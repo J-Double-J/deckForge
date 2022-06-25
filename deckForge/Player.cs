@@ -1,76 +1,98 @@
 using GameNamespace;
 using CardNamespace;
 
-public class Player
-{
-    GameMediator gm;
-    int cardPlays;
-    int cardDraws;
-    int startingHand;
-    List<Card> hand = new List<Card>();
-
-    public Player(GameMediator gm)
+namespace PlayerNamespace {
+    public class Player
     {
-        this.gm = gm;
+        GameMediator gm;
+        int cardPlays;
+        int cardDraws;
+        int startingHand;
+        List<Card> hand = new List<Card>();
 
-        //TODO: remove this is for sake of testing.
-        startingHand = 5;
-        cardPlays = 1;
-        cardDraws = 1;
+        public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
-        for (var i = 0; i < startingHand; i++)
+        public Player(GameMediator gm)
         {
-            DrawCard();
-        }
-    }
+            this.gm = gm;
 
-    public void StartTurn()
-    {
-        for (var i = 0; i < cardDraws; i++)
-        {
-            DrawCard();
-        }
-        for (var j = 0; j < cardPlays; j++)
-        {
-            PlayCard();
-        }
-        gm.EndPlayerTurn();
-    }
+            //TODO: remove this is for sake of testing.
+            startingHand = 5;
+            cardPlays = 1;
+            cardDraws = 1;
 
-    public void DrawCard()
-    {
-        Card? c = gm.DrawCardFromDeck();
-        if (c != null) {
-            hand.Add(c);
-        } else {
-            Console.WriteLine("Deck is Empty.");
-        }
-    }
-
-    public void PlayCard()
-    {
-        if (hand.Count == 0)
-        {
-            gm.EndGame();
-        }
-        else
-        {
-            Console.WriteLine("Which card would you like to play?");
-            for (var i = 0; i < hand.Count; i++)
+            for (var i = 0; i < startingHand; i++)
             {
-                Console.WriteLine($"{i}) {hand[i].PrintCard()}");
+                DrawCard();
             }
-            string? input;
-            int selectedVal;
-            do
+        }
+
+        public int HandSize()
+        {
+            return hand.Count;
+        }
+        public void StartTurn()
+        {
+            for (var i = 0; i < cardDraws; i++)
             {
-                input = Console.ReadLine();
-            } while (int.TryParse(input, out selectedVal) && (selectedVal > hand.Count || selectedVal < 0));
+                DrawCard();
+            }
+            for (var j = 0; j < cardPlays; j++)
+            {
+                PlayCard();
+            }
+            gm.EndPlayerTurn();
+        }
 
-            Card c = hand[selectedVal];
-            hand.RemoveAt(selectedVal);
+        public void DrawCard()
+        {
+            Card? c = gm.DrawCardFromDeck();
+            if (c != null)
+            {
+                hand.Add(c);
+            }
+            else
+            {
+                Console.WriteLine("Deck is Empty.");
+            }
+        }
 
-            gm.PlayerPlayedCard(c);
+        public void PlayCard()
+        {
+            if (hand.Count == 0)
+            {
+                gm.EndGame();
+            }
+            else
+            {
+                Console.WriteLine("Which card would you like to play?");
+                for (var i = 0; i < hand.Count; i++)
+                {
+                    Console.WriteLine($"{i}) {hand[i].PrintCard()}");
+                }
+                string? input;
+                int selectedVal;
+                do
+                {
+                    input = Console.ReadLine();
+                } while (int.TryParse(input, out selectedVal) && (selectedVal > hand.Count || selectedVal < 0));
+
+                Card c = hand[selectedVal];
+                hand.RemoveAt(selectedVal);
+
+                //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
+                gm.PlayerPlayedCard(c);
+                OnRaisePlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
+            }
+        }
+
+        private void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e) {
+            var handler = PlayerPlayedCard;
+
+            if (handler != null) {
+                handler(this, e);
+            }
         }
     }
 }
+
