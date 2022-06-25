@@ -10,7 +10,6 @@ namespace UnitTests
     public class DeckTests
     {
         [TestMethod]
-
         public void DeckShrinks_OnCardDraw()
         {
             Deck deck = new();

@@ -1,5 +1,6 @@
 using DeckNameSpace;
 using CardNamespace;
+using PlayerNamespace;
 
 namespace GameNamespace
 {
