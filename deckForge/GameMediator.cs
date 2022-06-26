@@ -9,7 +9,7 @@ namespace GameNamespace
         List<Player> players;
         Score score;
 
-        public GameMediator(int playerCount) {
+        public GameMediator(int playerCount, string? presetGame = null) {
             game = new Game(playerCount);
             score = new Score(playerCount);
 
@@ -23,75 +23,36 @@ namespace GameNamespace
         }
         public void StartPlayerTurn(int turn)
         {
-            if (players != null)
-            {
-                players[turn].StartTurn();
-            }
-            else
-            {
-                Console.WriteLine("Start Player Turn - Improper Instantiation of GameMediator: No Players List Object Set");
-                System.Environment.Exit(1);
-            }
+            players[turn].StartTurn();
         }
 
         public void PlayerPlayedCard(Card c)
         {
-            if (game != null && score != null)
-                score.IncreasePlayerScore(game.GetCurrentPlayer(), c.val);
-            else
-            {
-                Console.WriteLine("Player Played Card - Improper Instantiation of GameMediator: No Game Object Set");
-                System.Environment.Exit(1);
-            }
+            score.IncreasePlayerScore(game.GetCurrentPlayer(), c.val);
         }
 
         public void EndPlayerTurn()
         {
-            if (game != null)
-            {
-                StartPlayerTurn(game.NextPlayerTurn());
-            }
-            else
-            {
-                Console.WriteLine("End Player Turn - Improper Instantiation of GameMediator: No Game Object Set");
-                System.Environment.Exit(1);
-            }
+            StartPlayerTurn(game.NextPlayerTurn());
         }
 
         public void EndGame()
         {
-            if (game != null)
-            {
-                game.EndGame();
-            }
-            else
-            {
-                Console.WriteLine("End Game - Improper Instantiation of GameMediator: No Game Object Set");
-                System.Environment.Exit(1);
-            }
+            game.EndGame();
         }
 
         public Card? DrawCardFromDeck()
         {
-            if (game != null)
+
+            Card? c = game.DrawCard();
+            if (c != null)
             {
-                Card? c = game.DrawCard();
-                if (c != null)
-                {
-                    return c;
-                }
-                else
-                {
-                    return null;
-                }
+                return c;
             }
             else
             {
-                Console.WriteLine("DrawCardFromDeck - Improper Instantiation of GameMediator: No Game Object Set");
-                System.Environment.Exit(1);
                 return null;
             }
         }
-
     }
 }
