@@ -1,5 +1,5 @@
-﻿using PlayerNamespace;
-using CardNamespace;
+﻿using CardNamespace;
+using deckForge.PlayerConstruction;
 
 namespace deckForge.GameConstruction
 {
@@ -9,7 +9,7 @@ namespace deckForge.GameConstruction
         List<Player> players;
         Score score;
 
-        public GameMediator(int playerCount, string? presetGame = null)
+        public GameMediator(int playerCount)
         {
             try
             {

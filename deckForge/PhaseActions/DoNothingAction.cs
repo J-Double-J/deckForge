@@ -1,4 +1,4 @@
-﻿using PlayerNamespace;
+﻿using deckForge.PlayerConstruction;
 
 namespace deckForge.PhaseActions
 {

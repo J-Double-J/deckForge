@@ -1,7 +1,7 @@
 using CardNamespace;
 using deckForge.GameConstruction;
 
-namespace PlayerNamespace
+namespace deckForge.PlayerConstruction
 {
     public class Player
     {
@@ -85,10 +85,12 @@ namespace PlayerNamespace
             }
         }
 
-        private void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e) {
+        private void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e)
+        {
             var handler = PlayerPlayedCard;
 
-            if (handler != null) {
+            if (handler != null)
+            {
                 handler(this, e);
             }
         }

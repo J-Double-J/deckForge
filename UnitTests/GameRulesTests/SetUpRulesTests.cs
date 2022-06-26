@@ -1,8 +1,8 @@
 ﻿using DeckNameSpace;
 using FluentAssertions;
 using deckForge.GameRules;
-using PlayerNamespace;
 using deckForge.GameConstruction;
+using deckForge.PlayerConstruction;
 
 namespace UnitTests.GameRulesTests
 {
