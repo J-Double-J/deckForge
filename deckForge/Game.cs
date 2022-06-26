@@ -30,6 +30,10 @@ namespace GameNamespace
             return turnOrder.GetWhoseTurn();
         }
 
+        public int PlayerTurnXTurnsFromNow(int turns = 1) {
+            return turnOrder.GetWhoseTurnXTurnsFromNow(turns);
+        }
+
         public Card? DrawCard()
         {
             Card? c = deck.DrawCard();
@@ -48,6 +52,7 @@ namespace GameNamespace
         public void EndGame()
         {
             Console.WriteLine("You have emptied your hand. Congrats! No logical flaws were found.");
+            Environment.Exit(0);
         }
 
         private class TurnHandler
@@ -95,6 +100,10 @@ namespace GameNamespace
             public int GetWhoseTurn()
             {
                 return turnNum % order.Count;
+            }
+
+            public int GetWhoseTurnXTurnsFromNow(int turns) {
+                return (turnNum + turns) % order.Count;
             }
         }
     }
