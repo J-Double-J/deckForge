@@ -1,4 +1,4 @@
-﻿using deckForge.PlayerRoundRules;
+﻿using deckForge.GameRules.PlayerRoundRules;
 using deckForge.PhaseActions;
 using FluentAssertions;
 

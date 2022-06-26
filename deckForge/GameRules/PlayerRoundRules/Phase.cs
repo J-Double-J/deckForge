@@ -1,6 +1,6 @@
 ﻿using deckForge.PhaseActions;
 
-namespace deckForge.PlayerRoundRules
+namespace deckForge.GameRules.PlayerRoundRules
 {
     public class Phase
     {

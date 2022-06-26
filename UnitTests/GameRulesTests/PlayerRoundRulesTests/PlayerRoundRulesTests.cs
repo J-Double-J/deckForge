@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using deckForge.PlayerRoundRules;
+using deckForge.GameRules.PlayerRoundRules;
 
 namespace UnitTests.PlayerRoundRulesTests
 {
