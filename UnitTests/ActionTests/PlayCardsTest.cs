@@ -13,15 +13,13 @@ namespace UnitTests.ActionTests
         {
             bool eventRaised = false;
             GameAction action = new PlayCardsAction();
-            GameMediator gm = new();
+            GameMediator gm = new(1);
 
             //StringWriter and Reader are for the console.
             var sr = new StringReader("0");
 
             Console.SetIn(sr);
 
-            Game game = new(gm, 1);
-            gm.Game = game;
             Player p = new Player(gm);
 
             p.PlayerPlayedCard += (sender, e) => eventRaised = true;
@@ -29,7 +27,6 @@ namespace UnitTests.ActionTests
             action.execute(p);
             p.HandSize().Should().Be(4, "player played a card from their hand");
             eventRaised.Should().Be(true, "player should raise an event whenever it plays a card");
-
         }
     }
 }

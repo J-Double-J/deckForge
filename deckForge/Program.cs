@@ -2,4 +2,5 @@
 
 using GameNamespace;
 Console.WriteLine("Starting game!");
-CardGameInitializer GGI = new CardGameInitializer(2);
+GameMediator gm = new(2);
+gm.StartGame();

@@ -7,6 +7,7 @@ namespace DeckNameSpace{
         public Deck()
         {
             createDeck();
+            Shuffle();
         }
 
         public Card? DrawCard()

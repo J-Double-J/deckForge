@@ -12,10 +12,8 @@ namespace UnitTests.ActionTests
         public void DrawAction_MakesPlayerDrawCard()
         {
             GameAction action = new DrawCardsAction();
-            GameMediator gm = new();
+            GameMediator gm = new(0);
 
-            Game game = new(gm, 1);
-            gm.Game = game;
             Player p = new Player(gm);
 
 
@@ -34,10 +32,8 @@ namespace UnitTests.ActionTests
         public void DrawAction_CantDrawFromEmptyDeck()
         {
             GameAction action = new DrawCardsAction(drawCount: 5);
-            GameMediator gm = new();
+            GameMediator gm = new(0);
 
-            Game game = new(gm, 1);
-            gm.Game = game;
             Player p = new Player(gm);
 
             //TODO: Player on init draws 5 cards, so this adds to 52, test might break when init changes

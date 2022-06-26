@@ -1,15 +1,15 @@
-﻿using RoundRulesNamespace;
-using FluentAssertions;
-using PhaseNamespace;
+﻿using FluentAssertions;
+using deckForge.PlayerRoundRules;
 
-namespace UnitTests
+namespace UnitTests.PlayerRoundRulesTests
 {
     [TestClass]
     public class PlayerRoundRulesTests
     {
         [TestMethod]
         [DataRow(5)]
-        public void getRoundHandLimit_SpecifiedLimit(int lim) {
+        public void getRoundHandLimit_SpecifiedLimit(int lim)
+        {
             RoundRules rr = new RoundRules(lim);
             rr.HandLimit.Should().Be(lim, "RoundRules was initiliazed with a max hand limit");
         }
@@ -22,7 +22,8 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void setRoundHandLimitToInvalidValue() {
+        public void setRoundHandLimitToInvalidValue()
+        {
             Action init = () => new RoundRules(-1);
             init.Should().Throw<ArgumentException>("you can't have a negative hand limit");
         }
@@ -30,7 +31,8 @@ namespace UnitTests
         [TestMethod]
         [DataRow(5)]
 
-        public void getCardDrawonNewTurn_SpecifiedLimit(int lim) {
+        public void getCardDrawonNewTurn_SpecifiedLimit(int lim)
+        {
             RoundRules rr = new RoundRules(cardPlayLimit: lim);
             rr.CardPlayLimit.Should().Be(lim, "RoundRules was initiliazed with a max Card Play limit");
         }
@@ -43,7 +45,8 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void getPhasesList() {
+        public void getPhasesList()
+        {
             RoundRules rr = new();
             List<Phase> ph = rr.Phases;
             ph.Count.Should().BeGreaterThanOrEqualTo(1, "there has to be at least one phase in the game");
