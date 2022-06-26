@@ -1,13 +1,14 @@
 ﻿namespace deckForge.GameRules
 {
-    public class GameRulesSetUp
+    public class CreateGameRules
     {
-        public GameRulesSetUp(string? presetGame = null)
+        public CreateGameRules(string? presetGame = null)
         {
             if (presetGame != null)
             {
 
             }
+
         }
     }
 }
