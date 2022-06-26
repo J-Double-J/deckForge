@@ -1,27 +1,26 @@
-using GameNamespace;
 using CardNamespace;
+using deckForge.GameConstruction;
 
-namespace PlayerNamespace {
+namespace PlayerNamespace
+{
     public class Player
     {
         GameMediator gm;
         int cardPlays;
         int cardDraws;
-        int startingHand;
         List<Card> hand = new List<Card>();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
-        public Player(GameMediator gm)
+        public Player(GameMediator gm, int initHandSize = 5)
         {
             this.gm = gm;
 
             //TODO: remove this is for sake of testing.
-            startingHand = 5;
             cardPlays = 1;
             cardDraws = 1;
 
-            for (var i = 0; i < startingHand; i++)
+            for (var i = 0; i < initHandSize; i++)
             {
                 DrawCard();
             }

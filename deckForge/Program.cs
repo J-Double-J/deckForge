@@ -1,6 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using GameNamespace;
+using deckForge.GameConstruction;
+
 Console.WriteLine("Starting game!");
-GameMediator gm = new(2);
-gm.StartGame();
+
+try
+{
+    GameMediator gm = new(2);
+    gm.StartGame();
+}
+catch (Exception e) {
+    Console.WriteLine(e.Message);
+    Console.WriteLine(e.StackTrace);
+}
