@@ -2,7 +2,7 @@ using DeckNameSpace;
 using CardNamespace;
 using PlayerNamespace;
 
-namespace GameNamespace
+namespace deckForge.GameConstruction
 {
     public class Game
     {
@@ -30,16 +30,20 @@ namespace GameNamespace
             return turnOrder.GetWhoseTurn();
         }
 
-        public int PlayerTurnXTurnsFromNow(int turns = 1) {
+        public int PlayerTurnXTurnsFromNow(int turns = 1)
+        {
             return turnOrder.GetWhoseTurnXTurnsFromNow(turns);
         }
 
         public Card? DrawCard()
         {
             Card? c = deck.DrawCard();
-            if (c != null) {
+            if (c != null)
+            {
                 return c;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }
@@ -102,7 +106,8 @@ namespace GameNamespace
                 return turnNum % order.Count;
             }
 
-            public int GetWhoseTurnXTurnsFromNow(int turns) {
+            public int GetWhoseTurnXTurnsFromNow(int turns)
+            {
                 return (turnNum + turns) % order.Count;
             }
         }

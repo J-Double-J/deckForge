@@ -1,7 +1,7 @@
 ﻿using PlayerNamespace;
 using CardNamespace;
 
-namespace GameNamespace
+namespace deckForge.GameConstruction
 {
     public class GameMediator
     {
@@ -9,16 +9,26 @@ namespace GameNamespace
         List<Player> players;
         Score score;
 
-        public GameMediator(int playerCount, string? presetGame = null) {
-            game = new Game(playerCount);
-            score = new Score(playerCount);
+        public GameMediator(int playerCount, string? presetGame = null)
+        {
+            try
+            {
+                game = new Game(playerCount);
+                score = new Score(playerCount);
 
-            players = new List<Player>();
-            for (var i = 0; i < playerCount; i++)
-                players.Add(new Player(this));
+                players = new List<Player>();
+                for (var i = 0; i < playerCount; i++)
+                    players.Add(new Player(this));
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
-        public void StartGame() {
+        public void StartGame()
+        {
             StartPlayerTurn(game.GetCurrentPlayer());
         }
         public void StartPlayerTurn(int turn)

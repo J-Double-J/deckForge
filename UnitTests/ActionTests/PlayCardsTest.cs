@@ -1,7 +1,7 @@
-﻿using GameNamespace;
-using deckForge.PhaseActions;
+﻿using deckForge.PhaseActions;
 using PlayerNamespace;
 using FluentAssertions;
+using deckForge.GameConstruction;
 
 namespace UnitTests.ActionTests
 {

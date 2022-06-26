@@ -1,4 +1,4 @@
-﻿using GameNamespace;
+﻿using deckForge.GameConstruction;
 using FluentAssertions;
 
 namespace UnitTests
