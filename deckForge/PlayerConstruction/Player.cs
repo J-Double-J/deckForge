@@ -76,7 +76,7 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        virtual public void PlayCard()
+        virtual public void PlayCard(bool facedown = false)
         {
             //TODO: Remove
             if (_hand.Count == 0)
@@ -101,7 +101,7 @@ namespace deckForge.PlayerConstruction
                 _hand.RemoveAt(selectedVal);
 
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-                _gm.PlayerPlayedCard(c);
+                _gm.PlayerPlayedCard(c, facedown);
                 OnRaisePlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
             }
         }

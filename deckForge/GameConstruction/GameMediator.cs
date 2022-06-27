@@ -5,9 +5,9 @@ namespace deckForge.GameConstruction
 {
     public class GameMediator
     {
-        Game game;
-        List<Player> players;
-        Score score;
+        private Game _game;
+        private List<Player> _players;
+        private Score _score;
 
         public GameMediator(int playerCount)
         {
@@ -22,12 +22,12 @@ namespace deckForge.GameConstruction
                     throw new ArgumentException(message: "Game cannot have more than 12 players");
                 }
 
-                game = new Game(playerCount);
-                score = new Score(playerCount);
+                _game = new Game(playerCount);
+                _score = new Score(playerCount);
 
-                players = new List<Player>();
+                _players = new List<Player>();
                 for (var i = 0; i < playerCount; i++)
-                    players.Add(new Player(this, i));
+                    _players.Add(new Player(this, i));
             }
             catch
             {
@@ -36,40 +36,44 @@ namespace deckForge.GameConstruction
 
         }
 
+        public int PlayerCount {
+            get {return _players.Count;}
+        }
+
         //TODO: Only used for testing at this moment. Does not fix bad ID's
         public void AddPlayer(Player p)
         {
-            players.Add(p);
+            _players.Add(p);
         }
 
         public void StartGame()
         {
-            StartPlayerTurn(game.GetCurrentPlayer());
+            StartPlayerTurn(_game.GetCurrentPlayer());
         }
         public void StartPlayerTurn(int turn)
         {
-            players[turn].StartTurn();
+            _players[turn].StartTurn();
         }
 
-        public void PlayerPlayedCard(Card c)
+        public void PlayerPlayedCard(Card c, bool facedown)
         {
-            score.IncreasePlayerScore(game.GetCurrentPlayer(), c.val);
+            _score.IncreasePlayerScore(_game.GetCurrentPlayer(), c.val);
         }
 
         public void EndPlayerTurn()
         {
-            StartPlayerTurn(game.NextPlayerTurn());
+            StartPlayerTurn(_game.NextPlayerTurn());
         }
 
         public void EndGame()
         {
-            game.EndGame();
+            _game.EndGame();
         }
 
         public Card? DrawCardFromDeck()
         {
 
-            Card? c = game.DrawCard();
+            Card? c = _game.DrawCard();
             if (c != null)
             {
                 return c;
@@ -84,7 +88,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                return players[id];
+                return _players[id];
             }
             catch
             {

@@ -141,7 +141,6 @@ namespace UnitTests
             }
 
             match.Should().Be(true, "all the cards should be drawn from the top in the reverse order they were placed");
-
         }
     }
 }
