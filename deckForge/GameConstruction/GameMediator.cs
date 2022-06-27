@@ -18,13 +18,19 @@ namespace deckForge.GameConstruction
 
                 players = new List<Player>();
                 for (var i = 0; i < playerCount; i++)
-                    players.Add(new Player(this));
+                    players.Add(new Player(this, i));
             }
             catch
             {
                 throw;
             }
 
+        }
+
+        //TODO: Only used for testing at this moment. Does not fix bad ID's
+        public void AddPlayer(Player p)
+        {
+            players.Add(p);
         }
 
         public void StartGame()
@@ -63,6 +69,11 @@ namespace deckForge.GameConstruction
             {
                 return null;
             }
+        }
+
+        public Player GetPlayerByID(int id)
+        {
+            return players[id];
         }
     }
 }

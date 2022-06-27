@@ -12,9 +12,11 @@ namespace deckForge.PlayerConstruction
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
-        public Player(GameMediator gm, int initHandSize = 5)
+        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5)
         {
             _gm = gm;
+
+            PlayerID = playerID;
 
             //TODO: remove this is for sake of testing.
             _cardPlays = 1;
@@ -26,8 +28,14 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        public int HandSize {
+        public int HandSize
+        {
             get { return _hand.Count; }
+        }
+
+        public int PlayerID
+        {
+            get;
         }
 
         virtual public void StartTurn()
@@ -96,7 +104,12 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        virtual public void ExecuteCommand(Action command) {
+        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<Player> command) {
+            Player targetPlayer = _gm.GetPlayerByID(targetID);
+            command(targetPlayer);
+        }
+        virtual public void ExecuteCommand(Action command)
+        {
             command();
         }
     }
