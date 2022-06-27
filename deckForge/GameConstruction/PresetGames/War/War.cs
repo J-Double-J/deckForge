@@ -1,11 +1,11 @@
-﻿using deckForge.GameConstruction;
-using deckForge.GameRules;
+﻿using deckForge.GameRules;
 
-namespace deckForge.GameConstruction.PresetGames
+namespace deckForge.GameConstruction.PresetGames.War
 {
     public class War
     {
-        War() {
+        War()
+        {
             SetUpRules spr = new(initHandSize: 26);
 
             GameMediator gm = new(2);
