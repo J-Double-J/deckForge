@@ -5,20 +5,20 @@ namespace deckForge.PlayerConstruction
 {
     public class Player
     {
-        GameMediator gm;
-        int cardPlays;
-        int cardDraws;
-        List<Card> hand = new List<Card>();
+        private readonly GameMediator _gm;
+        private int _cardPlays;
+        private int _cardDraws;
+        private List<Card> _hand = new();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
         public Player(GameMediator gm, int initHandSize = 5)
         {
-            this.gm = gm;
+            _gm = gm;
 
             //TODO: remove this is for sake of testing.
-            cardPlays = 1;
-            cardDraws = 1;
+            _cardPlays = 1;
+            _cardDraws = 1;
 
             for (var i = 0; i < initHandSize; i++)
             {
@@ -26,29 +26,29 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        public int HandSize()
-        {
-            return hand.Count;
+        public int HandSize {
+            get { return _hand.Count; }
         }
-        public void StartTurn()
+
+        virtual public void StartTurn()
         {
-            for (var i = 0; i < cardDraws; i++)
+            for (var i = 0; i < _cardDraws; i++)
             {
                 DrawCard();
             }
-            for (var j = 0; j < cardPlays; j++)
+            for (var j = 0; j < _cardPlays; j++)
             {
                 PlayCard();
             }
-            gm.EndPlayerTurn();
+            _gm.EndPlayerTurn();
         }
 
-        public void DrawCard()
+        virtual public void DrawCard()
         {
-            Card? c = gm.DrawCardFromDeck();
+            Card? c = _gm.DrawCardFromDeck();
             if (c != null)
             {
-                hand.Add(c);
+                _hand.Add(c);
             }
             else
             {
@@ -56,36 +56,37 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        public void PlayCard()
+        virtual public void PlayCard()
         {
-            if (hand.Count == 0)
+            //TODO: Remove
+            if (_hand.Count == 0)
             {
-                gm.EndGame();
+                _gm.EndGame();
             }
             else
             {
                 Console.WriteLine("Which card would you like to play?");
-                for (var i = 0; i < hand.Count; i++)
+                for (var i = 0; i < _hand.Count; i++)
                 {
-                    Console.WriteLine($"{i}) {hand[i].PrintCard()}");
+                    Console.WriteLine($"{i}) {_hand[i].PrintCard()}");
                 }
                 string? input;
                 int selectedVal;
                 do
                 {
                     input = Console.ReadLine();
-                } while (int.TryParse(input, out selectedVal) && (selectedVal > hand.Count || selectedVal < 0));
+                } while (int.TryParse(input, out selectedVal) && (selectedVal > _hand.Count || selectedVal < 0));
 
-                Card c = hand[selectedVal];
-                hand.RemoveAt(selectedVal);
+                Card c = _hand[selectedVal];
+                _hand.RemoveAt(selectedVal);
 
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-                gm.PlayerPlayedCard(c);
+                _gm.PlayerPlayedCard(c);
                 OnRaisePlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
             }
         }
 
-        private void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e)
+        virtual protected void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e)
         {
             var handler = PlayerPlayedCard;
 
@@ -94,6 +95,9 @@ namespace deckForge.PlayerConstruction
                 handler(this, e);
             }
         }
+
+        virtual public void ExecuteCommand(Action command) {
+            command();
+        }
     }
 }
-

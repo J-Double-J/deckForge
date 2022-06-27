@@ -1,6 +1,6 @@
 using DeckNameSpace;
 using CardNamespace;
-using PlayerNamespace;
+using deckForge.PlayerConstruction;
 
 namespace deckForge.GameConstruction
 {

@@ -32,7 +32,7 @@ namespace UnitTests.GameRulesTests
             SetUpRules spr = new SetUpRules(initHandSize: 8);
             Player p = new(gm, spr.InitHandSize);
 
-            p.HandSize().Should().Be(8, "SetUpRules set the initial hand size to 8");
+            p.HandSize.Should().Be(8, "SetUpRules set the initial hand size to 8");
         } 
     }
 }

@@ -8,5 +8,3 @@ namespace deckForge.PlayerConstruction
         public Card CardPlayed { get; }
     }
 }
-
-

@@ -17,15 +17,15 @@ namespace UnitTests.ActionTests
             Player p = new Player(gm);
 
 
-            int initHandSize = p.HandSize();
+            int initHandSize = p.HandSize;
 
 
             action.execute(p);
-            p.HandSize().Should().Be(initHandSize + 1, "player was told to draw a card.");
+            p.HandSize.Should().Be(initHandSize + 1, "player was told to draw a card.");
 
             GameAction specifiedDraw = new DrawCardsAction(drawCount: 5);
             specifiedDraw.execute(p);
-            p.HandSize().Should().Be(initHandSize + 6, "player was told to draw 5 more cards");
+            p.HandSize.Should().Be(initHandSize + 6, "player was told to draw 5 more cards");
         }
 
         [TestMethod]
@@ -42,10 +42,10 @@ namespace UnitTests.ActionTests
                 p.DrawCard();
             }
 
-            int initHandSize = p.HandSize();
+            int initHandSize = p.HandSize;
 
             action.execute(p);
-            p.HandSize().Should().Be(52, "the deck was completely drawn from, so there should be no more cards to gain");
+            p.HandSize.Should().Be(52, "the deck was completely drawn from, so there should be no more cards to gain");
 
         }
     }
