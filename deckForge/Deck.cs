@@ -1,6 +1,7 @@
 using CardNamespace;
 
-namespace DeckNameSpace{
+namespace DeckNameSpace
+{
     public class Deck
     {
         public List<Card> deck = new List<Card>();
@@ -24,7 +25,8 @@ namespace DeckNameSpace{
             }
         }
 
-        public List<Card>? DrawMultipleCards(int count) {
+        public List<Card>? DrawMultipleCards(int count)
+        {
             List<Card>? cards = new();
             for (int i = 0; i < count; i++)
             {
@@ -53,8 +55,9 @@ namespace DeckNameSpace{
             }
         }
 
-        public int Size() {
-            return deck.Count;
+        public int Size
+        {
+            get { return deck.Count; }
         }
 
         //Simple 52 Card Deck for examples
@@ -83,6 +86,58 @@ namespace DeckNameSpace{
             }
         }
 
+        public void AddCardToDeck(Card card, string pos = "bottom", bool shuffleAfter = false)
+        {
+            if (pos == "bottom")
+            {
+                deck.Insert(0, card);
+            }
+            else if (pos == "top")
+            {
+                deck.Add(card);
+            }
+            else if (pos == "middle")
+            {
+                deck.Insert(deck.Count / 2, card);
+            }
+
+            else if (int.TryParse(pos, out int numValue))
+            {
+                if (numValue >= 0 && numValue <= deck.Count)
+                {
+                    deck.Insert(numValue, card);
+                }
+                else if (numValue < 0)
+                {
+                    deck.Insert(0, card);
+                }
+                else if (numValue > deck.Count)
+                {
+                    deck.Add(card);
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid pos: '{pos}', for a card to be placed in the deck");
+            }
+            
+            if (shuffleAfter == true) {
+                Shuffle();
+            }
+        }
+
+        public void AddMultipleCardsToDeck(List<Card> cards, string pos = "bottom", bool shuffleAfter = false) {
+            try {
+                foreach (Card c in cards) {
+                    AddCardToDeck(c, pos: pos);
+                }
+            } catch {
+                throw;
+            }
+
+            if (shuffleAfter == true)
+                Shuffle();
+        }
     }
 }
 

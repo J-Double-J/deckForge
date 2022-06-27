@@ -1,18 +1,20 @@
 using CardNamespace;
 using deckForge.GameConstruction;
+using DeckNameSpace;
 
 namespace deckForge.PlayerConstruction
 {
     public class Player
     {
         private readonly GameMediator _gm;
+        private Deck? _personalDeck;
         private int _cardPlays;
         private int _cardDraws;
         private List<Card> _hand = new();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
-        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5)
+        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null )
         {
             _gm = gm;
 
@@ -36,6 +38,16 @@ namespace deckForge.PlayerConstruction
         public int PlayerID
         {
             get;
+        }
+
+        public int PersonalDeckSize {
+            get {
+                if (_personalDeck != null) {
+                    return _personalDeck.Size;
+                } else {
+                    return 0;
+                }
+            }
         }
 
         virtual public void StartTurn()
@@ -111,6 +123,14 @@ namespace deckForge.PlayerConstruction
         virtual public void ExecuteCommand(Action command)
         {
             command();
+        }
+
+        virtual public void AddToPersonalDeck(Card c) {
+            if (_personalDeck != null)
+                _personalDeck.AddCardToDeck(c);
+            else {
+                throw new ArgumentException(message: "There is no personal deck to add to");
+            }
         }
     }
 }
