@@ -13,6 +13,15 @@ namespace deckForge.GameConstruction
         {
             try
             {
+                if (playerCount < 0)
+                {
+                    throw new ArgumentException(message: "Cannot have negative players");
+                }
+                else if (playerCount > 12)
+                {
+                    throw new ArgumentException(message: "Game cannot have more than 12 players");
+                }
+
                 game = new Game(playerCount);
                 score = new Score(playerCount);
 
@@ -73,7 +82,14 @@ namespace deckForge.GameConstruction
 
         public Player GetPlayerByID(int id)
         {
-            return players[id];
+            try
+            {
+                return players[id];
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
