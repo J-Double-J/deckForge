@@ -22,5 +22,7 @@ namespace deckForge.GameRules.PlayerRoundRules
             Actions = actions;
             PhaseName = phaseName;
         }
+
+        public void StartPhase() {}
     }
 }

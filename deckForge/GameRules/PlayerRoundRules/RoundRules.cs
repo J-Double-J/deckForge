@@ -3,6 +3,7 @@ namespace deckForge.GameRules.PlayerRoundRules
 {
     public class RoundRules
     {
+        RoundTemplate _rt;
         int handLim;
         List<Phase> phases;
 
@@ -27,8 +28,9 @@ namespace deckForge.GameRules.PlayerRoundRules
 
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public RoundRules(int handlimit = 64, int cardPlayLimit = 1, List<Phase>? phases = null)
+        public RoundRules(RoundTemplate rt, int handlimit = 64, int cardPlayLimit = 1, List<Phase>? phases = null)
         {
+            _rt = rt;
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
 
@@ -43,8 +45,10 @@ namespace deckForge.GameRules.PlayerRoundRules
                 this.phases = phases;
             }
         }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-
+        public void StartTurn()
+        {
+            _rt.StartRound();
+        }
     }
 }
