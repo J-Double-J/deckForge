@@ -11,12 +11,15 @@ namespace DeckNameSpace
             Shuffle();
         }
 
-        public Card? DrawCard()
+        public Card? DrawCard(bool drawFacedown = false)
         {
             if (deck.Count != 0)
             {
                 Card c = deck[deck.Count - 1];
                 deck.RemoveAt(deck.Count - 1);
+
+                if (c.Facedown != drawFacedown)
+                    c.Flip();
                 return c;
             }
             else
