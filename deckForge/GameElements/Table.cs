@@ -7,12 +7,12 @@ namespace deckForge.GameElements
     {
         GameMediator _gm;
         List<List<Card>> playedCards;
-        Table(GameMediator mediator)
+        public Table(GameMediator mediator, int playerCount)
         {
             _gm = mediator;
 
             playedCards = new();
-            for (var i = 0; i < _gm.PlayerCount; i++)
+            for (var i = 0; i < playerCount; i++)
             {
                 List<Card> cards = new();
                 playedCards.Add(cards);
@@ -25,9 +25,16 @@ namespace deckForge.GameElements
             {
                 foreach (Card c in player)
                 {
-                    c.PrintCard();
+                    Console.WriteLine(c.PrintCard());
                 }
             }
+        }
+
+        public void PlaceCardOnTable(int playerID, Card c) {
+            if (playerID >= 0 && playerID <= playedCards.Count - 1)
+                playedCards[playerID].Add(c);
+            else
+                throw new ArgumentException("Cannot place a card to a non-existant player");
         }
     }
 }
