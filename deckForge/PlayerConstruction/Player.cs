@@ -6,17 +6,18 @@ namespace deckForge.PlayerConstruction
 {
     public class Player
     {
-        private readonly GameMediator _gm;
-        private Deck? _personalDeck;
-        private int _cardPlays;
-        private int _cardDraws;
-        private List<Card> _hand = new();
+        protected readonly GameMediator _gm;
+        protected Deck? _personalDeck;
+        protected int _cardPlays;
+        protected int _cardDraws;
+        protected List<Card> _hand = new();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
         public Player(GameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null )
         {
             _gm = gm;
+            _personalDeck = personalDeck;
 
             PlayerID = playerID;
 
@@ -28,6 +29,7 @@ namespace deckForge.PlayerConstruction
             {
                 DrawCard();
             }
+
         }
 
         public int HandSize
@@ -100,11 +102,16 @@ namespace deckForge.PlayerConstruction
                 Card c = _hand[selectedVal];
                 _hand.RemoveAt(selectedVal);
 
+                if (facedown)
+                    c.Flip();
+
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-                _gm.PlayerPlayedCard(c, facedown);
+                _gm.PlayerPlayedCard(PlayerID, c);
                 OnRaisePlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
             }
         }
+
+        
 
         virtual protected void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e)
         {

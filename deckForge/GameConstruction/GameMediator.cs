@@ -1,5 +1,6 @@
 ﻿using CardNamespace;
 using deckForge.PlayerConstruction;
+using deckForge.GameElements;
 
 namespace deckForge.GameConstruction
 {
@@ -8,6 +9,7 @@ namespace deckForge.GameConstruction
         private Game _game;
         private List<Player> _players;
         private Score _score;
+        private Table _table;
 
         public GameMediator(int playerCount)
         {
@@ -24,10 +26,13 @@ namespace deckForge.GameConstruction
 
                 _game = new Game(playerCount);
                 _score = new Score(playerCount);
+                _table = new Table(this, playerCount);
+
 
                 _players = new List<Player>();
                 for (var i = 0; i < playerCount; i++)
                     _players.Add(new Player(this, i));
+
             }
             catch
             {
@@ -55,9 +60,9 @@ namespace deckForge.GameConstruction
             _players[turn].StartTurn();
         }
 
-        public void PlayerPlayedCard(Card c, bool facedown)
+        public void PlayerPlayedCard(int id, Card c)
         {
-            _score.IncreasePlayerScore(_game.GetCurrentPlayer(), c.val);
+            _table.PlaceCardOnTable(id, c);
         }
 
         public void EndPlayerTurn()

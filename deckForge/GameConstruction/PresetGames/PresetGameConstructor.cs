@@ -26,7 +26,8 @@ namespace deckForge.GameConstruction.PresetGames
             };
 
             //-1 if game DNE otherwise returns ID
-            static public int isPresetGameMade(string s) {
+            static public int isPresetGameMade(string s)
+            {
                 if (presetGames.ContainsKey(s))
                 {
                     return (int)presetGames[s]!;
@@ -34,7 +35,6 @@ namespace deckForge.GameConstruction.PresetGames
                 else
                     return -1;
             }
-            
         }
     }
 }
