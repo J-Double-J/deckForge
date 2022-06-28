@@ -100,5 +100,9 @@ namespace deckForge.GameConstruction
                 throw;
             }
         }
+
+        public List<Card> GetPlayedCardsOfPlayer(int playerID) {
+            return _table.GetCardsForSpecificPlayer(playerID);
+        }
     }
 }

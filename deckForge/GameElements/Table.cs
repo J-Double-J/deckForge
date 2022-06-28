@@ -30,11 +30,77 @@ namespace deckForge.GameElements
             }
         }
 
-        public void PlaceCardOnTable(int playerID, Card c) {
-            if (playerID >= 0 && playerID <= playedCards.Count - 1)
+        public List<Card> GetCardsForSpecificPlayer(int playerID)
+        {
+            return playedCards[playerID];
+        }
+
+        public void PlaceCardOnTable(int playerID, Card c)
+        {
+            try
+            {
                 playedCards[playerID].Add(c);
-            else
-                throw new ArgumentException("Cannot place a card to a non-existant player");
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void Flip_AllCardsOneWay_SpecificPlayer(int playerID, bool facedown = false)
+        {
+            try
+            {
+                foreach (Card c in playedCards[playerID])
+                {
+                    if (c.Facedown != facedown)
+                    {
+                        c.Flip();
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false)
+        {
+            for (var i = 0; i < playedCards.Count; i++)
+            {
+                Flip_AllCardsOneWay_SpecificPlayer(i, facedown);
+            }
+        }
+
+        public void Flip_AllCardsEitherWay_SpecificPlayer(int playerID)
+        {
+            try
+            {
+                foreach (Card c in playedCards[playerID])
+                {
+                    c.Flip();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        public void Flip_AllCardsEitherWay_AllPlayers()
+        {
+            for (var i = 0; i < playedCards.Count; i++)
+            {
+                Flip_AllCardsEitherWay_SpecificPlayer(i);
+            }
+        }
+
+        public void Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
+        {
+            try { playedCards[playerID][cardPos].Flip(); }
+            catch { throw; }
         }
     }
 }

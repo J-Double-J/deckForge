@@ -5,16 +5,33 @@ using FluentAssertions;
 
 namespace UnitTests.GameElements
 {
+
     [TestClass]
     public class TableTests
     {
+
+        private static GameMediator gm = new(2);
+        private static Table table = new(gm, 2);
+        private static StringWriter output = new();
+
+        [ClassInitialize()]
+        public static void InitializeTableTestsClass(TestContext ctx)
+        {
+            gm = new(2);
+        }
+
+        [TestInitialize()]
+        public void InitializeTableTests()
+        {
+            table = new(gm, 2);
+            output = new();
+        }
+
         [TestMethod]
         [DataRow(-1)]
-        [DataRow(3)]
-        public void PlaceCardOnTableInFrontOfNonexistantPlayer(int fakePlayerID) {
-            GameMediator gm = new(1);
-            Table table = new(gm, 1);
-
+        [DataRow(7)]
+        public void PlaceCardOnTableInFrontOfNonexistantPlayer(int fakePlayerID)
+        {
             Action a = () => table.PlaceCardOnTable(fakePlayerID, new Card(8, "J"));
 
             a.Should().Throw<ArgumentException>($"there is no player with the id of {fakePlayerID}");
@@ -22,11 +39,11 @@ namespace UnitTests.GameElements
 
         //This test is failing for whatever reason, and it has to do probably with behind the scenes Console.WriteLine stuff
         //I suspect. The test is printing what I expect. This test will remain in case I need to return to it.
-        public void TablePrintsCardsCorrectly() {
-            StringWriter sw = new();
-            Console.SetOut(sw);
-            GameMediator gm = new(2);
-            Table table = new(gm, 2);
+        //Works on Macbook.
+        [TestMethod]
+        public void TablePrintsCardsCorrectly()
+        {
+            Console.SetOut(output);
 
             table.PlaceCardOnTable(0, new Card(8, "J", facedown: false));
             table.PlaceCardOnTable(0, new Card(9, "J", facedown: false));
@@ -37,7 +54,114 @@ namespace UnitTests.GameElements
 
             table.PrintTableState();
 
-            sw.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
+            output.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
         }
+
+        [TestMethod]
+        public void TableReturnsPlayersCards()
+        {
+            string s = String.Empty;
+            setUpTableForFlipTests();
+
+            List<Card> cards = table.GetCardsForSpecificPlayer(0);
+
+            foreach (Card c in cards)
+                s += c.PrintCard();
+
+            s.Should().Be("8J9J", "these are the cards that Player 0 has in front of them");
+        }
+
+        [TestMethod]
+        public void TableFlipsAllPlayerCards()
+        {
+            setUpTableForFlipTests();
+
+            table.Flip_AllCardsOneWay_AllPLayers(facedown: true);
+            table.PrintTableState();
+
+            output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\nCOVERED\n", "all 4 cards should be flipped down");
+        }
+
+        [TestMethod]
+        public void TableFlipsAllCardsEitherWay()
+        {
+            setUpTableForFlipTests();
+
+            table.Flip_AllCardsEitherWay_AllPlayers();
+            table.PrintTableState();
+
+            output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\n2Q\n", "only the 2 Queen should be faceup as it was facedown originally");
+        }
+
+        [TestMethod]
+        public void TableFlipsASpecificPlayersCards()
+        {
+            setUpTableForFlipTests();
+
+            table.Flip_AllCardsOneWay_SpecificPlayer(0, facedown: true);
+            table.PrintTableState();
+
+            output.ToString().Should().Be("COVERED\nCOVERED\n1Q\nCOVERED\n", "Player 0 should have their cards hidden now");
+        }
+
+        [TestMethod]
+        public void TableFlipsASpecificPlayersCards_EitherWay()
+        {
+            setUpTableForFlipTests();
+
+            table.Flip_AllCardsEitherWay_SpecificPlayer(1);
+            table.PrintTableState();
+
+            output.ToString().Should().Be("8J\n9J\nCOVERED\n2Q\n", "Player 1's cards were flipped regardless of their original facing");
+        }
+
+        [TestMethod]
+        public void TableFlipsSpecificPlayersCard()
+        {
+            setUpTableForFlipTests();
+
+            table.Flip_SpecificCard_SpecificPlayer(0, 0);
+            table.PrintTableState();
+
+            output.ToString().Should().Be("COVERED\n9J\n1Q\nCOVERED\n", "The 8J card should be flipped down while the other cards are untouched");
+        }
+
+        [TestMethod]
+        public void TableShouldThrowError_OnAllFlippinActions_OnBadPlayerID()
+        {
+            Action a = () => table.Flip_AllCardsEitherWay_SpecificPlayer(3);
+            Action b = () => table.Flip_AllCardsOneWay_SpecificPlayer(3);
+            Action c = () => table.Flip_SpecificCard_SpecificPlayer(3, 0);
+            string because = "there is no player 3 on the table";
+
+            setUpTableForFlipTests();
+
+            a.Should().Throw<ArgumentOutOfRangeException>(because);
+            b.Should().Throw<ArgumentOutOfRangeException>(because);
+            c.Should().Throw<ArgumentOutOfRangeException>(because);
+        }
+
+        [TestMethod]
+        public void TableShouldThrowError_OnFlippingNonexistantCard()
+        {
+            Action a = () => table.Flip_SpecificCard_SpecificPlayer(0, 3);
+
+            setUpTableForFlipTests();
+
+            a.Should().Throw<ArgumentOutOfRangeException>("Player 0 doesn't have a 4th card on the board");
+        }
+
+
+        private void setUpTableForFlipTests()
+        {
+            Console.SetOut(output);
+
+            table.PlaceCardOnTable(0, new Card(8, "J", facedown: false));
+            table.PlaceCardOnTable(0, new Card(9, "J", facedown: false));
+            table.PlaceCardOnTable(1, new Card(1, "Q", facedown: false));
+            table.PlaceCardOnTable(1, new Card(2, "Q", facedown: true));
+        }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
 using deckForge.GameRules;
+using deckForge.GameElements;
 using FluentAssertions;
 
 namespace UnitTests.PlayerConstruction
@@ -31,6 +32,24 @@ namespace UnitTests.PlayerConstruction
 
             p1.TellAnotherPlayerToExecuteCommand(1, (Player p) => p.DrawCard());
             p2.HandSize.Should().Be(6, "Player 2 was told to draw a card");
+        }
+
+
+        //TODO: Write a GM stub in order to command player
+        //[TestMethod]
+        public void PlayerGetsTheirPlayedCards_FromTable()
+        {
+            GameMediator gm = new(0);
+            Player p = new(gm, playerID: 0);
+            Table table = new(gm, playerCount: 1);
+            var stringReader = new StringReader("0");
+            Console.SetIn(stringReader);
+
+            gm.AddPlayer(p);
+
+            p.PlayCard();
+
+            p.PlayedCards.Count.Should().Be(1, "Player played a card");
         }
     }
 }

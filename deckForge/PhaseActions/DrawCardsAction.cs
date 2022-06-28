@@ -13,7 +13,7 @@ namespace deckForge.PhaseActions
         {
             Name = name;
             DrawCount = drawCount;
-            Description = $"Draw {drawCount} Cards";
+            Description = $"Draw {drawCount} Card(s)";
         }
 
         override public void execute(Player p)

@@ -58,6 +58,12 @@ namespace deckForge.PlayerConstruction
             }
         }
 
+        public List<Card> PlayedCards {
+            get {
+                return _gm.GetPlayedCardsOfPlayer(PlayerID);
+            }
+        }
+
         virtual public void StartTurn()
         {
             for (var i = 0; i < _cardDraws; i++)
