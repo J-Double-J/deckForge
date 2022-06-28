@@ -1,6 +1,7 @@
 using CardNamespace;
 using deckForge.GameConstruction;
 using DeckNameSpace;
+using deckForge.PlayerConstruction.PlayerEvents;
 
 namespace deckForge.PlayerConstruction
 {
@@ -13,8 +14,9 @@ namespace deckForge.PlayerConstruction
         protected List<Card> _hand = new();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
+        public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
 
-        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null )
+        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
         {
             _gm = gm;
             _personalDeck = personalDeck;
@@ -29,7 +31,6 @@ namespace deckForge.PlayerConstruction
             {
                 DrawCard();
             }
-
         }
 
         public int HandSize
@@ -42,11 +43,16 @@ namespace deckForge.PlayerConstruction
             get;
         }
 
-        public int PersonalDeckSize {
-            get {
-                if (_personalDeck != null) {
+        public int PersonalDeckSize
+        {
+            get
+            {
+                if (_personalDeck != null)
+                {
                     return _personalDeck.Size;
-                } else {
+                }
+                else
+                {
                     return 0;
                 }
             }
@@ -107,23 +113,12 @@ namespace deckForge.PlayerConstruction
 
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
                 _gm.PlayerPlayedCard(PlayerID, c);
-                OnRaisePlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
+                OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
             }
         }
 
-        
-
-        virtual protected void OnRaisePlayerPlayedCard(PlayerPlayedCardEventArgs e)
+        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<Player> command)
         {
-            var handler = PlayerPlayedCard;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<Player> command) {
             Player targetPlayer = _gm.GetPlayerByID(targetID);
             command(targetPlayer);
         }
@@ -132,12 +127,30 @@ namespace deckForge.PlayerConstruction
             command();
         }
 
-        virtual public void AddToPersonalDeck(Card c) {
+        virtual public void AddToPersonalDeck(Card c)
+        {
             if (_personalDeck != null)
                 _personalDeck.AddCardToDeck(c);
-            else {
+            else
+            {
                 throw new ArgumentException(message: "There is no personal deck to add to");
             }
+        }
+
+        protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
+        {
+            var handler = PlayerPlayedCard;
+
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEvent e)
+        {
+            var handler = PlayerMessageEvent;
+
+            if (handler != null)
+                handler(this, e);
         }
     }
 }
