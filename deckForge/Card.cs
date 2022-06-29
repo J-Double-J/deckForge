@@ -1,5 +1,7 @@
-namespace CardNamespace {
-    public class Card {
+namespace CardNamespace
+{
+    public class Card
+    {
         public int val;
         public string suit = String.Empty;
         private bool facedown;
@@ -11,7 +13,8 @@ namespace CardNamespace {
             this.facedown = facedown;
         }
 
-        public bool Facedown {
+        public bool Facedown
+        {
             get { return facedown; }
             set { facedown = value; }
         }
@@ -23,12 +26,12 @@ namespace CardNamespace {
                 return "COVERED";
         }
 
-        public void Flip() {
+        public void Flip()
+        {
             if (facedown)
                 facedown = false;
             else
                 facedown = true;
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CardNamespace;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements;
+using deckForge.PhaseActions;
 
 namespace deckForge.GameConstruction
 {
@@ -41,8 +42,9 @@ namespace deckForge.GameConstruction
 
         }
 
-        public int PlayerCount {
-            get {return _players.Count;}
+        public int PlayerCount
+        {
+            get { return _players.Count; }
         }
 
         //TODO: Only used for testing at this moment. Does not fix bad ID's
@@ -101,8 +103,21 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public List<Card> GetPlayedCardsOfPlayer(int playerID) {
+        public List<Card> GetPlayedCardsOfPlayer(int playerID)
+        {
             return _table.GetCardsForSpecificPlayer(playerID);
+        }
+
+        public void TellPlayerToExecuteCommand(int playerID, GameAction command)
+        {
+            try
+            {
+                _players[playerID].ExecuteGameAction(command);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

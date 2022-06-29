@@ -23,6 +23,6 @@ namespace deckForge.GameRules.PlayerRoundRules
             PhaseName = phaseName;
         }
 
-        public void StartPhase() {}
+        virtual public void StartPhase() {}
     }
 }

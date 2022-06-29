@@ -2,6 +2,7 @@ using CardNamespace;
 using deckForge.GameConstruction;
 using DeckNameSpace;
 using deckForge.PlayerConstruction.PlayerEvents;
+using deckForge.PhaseActions;
 
 namespace deckForge.PlayerConstruction
 {
@@ -131,6 +132,10 @@ namespace deckForge.PlayerConstruction
         virtual public void ExecuteCommand(Action command)
         {
             command();
+        }
+
+        virtual public void ExecuteGameAction(GameAction action) {
+            action.execute(this);
         }
 
         virtual public void AddToPersonalDeck(Card c)
