@@ -6,7 +6,7 @@ namespace deckForge.PhaseActions
     public class DoNothingAction<T> : IAction<T>
     {
         public DoNothingAction() { }
-        public string Name { get { return "Do Nothing"; } }
+        public string Name { get { return "Nothing"; } }
 
         public string Description
         {

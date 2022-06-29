@@ -6,7 +6,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 {
     public class BasePhase<T> : IPhase
     {
-        protected int _curAction = 0;
+        protected int CurrentAction = 0;
         public string PhaseName
         {
             get;

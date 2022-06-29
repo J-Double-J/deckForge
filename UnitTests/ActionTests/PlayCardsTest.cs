@@ -12,15 +12,14 @@ namespace UnitTests.ActionTests
         public void PlayAction_MakesPlayerPlayCards()
         {
             bool eventRaised = false;
-            PlayerGameAction action = new PlayCardsAction();
             GameMediator gm = new(1);
+            Player p = new Player(gm);
+            PlayerGameAction action = new PlayCardsAction();
 
             //StringWriter and Reader are for the console.
             var sr = new StringReader("0");
 
             Console.SetIn(sr);
-
-            Player p = new Player(gm);
 
             p.PlayerPlayedCard += (sender, e) => eventRaised = true;
 

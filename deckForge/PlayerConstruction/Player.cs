@@ -136,7 +136,7 @@ namespace deckForge.PlayerConstruction
             command();
         }
 
-        virtual public void ExecuteGameAction(PlayerGameAction action)
+        virtual public void ExecuteGameAction(IAction<Player> action)
         {
             action.execute(this);
         }

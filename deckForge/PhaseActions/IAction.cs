@@ -4,6 +4,6 @@ namespace deckForge.PhaseActions
     {
         public string Name { get; }
         public string Description { get; }
-        public void execute(T obj);
+        public void execute(T t);
     }
 }

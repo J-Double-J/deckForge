@@ -6,25 +6,32 @@ namespace deckForge.GameRules.RoundConstruction.Phases
     public class PlayerPhase : BasePhase<Player>
     {
 
-        Player _player;
-        public PlayerPhase(Player player, List<IAction<Player>> actions, string phaseName = "") : base(actions: actions, phaseName: phaseName)
+        protected int CurrentPlayer = 0;
+        protected List<Player> Players;
+        public PlayerPhase(List<Player> players, List<IAction<Player>> actions, string phaseName = "") : base(actions: actions, phaseName: phaseName)
         {
-            _player = player;
+            Players = players;
         }
 
         new virtual public void StartPhase()
         {
             base.StartPhase();
-            NextAction(actionNum: _curAction);
+            NextAction(actionNum: CurrentAction);
+
         }
         new virtual public void EndPhase()
         {
             base.EndPhase();
         }
 
-        private void NextAction(int actionNum)
+        protected void NextAction(int actionNum)
         {
-            Actions[actionNum].execute(_player);
+            foreach (Player p in Players)
+            {
+                Actions[actionNum].execute(p);
+            }
+            CurrentAction++;
+            NextAction(CurrentAction);
         }
     }
 }

@@ -4,23 +4,21 @@ namespace deckForge.PhaseActions
 {
     public class DrawCardsAction : PlayerGameAction
     {
-        override public string Name { get; }
-        override public string Description { get; }
-
         public int DrawCount { get; }
 
         public DrawCardsAction(string name = "Draw", int drawCount = 1)
+        : base(name: name)
         {
             Name = name;
             DrawCount = drawCount;
             Description = $"Draw {drawCount} Card(s)";
         }
 
-        override public void execute(Player p)
+        override public void execute(Player player)
         {
             for (int i = 0; i < DrawCount; i++)
             {
-                p.DrawCard();
+                player.DrawCard();
             }
         }
     }
