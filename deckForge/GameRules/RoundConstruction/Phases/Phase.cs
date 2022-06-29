@@ -1,6 +1,6 @@
 ﻿using deckForge.PhaseActions;
 
-namespace deckForge.GameRules.PlayerRoundRules
+namespace deckForge.GameRules.RoundConstruction.Phases
 {
     public class Phase
     {
@@ -9,13 +9,16 @@ namespace deckForge.GameRules.PlayerRoundRules
             get;
         }
 
-        public List<GameAction> Actions {
+        public List<GameAction> Actions
+        {
             get;
             private set;
         }
 
-        public Phase(List<GameAction>? actions = null, string phaseName = "") {
-            if (actions == null) {
+        public Phase(List<GameAction>? actions = null, string phaseName = "")
+        {
+            if (actions == null)
+            {
                 actions = new List<GameAction>();
                 actions.Add(new DoNothingAction());
             }
@@ -23,6 +26,6 @@ namespace deckForge.GameRules.PlayerRoundRules
             PhaseName = phaseName;
         }
 
-        virtual public void StartPhase() {}
+        virtual public void StartPhase() { }
     }
 }

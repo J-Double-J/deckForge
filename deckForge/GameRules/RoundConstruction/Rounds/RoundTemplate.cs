@@ -1,4 +1,6 @@
-namespace deckForge.GameRules.PlayerRoundRules
+using deckForge.GameRules.RoundConstruction.Phases;
+
+namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     public class RoundTemplate
     {
@@ -17,7 +19,8 @@ namespace deckForge.GameRules.PlayerRoundRules
 
         virtual protected void NextPhase(int phaseNum)
         {
-            try {
+            try
+            {
                 if (curPhase + 1 <= phases.Count)
                 {
                     phases[curPhase].StartPhase();
@@ -28,10 +31,12 @@ namespace deckForge.GameRules.PlayerRoundRules
                 {
                     EndRound();
                 }
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
-            
+
         }
 
         virtual public void EndRound() { }

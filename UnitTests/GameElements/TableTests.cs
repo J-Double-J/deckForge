@@ -53,8 +53,10 @@ namespace UnitTests.GameElements
             table.PlaceCardOnTable(1, new Card(10, "J", facedown: false));
 
             table.PrintTableState();
-
-            output.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
+            if(OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
+            else if(OperatingSystem.IsWindows())
+                output.ToString().Should().Be("8J\r\n9J\r\n10J\r\n8J\r\n9J\r\n10J\r\n", "these six cards were placed on the table");
         }
 
         [TestMethod]
@@ -79,7 +81,10 @@ namespace UnitTests.GameElements
             table.Flip_AllCardsOneWay_AllPLayers(facedown: true);
             table.PrintTableState();
 
-            output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\nCOVERED\n", "all 4 cards should be flipped down");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\nCOVERED\n", "all 4 cards should be flipped down");
+            else if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("COVERED\r\nCOVERED\r\nCOVERED\r\nCOVERED\r\n", "all 4 cards should be flipped down");
         }
 
         [TestMethod]
@@ -90,7 +95,10 @@ namespace UnitTests.GameElements
             table.Flip_AllCardsEitherWay_AllPlayers();
             table.PrintTableState();
 
-            output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\n2Q\n", "only the 2 Queen should be faceup as it was facedown originally");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\n2Q\n", "only the 2 Queen should be faceup as it was facedown originally");
+            if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("COVERED\r\nCOVERED\r\nCOVERED\r\n2Q\r\n", "only the 2 Queen should be faceup as it was facedown originally");
         }
 
         [TestMethod]
@@ -101,7 +109,10 @@ namespace UnitTests.GameElements
             table.Flip_AllCardsOneWay_SpecificPlayer(0, facedown: true);
             table.PrintTableState();
 
-            output.ToString().Should().Be("COVERED\nCOVERED\n1Q\nCOVERED\n", "Player 0 should have their cards hidden now");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("COVERED\nCOVERED\n1Q\nCOVERED\n", "Player 0 should have their cards hidden now");
+            if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("COVERED\r\nCOVERED\r\n1Q\r\nCOVERED\r\n", "Player 0 should have their cards hidden now");
         }
 
         [TestMethod]
@@ -112,7 +123,10 @@ namespace UnitTests.GameElements
             table.Flip_AllCardsEitherWay_SpecificPlayer(1);
             table.PrintTableState();
 
-            output.ToString().Should().Be("8J\n9J\nCOVERED\n2Q\n", "Player 1's cards were flipped regardless of their original facing");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("8J\n9J\nCOVERED\n2Q\n", "Player 1's cards were flipped regardless of their original facing");
+            if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("8J\r\n9J\r\nCOVERED\r\n2Q\r\n", "Player 1's cards were flipped regardless of their original facing");
         }
 
         [TestMethod]
@@ -123,7 +137,10 @@ namespace UnitTests.GameElements
             table.Flip_SpecificCard_SpecificPlayer(0, 0);
             table.PrintTableState();
 
-            output.ToString().Should().Be("COVERED\n9J\n1Q\nCOVERED\n", "The 8J card should be flipped down while the other cards are untouched");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("COVERED\n9J\n1Q\nCOVERED\n", "The 8J card should be flipped down while the other cards are untouched");
+            else if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("COVERED\r\n9J\r\n1Q\r\nCOVERED\r\n", "The 8J card should be flipped down while the other cards are untouched");
         }
 
         [TestMethod]

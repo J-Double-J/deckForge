@@ -1,4 +1,4 @@
-namespace deckForge.GameRules.PlayerRoundRules
+namespace deckForge.GameRules.RoundConstruction.Interfaces
 {
     public interface IRoundRules
     {

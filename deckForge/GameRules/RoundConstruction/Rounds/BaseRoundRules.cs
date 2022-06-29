@@ -1,4 +1,7 @@
-namespace deckForge.GameRules.PlayerRoundRules
+using deckForge.GameRules.RoundConstruction.Phases;
+using deckForge.GameRules.RoundConstruction.Interfaces;
+
+namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     public class BaseRoundRules : IRoundRules
     {
