@@ -1,20 +1,22 @@
 ﻿using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.PhaseActions;
+using deckForge.PlayerConstruction;
 using FluentAssertions;
 
 namespace UnitTests.PlayerRoundRulesTests
 {
     [TestClass]
-    public class PhaseTests {
-        
+    public class PhaseTests
+    {
+
         [TestMethod]
         public void SetActionOfAPhase()
         {
-            List<GameAction> actions = new List<GameAction>();
+            List<IAction<Player>> actions = new List<IAction<Player>>();
             actions.Add(new DrawCardsAction());
-            Phase ph = new Phase(actions);
+            BasePhase<Player> ph = new BasePhase<Player>(actions);
 
-            ph.Actions.Count.Should().Be(1, "there is an action that was added to the phase");
+            ph.ActionCount.Should().Be(1, "there is an action that was added to the phase");
         }
 
 

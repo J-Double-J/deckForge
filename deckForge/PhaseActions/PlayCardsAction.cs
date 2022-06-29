@@ -2,13 +2,15 @@
 
 namespace deckForge.PhaseActions
 {
-    public class PlayCardsAction : GameAction {
+    public class PlayCardsAction : PlayerGameAction
+    {
 
 
-        public PlayCardsAction(string name = "Play", int playCount = 1) {
+        public PlayCardsAction(string name = "Play", int playCount = 1)
+        {
             Name = name;
             PlayCount = playCount;
-            Description = $"Play {playCount} Cards";    
+            Description = $"Play {playCount} Cards";
         }
 
         public override string Name { get; }
@@ -17,7 +19,8 @@ namespace deckForge.PhaseActions
 
         public int PlayCount { get; }
 
-        public override void execute(Player p) {
+        public override void execute(Player p)
+        {
             p.PlayCard();
         }
     }

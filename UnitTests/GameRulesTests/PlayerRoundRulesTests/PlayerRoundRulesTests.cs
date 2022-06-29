@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Rounds;
+using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
 
@@ -13,14 +14,14 @@ namespace UnitTests.PlayerRoundRulesTests
         [DataRow(5)]
         public void getRoundHandLimit_SpecifiedLimit(int lim)
         {
-            PlayerRoundRules rr = new PlayerRoundRules(new List<Phase>(), new Player(new GameMediator(0)), handlimit: lim);
+            PlayerRoundRules rr = new PlayerRoundRules(new List<IPhase>(), new Player(new GameMediator(0)), handlimit: lim);
             rr.HandLimit.Should().Be(lim, "RoundRules was initiliazed with a max hand limit");
         }
 
         [TestMethod]
         public void getRoundHandLimit_UnSpecifiedLimit()
         {
-            PlayerRoundRules rr = new PlayerRoundRules(new List<Phase>(), new Player(new GameMediator(0)));
+            PlayerRoundRules rr = new PlayerRoundRules(new List<IPhase>(), new Player(new GameMediator(0)));
             rr.HandLimit.Should().Be(64, "RoundRules was initiliazed without a max hand limit");
         }
 
@@ -28,7 +29,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void setRoundHandLimitToInvalidValue()
         {
             var gm = new GameMediator(0);
-            Action init = () => new PlayerRoundRules(new List<Phase>(), new Player(gm), handlimit: -2);
+            Action init = () => new PlayerRoundRules(new List<IPhase>(), new Player(gm), handlimit: -2);
             init.Should().Throw<ArgumentException>("you can't have a negative hand limit (except for -1 which is no limit to card play)");
         }
 
@@ -37,14 +38,14 @@ namespace UnitTests.PlayerRoundRulesTests
 
         public void getCardDrawonNewTurn_SpecifiedLimit(int lim)
         {
-            PlayerRoundRules rr = new PlayerRoundRules(new List<Phase>(), new Player(new GameMediator(0)), cardPlayLimit: lim);
+            PlayerRoundRules rr = new PlayerRoundRules(new List<IPhase>(), new Player(new GameMediator(0)), cardPlayLimit: lim);
             rr.CardPlayLimit.Should().Be(lim, "RoundRules was initiliazed with a max Card Play limit");
         }
 
         [TestMethod]
         public void getCardDrawonNewTurn_UnSpecifiedLimit()
         {
-            PlayerRoundRules rr = new PlayerRoundRules(new List<Phase>(), new Player(new GameMediator(0)));
+            PlayerRoundRules rr = new PlayerRoundRules(new List<IPhase>(), new Player(new GameMediator(0)));
             rr.CardPlayLimit.Should().Be(1, "RoundRules was initiliazed with a max Card Play limit");
         }
     }

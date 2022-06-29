@@ -1,12 +1,13 @@
 ﻿using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.PlayerConstruction;
 using deckForge.PhaseActions;
+using deckForge.GameRules.RoundConstruction.Interfaces;
+
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     public class PlayerRoundRules : BaseRoundRules
     {
         int _handLim;
-        Player _player;
 
         public int HandLimit
         {
@@ -27,11 +28,11 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         public Player Player { get; }
 
 
-        public PlayerRoundRules(List<Phase> phases, Player p, int handlimit = 64, int cardPlayLimit = 1) : base(phases: phases)
+        public PlayerRoundRules(List<IPhase> phases, Player p, int handlimit = 64, int cardPlayLimit = 1) : base(phases: phases)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
-            _player = p;
+            Player = p;
         }
     }
 }

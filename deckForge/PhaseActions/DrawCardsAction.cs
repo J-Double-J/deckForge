@@ -2,7 +2,7 @@
 
 namespace deckForge.PhaseActions
 {
-    public class DrawCardsAction : GameAction
+    public class DrawCardsAction : PlayerGameAction
     {
         override public string Name { get; }
         override public string Description { get; }

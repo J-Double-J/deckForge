@@ -59,8 +59,10 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        public List<Card> PlayedCards {
-            get {
+        public List<Card> PlayedCards
+        {
+            get
+            {
                 return _gm.GetPlayedCardsOfPlayer(PlayerID);
             }
         }
@@ -134,7 +136,8 @@ namespace deckForge.PlayerConstruction
             command();
         }
 
-        virtual public void ExecuteGameAction(GameAction action) {
+        virtual public void ExecuteGameAction(PlayerGameAction action)
+        {
             action.execute(this);
         }
 

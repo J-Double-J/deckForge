@@ -11,7 +11,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void DrawAction_MakesPlayerDrawCard()
         {
-            GameAction action = new DrawCardsAction();
+            PlayerGameAction action = new DrawCardsAction();
             GameMediator gm = new(0);
 
             Player p = new Player(gm);
@@ -23,7 +23,7 @@ namespace UnitTests.ActionTests
             action.execute(p);
             p.HandSize.Should().Be(initHandSize + 1, "player was told to draw a card.");
 
-            GameAction specifiedDraw = new DrawCardsAction(drawCount: 5);
+            PlayerGameAction specifiedDraw = new DrawCardsAction(drawCount: 5);
             specifiedDraw.execute(p);
             p.HandSize.Should().Be(initHandSize + 6, "player was told to draw 5 more cards");
         }
@@ -31,7 +31,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void DrawAction_CantDrawFromEmptyDeck()
         {
-            GameAction action = new DrawCardsAction(drawCount: 5);
+            PlayerGameAction action = new DrawCardsAction(drawCount: 5);
             GameMediator gm = new(0);
 
             Player p = new Player(gm);

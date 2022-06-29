@@ -1,14 +1,15 @@
 using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Interfaces;
 
+
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     public class BaseRoundRules : IRoundRules
     {
 
-        protected List<Phase> _phases;
+        protected List<IPhase> _phases;
         protected int _curPhase = 0;
-        public BaseRoundRules(List<Phase> phases)
+        public BaseRoundRules(List<IPhase> phases)
         {
             _phases = phases;
         }

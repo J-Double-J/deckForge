@@ -12,7 +12,7 @@ namespace UnitTests.ActionTests
         public void PlayAction_MakesPlayerPlayCards()
         {
             bool eventRaised = false;
-            GameAction action = new PlayCardsAction();
+            PlayerGameAction action = new PlayCardsAction();
             GameMediator gm = new(1);
 
             //StringWriter and Reader are for the console.

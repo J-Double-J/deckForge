@@ -108,7 +108,7 @@ namespace deckForge.GameConstruction
             return _table.GetCardsForSpecificPlayer(playerID);
         }
 
-        public void TellPlayerToExecuteCommand(int playerID, GameAction command)
+        public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command)
         {
             try
             {
