@@ -1,6 +1,4 @@
-﻿using deckForge.GameRules.RoundConstruction.Phases;
-using deckForge.PlayerConstruction;
-using deckForge.PhaseActions;
+﻿using deckForge.PlayerConstruction;
 using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
@@ -28,7 +26,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         public Player Player { get; }
 
 
-        public PlayerRoundRules(List<IPhase> phases, Player p, int handlimit = 64, int cardPlayLimit = 1) : base(phases: phases)
+        public PlayerRoundRules(List<IPhase> phases, Player p, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        : base(phases: phases, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;

@@ -4,5 +4,6 @@ namespace deckForge.GameRules.RoundConstruction.Interfaces
     {
         public void StartRound();
         public void EndRound();
+        public void SkipToPhase(int phaseNum);
     }
 }

@@ -6,6 +6,13 @@ namespace deckForge.GameRules.RoundConstruction.Interfaces
         public void StartPhase();
         public void EndPhase();
         public string PhaseName { get; }
+        event EventHandler<SkipToPhaseEventArgs> SkipToPhase;
 
+    }
+
+    public class SkipToPhaseEventArgs : EventArgs
+    {
+        public readonly int phaseNum;
+        public SkipToPhaseEventArgs(int phaseNum) { this.phaseNum = phaseNum; }
     }
 }

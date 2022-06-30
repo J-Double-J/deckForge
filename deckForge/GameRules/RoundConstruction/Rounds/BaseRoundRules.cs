@@ -7,27 +7,65 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
     public class BaseRoundRules : IRoundRules
     {
 
-        protected List<IPhase> _phases;
-        protected int _curPhase = 0;
-        public BaseRoundRules(List<IPhase> phases)
+        protected List<IPhase> Phases;
+        protected int CurPhase = 0;
+        public BaseRoundRules(List<IPhase> phases, bool subscribeToAllPhaseEvents = true)
         {
-            _phases = phases;
-        }
-
-        virtual public void StartRound() {
-            //Loop makes sure that if a phase is skipped it handles it correctly
-            while (_curPhase < _phases.Count) {
-                _phases[_curPhase].StartPhase();
-                _curPhase++;
-
-                if (_curPhase >= _phases.Count()) {
-                    break;
-                }
+            Phases = phases;
+            if (subscribeToAllPhaseEvents)
+            {
+                SubscribeToAllPhases_SkipToPhaseEvents();
             }
-
-            EndRound();
         }
 
-        virtual public void EndRound() {}
+        virtual public void StartRound()
+        {
+            NextPhase(0);
+        }
+
+        virtual protected void NextPhase(int phaseNum)
+        {
+            if (phaseNum < Phases.Count)
+            {
+                Phases[CurPhase].StartPhase();
+                phaseNum++;
+            }
+            if (phaseNum > Phases.Count - 1)
+            {
+                EndRound();
+            }
+            else
+            {
+                NextPhase(phaseNum);
+            }
+        }
+
+        virtual public void EndRound() { }
+
+        virtual public void SkipToPhase(int phaseNum)
+        {
+            try
+            {
+                CurPhase = phaseNum;
+                NextPhase(CurPhase);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        virtual protected void Phase_SkipToPhaseEvent(Object? sender, SkipToPhaseEventArgs e)
+        {
+            SkipToPhase(e.phaseNum);
+        }
+
+        virtual protected void SubscribeToAllPhases_SkipToPhaseEvents()
+        {
+            foreach (IPhase phase in Phases)
+            {
+                phase.SkipToPhase += Phase_SkipToPhaseEvent;
+            }
+        }
     }
 }
