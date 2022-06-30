@@ -46,7 +46,26 @@ namespace UnitTests.ActionTests
 
             action.execute(p);
             p.HandSize.Should().Be(52, "the deck was completely drawn from, so there should be no more cards to gain");
+        }
 
+        [TestMethod]
+        public void UnsupportedExecutes_ThrowErrors()
+        {
+            GameMediator gm = new(0);
+            Player p = new Player(gm);
+            Player p2 = new Player(gm);
+            Player p3 = new Player(gm);
+            List<Player> targetPlayers = new List<Player>{
+                p2, p3
+            };
+
+            PlayerGameAction action = new DrawCardsAction(drawCount: 5);
+
+            Action a = () => action.execute(p, p2);
+            Action b = () => action.execute(p, targetPlayers);
+
+            a.Should().Throw<NotSupportedException>("this method does not allow Players to target draws against one another");
+            b.Should().Throw<NotSupportedException>("this method does not allow Players to target draws against one another");
         }
     }
 }
