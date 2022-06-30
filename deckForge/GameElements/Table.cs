@@ -102,5 +102,46 @@ namespace deckForge.GameElements
             try { playedCards[playerID][cardPos].Flip(); }
             catch { throw; }
         }
+
+        public void Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
+        {
+            if (playedCards[playerID][cardPos].Facedown != facedown)
+            {
+                playedCards[playerID][cardPos].Flip();
+            }
+        }
+
+        public Card RemoveSpecificCard_FromPlayer(int playerID, int cardPos)
+        {
+            try
+            {
+                Card c = playedCards[playerID][cardPos];
+                playedCards[playerID].RemoveAt(cardPos);
+                return c;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<Card> PickUpAllCards_FromPlayer(int playerID)
+        {
+            try
+            {
+                List<Card> cards = new();
+
+                for (var i = 0; i < playedCards[playerID].Count; i++)
+                {
+                    cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: i));
+                }
+
+                return cards;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

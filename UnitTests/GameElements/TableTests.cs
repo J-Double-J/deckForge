@@ -53,9 +53,9 @@ namespace UnitTests.GameElements
             table.PlaceCardOnTable(1, new Card(10, "J", facedown: false));
 
             table.PrintTableState();
-            if(OperatingSystem.IsMacOS())
+            if (OperatingSystem.IsMacOS())
                 output.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
-            else if(OperatingSystem.IsWindows())
+            else if (OperatingSystem.IsWindows())
                 output.ToString().Should().Be("8J\r\n9J\r\n10J\r\n8J\r\n9J\r\n10J\r\n", "these six cards were placed on the table");
         }
 
@@ -63,7 +63,7 @@ namespace UnitTests.GameElements
         public void TableReturnsPlayersCards()
         {
             string s = String.Empty;
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             List<Card> cards = table.GetCardsForSpecificPlayer(0);
 
@@ -76,7 +76,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableFlipsAllPlayerCards()
         {
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             table.Flip_AllCardsOneWay_AllPLayers(facedown: true);
             table.PrintTableState();
@@ -90,7 +90,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableFlipsAllCardsEitherWay()
         {
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             table.Flip_AllCardsEitherWay_AllPlayers();
             table.PrintTableState();
@@ -104,7 +104,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableFlipsASpecificPlayersCards()
         {
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             table.Flip_AllCardsOneWay_SpecificPlayer(0, facedown: true);
             table.PrintTableState();
@@ -118,7 +118,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableFlipsASpecificPlayersCards_EitherWay()
         {
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             table.Flip_AllCardsEitherWay_SpecificPlayer(1);
             table.PrintTableState();
@@ -132,7 +132,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableFlipsSpecificPlayersCard()
         {
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             table.Flip_SpecificCard_SpecificPlayer(0, 0);
             table.PrintTableState();
@@ -151,7 +151,7 @@ namespace UnitTests.GameElements
             Action c = () => table.Flip_SpecificCard_SpecificPlayer(3, 0);
             string because = "there is no player 3 on the table";
 
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             a.Should().Throw<ArgumentOutOfRangeException>(because);
             b.Should().Throw<ArgumentOutOfRangeException>(because);
@@ -163,13 +163,70 @@ namespace UnitTests.GameElements
         {
             Action a = () => table.Flip_SpecificCard_SpecificPlayer(0, 3);
 
-            setUpTableForFlipTests();
+            setUpTableForTests();
 
             a.Should().Throw<ArgumentOutOfRangeException>("Player 0 doesn't have a 4th card on the board");
         }
 
+        [TestMethod]
+        public void TableRemovesACard()
+        {
+            setUpTableForTests();
 
-        private void setUpTableForFlipTests()
+            table.RemoveSpecificCard_FromPlayer(0, 0);
+            table.PrintTableState();
+
+            output.ToString().Should().Be("9J\n1Q\nCOVERED\n", "First player's first card was removed");
+        }
+
+        [TestMethod]
+        public void TableShouldThrowException_IfRemovingCard_FromNonexistantPlayer()
+        {
+            setUpTableForTests();
+
+            Action a = () => table.RemoveSpecificCard_FromPlayer(0, 5);
+            a.Should().Throw<ArgumentOutOfRangeException>("there is no sixth player");
+        }
+
+        [TestMethod]
+        public void TableShouldThrowException_IfRemovingNonexistantCard_FromPlayer()
+        {
+            setUpTableForTests();
+
+            Action a = () => table.RemoveSpecificCard_FromPlayer(4, 0);
+            a.Should().Throw<ArgumentOutOfRangeException>("Player 0 has no fifth card");
+        }
+
+        [TestMethod]
+        public void PickUpAllCards_FromAPlayerTableSpot()
+        {
+            List<Card> cards;
+
+            setUpTableForTests();
+
+            cards = table.PickUpAllCards_FromPlayer(0);
+            cards.Count.Should().Be(2, "all of Player 0's cards were picked up");
+        }
+
+        [TestMethod]
+        public void PickUpAllCards_AndTableNoLongerHasThoseCards()
+        {
+            setUpTableForTests();
+
+            table.PickUpAllCards_FromPlayer(0);
+            table.PrintTableState();
+
+            if (OperatingSystem.IsIOS())
+            {
+                output.Should().Be("1Q\nCOVERED\n");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.Should().Be("1Q\r\nCOVERED\r\n");
+            }
+        }
+
+        private void setUpTableForTests()
         {
             Console.SetOut(output);
 
@@ -178,7 +235,6 @@ namespace UnitTests.GameElements
             table.PlaceCardOnTable(1, new Card(1, "Q", facedown: false));
             table.PlaceCardOnTable(1, new Card(2, "Q", facedown: true));
         }
-
 
     }
 }
