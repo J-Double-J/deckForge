@@ -131,9 +131,15 @@ namespace deckForge.GameElements
             {
                 List<Card> cards = new();
 
-                for (var i = 0; i < playedCards[playerID].Count; i++)
+                // for (var i = 0; i < playedCards[playerID].Count; i++)
+                // {
+                //     cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: i));
+                // }
+                var numCardsToGrab = playedCards[playerID].Count;
+                for (var i = 0; i < numCardsToGrab; i++)
                 {
-                    cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: i));
+                    cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: 0));
+
                 }
 
                 return cards;

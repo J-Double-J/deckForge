@@ -198,7 +198,7 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void PickUpAllCards_FromAPlayerTableSpot()
+        public void PickUpAllCards_From_APlayerTableSpot()
         {
             List<Card> cards;
 
