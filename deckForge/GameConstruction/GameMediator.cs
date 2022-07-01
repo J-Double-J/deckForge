@@ -119,5 +119,21 @@ namespace deckForge.GameConstruction
                 throw;
             }
         }
+
+        public Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
+        {
+            if (facedown is null)
+            {
+                return _table.Flip_SpecificCard_SpecificPlayer(playerID, cardPos);
+            }
+            else
+            {
+                return _table.Flip_SpecificCard_SpecificPlayer_SpecificWay(playerID, cardPos, (bool)facedown);
+            }
+        }
+
+        public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID) {
+            return _table.PickUpAllCards_FromPlayer(playerID);
+        }
     }
 }

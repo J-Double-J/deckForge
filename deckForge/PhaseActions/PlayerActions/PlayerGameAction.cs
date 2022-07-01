@@ -1,5 +1,6 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.GameRules.RoundConstruction.Phases;
+using CardNamespace;
 
 namespace deckForge.PhaseActions
 {
@@ -13,12 +14,15 @@ namespace deckForge.PhaseActions
         }
         public virtual string Name { get; protected set; }
         public virtual string Description { get; protected set; }
-        public virtual void execute(Player player) { throw new NotSupportedException("This implentation '(Player player)' is not defined for this action."); }
-        public virtual void execute(Player playerExecutor, Player playerTarget) { throw new NotSupportedException("This implentation '(Player playerExecutor, Player playerTarget)' is not defined for this action."); }
-        public virtual void execute(Player player, List<Player> playerGroup) { 
+        public virtual Object? execute(Player player) { throw new NotSupportedException("This implentation '(Player player)' is not defined for this action."); }
+        public virtual Object? execute(Player playerExecutor, Player playerTarget) { throw new NotSupportedException("This implentation '(Player playerExecutor, Player playerTarget)' is not defined for this action."); }
+        public virtual List<Object?> execute(Player player, List<Player> playerGroup) {
+            List<Object?> objects = new(); 
             foreach(Player p in playerGroup) {
-                execute(player, p);
+                objects.Add(execute(player, p));
             }
+
+            return objects;
         }
     }
 }

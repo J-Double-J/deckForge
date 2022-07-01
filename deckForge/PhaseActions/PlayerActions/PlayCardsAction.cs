@@ -1,4 +1,5 @@
 ﻿using deckForge.PlayerConstruction;
+using CardNamespace;
 
 namespace deckForge.PhaseActions
 {
@@ -14,9 +15,9 @@ namespace deckForge.PhaseActions
 
         public int PlayCount { get; }
 
-        public override void execute(Player player)
+        public override Card? execute(Player player)
         {
-            player.PlayCard();
+            return player.PlayCard();
         }
 
         

@@ -80,7 +80,8 @@ namespace deckForge.PlayerConstruction
             _gm.EndPlayerTurn();
         }
 
-        virtual public void DrawCard()
+        //Returns which card was drawn
+        virtual public Card? DrawCard()
         {
             Card? c = _gm.DrawCardFromDeck();
             if (c != null)
@@ -91,14 +92,18 @@ namespace deckForge.PlayerConstruction
             {
                 Console.WriteLine("Deck is Empty.");
             }
+
+            return c;
         }
 
-        virtual public void PlayCard(bool facedown = false)
+        //Returns PlayedCard
+        virtual public Card? PlayCard(bool facedown = false)
         {
             //TODO: Remove
             if (_hand.Count == 0)
             {
                 _gm.EndGame();
+                return null;
             }
             else
             {
@@ -123,6 +128,8 @@ namespace deckForge.PlayerConstruction
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
                 _gm.PlayerPlayedCard(PlayerID, c);
                 OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
+
+                return c;
             }
         }
 
@@ -141,13 +148,13 @@ namespace deckForge.PlayerConstruction
             action.execute(this);
         }
 
-        virtual public void AddToPersonalDeck(Card c)
+        virtual public void AddToPersonalDeck(Card c, string position = "bottom", bool shuffleDeckAfter = false)
         {
             if (_personalDeck != null)
-                _personalDeck.AddCardToDeck(c);
+                _personalDeck.AddCardToDeck(c, pos: position, shuffleAfter: shuffleDeckAfter);
             else
             {
-                throw new ArgumentException(message: "There is no personal deck to add to");
+                throw new NotSupportedException(message: "There is no personal deck to add to");
             }
         }
 
@@ -162,9 +169,33 @@ namespace deckForge.PlayerConstruction
         protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEvent e)
         {
             var handler = PlayerMessageEvent;
-
             if (handler != null)
                 handler(this, e);
+        }
+
+        //Gets Flipped Card
+        public Card FlipSingleCard(int cardNum, bool? facedown = null)
+        {
+            return _gm.FlipSingleCard(PlayerID, cardNum, facedown);
+        }
+
+        public List<Card> TakeAllCardsFromTable()
+        {
+            return _gm.PickUpAllCards_FromTable_FromPlayer(PlayerID);
+        }
+
+        //Returns what cards were added to the deck
+        public List<Card> AddCardsToPersonalDeck
+        (List<Card> cards, string position = "bottom", bool shuffleDeckAfter = false)
+        {
+            if (_personalDeck is not null) {
+                _personalDeck?.AddMultipleCardsToDeck(cards, position, shuffleDeckAfter);
+                return cards;
+            }
+            else
+            {
+                throw new NotSupportedException($"Player {PlayerID} doesn't have a personal deck");
+            }
         }
     }
 }

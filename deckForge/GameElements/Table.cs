@@ -97,17 +97,25 @@ namespace deckForge.GameElements
             }
         }
 
-        public void Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
+        //Returns which card this command was on
+        public Card Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
         {
-            try { playedCards[playerID][cardPos].Flip(); }
+            try { 
+                playedCards[playerID][cardPos].Flip(); 
+                return playedCards[playerID][cardPos];
+            }
             catch { throw; }
         }
 
-        public void Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
+        //Returns which card this command was on
+        public Card Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
         {
             if (playedCards[playerID][cardPos].Facedown != facedown)
             {
                 playedCards[playerID][cardPos].Flip();
+                return playedCards[playerID][cardPos];
+            } else {
+                return playedCards[playerID][cardPos];
             }
         }
 
