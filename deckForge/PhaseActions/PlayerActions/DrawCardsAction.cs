@@ -7,9 +7,16 @@ namespace deckForge.PhaseActions
     {
         public int DrawCount { get; }
 
-        public DrawCardsAction(string name = "Draw", int drawCount = 1)
+        public DrawCardsAction(int drawCount = 1, string name = "Draw")
         : base(name: name)
         {
+            Name = name;
+            DrawCount = drawCount;
+            Description = $"Draw {drawCount} Card(s)";
+        }
+
+        public DrawCardsAction(ref int drawCount, string name = "Draw")
+        : base(name: name) {
             Name = name;
             DrawCount = drawCount;
             Description = $"Draw {drawCount} Card(s)";
@@ -19,7 +26,6 @@ namespace deckForge.PhaseActions
         override public List<Card?> execute(Player player)
         {
             List<Card?> cards = new();
-
             for (int i = 0; i < DrawCount; i++)
             {
                 cards.Add(player.DrawCard());
