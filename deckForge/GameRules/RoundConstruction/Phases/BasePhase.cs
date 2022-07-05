@@ -16,19 +16,22 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         protected List<IAction<T>> Actions
         {
             get;
-            private set;
+            set;
         }
 
-        public int ActionCount { get { return Actions.Count; } }
+        public int ActionCount { 
+            get { 
+                if (Actions is null) {
+                    return 0;
+                } else {
+                    return Actions.Count;
+                }
+            } 
+        }
 
-        public BasePhase(List<IAction<T>>? actions = null, string phaseName = "")
+        public BasePhase(string phaseName = "")
         {
-            if (actions == null)
-            {
-                actions = new List<IAction<T>>();
-                actions.Add(new DoNothingAction<T>());
-            }
-            Actions = actions;
+            Actions = new();
             PhaseName = phaseName;
         }
 
