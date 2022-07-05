@@ -3,10 +3,10 @@ using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
-    public class PlayerRoundRules : BaseRoundRules
+    abstract public class PlayerRoundRules : BaseRoundRules
     {
+        abstract override public List<IPhase> Phases { get; }
         int _handLim;
-
         public int HandLimit
         {
             get { return _handLim; }
@@ -23,15 +23,39 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
         public int CardPlayLimit { get; private set; }
-        public Player Player { get; }
+        public List<Player> Players { get; }
 
 
-        public PlayerRoundRules(List<IPhase> phases, Player p, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-        : base(phases: phases, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
+        public PlayerRoundRules(List<Player> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        : base(subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
-            Player = p;
+            Players = players;
+        }
+
+        new virtual public void StartRound()
+        {
+            base.StartRound();
+        }
+
+        new virtual protected void NextPhase(int phaseNum)
+        {
+            base.NextPhase(phaseNum);
+        }
+
+        new virtual public void EndRound()
+        {
+            base.EndRound();
+        }
+
+        new virtual public void SkipToPhase(int phaseNum)
+        {
+            base.SkipToPhase(phaseNum);
+        }
+
+        new virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase) {
+            repeatPhase = true;
         }
     }
 }

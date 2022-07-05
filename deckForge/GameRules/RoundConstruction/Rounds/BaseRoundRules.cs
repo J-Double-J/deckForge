@@ -4,14 +4,13 @@ using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
-    public class BaseRoundRules : IRoundRules
+    abstract public class BaseRoundRules : IRoundRules
     {
 
-        protected List<IPhase> Phases;
+        abstract public List<IPhase> Phases { get; }
         protected int CurPhase = 0;
-        public BaseRoundRules(List<IPhase> phases, bool subscribeToAllPhaseEvents = true)
+        public BaseRoundRules(bool subscribeToAllPhaseEvents = true)
         {
-            Phases = phases;
             if (subscribeToAllPhaseEvents)
             {
                 SubscribeToAllPhases_SkipToPhaseEvents();
@@ -25,16 +24,22 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
         virtual protected void NextPhase(int phaseNum)
         {
-            if (phaseNum < Phases.Count)
-            {
-                Phases[CurPhase].StartPhase();
-                phaseNum++;
-            }
-            if (phaseNum > Phases.Count - 1)
-            {
-                EndRound();
-            }
-            else
+            NextPhaseHook(phaseNum, out bool repeatPhase);
+            if (repeatPhase) {
+                if (phaseNum < Phases.Count)
+                {
+                    Phases[CurPhase].StartPhase();
+                    phaseNum++;
+                }
+                if (phaseNum > Phases.Count - 1)
+                {
+                    EndRound();
+                }
+                else
+                {
+                    NextPhase(phaseNum);
+                }
+            } else
             {
                 NextPhase(phaseNum);
             }
@@ -53,6 +58,10 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             {
                 throw;
             }
+        }
+
+        virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase) {
+            repeatPhase = true;
         }
 
         virtual protected void Phase_SkipToPhaseEvent(Object? sender, SkipToPhaseEventArgs e)
