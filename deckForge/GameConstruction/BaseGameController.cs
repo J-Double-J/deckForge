@@ -59,7 +59,7 @@ namespace deckForge.GameConstruction
             Environment.Exit(0);
         }
 
-        private class TurnHandler
+        private class TurnHandler : ITurnHandler
         {
             private Random rng = new Random();
             private List<int> order = new List<int>();
