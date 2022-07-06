@@ -23,7 +23,7 @@ namespace UnitTests.PlayerRoundRulesTests
         [DataRow(5)]
         public void getRoundHandLimit_SpecifiedLimit(int lim)
         {
-            List<Player> players = new List<Player> { new Player(new GameMediator(0)) };
+            List<Player> players = new List<Player> { new Player(new BaseGameMediator(0)) };
             PlayerRoundRules rr = new TestPlayerRoundRules(players, handlimit: lim);
             rr.HandLimit.Should().Be(lim, "RoundRules was initiliazed with a max hand limit");
         }
@@ -32,7 +32,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void getRoundHandLimit_UnSpecifiedLimit()
         {
             List<Player> players = new();
-            players.Add(new Player(new GameMediator(0)));
+            players.Add(new Player(new BaseGameMediator(0)));
             PlayerRoundRules rr = new TestPlayerRoundRules(players);
             rr.HandLimit.Should().Be(64, "RoundRules was initiliazed without a max hand limit");
         }
@@ -41,7 +41,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void setRoundHandLimitToInvalidValue()
         {
             List<Player> players = new();
-            players.Add(new Player(new GameMediator(0)));
+            players.Add(new Player(new BaseGameMediator(0)));
             Action init = () => new TestPlayerRoundRules(players, handlimit: -2);
             init.Should().Throw<ArgumentException>("you can't have a negative hand limit (except for -1 which is no limit to card play)");
         }
@@ -52,7 +52,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void getCardDrawonNewTurn_SpecifiedLimit(int lim)
         {
             List<Player> players = new();
-            players.Add(new Player(new GameMediator(0)));
+            players.Add(new Player(new BaseGameMediator(0)));
             PlayerRoundRules rr = new TestPlayerRoundRules(players, cardPlayLimit: lim);
             rr.CardPlayLimit.Should().Be(lim, "RoundRules was initiliazed with a max Card Play limit");
         }
@@ -61,7 +61,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void getCardDrawonNewTurn_UnSpecifiedLimit()
         {
             List<Player> players = new();
-            players.Add(new Player(new GameMediator(0)));
+            players.Add(new Player(new BaseGameMediator(0)));
             PlayerRoundRules rr = new TestPlayerRoundRules(players);
             rr.CardPlayLimit.Should().Be(1, "RoundRules was initiliazed with a max Card Play limit");
         }

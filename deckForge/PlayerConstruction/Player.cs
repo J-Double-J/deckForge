@@ -8,7 +8,7 @@ namespace deckForge.PlayerConstruction
 {
     public class Player
     {
-        protected readonly GameMediator _gm;
+        protected readonly IGameMediator _gm;
         protected Deck? _personalDeck;
         protected int _cardPlays;
         protected int _cardDraws;
@@ -17,7 +17,7 @@ namespace deckForge.PlayerConstruction
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
 
-        public Player(GameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
+        public Player(IGameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
         {
             _gm = gm;
             _personalDeck = personalDeck;

@@ -12,7 +12,7 @@ namespace UnitTests.ActionTests
         public void PlayAction_MakesPlayerPlayCards()
         {
             bool eventRaised = false;
-            GameMediator gm = new(1);
+            IGameMediator gm = new BaseGameMediator(1);
             Player p = new Player(gm);
             PlayerGameAction action = new PlayCardsAction();
 
@@ -31,7 +31,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void UnsupportedExecutes_ThrowErrors()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             Player p = new Player(gm);
             Player p2 = new Player(gm);
             Player p3 = new Player(gm);

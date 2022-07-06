@@ -11,7 +11,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void DrawAction_MakesPlayerDrawCard()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             Player p = new Player(gm);
             PlayerGameAction action = new DrawCardsAction();
 
@@ -31,7 +31,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void DrawAction_CantDrawFromEmptyDeck()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             Player p = new Player(gm);
             PlayerGameAction action = new DrawCardsAction(drawCount: 5);
 
@@ -51,7 +51,7 @@ namespace UnitTests.ActionTests
         [TestMethod]
         public void UnsupportedExecutes_ThrowErrors()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             Player p = new Player(gm);
             Player p2 = new Player(gm);
             Player p3 = new Player(gm);

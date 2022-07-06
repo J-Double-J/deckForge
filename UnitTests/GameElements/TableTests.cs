@@ -10,14 +10,14 @@ namespace UnitTests.GameElements
     public class TableTests
     {
 
-        private static GameMediator gm = new(2);
+        private static IGameMediator gm = new BaseGameMediator(2);
         private static Table table = new(gm, 2);
         private static StringWriter output = new();
 
         [ClassInitialize()]
         public static void InitializeTableTestsClass(TestContext ctx)
         {
-            gm = new(2);
+            gm = new BaseGameMediator(2);
         }
 
         [TestInitialize()]

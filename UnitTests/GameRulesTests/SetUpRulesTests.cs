@@ -31,7 +31,7 @@ namespace UnitTests.GameRulesTests
         [TestMethod]
         public void PlayerShouldHave_CorrectInitHandSize()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             SetUpRules spr = new SetUpRules(initHandSize: 8);
             Player p = new(gm, initHandSize: spr.InitHandSize);
 

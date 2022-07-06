@@ -10,7 +10,7 @@ namespace UnitTests.GameConstructionTests
         [TestMethod]
         public void GetPlayerByID_ThrowsOnInvalidID()
         {
-            GameMediator gm = new(2);
+            IGameMediator gm = new BaseGameMediator(2);
             Action a = () => gm.GetPlayerByID(3);
             a.Should().Throw<ArgumentException>("an invalid player ID was passed to the GameMediator");
         }
@@ -18,7 +18,7 @@ namespace UnitTests.GameConstructionTests
         [TestMethod]
         public void GameMediatorCanDrawCard()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
 
             Card c = gm.DrawCardFromDeck()!;
 
@@ -28,7 +28,7 @@ namespace UnitTests.GameConstructionTests
         [TestMethod]
         public void GameMediatorCannotDrawFromEmptyDeck()
         {
-            GameMediator gm = new(0);
+            IGameMediator gm = new BaseGameMediator(0);
             Card? c;
 
             for (var i = 0; i < 52; i++)
@@ -45,7 +45,7 @@ namespace UnitTests.GameConstructionTests
         [TestMethod]
         public void InitiateGameMediatorWithNegativePlayers()
         {
-            Action a = () => new GameMediator(-1);
+            Action a = () => new BaseGameMediator(-1);
 
             a.Should().Throw<ArgumentException>("a game cannot have negative players");
         }
@@ -53,7 +53,7 @@ namespace UnitTests.GameConstructionTests
         [TestMethod]
         public void InitiateGameMediatorWithTooManyPlayers()
         {
-            Action a = () => new GameMediator(13);
+            Action a = () => new BaseGameMediator(13);
 
             a.Should().Throw<ArgumentException>("a game cannot have more than 12 players at the moment");
         }

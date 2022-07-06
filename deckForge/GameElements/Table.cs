@@ -5,9 +5,9 @@ namespace deckForge.GameElements
 {
     public class Table
     {
-        GameMediator _gm;
+        IGameMediator _gm;
         List<List<Card>> playedCards;
-        public Table(GameMediator mediator, int playerCount)
+        public Table(IGameMediator mediator, int playerCount)
         {
             _gm = mediator;
 

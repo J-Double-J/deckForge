@@ -8,21 +8,25 @@ namespace deckForge.GameRules
         private int _initHandSize;
         public readonly List<Deck> Decks = new List<Deck>();
 
-        public SetUpRules(int deckCount = 1, int initHandSize = 0) {
+        public SetUpRules(int deckCount = 1, int initHandSize = 0)
+        {
             try
             {
                 DeckCount = deckCount;
                 InitHandSize = initHandSize;
             }
-            catch {
+            catch
+            {
                 throw;
             }
-            
+
         }
 
-        public int DeckCount { 
-            get { return _deckCount; } 
-            private set {
+        public int DeckCount
+        {
+            get { return _deckCount; }
+            private set
+            {
                 if (value > 0)
                 {
                     _deckCount = value;
@@ -31,20 +35,23 @@ namespace deckForge.GameRules
                         Decks.Add(new Deck()); //TODO use better logic to create the right decks and their types
                     }
                 }
-                else {
+                else
+                {
                     throw new ArgumentException("Cannot initialize a game and have a deck count that is 0 or less");
                 }
-            } 
+            }
         }
 
-        public int InitHandSize {
+        public int InitHandSize
+        {
             get { return _initHandSize; }
-            private set {
+            private set
+            {
                 if (value >= 0)
                     _initHandSize = value;
                 else
                     throw new ArgumentException("Cannot have a negative hand size");
-            }        
+            }
         }
     }
 }
