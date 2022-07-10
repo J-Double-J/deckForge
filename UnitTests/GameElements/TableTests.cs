@@ -3,6 +3,8 @@ using deckForge.GameConstruction;
 using CardNamespace;
 using FluentAssertions;
 using DeckNameSpace;
+using deckForge.PlayerConstruction;
+
 
 namespace UnitTests.GameElements
 {
@@ -26,6 +28,8 @@ namespace UnitTests.GameElements
         {
             table = new(gm, 2, decks);
             output = new();
+            for (var i = 0; i < 2; i++)
+                gm.RegisterPlayer(new BasePlayer(gm, i));
         }
 
         [TestMethod]
@@ -177,7 +181,12 @@ namespace UnitTests.GameElements
             table.RemoveSpecificCard_FromPlayer(0, 0);
             table.PrintTableState();
 
-            output.ToString().Should().Be("9J\n1Q\nCOVERED\n", "First player's first card was removed");
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("9J\n1Q\nCOVERED\n", "First player's first card was removed");
+            else if(OperatingSystem.IsWindows()) {
+                output.ToString().Should().Be("9J\r\n1Q\r\nCOVERED\r\n", "First player's first card was removed");
+
+            }
         }
 
         [TestMethod]
@@ -223,7 +232,7 @@ namespace UnitTests.GameElements
             }
             else if (OperatingSystem.IsWindows())
             {
-                output.Should().Be("1Q\r\nCOVERED\r\n");
+                output.ToString().Should().Be("1Q\r\nCOVERED\r\n");
             }
         }
 

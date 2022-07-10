@@ -28,7 +28,7 @@ namespace deckForge.GameConstruction.PresetGames.War
             List<WarPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<Card> cards = table.DrawCardsFromDeck(26)!;
+                List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
                 Deck deck = new(cards);
                 players.Add(new WarPlayer(gm, i, deck));
             }

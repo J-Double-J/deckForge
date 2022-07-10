@@ -11,6 +11,7 @@ namespace deckForge.GameConstruction
         private List<IPlayer> _players = new();
         private Table? _table;
 
+        //TODO: Remove PlayerCount
         public BaseGameMediator(int playerCount)
         {
             try
@@ -24,17 +25,12 @@ namespace deckForge.GameConstruction
                     throw new ArgumentException(message: "Game cannot have more than 12 players");
                 }
 
-
                 _players = new List<IPlayer>();
-                for (var i = 0; i < playerCount; i++)
-                    _players.Add(new BasePlayer(this, i));
-
             }
             catch
             {
                 throw;
             }
-
         }
 
         public void RegisterPlayer(IPlayer player)
@@ -51,6 +47,7 @@ namespace deckForge.GameConstruction
         {
             _gameController = gameController;
         }
+
         public int PlayerCount
         {
             get { return _players.Count; }
@@ -128,27 +125,35 @@ namespace deckForge.GameConstruction
             }
         }
 
-        //TODO implement
         public Card? DrawCardFromDeck()
         {
-            return null;
-            /*
-            Card? c = _gameController.DrawCard();
-            if (c != null)
+            try
             {
-                return c;
+                Card? c = _table!.DrawCardFromDeck();
+                if (c != null)
+                {
+                    return c;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
-            {
-                return null;
-            }*/
+            catch {
+                throw;
+            }
+            
         }
 
         public IPlayer GetPlayerByID(int id)
         {
             try
             {
-                return _players[id];
+                if (_players is null) {
+                    throw new ArgumentNullException("No players have been registered with GameMediator");
+                }
+                else
+                    return _players[id];
             }
             catch
             {

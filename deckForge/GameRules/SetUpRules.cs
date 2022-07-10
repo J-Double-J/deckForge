@@ -20,8 +20,10 @@ namespace deckForge.GameRules
             {
                 throw;
             }
-            Decks.Add(new Deck());
-            Decks[0].Shuffle();
+
+            foreach (Deck d in Decks) {
+                d.Shuffle();
+            }
         }
 
         public int DeckCount

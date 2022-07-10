@@ -3,6 +3,7 @@ using FluentAssertions;
 using deckForge.GameRules;
 using deckForge.GameConstruction;
 using deckForge.PlayerConstruction;
+using deckForge.GameElements;
 
 namespace UnitTests.GameRulesTests
 {
@@ -32,6 +33,8 @@ namespace UnitTests.GameRulesTests
         public void PlayerShouldHave_CorrectInitHandSize()
         {
             IGameMediator gm = new BaseGameMediator(0);
+            List<Deck> decks = new List<Deck>() { new Deck() };
+            Table table = new(gm, 0, decks);
             BaseSetUpRules spr = new BaseSetUpRules(initHandSize: 8);
             IPlayer p = new BasePlayer(gm, initHandSize: spr.InitHandSize);
 

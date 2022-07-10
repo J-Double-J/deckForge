@@ -1,6 +1,9 @@
 ﻿using deckForge.GameConstruction;
 using CardNamespace;
 using FluentAssertions;
+using deckForge.GameElements;
+using DeckNameSpace;
+using deckForge.PlayerConstruction;
 
 namespace UnitTests.GameConstructionTests
 {
@@ -11,6 +14,10 @@ namespace UnitTests.GameConstructionTests
         public void GetPlayerByID_ThrowsOnInvalidID()
         {
             IGameMediator gm = new BaseGameMediator(2);
+            List<Deck> decks = new() { new Deck() };
+            Table table = new(gm, 0, decks);
+            new BasePlayer(gm, 0);
+            new BasePlayer(gm, 1);
             Action a = () => gm.GetPlayerByID(3);
             a.Should().Throw<ArgumentException>("an invalid player ID was passed to the GameMediator");
         }
@@ -19,6 +26,8 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCanDrawCard()
         {
             IGameMediator gm = new BaseGameMediator(0);
+            List<Deck> decks = new() { new Deck() };
+            Table table = new(gm, 0, decks);
 
             Card c = gm.DrawCardFromDeck()!;
 
@@ -29,6 +38,9 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCannotDrawFromEmptyDeck()
         {
             IGameMediator gm = new BaseGameMediator(0);
+            List<Deck> decks = new() { new Deck() };
+            Table table = new(gm, 0, decks);
+
             Card? c;
 
             for (var i = 0; i < 52; i++)

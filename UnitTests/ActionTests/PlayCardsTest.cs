@@ -2,6 +2,8 @@
 using FluentAssertions;
 using deckForge.GameConstruction;
 using deckForge.PlayerConstruction;
+using DeckNameSpace;
+using deckForge.GameElements;
 
 namespace UnitTests.ActionTests
 {
@@ -13,6 +15,8 @@ namespace UnitTests.ActionTests
         {
             bool eventRaised = false;
             IGameMediator gm = new BaseGameMediator(1);
+            List<Deck> decks = new() { new Deck() };
+            Table table = new(gm, 1, decks);
             IPlayer p = new BasePlayer(gm);
             PlayerGameAction action = new PlayCardsAction();
 
@@ -32,6 +36,8 @@ namespace UnitTests.ActionTests
         public void UnsupportedExecutes_ThrowErrors()
         {
             IGameMediator gm = new BaseGameMediator(0);
+            List<Deck> decks = new() { new Deck() };
+            Table table = new(gm, 0, decks);
             IPlayer p = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
             IPlayer p3 = new BasePlayer(gm);

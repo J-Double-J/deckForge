@@ -10,6 +10,7 @@ namespace deckForge.GameElements
         public Table(IGameMediator mediator, int playerCount, List<Deck> initDecks)
         {
             _gm = mediator;
+            _gm.RegisterTable(this);
 
             PlayedCards = new();
             for (var i = 0; i < playerCount; i++)
@@ -176,7 +177,7 @@ namespace deckForge.GameElements
             }
         }
 
-        public List<Card?> DrawCardsFromDeck(int cardCount, int deckNum = 0) {
+        public List<Card?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0) {
             List<Card?> cards = new();
             try {
                 for (var i = 0; i < cardCount; i++) {
