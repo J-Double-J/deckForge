@@ -1,7 +1,7 @@
 using FluentAssertions;
 using deckForge.GameElements.Resources;
 
-namespace UnitTests
+namespace UnitTests.GameElements
 
 
 {
@@ -140,6 +140,48 @@ namespace UnitTests
             }
 
             match.Should().Be(true, "all the cards should be drawn from the top in the reverse order they were placed");
+        }
+
+        //Testing IResourceCollection Implementation
+
+        [TestMethod]
+        public void AddResouceToDeck() {
+            Card c = new(21, "J");
+            Deck d = new Deck(defaultAddCardPos: "top");
+
+            d.AddResource(c);
+            var cardDrawn = d.DrawCard();
+
+            c.val.Should().Be(21, "the card '21J' was added to the top of the deck and then drawn");
+        }
+
+        [TestMethod]
+        public void RemoveResourceFromDeck() {
+            Card c = new(21, "J");
+            Deck d = new Deck(defaultAddCardPos: "top");
+
+            d.AddResource(c);
+            d.RemoveResource(c);
+
+            d.Size.Should().Be(52, "a card resource was added and then removed from the deck");
+        }
+
+        [TestMethod]
+        public void DeckCannotIncrementResourceCollection() {
+            Deck d = new Deck();
+
+            Action a = () => { d.IncrementResourceCollection(); };
+
+            a.Should().Throw<NotImplementedException>("it doesn't make sense to increment the deck size without a card");
+        }
+
+        [TestMethod]
+        public void DeckDecrementsDeckSize() {
+            Deck d = new Deck();
+
+            d.DecrementResourceCollection();
+
+            d.Size.Should().Be(51, "a card was removed from the deck");
         }
     }
 }

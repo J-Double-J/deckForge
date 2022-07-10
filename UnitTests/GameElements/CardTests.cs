@@ -1,13 +1,14 @@
 ﻿using deckForge.GameElements.Resources;
 using FluentAssertions;
 
-namespace UnitTests
+namespace UnitTests.GameElements
 {
     [TestClass]
     public class CardTests
     {
         [TestMethod]
-        public void FlipCardNumerousTimes() {
+        public void FlipCardNumerousTimes()
+        {
             Card c = new(8, "J");
 
             c.Flip();
@@ -18,13 +19,15 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void CardPrintsValuesWhenFaceUp() {
+        public void CardPrintsValuesWhenFaceUp()
+        {
             Card c = new(8, "J", facedown: false);
 
             c.PrintCard().Should().Be("8J", "the card is faceup right now and is easily read");
         }
 
-        public void CardIsCoveredWhenFaceDown() {
+        public void CardIsCoveredWhenFaceDown()
+        {
             Card c = new(8, "J");
 
             c.PrintCard().Should().Be("COVERED", "the card is facedown right now, so it should not be clear what the card's value is");

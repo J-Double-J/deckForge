@@ -1,17 +1,24 @@
 namespace deckForge.GameElements.Resources
 {
-    public class Deck
+    public class Deck : IResourceCollection<Card>
     {
         public List<Card> deck = new List<Card>();
-        public Deck()
+        private string _defaultAddCardPos;
+        private bool _defaultShuffleOnAddCard;
+
+        public Deck(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             createDeck();
             Shuffle();
+            _defaultAddCardPos = defaultAddCardPos;
+            _defaultShuffleOnAddCard = defaultShuffleOnAddCard;
         }
 
-        public Deck(List<Card> cards)
+        public Deck(List<Card> cards, string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             deck = cards;
+            _defaultAddCardPos = defaultAddCardPos;
+            _defaultShuffleOnAddCard = defaultShuffleOnAddCard;
         }
 
         public Card? DrawCard(bool drawFacedown = false)
@@ -149,6 +156,36 @@ namespace deckForge.GameElements.Resources
 
             if (shuffleAfter == true)
                 Shuffle();
+        }
+
+        public void AddResource(Card resource)
+        {
+            AddCardToDeck(resource, pos: _defaultAddCardPos, shuffleAfter: _defaultShuffleOnAddCard);
+        }
+
+        public void RemoveResource(Card resource)
+        {
+            for (int i = 0; i < Size; i++) {
+                if (deck[i] == resource) {
+                    deck.Remove(deck[i]);
+                    i--; //Deck shrinks so this compensates for that
+                }
+            }
+        }
+
+        public void IncrementResourceCollection()
+        {
+            throw new NotImplementedException("Deck can't increment the collection without a card");
+        }
+
+        public void DecrementResourceCollection()
+        {
+            deck.RemoveAt(deck.Count - 1);
+        }
+
+        public Card? GainResource()
+        {
+            return DrawCard();
         }
     }
 }
