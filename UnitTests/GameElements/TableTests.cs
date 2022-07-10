@@ -2,6 +2,7 @@
 using deckForge.GameConstruction;
 using CardNamespace;
 using FluentAssertions;
+using DeckNameSpace;
 
 namespace UnitTests.GameElements
 {
@@ -9,9 +10,9 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-
+        static List<Deck> decks = new List<Deck>{ new Deck() };
         private static IGameMediator gm = new BaseGameMediator(2);
-        private static Table table = new(gm, 2);
+        private static Table table = new(gm, 2, decks);
         private static StringWriter output = new();
 
         [ClassInitialize()]
@@ -23,7 +24,7 @@ namespace UnitTests.GameElements
         [TestInitialize()]
         public void InitializeTableTests()
         {
-            table = new(gm, 2);
+            table = new(gm, 2, decks);
             output = new();
         }
 

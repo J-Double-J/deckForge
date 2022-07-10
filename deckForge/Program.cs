@@ -6,10 +6,11 @@ Console.WriteLine("Starting game!");
 
 try
 {
-    GameMediator gm = new(2);
+    BaseGameMediator gm = new(2);
     gm.StartGame();
 }
-catch (Exception e) {
+catch (Exception e)
+{
     Console.WriteLine(e.Message);
     Console.WriteLine(e.StackTrace);
 }

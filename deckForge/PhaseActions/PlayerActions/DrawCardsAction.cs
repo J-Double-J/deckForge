@@ -16,14 +16,15 @@ namespace deckForge.PhaseActions
         }
 
         public DrawCardsAction(ref int drawCount, string name = "Draw")
-        : base(name: name) {
+        : base(name: name)
+        {
             Name = name;
             DrawCount = drawCount;
             Description = $"Draw {drawCount} Card(s)";
         }
 
         //Returns the list of cards that was drawn into the player's hand
-        override public List<Card?> execute(Player player)
+        override public List<Card?> execute(IPlayer player)
         {
             List<Card?> cards = new();
             for (int i = 0; i < DrawCount; i++)

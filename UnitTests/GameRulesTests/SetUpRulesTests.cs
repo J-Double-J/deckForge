@@ -14,7 +14,7 @@ namespace UnitTests.GameRulesTests
         [DataRow(3)]
         public void CreateNumerousDeck(int count)
         {
-            SetUpRules spr = new SetUpRules(deckCount: count);
+            BaseSetUpRules spr = new BaseSetUpRules(deckCount: count);
 
             spr.Decks.Count().Should().Be(count, "SetUpRules was told to create numerous decks");
         }
@@ -24,7 +24,7 @@ namespace UnitTests.GameRulesTests
         [DataRow(0)]
         public void AttemptToCreateNegativeOrNilDecks(int count)
         {
-            Action act = () => new SetUpRules(deckCount: count);
+            Action act = () => new BaseSetUpRules(deckCount: count);
             act.Should().Throw<ArgumentException>("SetUpRules cannot make a game with no decks");
         }
 
@@ -32,8 +32,8 @@ namespace UnitTests.GameRulesTests
         public void PlayerShouldHave_CorrectInitHandSize()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            SetUpRules spr = new SetUpRules(initHandSize: 8);
-            Player p = new(gm, initHandSize: spr.InitHandSize);
+            BaseSetUpRules spr = new BaseSetUpRules(initHandSize: 8);
+            IPlayer p = new BasePlayer(gm, initHandSize: spr.InitHandSize);
 
             p.HandSize.Should().Be(8, "SetUpRules set the initial hand size to 8");
         }

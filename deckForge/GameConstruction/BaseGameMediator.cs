@@ -8,7 +8,7 @@ namespace deckForge.GameConstruction
     public class BaseGameMediator : IGameMediator
     {
         private IGameController? _gameController;
-        private List<Player> _players = new();
+        private List<IPlayer> _players = new();
         private Table? _table;
 
         public BaseGameMediator(int playerCount)
@@ -25,9 +25,9 @@ namespace deckForge.GameConstruction
                 }
 
 
-                _players = new List<Player>();
+                _players = new List<IPlayer>();
                 for (var i = 0; i < playerCount; i++)
-                    _players.Add(new Player(this, i));
+                    _players.Add(new BasePlayer(this, i));
 
             }
             catch
@@ -37,15 +37,18 @@ namespace deckForge.GameConstruction
 
         }
 
-        public void RegisterPlayer(Player player) {
+        public void RegisterPlayer(IPlayer player)
+        {
             _players.Add(player);
         }
 
-        public void RegisterTable(Table table) {
+        public void RegisterTable(Table table)
+        {
             _table = table;
         }
 
-        public void RegisterGameController(IGameController gameController) {
+        public void RegisterGameController(IGameController gameController)
+        {
             _gameController = gameController;
         }
         public int PlayerCount
@@ -54,14 +57,15 @@ namespace deckForge.GameConstruction
         }
 
         //TODO: Only used for testing at this moment. Does not fix bad ID's
-        public void AddPlayer(Player p)
+        public void AddPlayer(IPlayer p)
         {
             _players.Add(p);
         }
 
         public void StartGame()
         {
-            try {
+            try
+            {
                 if (_gameController is null || _players is null || _table is null)
                 {
                     string errorMessage = "GameMediator is not fully initialized: \n";
@@ -77,7 +81,9 @@ namespace deckForge.GameConstruction
                 {
                     StartPlayerTurn(_gameController.GetCurrentPlayer());
                 }
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
         }
@@ -88,27 +94,36 @@ namespace deckForge.GameConstruction
 
         public void PlayerPlayedCard(int id, Card c)
         {
-            try {
+            try
+            {
                 _table!.PlaceCardOnTable(id, c);
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
         }
 
         public void EndPlayerTurn()
         {
-            try {
+            try
+            {
                 StartPlayerTurn(_gameController!.NextPlayerTurn());
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
         }
 
         public void EndGame()
         {
-            try {
+            try
+            {
                 _gameController!.EndGame();
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
         }
@@ -129,7 +144,7 @@ namespace deckForge.GameConstruction
             }*/
         }
 
-        public Player GetPlayerByID(int id)
+        public IPlayer GetPlayerByID(int id)
         {
             try
             {
@@ -143,14 +158,17 @@ namespace deckForge.GameConstruction
 
         public List<Card> GetPlayedCardsOfPlayer(int playerID)
         {
-            try {
+            try
+            {
                 return _table!.GetCardsForSpecificPlayer(playerID);
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
-            
-        }
 
+        }
+        /*
         public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command)
         {
             try
@@ -161,11 +179,12 @@ namespace deckForge.GameConstruction
             {
                 throw;
             }
-        }
+        }*/
 
         public Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
-            try {
+            try
+            {
                 if (facedown is null)
                 {
                     return _table!.Flip_SpecificCard_SpecificPlayer(playerID, cardPos);
@@ -174,17 +193,22 @@ namespace deckForge.GameConstruction
                 {
                     return _table!.Flip_SpecificCard_SpecificPlayer_SpecificWay(playerID, cardPos, (bool)facedown);
                 }
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
-            
+
         }
 
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID)
         {
-            try {
+            try
+            {
                 return _table!.PickUpAllCards_FromPlayer(playerID);
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
         }

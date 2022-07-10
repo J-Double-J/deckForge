@@ -12,7 +12,7 @@ namespace UnitTests.ActionTests
         public void DrawAction_MakesPlayerDrawCard()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Player p = new Player(gm);
+            IPlayer p = new BasePlayer(gm);
             PlayerGameAction action = new DrawCardsAction();
 
 
@@ -32,7 +32,7 @@ namespace UnitTests.ActionTests
         public void DrawAction_CantDrawFromEmptyDeck()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Player p = new Player(gm);
+            IPlayer p = new BasePlayer(gm);
             PlayerGameAction action = new DrawCardsAction(drawCount: 5);
 
 
@@ -52,10 +52,10 @@ namespace UnitTests.ActionTests
         public void UnsupportedExecutes_ThrowErrors()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Player p = new Player(gm);
-            Player p2 = new Player(gm);
-            Player p3 = new Player(gm);
-            List<Player> targetPlayers = new List<Player>{
+            IPlayer p = new BasePlayer(gm);
+            IPlayer p2 = new BasePlayer(gm);
+            IPlayer p3 = new BasePlayer(gm);
+            List<IPlayer> targetPlayers = new List<IPlayer>{
                 p2, p3
             };
 

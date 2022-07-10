@@ -3,11 +3,13 @@ using deckForge.PhaseActions;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements;
 
-namespace deckForge.GameConstruction {
-    public interface IGameMediator {
-        public void RegisterPlayer(Player p);
+namespace deckForge.GameConstruction
+{
+    public interface IGameMediator
+    {
+        public void RegisterPlayer(IPlayer p);
         public void RegisterTable(Table t);
-        public void RegisterGameController (IGameController game);
+        public void RegisterGameController(IGameController game);
         public int PlayerCount { get; }
         public void StartGame();
         public void EndGame();
@@ -15,10 +17,10 @@ namespace deckForge.GameConstruction {
         public void EndPlayerTurn();
         public void PlayerPlayedCard(int playerID, Card c);
         public Card? DrawCardFromDeck();
-        public Player GetPlayerByID(int playerID);
+        public IPlayer GetPlayerByID(int playerID);
         public List<Card> GetPlayedCardsOfPlayer(int playerID);
         public Card FlipSingleCard(int playerID, int cardPos, bool? facedown);
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
-        public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command);
+        //public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command);
     }
 }

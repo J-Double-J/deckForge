@@ -23,10 +23,10 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
         public int CardPlayLimit { get; private set; }
-        public List<Player> Players { get; }
+        public List<IPlayer> Players { get; }
 
 
-        public PlayerRoundRules(List<Player> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        public PlayerRoundRules(List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
         : base(subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
         {
             HandLimit = handlimit;
@@ -54,7 +54,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             base.SkipToPhase(phaseNum);
         }
 
-        new virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase) {
+        new virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase)
+        {
             repeatPhase = true;
         }
     }

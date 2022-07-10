@@ -3,12 +3,12 @@ using deckForge.PlayerConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
-    public class PlayerPhase : BasePhase<Player>
+    public class PlayerPhase : BasePhase<IPlayer>
     {
 
         protected int CurrentPlayer = 0;
-        protected List<Player> Players;
-        public PlayerPhase(List<Player> players, string phaseName = "") : base(phaseName: phaseName)
+        protected List<IPlayer> Players;
+        public PlayerPhase(List<IPlayer> players, string phaseName = "") : base(phaseName: phaseName)
         {
             Players = players;
         }
@@ -21,7 +21,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
         virtual protected void NextAction(int actionNum)
         {
-            foreach (Player p in Players)
+            foreach (IPlayer p in Players)
             {
                 NextActionHook(p, actionNum, out bool repeatAction);
                 if (repeatAction)
@@ -39,6 +39,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             base.EndPhase();
         }
 
-        virtual protected void NextActionHook(Player p, int actionNum, out bool repeatAction) {repeatAction = false;}
+        virtual protected void NextActionHook(IPlayer p, int actionNum, out bool repeatAction) { repeatAction = false; }
     }
 }

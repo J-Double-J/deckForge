@@ -6,7 +6,7 @@ using deckForge.PhaseActions;
 
 namespace deckForge.PlayerConstruction
 {
-    public class Player
+    public class BasePlayer : IPlayer
     {
         protected readonly IGameMediator _gm;
         protected Deck? _personalDeck;
@@ -17,7 +17,7 @@ namespace deckForge.PlayerConstruction
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
 
-        public Player(IGameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
+        public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
         {
             _gm = gm;
             _personalDeck = personalDeck;
@@ -133,9 +133,9 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<Player> command)
+        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<IPlayer> command)
         {
-            Player targetPlayer = _gm.GetPlayerByID(targetID);
+            IPlayer targetPlayer = _gm.GetPlayerByID(targetID);
             command(targetPlayer);
         }
         virtual public void ExecuteCommand(Action command)
@@ -143,19 +143,9 @@ namespace deckForge.PlayerConstruction
             command();
         }
 
-        virtual public void ExecuteGameAction(IAction<Player> action)
+        virtual public void ExecuteGameAction(IAction<IPlayer> action)
         {
             action.execute(this);
-        }
-
-        virtual public void AddToPersonalDeck(Card c, string position = "bottom", bool shuffleDeckAfter = false)
-        {
-            if (_personalDeck != null)
-                _personalDeck.AddCardToDeck(c, pos: position, shuffleAfter: shuffleDeckAfter);
-            else
-            {
-                throw new NotSupportedException(message: "There is no personal deck to add to");
-            }
         }
 
         protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
@@ -183,12 +173,37 @@ namespace deckForge.PlayerConstruction
         {
             return _gm.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
+    }
+
+    public class BasePlayer_WithPersonalDeck : BasePlayer, IPlayer_WithPersonalDeck
+    {
+        new Deck _personalDeck;
+        public BasePlayer_WithPersonalDeck(IGameMediator _gm, int playerID, int initHandSize, Deck personalDeck) :
+        base(_gm, playerID, initHandSize)
+        {
+            _personalDeck = personalDeck;
+        }
+
+        //Return what card was added to the deck
+        public Card AddCardToPersonalDeck(Card c, string position = "bottom", bool shuffleDeckAfter = false)
+        {
+            if (_personalDeck != null)
+            {
+                _personalDeck.AddCardToDeck(c, pos: position, shuffleAfter: shuffleDeckAfter);
+                return c;
+            }
+            else
+            {
+                throw new NotSupportedException(message: "There is no personal deck to add to");
+            }
+        }
 
         //Returns what cards were added to the deck
         public List<Card> AddCardsToPersonalDeck
         (List<Card> cards, string position = "bottom", bool shuffleDeckAfter = false)
         {
-            if (_personalDeck is not null) {
+            if (_personalDeck is not null)
+            {
                 _personalDeck?.AddMultipleCardsToDeck(cards, position, shuffleDeckAfter);
                 return cards;
             }

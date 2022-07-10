@@ -1,6 +1,6 @@
 ﻿using CardNamespace;
 
-namespace deckForge.PlayerConstruction
+namespace deckForge.PlayerConstruction.PlayerEvents
 {
     public class PlayerPlayedCardEventArgs : EventArgs
     {

@@ -1,27 +1,39 @@
 using deckForge.GameConstruction;
 using CardNamespace;
+using DeckNameSpace;
 
 namespace deckForge.GameElements
 {
-    public class Table
+    public class Table : ITable
     {
         IGameMediator _gm;
-        List<List<Card>> playedCards;
-        public Table(IGameMediator mediator, int playerCount)
+        public Table(IGameMediator mediator, int playerCount, List<Deck> initDecks)
         {
             _gm = mediator;
 
-            playedCards = new();
+            PlayedCards = new();
             for (var i = 0; i < playerCount; i++)
             {
                 List<Card> cards = new();
-                playedCards.Add(cards);
+                PlayedCards.Add(cards);
             }
+
+            TableDecks = initDecks;
+        }
+
+        public List<Deck> TableDecks
+        {
+            get;
+        }
+
+        public List<List<Card>> PlayedCards
+        {
+            get;
         }
 
         public void PrintTableState()
         {
-            foreach (List<Card> player in playedCards)
+            foreach (List<Card> player in PlayedCards)
             {
                 foreach (Card c in player)
                 {
@@ -32,14 +44,14 @@ namespace deckForge.GameElements
 
         public List<Card> GetCardsForSpecificPlayer(int playerID)
         {
-            return playedCards[playerID];
+            return PlayedCards[playerID];
         }
 
         public void PlaceCardOnTable(int playerID, Card c)
         {
             try
             {
-                playedCards[playerID].Add(c);
+                PlayedCards[playerID].Add(c);
             }
             catch
             {
@@ -51,7 +63,7 @@ namespace deckForge.GameElements
         {
             try
             {
-                foreach (Card c in playedCards[playerID])
+                foreach (Card c in PlayedCards[playerID])
                 {
                     if (c.Facedown != facedown)
                     {
@@ -67,7 +79,7 @@ namespace deckForge.GameElements
 
         public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false)
         {
-            for (var i = 0; i < playedCards.Count; i++)
+            for (var i = 0; i < PlayedCards.Count; i++)
             {
                 Flip_AllCardsOneWay_SpecificPlayer(i, facedown);
             }
@@ -77,7 +89,7 @@ namespace deckForge.GameElements
         {
             try
             {
-                foreach (Card c in playedCards[playerID])
+                foreach (Card c in PlayedCards[playerID])
                 {
                     c.Flip();
                 }
@@ -91,7 +103,7 @@ namespace deckForge.GameElements
 
         public void Flip_AllCardsEitherWay_AllPlayers()
         {
-            for (var i = 0; i < playedCards.Count; i++)
+            for (var i = 0; i < PlayedCards.Count; i++)
             {
                 Flip_AllCardsEitherWay_SpecificPlayer(i);
             }
@@ -100,9 +112,10 @@ namespace deckForge.GameElements
         //Returns which card this command was on
         public Card Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
         {
-            try { 
-                playedCards[playerID][cardPos].Flip(); 
-                return playedCards[playerID][cardPos];
+            try
+            {
+                PlayedCards[playerID][cardPos].Flip();
+                return PlayedCards[playerID][cardPos];
             }
             catch { throw; }
         }
@@ -110,12 +123,14 @@ namespace deckForge.GameElements
         //Returns which card this command was on
         public Card Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
         {
-            if (playedCards[playerID][cardPos].Facedown != facedown)
+            if (PlayedCards[playerID][cardPos].Facedown != facedown)
             {
-                playedCards[playerID][cardPos].Flip();
-                return playedCards[playerID][cardPos];
-            } else {
-                return playedCards[playerID][cardPos];
+                PlayedCards[playerID][cardPos].Flip();
+                return PlayedCards[playerID][cardPos];
+            }
+            else
+            {
+                return PlayedCards[playerID][cardPos];
             }
         }
 
@@ -123,8 +138,8 @@ namespace deckForge.GameElements
         {
             try
             {
-                Card c = playedCards[playerID][cardPos];
-                playedCards[playerID].RemoveAt(cardPos);
+                Card c = PlayedCards[playerID][cardPos];
+                PlayedCards[playerID].RemoveAt(cardPos);
                 return c;
             }
             catch
@@ -138,12 +153,7 @@ namespace deckForge.GameElements
             try
             {
                 List<Card> cards = new();
-
-                // for (var i = 0; i < playedCards[playerID].Count; i++)
-                // {
-                //     cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: i));
-                // }
-                var numCardsToGrab = playedCards[playerID].Count;
+                var numCardsToGrab = PlayedCards[playerID].Count;
                 for (var i = 0; i < numCardsToGrab; i++)
                 {
                     cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: 0));
@@ -154,6 +164,26 @@ namespace deckForge.GameElements
             }
             catch
             {
+                throw;
+            }
+        }
+
+        public Card? DrawCardFromDeck(int deckNum = 0) {
+            try {
+                return TableDecks[deckNum].DrawCard();
+            } catch {
+                throw;
+            }
+        }
+
+        public List<Card?> DrawCardsFromDeck(int cardCount, int deckNum = 0) {
+            List<Card?> cards = new();
+            try {
+                for (var i = 0; i < cardCount; i++) {
+                    cards.Add(DrawCardFromDeck(deckNum));
+                }
+                return cards;
+            } catch {
                 throw;
             }
         }

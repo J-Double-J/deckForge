@@ -11,6 +11,11 @@ namespace DeckNameSpace
             Shuffle();
         }
 
+        public Deck(List<Card> cards)
+        {
+            deck = cards;
+        }
+
         public Card? DrawCard(bool drawFacedown = false)
         {
             if (deck.Count != 0)
@@ -123,18 +128,24 @@ namespace DeckNameSpace
             {
                 throw new ArgumentException($"Invalid pos: '{pos}', for a card to be placed in the deck");
             }
-            
-            if (shuffleAfter == true) {
+
+            if (shuffleAfter == true)
+            {
                 Shuffle();
             }
         }
 
-        public void AddMultipleCardsToDeck(List<Card> cards, string pos = "bottom", bool shuffleAfter = false) {
-            try {
-                foreach (Card c in cards) {
+        public void AddMultipleCardsToDeck(List<Card> cards, string pos = "bottom", bool shuffleAfter = false)
+        {
+            try
+            {
+                foreach (Card c in cards)
+                {
                     AddCardToDeck(c, pos: pos);
                 }
-            } catch {
+            }
+            catch
+            {
                 throw;
             }
 

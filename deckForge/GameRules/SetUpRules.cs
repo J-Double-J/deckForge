@@ -2,13 +2,14 @@
 
 namespace deckForge.GameRules
 {
-    public class SetUpRules
+    public class BaseSetUpRules
     {
         private int _deckCount;
         private int _initHandSize;
         public readonly List<Deck> Decks = new List<Deck>();
+        
 
-        public SetUpRules(int deckCount = 1, int initHandSize = 0)
+        public BaseSetUpRules(int deckCount = 1, int initHandSize = 0)
         {
             try
             {
@@ -19,7 +20,8 @@ namespace deckForge.GameRules
             {
                 throw;
             }
-
+            Decks.Add(new Deck());
+            Decks[0].Shuffle();
         }
 
         public int DeckCount
