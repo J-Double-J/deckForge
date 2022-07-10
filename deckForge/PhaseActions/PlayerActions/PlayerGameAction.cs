@@ -1,7 +1,6 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.GameRules.RoundConstruction.Phases;
-using CardNamespace;
-
+using deckForge.GameElements.Resources;
 namespace deckForge.PhaseActions
 {
     public class PlayerGameAction : IAction<IPlayer>

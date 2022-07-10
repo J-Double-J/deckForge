@@ -5,7 +5,7 @@ using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
 using deckForge.GameElements;
-using DeckNameSpace;
+using deckForge.GameElements.Resources;
 
 namespace UnitTests.PlayerRoundRulesTests
 {

@@ -1,7 +1,8 @@
 using deckForge.PlayerConstruction.PlayerEvents;
-using CardNamespace;
+using deckForge.GameElements.Resources;
 
-namespace deckForge.PlayerConstruction {
+namespace deckForge.PlayerConstruction
+{
     public interface IPlayer {
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;

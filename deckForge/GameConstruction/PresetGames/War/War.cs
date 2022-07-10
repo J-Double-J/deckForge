@@ -1,10 +1,9 @@
 ﻿using deckForge.GameRules;
 using deckForge.GameElements;
-using CardNamespace;
-using DeckNameSpace;
 using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
 using deckForge.GameRules.RoundConstruction.Rounds;
+using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction.PresetGames.War
 {

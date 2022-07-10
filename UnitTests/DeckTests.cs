@@ -1,6 +1,5 @@
-using DeckNameSpace;
-using CardNamespace;
 using FluentAssertions;
+using deckForge.GameElements.Resources;
 
 namespace UnitTests
 

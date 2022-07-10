@@ -1,4 +1,4 @@
-﻿using CardNamespace;
+﻿using deckForge.GameElements.Resources;
 
 namespace deckForge.PlayerConstruction.PlayerEvents
 {

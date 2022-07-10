@@ -1,7 +1,7 @@
-using CardNamespace;
 using deckForge.PhaseActions;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements;
+using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction
 {

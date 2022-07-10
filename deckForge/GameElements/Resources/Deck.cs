@@ -1,6 +1,4 @@
-using CardNamespace;
-
-namespace DeckNameSpace
+namespace deckForge.GameElements.Resources
 {
     public class Deck
     {

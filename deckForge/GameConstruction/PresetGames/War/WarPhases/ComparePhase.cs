@@ -1,8 +1,8 @@
 using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.PlayerConstruction;
 using deckForge.PhaseActions;
-using CardNamespace;
 using deckForge.GameRules.RoundConstruction.Interfaces;
+using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction.PresetGames.War
 {

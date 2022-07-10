@@ -1,5 +1,5 @@
 using deckForge.PlayerConstruction;
-using CardNamespace;
+using deckForge.GameElements.Resources;
 
 namespace deckForge.PhaseActions
 {

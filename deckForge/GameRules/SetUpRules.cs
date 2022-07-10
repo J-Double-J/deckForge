@@ -1,4 +1,4 @@
-﻿using DeckNameSpace;
+﻿using deckForge.GameElements.Resources;
 
 namespace deckForge.GameRules
 {

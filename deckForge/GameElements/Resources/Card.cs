@@ -1,9 +1,9 @@
-namespace CardNamespace
+namespace deckForge.GameElements.Resources
 {
     public class Card
     {
         public int val;
-        public string suit = String.Empty;
+        public string suit = string.Empty;
         private bool facedown;
 
         public Card(int val, string suit, bool facedown = true)

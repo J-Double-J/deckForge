@@ -1,4 +1,4 @@
-﻿using CardNamespace;
+﻿using deckForge.GameElements.Resources;
 using FluentAssertions;
 
 namespace UnitTests

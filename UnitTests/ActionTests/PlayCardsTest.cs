@@ -2,8 +2,8 @@
 using FluentAssertions;
 using deckForge.GameConstruction;
 using deckForge.PlayerConstruction;
-using DeckNameSpace;
 using deckForge.GameElements;
+using deckForge.GameElements.Resources;
 
 namespace UnitTests.ActionTests
 {

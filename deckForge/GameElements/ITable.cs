@@ -1,6 +1,6 @@
-using CardNamespace;
-using DeckNameSpace;
-namespace deckForge.GameElements {
+using deckForge.GameElements.Resources;
+namespace deckForge.GameElements
+{
     public interface ITable {
         public List<Deck> TableDecks { get; }
         public List<List<Card>> PlayedCards { get; }

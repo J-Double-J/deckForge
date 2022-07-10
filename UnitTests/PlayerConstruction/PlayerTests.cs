@@ -3,7 +3,7 @@ using deckForge.GameConstruction;
 using deckForge.GameRules;
 using deckForge.GameElements;
 using FluentAssertions;
-using DeckNameSpace;
+using deckForge.GameElements.Resources;
 
 namespace UnitTests.PlayerConstruction
 {

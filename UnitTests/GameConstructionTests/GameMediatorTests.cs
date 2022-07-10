@@ -1,9 +1,8 @@
 ﻿using deckForge.GameConstruction;
-using CardNamespace;
 using FluentAssertions;
 using deckForge.GameElements;
-using DeckNameSpace;
 using deckForge.PlayerConstruction;
+using deckForge.GameElements.Resources;
 
 namespace UnitTests.GameConstructionTests
 {

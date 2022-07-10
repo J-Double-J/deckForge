@@ -1,7 +1,6 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.PlayerConstruction.PlayerEvents;
-using CardNamespace;
-using DeckNameSpace;
+using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction.PresetGames.War
 {
