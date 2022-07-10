@@ -18,6 +18,7 @@ namespace UnitTests.ActionTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 1, decks);
             IPlayer p = new BasePlayer(gm);
+            p.DrawStartingHand();
             PlayerGameAction action = new PlayCardsAction();
 
             //StringWriter and Reader are for the console.

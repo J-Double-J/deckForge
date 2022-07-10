@@ -11,6 +11,7 @@ namespace deckForge.PlayerConstruction
         protected Deck? _personalDeck;
         protected int _cardPlays;
         protected int _cardDraws;
+        protected int _initHandSize;
         protected List<Card> _hand = new();
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
@@ -27,10 +28,7 @@ namespace deckForge.PlayerConstruction
             _cardPlays = 1;
             _cardDraws = 1;
 
-            for (var i = 0; i < initHandSize; i++)
-            {
-                DrawCard();
-            }
+            _initHandSize = initHandSize;
         }
 
         public int HandSize
@@ -63,6 +61,13 @@ namespace deckForge.PlayerConstruction
             get
             {
                 return _gm.GetPlayedCardsOfPlayer(PlayerID);
+            }
+        }
+
+        virtual public void DrawStartingHand() {
+            for (var i = 0; i < _initHandSize; i++)
+            {
+                DrawCard();
             }
         }
 

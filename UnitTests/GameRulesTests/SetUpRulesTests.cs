@@ -37,6 +37,7 @@ namespace UnitTests.GameRulesTests
             Table table = new(gm, 0, decks);
             BaseSetUpRules spr = new BaseSetUpRules(initHandSize: 8);
             IPlayer p = new BasePlayer(gm, initHandSize: spr.InitHandSize);
+            p.DrawStartingHand();
 
             p.HandSize.Should().Be(8, "SetUpRules set the initial hand size to 8");
         }

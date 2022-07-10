@@ -10,6 +10,7 @@ namespace deckForge.PlayerConstruction
         public int PlayerID { get; }
         public List<Card> PlayedCards { get; }
         public void StartTurn();
+        public void DrawStartingHand();
         public Card? DrawCard();
         public Card? PlayCard(bool facedown = false);
         public Card FlipSingleCard(int cardNum, bool? facedown = null);
