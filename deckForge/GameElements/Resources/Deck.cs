@@ -158,6 +158,11 @@ namespace deckForge.GameElements.Resources
                 Shuffle();
         }
 
+        public Type ResourceType
+        {
+            get { return typeof(Card); }
+        }
+
         public void AddResource(Card resource)
         {
             AddCardToDeck(resource, pos: _defaultAddCardPos, shuffleAfter: _defaultShuffleOnAddCard);
@@ -175,7 +180,7 @@ namespace deckForge.GameElements.Resources
 
         public void IncrementResourceCollection()
         {
-            throw new NotImplementedException("Deck can't increment the collection without a card");
+            throw new NotImplementedException("Deck can't increment the collection without a card specified");
         }
 
         public void DecrementResourceCollection()

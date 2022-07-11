@@ -1,7 +1,12 @@
 ﻿namespace deckForge.GameElements.Resources
 {
-    public interface IResourceCollection<T>
+
+    public interface IResourceCollection {
+        Type ResourceType { get; }
+    }
+    public interface IResourceCollection<T> : IResourceCollection
     {
+        new Type ResourceType { get; }
         public void AddResource(T resource);
         public void RemoveResource(T resource);
         public void IncrementResourceCollection();

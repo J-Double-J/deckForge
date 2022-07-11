@@ -54,5 +54,18 @@ namespace UnitTests.PlayerConstruction
 
             p.PlayedCards.Count.Should().Be(1, "Player played a card");
         }
+
+        [TestMethod]
+        public void PlayerDrawsCardFromDeckResource() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck();
+
+            d.AddCardToDeck(new Card(21, "W"), pos: "top");
+            p.AddPlayerResourceCollection(d);
+
+            Card? c = (Card?)p.TakeResourceFromCollection(0);
+            c.val.Should().Be(21, "the deck had 21W be added to the top");
+        }
     }
 }

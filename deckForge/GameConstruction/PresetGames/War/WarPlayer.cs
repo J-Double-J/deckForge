@@ -16,10 +16,10 @@ namespace deckForge.GameConstruction.PresetGames.War
 
         public override Card? PlayCard(bool facedown = false)
         {
-            Card? c = _personalDeck!.DrawCard(drawFacedown: true);
+            Card? c = PersonalDeck!.DrawCard(drawFacedown: true);
             if (c != null)
             {
-                _gm.PlayerPlayedCard(PlayerID, c);
+                GM.PlayerPlayedCard(PlayerID, c);
                 OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
                 return c;
             }

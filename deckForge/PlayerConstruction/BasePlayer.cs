@@ -7,33 +7,37 @@ namespace deckForge.PlayerConstruction
 {
     public class BasePlayer : IPlayer
     {
-        protected readonly IGameMediator _gm;
-        protected Deck? _personalDeck;
-        protected int _cardPlays;
-        protected int _cardDraws;
-        protected int _initHandSize;
-        protected List<Card> _hand = new();
+        protected readonly IGameMediator GM;
+        protected Deck? PersonalDeck;
+        protected int CardPlays;
+        protected int CardDraws;
+        protected int InitHandSize;
+        protected Hand PlayerHand; 
+        protected List<IResourceCollection> PlayerResourceCollections;
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
 
         public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
         {
-            _gm = gm;
-            _personalDeck = personalDeck;
+            PlayerHand = new();
+            //PlayerHand is not considered part of PlayerResourceCollections despite being a collection
+            PlayerResourceCollections = new List<IResourceCollection>();
 
+            GM = gm;
+            PersonalDeck = personalDeck;
             PlayerID = playerID;
 
             //TODO: remove this is for sake of testing.
-            _cardPlays = 1;
-            _cardDraws = 1;
+            CardPlays = 1;
+            CardDraws = 1;
 
-            _initHandSize = initHandSize;
+            InitHandSize = initHandSize;
         }
 
         public int HandSize
         {
-            get { return _hand.Count; }
+            get { return PlayerHand.HandSize; }
         }
 
         public int PlayerID
@@ -45,9 +49,9 @@ namespace deckForge.PlayerConstruction
         {
             get
             {
-                if (_personalDeck != null)
+                if (PersonalDeck != null)
                 {
-                    return _personalDeck.Size;
+                    return PersonalDeck.Size;
                 }
                 else
                 {
@@ -60,12 +64,12 @@ namespace deckForge.PlayerConstruction
         {
             get
             {
-                return _gm.GetPlayedCardsOfPlayer(PlayerID);
+                return GM.GetPlayedCardsOfPlayer(PlayerID);
             }
         }
 
         virtual public void DrawStartingHand() {
-            for (var i = 0; i < _initHandSize; i++)
+            for (var i = 0; i < InitHandSize; i++)
             {
                 DrawCard();
             }
@@ -73,24 +77,24 @@ namespace deckForge.PlayerConstruction
 
         virtual public void StartTurn()
         {
-            for (var i = 0; i < _cardDraws; i++)
+            for (var i = 0; i < CardDraws; i++)
             {
                 DrawCard();
             }
-            for (var j = 0; j < _cardPlays; j++)
+            for (var j = 0; j < CardPlays; j++)
             {
                 PlayCard();
             }
-            _gm.EndPlayerTurn();
+            GM.EndPlayerTurn();
         }
 
         //Returns which card was drawn
         virtual public Card? DrawCard()
         {
-            Card? c = _gm.DrawCardFromDeck();
+            Card? c = GM.DrawCardFromDeck();
             if (c != null)
             {
-                _hand.Add(c);
+                PlayerHand.AddResource(c);
             }
             else
             {
@@ -104,33 +108,33 @@ namespace deckForge.PlayerConstruction
         virtual public Card? PlayCard(bool facedown = false)
         {
             //TODO: Remove
-            if (_hand.Count == 0)
+            if (HandSize == 0)
             {
-                _gm.EndGame();
+                GM.EndGame();
                 return null;
             }
             else
             {
                 Console.WriteLine("Which card would you like to play?");
-                for (var i = 0; i < _hand.Count; i++)
+                for (var i = 0; i < HandSize; i++)
                 {
-                    Console.WriteLine($"{i}) {_hand[i].PrintCard()}");
+                    Console.WriteLine($"{i}) {PlayerHand.getCardAt(i).PrintCard()}");
                 }
                 string? input;
                 int selectedVal;
                 do
                 {
                     input = Console.ReadLine();
-                } while (int.TryParse(input, out selectedVal) && (selectedVal > _hand.Count || selectedVal < 0));
+                } while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-                Card c = _hand[selectedVal];
-                _hand.RemoveAt(selectedVal);
+                Card c = PlayerHand.getCardAt(selectedVal);
+                PlayerHand.RemoveResource(c);
 
                 if (facedown)
                     c.Flip();
 
                 //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-                _gm.PlayerPlayedCard(PlayerID, c);
+                GM.PlayerPlayedCard(PlayerID, c);
                 OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
 
                 return c;
@@ -139,7 +143,7 @@ namespace deckForge.PlayerConstruction
 
         virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<IPlayer> command)
         {
-            IPlayer targetPlayer = _gm.GetPlayerByID(targetID);
+            IPlayer targetPlayer = GM.GetPlayerByID(targetID);
             command(targetPlayer);
         }
         virtual public void ExecuteCommand(Action command)
@@ -170,12 +174,68 @@ namespace deckForge.PlayerConstruction
         //Gets Flipped Card
         public Card FlipSingleCard(int cardNum, bool? facedown = null)
         {
-            return _gm.FlipSingleCard(PlayerID, cardNum, facedown);
+            return GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
         public List<Card> TakeAllCardsFromTable()
         {
-            return _gm.PickUpAllCards_FromTable_FromPlayer(PlayerID);
+            return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
+        }
+
+        //Returns -1 if not found
+        public virtual int FindCorrectPoolID(IResource resource)
+        {
+            int resourcePoolID = -1;
+            for (var i = 0; i < PlayerResourceCollections.Count; i++)
+            {
+                if (PlayerResourceCollections[i].ResourceType == resource.GetType()) {
+                    resourcePoolID = i;
+                    break;
+                }
+            }
+            return resourcePoolID;
+        }
+
+        public virtual void AddResourceToPool(int ID, IResource resource) {
+            try
+            {
+                if (ID >= 0 || ID < PlayerResourceCollections.Count)
+                {
+                    if (PlayerResourceCollections[ID].ResourceType == resource.GetType())
+                    {
+                        IResourceCollection rs = PlayerResourceCollections[ID];
+                        var casting = (IResourceCollection<object>)rs;
+                        casting.AddResource(resource);
+                    }
+                    else {
+                        throw new ArgumentException($"Resource is of Type {resource.GetType()} and cannot be put into a collection of Type ${PlayerResourceCollections[ID].ResourceType}");
+                    }
+                }
+                else {
+                    throw new ArgumentOutOfRangeException("ID is out of range of PlayerResourceCollections");
+                }
+            }
+            catch {
+                throw;
+            }
+        }
+
+        public void AddPlayerResourceCollection(IResourceCollection collection) {
+            PlayerResourceCollections.Add(collection);
+        }
+
+        public Object? TakeResourceFromCollection(int resourceCollectionID)
+        {
+            try
+            {
+                IResourceCollection rs = PlayerResourceCollections[resourceCollectionID];
+                var casting = (IResourceCollection<object>)rs; 
+                return casting.GainResource();
+            }
+            catch {
+                throw;
+            }
+
         }
     }
 
