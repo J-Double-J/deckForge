@@ -2,6 +2,8 @@ using deckForge.GameConstruction;
 using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
+using System.Reflection;
+using System.Globalization;
 
 namespace deckForge.PlayerConstruction
 {
@@ -51,7 +53,7 @@ namespace deckForge.PlayerConstruction
             {
                 if (PersonalDeck != null)
                 {
-                    return PersonalDeck.Size;
+                    return PersonalDeck.Count;
                 }
                 else
                 {
@@ -182,8 +184,13 @@ namespace deckForge.PlayerConstruction
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
 
-        //Returns -1 if not found
-        public virtual int FindCorrectPoolID(IResource resource)
+        public void AddPlayerResourceCollection(IResourceCollection collection)
+        {
+            PlayerResourceCollections.Add(collection);
+        }
+
+        //Finds first resource match or returns -1 if not found
+        public virtual int FindCorrectPoolID(object resource)
         {
             int resourcePoolID = -1;
             for (var i = 0; i < PlayerResourceCollections.Count; i++)
@@ -196,52 +203,202 @@ namespace deckForge.PlayerConstruction
             return resourcePoolID;
         }
 
-        public virtual void AddResourceToPool(int ID, IResource resource) {
-            try
-            {
-                if (ID >= 0 || ID < PlayerResourceCollections.Count)
-                {
-                    if (PlayerResourceCollections[ID].ResourceType == resource.GetType())
-                    {
-                        IResourceCollection rs = PlayerResourceCollections[ID];
-                        var casting = (IResourceCollection<object>)rs;
-                        casting.AddResource(resource);
-                    }
-                    else {
-                        throw new ArgumentException($"Resource is of Type {resource.GetType()} and cannot be put into a collection of Type ${PlayerResourceCollections[ID].ResourceType}");
-                    }
-                }
-                else {
-                    throw new ArgumentOutOfRangeException("ID is out of range of PlayerResourceCollections");
-                }
-            }
-            catch {
-                throw;
-            }
-        }
+       
 
-        public void AddPlayerResourceCollection(IResourceCollection collection) {
-            PlayerResourceCollections.Add(collection);
-        }
-
-        public Object? TakeResourceFromCollection(int resourceCollectionID)
+        public object? TakeResourceFromCollection(int resourceCollectionID)
         {
             try
             {
-                IResourceCollection rs = PlayerResourceCollections[resourceCollectionID];
-                var casting = (IResourceCollection<object>)rs; 
-                return casting.GainResource();
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                Object? gainedResource = null;
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                foreach (MethodInfo method in methodInfos) {
+                    if (method.Name == "GainResource") {
+                        gainedResource = method.Invoke(instance, null);
+                        
+                    }
+                }
+                return gainedResource;
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void AddResourceToCollection(int resourceCollectionID, object resource) {
+            try
+            {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                if (resource.GetType() != resourceCollection.ResourceType)
+                    throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "AddResource")
+                    {
+                        object[] args = { resource };
+                        method.Invoke(instance, args);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RemoveResourceFromCollection(int resourceCollectionID, object resource) {
+            try
+            {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                ThrowIf_InvalidResourceForCollection(resourceCollection, resource);
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+                foreach (MethodInfo method in methodInfos) {
+                    if (method.Name == "RemoveResource") {
+                        object[] args = { resource };
+                        method.Invoke(instance, args);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void IncrementResourceCollection(int resourceCollectionID) {
+            try
+            {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "IncrementResourceCollection")
+                    {
+                        method.Invoke(instance, null);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
             }
             catch {
                 throw;
             }
+        }
 
+        public void DecrementResourceCollection(int resourceCollectionID)
+        {
+            try {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "DecrementResourceCollection")
+                    {
+                        method.Invoke(instance, null);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        public void ClearResourceCollection(int resourceCollectionID) {
+            try {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "ClearCollection")
+                    {
+                        method.Invoke(instance, null);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        private void ThrowIf_InvalidResourceID(int resourceCollectionID) {
+            if (resourceCollectionID < 0 || resourceCollectionID > PlayerResourceCollections.Count)
+                throw new ArgumentOutOfRangeException($"PlayerResouceCollections[{resourceCollectionID}] does not exist. Did you forget to add a collection to Player?");
+        }
+
+        private void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
+        {
+            if (resource.GetType() != resourceCollection.ResourceType)
+                throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
         }
     }
 
     public class BasePlayer_WithPersonalDeck : BasePlayer, IPlayer_WithPersonalDeck
     {
-        new Deck _personalDeck;
+        Deck _personalDeck;
         public BasePlayer_WithPersonalDeck(IGameMediator _gm, int playerID, int initHandSize, Deck personalDeck) :
         base(_gm, playerID, initHandSize)
         {

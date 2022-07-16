@@ -47,7 +47,6 @@ namespace deckForge.GameElements.Resources
             }
         }
 
-
         public void RemoveResource(Card resource)
         {
             for (var i = 0; i < hand.Count; i++) {
@@ -73,6 +72,8 @@ namespace deckForge.GameElements.Resources
             throw new NotImplementedException();
         }
 
-        
+        public void ClearCollection() {
+            hand.Clear();
+        }
     }
 }

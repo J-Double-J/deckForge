@@ -12,5 +12,6 @@
         public void IncrementResourceCollection();
         public void DecrementResourceCollection();
         public T? GainResource();
+        public void ClearCollection();
     }
 }

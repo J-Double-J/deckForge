@@ -13,10 +13,10 @@ namespace UnitTests.GameElements
         {
             Deck deck = new();
 
-            int initSize = deck.Size;
+            int initSize = deck.Count;
             deck.DrawCard();
 
-            deck.Size.Should().Be(initSize - 1, "a card was drawn");
+            deck.Count.Should().Be(initSize - 1, "a card was drawn");
             //Assert.IsTrue((deck.Size() == initSize - 1), "Deck did not shrink on card draw");
         }
 
@@ -51,7 +51,7 @@ namespace UnitTests.GameElements
             List<Card>? cards = new();
 
             deck.DrawMultipleCards(49);
-            int initDeckSize = deck.Size;
+            int initDeckSize = deck.Count;
 
             cards = deck.DrawMultipleCards(count);
 
@@ -163,7 +163,7 @@ namespace UnitTests.GameElements
             d.AddResource(c);
             d.RemoveResource(c);
 
-            d.Size.Should().Be(52, "a card resource was added and then removed from the deck");
+            d.Count.Should().Be(52, "a card resource was added and then removed from the deck");
         }
 
         [TestMethod]
@@ -181,7 +181,7 @@ namespace UnitTests.GameElements
 
             d.DecrementResourceCollection();
 
-            d.Size.Should().Be(51, "a card was removed from the deck");
+            d.Count.Should().Be(51, "a card was removed from the deck");
         }
     }
 }

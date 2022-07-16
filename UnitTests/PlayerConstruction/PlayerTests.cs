@@ -56,6 +56,18 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
+        public void PlayerFindsCorrectResourceCollection() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck();
+
+            p.AddPlayerResourceCollection(d);
+            int pos = p.FindCorrectPoolID(new Card(21, "J"));
+
+            pos.Should().Be(0, "the deck collection is at the 0th spot");
+        }
+
+        [TestMethod]
         public void PlayerDrawsCardFromDeckResource() {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
@@ -65,7 +77,72 @@ namespace UnitTests.PlayerConstruction
             p.AddPlayerResourceCollection(d);
 
             Card? c = (Card?)p.TakeResourceFromCollection(0);
-            c.val.Should().Be(21, "the deck had 21W be added to the top");
+            c!.val.Should().Be(21, "the deck had 21W be added to the top");
+        }
+
+        [TestMethod]
+        public void PlayerAdds_CardToDeckResource()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck(defaultAddCardPos: "top");
+
+            p.AddPlayerResourceCollection(d);
+            p.AddResourceToCollection(0, new Card(21, "W"));
+
+            Card? c = (Card?)p.TakeResourceFromCollection(0);
+            c!.val.Should().Be(21, "the card 21W was added to the collection by the player");
+        }
+
+        [TestMethod]
+        public void PlayerCannotAdd_InvalidResourcesToCollection() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck(defaultAddCardPos: "top");
+
+            p.AddPlayerResourceCollection(d);
+            Action action = () => p.AddResourceToCollection(0, new BasePlayer(gm, playerID: 1));
+
+            action.Should().Throw<ArgumentException>("player cannot add another player to a collection of cards");
+        }
+
+        [TestMethod]
+        public void PlayerCanClear_ResourceCollection()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck();
+
+            p.AddPlayerResourceCollection(d);
+            p.ClearResourceCollection(0);
+            Card? card = (Card?)p.TakeResourceFromCollection(0);
+
+            card.Should().BeNull("there are no card left in the deck");
+        }
+
+        [TestMethod]
+        public void PlayerCanIncrement_ResourceCollection() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck();
+
+            p.AddPlayerResourceCollection(d);
+            Action a = () => p.IncrementResourceCollection(0);
+
+            a.Should().Throw<NotImplementedException>("deck cannot increment itself without a resource");
+        }
+
+        [TestMethod]
+        public void PlayerCanDecrement_ResourceCollection()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck();
+
+            p.AddPlayerResourceCollection(d);
+            p.DecrementResourceCollection(0);
+
+            d.Count.Should().Be(51, "the deck was decremented and lost a card");
         }
     }
 }

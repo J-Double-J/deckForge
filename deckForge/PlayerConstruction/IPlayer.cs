@@ -15,6 +15,15 @@ namespace deckForge.PlayerConstruction
         public Card? PlayCard(bool facedown = false);
         public Card FlipSingleCard(int cardNum, bool? facedown = null);
         public List<Card> TakeAllCardsFromTable();
+        public void AddPlayerResourceCollection(IResourceCollection collection);
+        public int FindCorrectPoolID(object resource);
+        public object? TakeResourceFromCollection(int resourceCollectionID);
+        public void AddResourceToCollection(int resourceCollectionID, object resource);
+        public void RemoveResourceFromCollection(int resourceCollectionID, object resource);
+        public void IncrementResourceCollection(int resourceCollectionID);
+        public void DecrementResourceCollection(int resourceCollectionID);
+        public void ClearResourceCollection(int resourceCollectionID);
+
     }
 
     public interface IPlayer_WithPersonalDeck : IPlayer {

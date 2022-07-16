@@ -2,9 +2,16 @@ namespace deckForge.GameElements.Resources
 {
     public class Deck : IResourceCollection<Card>
     {
-        public List<Card> deck = new List<Card>();
+        private List<Card> deck = new List<Card>();
         private string _defaultAddCardPos;
         private bool _defaultShuffleOnAddCard;
+
+        public Deck() {
+            createDeck();
+            Shuffle();
+            _defaultAddCardPos = "bottom";
+            _defaultShuffleOnAddCard = false;
+        }
 
         public Deck(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
@@ -68,7 +75,7 @@ namespace deckForge.GameElements.Resources
             }
         }
 
-        public int Size
+        public int Count
         {
             get { return deck.Count; }
         }
@@ -170,7 +177,7 @@ namespace deckForge.GameElements.Resources
 
         public void RemoveResource(Card resource)
         {
-            for (int i = 0; i < Size; i++) {
+            for (int i = 0; i < Count; i++) {
                 if (deck[i] == resource) {
                     deck.Remove(deck[i]);
                     i--; //Deck shrinks so this compensates for that
@@ -191,6 +198,11 @@ namespace deckForge.GameElements.Resources
         public Card? GainResource()
         {
             return DrawCard();
+        }
+
+        public void ClearCollection()
+        {
+            deck.Clear();
         }
     }
 }
