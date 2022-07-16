@@ -39,7 +39,7 @@ namespace deckForge.PlayerConstruction
 
         public int HandSize
         {
-            get { return PlayerHand.HandSize; }
+            get { return PlayerHand.CurrentHandSize; }
         }
 
         public int PlayerID
@@ -120,7 +120,7 @@ namespace deckForge.PlayerConstruction
                 Console.WriteLine("Which card would you like to play?");
                 for (var i = 0; i < HandSize; i++)
                 {
-                    Console.WriteLine($"{i}) {PlayerHand.getCardAt(i).PrintCard()}");
+                    Console.WriteLine($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
                 }
                 string? input;
                 int selectedVal;
@@ -129,7 +129,7 @@ namespace deckForge.PlayerConstruction
                     input = Console.ReadLine();
                 } while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-                Card c = PlayerHand.getCardAt(selectedVal);
+                Card c = PlayerHand.GetCardAt(selectedVal);
                 PlayerHand.RemoveResource(c);
 
                 if (facedown)

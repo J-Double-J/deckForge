@@ -183,5 +183,24 @@ namespace UnitTests.GameElements
 
             d.Count.Should().Be(51, "a card was removed from the deck");
         }
+
+        [TestMethod]
+        public void DeckCanGiveResource() {
+            Deck d = new(defaultAddCardPos: "top");
+
+            d.AddResource(new Card(21, "W"));
+            Card? c = d.GainResource();
+
+            c!.val.Should().Be(21, "the card 21W was added to the top of the deck");
+        }
+
+        [TestMethod]
+        public void DeckCanBeCleared() {
+            Deck d = new();
+
+            d.ClearCollection();
+
+            d.Count.Should().Be(0, "the deck was emptied");
+        }
     }
 }

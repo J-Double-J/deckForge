@@ -81,7 +81,7 @@ namespace deckForge.GameElements.Resources
         }
 
         //Simple 52 Card Deck for examples
-        void createDeck()
+        private void createDeck()
         {
             for (int i = 1; i < 14; i++)
             {
@@ -200,9 +200,12 @@ namespace deckForge.GameElements.Resources
             return DrawCard();
         }
 
-        public void ClearCollection()
+        public List<Card>? ClearCollection()
         {
+            List<Card> cardsRemoved = deck;
             deck.Clear();
+
+            return cardsRemoved;
         }
     }
 }

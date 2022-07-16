@@ -21,11 +21,11 @@ namespace deckForge.GameElements.Resources
             set { _maxHandSize = value; }
         }
 
-        public int HandSize {
+        public int CurrentHandSize {
             get { return hand.Count; }
         }
 
-        public Card getCardAt(int i) {
+        public Card GetCardAt(int i) {
             try
             {
                 return hand[i];
@@ -42,7 +42,7 @@ namespace deckForge.GameElements.Resources
         //If already at hand limit, card is not added.
         public void AddResource(Card resource)
         {
-            if (MaxHandSize < 0 || HandSize < MaxHandSize) {
+            if (MaxHandSize < 0 || CurrentHandSize < MaxHandSize) {
                 hand.Add((Card)resource);
             }
         }
@@ -72,8 +72,11 @@ namespace deckForge.GameElements.Resources
             throw new NotImplementedException();
         }
 
-        public void ClearCollection() {
+        public List<Card>? ClearCollection() {
+            List<Card> cardsRemoved = hand;
             hand.Clear();
+
+            return cardsRemoved;
         }
     }
 }
