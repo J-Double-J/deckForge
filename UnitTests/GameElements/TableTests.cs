@@ -10,7 +10,7 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-        static List<Deck> decks = new List<Deck>{ new Deck() };
+        static readonly List<Deck> decks = new() { new Deck(), new Deck(), new Deck() };
         private static IGameMediator gm = new BaseGameMediator(2);
         private static Table table = new(gm, 2, decks);
         private static StringWriter output = new();
@@ -40,9 +40,6 @@ namespace UnitTests.GameElements
             a.Should().Throw<ArgumentException>($"there is no player with the id of {fakePlayerID}");
         }
 
-        //This test is failing for whatever reason, and it has to do probably with behind the scenes Console.WriteLine stuff
-        //I suspect. The test is printing what I expect. This test will remain in case I need to return to it.
-        //Works on Macbook.
         [TestMethod]
         public void TablePrintsCardsCorrectly()
         {
@@ -234,6 +231,70 @@ namespace UnitTests.GameElements
             }
         }
 
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public void TableFlips_ACardForAPlayer_InSpecificWay(bool facedown) {
+            setUpTableForTests();
+            
+            table.Flip_SpecificCard_SpecificPlayer_SpecificWay(0, 0, facedown);
+            table.PrintTableState();
+
+            if (facedown)
+            {
+                if (OperatingSystem.IsIOS())
+                {
+                    output.ToString().Should().Be("COVERED\n9J\n1Q\nCOVERED\n");
+                } else if (OperatingSystem.IsWindows())
+                {
+                    output.ToString().Should().Be("COVERED\r\n9J\r\n1Q\r\nCOVERED\r\n");
+                }
+            }
+            else {
+                if (OperatingSystem.IsIOS())
+                {
+                    output.ToString().Should().Be("8J\n9J\n1Q\nCOVERED\n");
+                }
+                else if (OperatingSystem.IsWindows())
+                {
+                    output.ToString().Should().Be("8J\r\n9J\r\n1Q\r\nCOVERED\r\n");
+                }
+            }
+        }
+
+        [TestMethod]
+        [DataRow(0)]
+        [DataRow(2)]
+        public void TableCanDrawCard_FromSpecificDeck(int deckNum)
+        {
+            Card? c = table.DrawCardFromDeck(0)!;
+
+            c.Should().NotBeNull("because a new card is being drawn from this deck");
+        }
+
+        [TestMethod]
+        public void TableCanDrawManyCards_FromSpecificDeck() {
+            List<Card?> cards  = new List<Card?>();
+
+            cards = table.DrawMultipleCardsFromDeck(5);
+
+            cards.Count.Should().Be(5, "5 cards was drawn from the first deck");
+
+            foreach(Card? c in cards)
+            {
+                c.Should().NotBeNull("the deck is new and should not be empty");
+            }
+        }
+
+        [TestMethod]
+        public void TableCannotDraw_FromNonexistantDeck() {
+            Action a = () => table.DrawCardFromDeck(10);
+            Action b = () => table.DrawMultipleCardsFromDeck(5, 4);
+
+            a.Should().Throw<ArgumentOutOfRangeException>("there is no 11th deck");
+            b.Should().Throw<ArgumentOutOfRangeException>("there is no 5th deck");
+        }
+
         private void setUpTableForTests()
         {
             Console.SetOut(output);
@@ -243,6 +304,5 @@ namespace UnitTests.GameElements
             table.PlaceCardOnTable(1, new Card(1, "Q", facedown: false));
             table.PlaceCardOnTable(1, new Card(2, "Q", facedown: true));
         }
-
     }
 }
