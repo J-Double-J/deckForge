@@ -6,6 +6,38 @@ namespace deckForge.GameElements
     public class Table : ITable
     {
         IGameMediator _gm;
+
+        public Table(IGameMediator mediator, int playerCount)
+        {
+            _gm = mediator;
+            _gm.RegisterTable(this);
+
+            PlayedCards = new();
+            for (var i = 0; i < playerCount; i++)
+            {
+                List<Card> cards = new();
+                PlayedCards.Add(cards);
+            }
+
+            TableDecks = new();
+        }
+
+        public Table(IGameMediator mediator, int playerCount, Deck initDeck)
+        {
+            _gm = mediator;
+            _gm.RegisterTable(this);
+
+            PlayedCards = new();
+            for (var i = 0; i < playerCount; i++)
+            {
+                List<Card> cards = new();
+                PlayedCards.Add(cards);
+            }
+
+            TableDecks = new List<Deck>();
+            TableDecks.Add(initDeck);
+        }
+
         public Table(IGameMediator mediator, int playerCount, List<Deck> initDecks)
         {
             _gm = mediator;
