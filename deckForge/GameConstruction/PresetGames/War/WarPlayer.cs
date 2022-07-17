@@ -4,7 +4,7 @@ using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction.PresetGames.War
 {
-    public class WarPlayer : BasePlayer_WithPersonalDeck
+    public class WarPlayer : BasePlayer
     {
         public WarPlayer(IGameMediator gm, int playerID, Deck personalDeck) : base(gm, playerID: playerID, initHandSize: 0, personalDeck: personalDeck)
         {
