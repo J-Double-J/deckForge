@@ -3,7 +3,7 @@ using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
 using System.Reflection;
-using System.Globalization;
+using System.Collections;
 
 namespace deckForge.PlayerConstruction
 {
@@ -203,8 +203,6 @@ namespace deckForge.PlayerConstruction
             return resourcePoolID;
         }
 
-       
-
         public object? TakeResourceFromCollection(int resourceCollectionID)
         {
             try
@@ -284,6 +282,44 @@ namespace deckForge.PlayerConstruction
                 foreach (MethodInfo method in methodInfos) {
                     if (method.Name == "RemoveResource") {
                         object[] args = { resource };
+                        method.Invoke(instance, args);
+                    }
+                }
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        //Individual resources must have a 
+        public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources) {
+            try
+            {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                ThrowIf_InvalidResourceForCollection(resourceCollection, resources[0]);
+
+                instance = resourceCollection;
+                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                Type listType = typeof(List<>).MakeGenericType(resources[0].GetType());
+                IList listOfResources = (Activator.CreateInstance(listType) as IList)!;
+
+                listOfResources = resources;
+
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "AddMultipleResources")
+                    {
+                        object[] args = { listOfResources };
                         method.Invoke(instance, args);
                     }
                 }
@@ -392,46 +428,7 @@ namespace deckForge.PlayerConstruction
         private void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
         {
             if (resource.GetType() != resourceCollection.ResourceType)
-                throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
-        }
-    }
-
-    public class BasePlayer_WithPersonalDeck : BasePlayer, IPlayer_WithPersonalDeck
-    {
-        Deck _personalDeck;
-        public BasePlayer_WithPersonalDeck(IGameMediator _gm, int playerID, int initHandSize, Deck personalDeck) :
-        base(_gm, playerID, initHandSize)
-        {
-            _personalDeck = personalDeck;
-        }
-
-        //Return what card was added to the deck
-        public Card AddCardToPersonalDeck(Card c, string position = "bottom", bool shuffleDeckAfter = false)
-        {
-            if (_personalDeck != null)
-            {
-                _personalDeck.AddCardToDeck(c, pos: position, shuffleAfter: shuffleDeckAfter);
-                return c;
-            }
-            else
-            {
-                throw new NotSupportedException(message: "There is no personal deck to add to");
-            }
-        }
-
-        //Returns what cards were added to the deck
-        public List<Card> AddCardsToPersonalDeck
-        (List<Card> cards, string position = "bottom", bool shuffleDeckAfter = false)
-        {
-            if (_personalDeck is not null)
-            {
-                _personalDeck?.AddMultipleCardsToDeck(cards, position, shuffleDeckAfter);
-                return cards;
-            }
-            else
-            {
-                throw new NotSupportedException($"Player {PlayerID} doesn't have a personal deck");
-            }
+                throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
         }
     }
 }

@@ -107,6 +107,36 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
+        public void PlayerCanAdd_MultipleResourcesToCollection() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck(defaultAddCardPos: "top");
+            List<Card> cards = new() { new Card(21, "W"), new Card(22, "W"), new Card(23, "W"), new Card(24, "W"), };
+
+            p.AddPlayerResourceCollection(d);
+            List<object> objects = cards.Cast<object>().ToList();
+
+            p.AddMultipleResourcesToCollection(0, objects);
+            Card drawnCard = (Card)p.TakeResourceFromCollection(0)!;
+
+            drawnCard.val.Should().Be(24, "the last card added was 24W");
+        }
+
+        [TestMethod]
+        public void PlayerCannotAdd_MultipleInvalidResourcesToCollection() {
+            IGameMediator gm = new BaseGameMediator(0);
+            BasePlayer p = new(gm, playerID: 0);
+            Deck d = new Deck(defaultAddCardPos: "top");
+            List<BasePlayer> players = new() { new BasePlayer(gm, 1), new BasePlayer(gm, 2), new BasePlayer(gm, 3) };
+
+            p.AddPlayerResourceCollection(d);
+            List<object> objects = players.Cast<object>().ToList();
+
+            Action a = () => p.AddMultipleResourcesToCollection(0, objects);
+            a.Should().Throw<ArgumentException>("players cannot be added to a deck");
+        }
+
+        [TestMethod]
         public void PlayerCanClear_ResourceCollection()
         {
             IGameMediator gm = new BaseGameMediator(0);

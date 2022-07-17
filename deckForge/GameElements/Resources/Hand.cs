@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace deckForge.GameElements.Resources
 {
@@ -54,6 +50,21 @@ namespace deckForge.GameElements.Resources
                     hand.RemoveAt(i);
                     i--;
                 }
+            }
+        }
+
+        public void AddMultipleResources(IList resources)
+        {
+            try
+            {
+                for (int i = 0; i < resources.Count; i++)
+                {
+                    AddResource((Card)Convert.ChangeType(resources[i], typeof(Card))!);
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 

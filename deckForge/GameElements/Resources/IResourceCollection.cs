@@ -1,4 +1,6 @@
-﻿namespace deckForge.GameElements.Resources
+﻿using System.Collections;
+
+namespace deckForge.GameElements.Resources
 {
 
     public interface IResourceCollection {
@@ -8,6 +10,7 @@
     {
         new Type ResourceType { get; }
         public void AddResource(T resource);
+        public void AddMultipleResources(IList resource);
         public void RemoveResource(T resource);
         public void IncrementResourceCollection();
         public void DecrementResourceCollection();

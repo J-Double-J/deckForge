@@ -20,6 +20,7 @@ namespace deckForge.PlayerConstruction
         public object? TakeResourceFromCollection(int resourceCollectionID);
         public void AddResourceToCollection(int resourceCollectionID, object resource);
         public void RemoveResourceFromCollection(int resourceCollectionID, object resource);
+        public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources);
         public void IncrementResourceCollection(int resourceCollectionID);
         public void DecrementResourceCollection(int resourceCollectionID);
         public void ClearResourceCollection(int resourceCollectionID);

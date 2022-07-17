@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace deckForge.GameElements.Resources
 {
     public class Deck : IResourceCollection<Card>
@@ -182,6 +184,19 @@ namespace deckForge.GameElements.Resources
                     deck.Remove(deck[i]);
                     i--; //Deck shrinks so this compensates for that
                 }
+            }
+        }
+
+        public void AddMultipleResources(IList resources) {
+            try
+            {
+                for (int i = 0; i < resources.Count; i++)
+                {
+                    AddResource((Card)Convert.ChangeType(resources[i], typeof(Card))!);
+                }
+            }
+            catch {
+                throw;
             }
         }
 
