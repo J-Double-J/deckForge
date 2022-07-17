@@ -15,8 +15,9 @@ namespace deckForge.PlayerConstruction
         public Card? PlayCard(bool facedown = false);
         public Card FlipSingleCard(int cardNum, bool? facedown = null);
         public List<Card> TakeAllCardsFromTable();
-        public void AddPlayerResourceCollection(IResourceCollection collection);
-        public int FindCorrectPoolID(object resource);
+        public void AddResourceCollection(IResourceCollection collection);
+        public int FindCorrectPoolID(Type resourceType);
+        public int CountOfResourceCollection(int resourceCollectionID);
         public object? TakeResourceFromCollection(int resourceCollectionID);
         public void AddResourceToCollection(int resourceCollectionID, object resource);
         public void RemoveResourceFromCollection(int resourceCollectionID, object resource);

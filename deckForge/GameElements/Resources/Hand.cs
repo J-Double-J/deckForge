@@ -21,6 +21,10 @@ namespace deckForge.GameElements.Resources
             get { return hand.Count; }
         }
 
+        public int Count {
+            get { return hand.Count; }
+        }
+
         public Card GetCardAt(int i) {
             try
             {

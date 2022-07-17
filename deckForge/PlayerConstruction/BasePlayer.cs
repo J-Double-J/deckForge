@@ -184,23 +184,78 @@ namespace deckForge.PlayerConstruction
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
 
-        public void AddPlayerResourceCollection(IResourceCollection collection)
+        public void AddResourceCollection(IResourceCollection collection)
         {
             PlayerResourceCollections.Add(collection);
         }
 
         //Finds first resource match or returns -1 if not found
-        public virtual int FindCorrectPoolID(object resource)
+        public virtual int FindCorrectPoolID(Type resourceType)
         {
             int resourcePoolID = -1;
-            for (var i = 0; i < PlayerResourceCollections.Count; i++)
-            {
-                if (PlayerResourceCollections[i].ResourceType == resource.GetType()) {
-                    resourcePoolID = i;
-                    break;
+
+            try {
+                Type? collectionType = null;
+
+                for (var i = 0; i < PlayerResourceCollections.Count; i++)
+                {
+
+                    ThrowIf_InvalidResourceID(i);
+
+                    IResourceCollection resourceCollection = PlayerResourceCollections[i];
+                    var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                    PropertyInfo[] propertyInfos = resourceCollection.GetType().GetProperties();
+
+                    foreach (PropertyInfo property in propertyInfos)
+                    {
+                        if (property.Name == "ResourceType")
+                        {
+                            collectionType = (Type)property.GetValue(instance, null)!;
+                        }
+                    }
+
+                    if (collectionType != null && collectionType == resourceType)
+                    {
+                        resourcePoolID = i;
+                        break;
+                    }
                 }
+            } 
+            catch { 
+                throw; 
             }
+            
             return resourcePoolID;
+        }
+
+        public int CountOfResourceCollection(int resourceCollectionID) {
+            try {
+                ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                PropertyInfo[] propertyInfos = resourceCollection.GetType().GetProperties();
+
+                instance = resourceCollection;
+                foreach (PropertyInfo property in propertyInfos)
+                {
+                    if (property.Name == "Count")
+                    {
+                        return (int)property.GetValue(instance, null)!;
+                    }
+                }
+                return -1;
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public object? TakeResourceFromCollection(int resourceCollectionID)
@@ -209,7 +264,7 @@ namespace deckForge.PlayerConstruction
             {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
 
-                Object? gainedResource = null;
+                object? gainedResource = null;
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
 
@@ -219,9 +274,10 @@ namespace deckForge.PlayerConstruction
                 foreach (MethodInfo method in methodInfos) {
                     if (method.Name == "GainResource") {
                         gainedResource = method.Invoke(instance, null);
-                        
+                        break;
                     }
                 }
+
                 return gainedResource;
             }
             catch (TargetInvocationException e)

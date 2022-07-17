@@ -202,5 +202,16 @@ namespace UnitTests.GameElements
 
             d.Count.Should().Be(0, "the deck was emptied");
         }
+
+        [TestMethod]
+        public void DeckCanResourceCount() {
+            Deck d = new();
+
+            d.DrawCard();
+            d.DrawCard();
+            d.DrawCard();
+
+            d.Count.Should().Be(49, "3 cards were drawn from the deck (52 - 3 = 49)");
+        }
     }
 }
