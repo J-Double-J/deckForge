@@ -3,25 +3,24 @@ using deckForge.GameElements.Resources;
 
 namespace deckForge.PhaseActions
 {
-    class TakeAllCards_FromTargetPlayerTable_ToPlayerDeck : PlayerGameAction
+    public class TakeAllCards_FromTargetPlayerTable_ToPlayerDeck : PlayerGameAction
     {
         public TakeAllCards_FromTargetPlayerTable_ToPlayerDeck(
             string name = "Take Cards from Player on Table",
-            string description = "Take some Cards on the Table from a Player."
+            string description = "Take all Cards on the Player Target's Table spot."
             ) : base(name: name, description: description)
         { }
 
         public override List<Card> execute(IPlayer playerExecutor, IPlayer playerTarget)
         {
             try {
+                int resourceCollectionID = playerExecutor.FindCorrectPoolID(typeof(Card));
+                List<Card> cards = playerTarget.TakeAllCardsFromTable();
+                List<object> objectCards = cards.Cast<object>().ToList();
 
-                if (playerExecutor.GetType() == typeof(BasePlayer_WithPersonalDeck)) {
-                    IPlayer_WithPersonalDeck personal = (IPlayer_WithPersonalDeck)playerExecutor;
-                    return personal.AddCardsToPersonalDeck(playerTarget.TakeAllCardsFromTable());
-                } else {
-                    string e = "PlayerExecutor does not implement 'IPlayer_WithPersonalDeck'. Action parameters are not checked at compile time. Are you sure the right player is calling this action?";
-                    throw new ArgumentException(e);
-                }
+                playerExecutor.AddMultipleResourcesToCollection(resourceCollectionID, objectCards);
+
+                return cards;
             } catch {
                 throw;
             }
