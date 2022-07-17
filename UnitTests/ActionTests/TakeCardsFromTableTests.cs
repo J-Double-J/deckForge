@@ -23,16 +23,13 @@ namespace UnitTests.ActionTests
             opponent.AddResourceCollection(deckTwo);
 
             table.PlaceCardOnTable(0, (Card)player.TakeResourceFromCollection(0)!);
-            Console.WriteLine(player.CountOfResourceCollection(0));
             table.PlaceCardOnTable(0, (Card)player.TakeResourceFromCollection(0)!);
-            Console.WriteLine(player.CountOfResourceCollection(0));
             table.PlaceCardOnTable(1, (Card)opponent.TakeResourceFromCollection(0)!);
-            Console.WriteLine(opponent.CountOfResourceCollection(0));
 
             IAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck();
             gameAction.execute(player, opponent);
 
-            player.CountOfResourceCollection(0).Should().Be(51, "they added a card from their opponent and still have a card on the table");
+            player.CountOfResourceCollection(0).Should().Be(51, "they added two cards from their opponent and still have a card on the table");
         }
     }
 }
