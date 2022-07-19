@@ -3,7 +3,7 @@ using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction
 {
-    public class BaseGameController
+    public class BaseGameController : IGameController
     {
         Deck deck;
         int playerCount;

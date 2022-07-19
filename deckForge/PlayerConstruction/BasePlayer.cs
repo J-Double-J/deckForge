@@ -10,7 +10,6 @@ namespace deckForge.PlayerConstruction
     public class BasePlayer : IPlayer
     {
         protected readonly IGameMediator GM;
-        protected Deck? PersonalDeck;
         protected int CardPlays;
         protected int CardDraws;
         protected int InitHandSize;
@@ -20,14 +19,14 @@ namespace deckForge.PlayerConstruction
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
 
-        public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5, Deck? personalDeck = null)
+        public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5)
         {
             PlayerHand = new();
+
             //PlayerHand is not considered part of PlayerResourceCollections despite being a collection
             PlayerResourceCollections = new List<IResourceCollection>();
 
             GM = gm;
-            PersonalDeck = personalDeck;
             PlayerID = playerID;
 
             //TODO: remove this is for sake of testing.
@@ -45,21 +44,6 @@ namespace deckForge.PlayerConstruction
         public int PlayerID
         {
             get;
-        }
-
-        public int PersonalDeckSize
-        {
-            get
-            {
-                if (PersonalDeck != null)
-                {
-                    return PersonalDeck.Count;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
         }
 
         public List<Card> PlayedCards
