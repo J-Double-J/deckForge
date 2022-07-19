@@ -17,8 +17,7 @@ namespace deckForge.GameConstruction.PresetGames.War
 
         public override void StartPhase()
         {
-            bool isWar = false;
-
+            bool isWar;
             if (FlippedCards != null)
             {
                 if (FlippedCards[0].val != FlippedCards[1].val)
@@ -42,19 +41,23 @@ namespace deckForge.GameConstruction.PresetGames.War
         {
             if (!isWar)
             {
+                if (FlippedCards![0].val > FlippedCards[1].val)
+                {
+                    Actions[0].execute(Players[0], Players[1]);
+                    Console.WriteLine("Player 0 won this round");
+                }
+                else
+                {
+                    Actions[0].execute(Players[1], Players[0]);
+                    Console.WriteLine("Player 1 won this round");
+                }
+                
                 OnSkipToPhase(new SkipToPhaseEventArgs(0));
             }
             else
             {
                 //Action here is TakeCardsFromPlayerOnTable
-                if (FlippedCards![0].val > FlippedCards[1].val)
-                {
-                    Actions[0].execute(Players[0], Players[1]);
-                }
-                else
-                {
-                    Actions[0].execute(Players[1], Players[0]);
-                }
+                
                 EndPhase();
             }
         }

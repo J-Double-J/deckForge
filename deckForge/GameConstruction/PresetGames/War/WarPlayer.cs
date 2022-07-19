@@ -6,17 +6,16 @@ namespace deckForge.GameConstruction.PresetGames.War
 {
     public class WarPlayer : BasePlayer
     {
-        public WarPlayer(IGameMediator gm, int playerID, Deck personalDeck) : base(gm, playerID: playerID, initHandSize: 0, personalDeck: personalDeck)
+        Deck personalDeck;
+        public WarPlayer(IGameMediator gm, int playerID, Deck deck) : base(gm, playerID: playerID, initHandSize: 0)
         {
-            if (personalDeck == null)
-            {
-                throw new ArgumentException("Cannot have a non-existant personal deck in War");
-            }
+            personalDeck = deck;
+            AddResourceCollection(personalDeck);
         }
 
         public override Card? PlayCard(bool facedown = false)
         {
-            Card? c = PersonalDeck!.DrawCard(drawFacedown: true);
+            Card? c = personalDeck!.DrawCard(drawFacedown: true);
             if (c != null)
             {
                 GM.PlayerPlayedCard(PlayerID, c);

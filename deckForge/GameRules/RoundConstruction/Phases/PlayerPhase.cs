@@ -21,11 +21,11 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
         virtual protected void NextAction(int actionNum)
         {
-            foreach (IPlayer p in Players)
+            foreach (IPlayer player in Players)
             {
-                NextActionHook(p, actionNum, out bool repeatAction);
+                NextActionHook(player, actionNum, out bool repeatAction);
                 if (repeatAction)
-                    Actions?[actionNum].execute(p);
+                    Actions?[actionNum].execute(player);
             }
             CurrentAction++;
             if (CurrentAction < ActionCount - 1)

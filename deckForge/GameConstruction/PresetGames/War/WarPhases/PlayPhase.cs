@@ -26,11 +26,11 @@ namespace deckForge.GameConstruction.PresetGames.War
             return FlippedCards!;
         }
 
-        override protected void NextActionHook(IPlayer p, int actionNum, out bool repeatAction)
+        override protected void NextActionHook(IPlayer player, int actionNum, out bool repeatAction)
         {
             repeatAction = false;
             if (actionNum == 0)
-                FlippedCards.Add((Card?)Actions[actionNum].execute(p));
+                FlippedCards.Add((Card?)Actions[actionNum].execute(player));
         }
 
         public override void StartPhase()

@@ -13,18 +13,17 @@ namespace deckForge.GameConstruction.PresetGames.War
         {
             const short PLAYER_COUNT = 2;
 
-            BaseGameMediator gm = new(PLAYER_COUNT);
+            IGameMediator gm = new BaseGameMediator(PLAYER_COUNT);
             BaseSetUpRules spr = new(initHandSize: 26);
-            BaseGameController gameController = new(PLAYER_COUNT);
+            IGameController gameController = new BaseGameController(PLAYER_COUNT);
             Table table = new(gm, PLAYER_COUNT, spr.Decks);
-            List<WarPlayer> players = WarPlayerSetUp(gm, table);
-            //WarRoundRules wrr = new WarRoundRules(players);
-
+            List<IPlayer> players = WarPlayerSetUp(gm, table);
+            WarRoundRules wrr = new WarRoundRules(players);
         }
 
-        private List<WarPlayer> WarPlayerSetUp(BaseGameMediator gm, Table table)
+        private List<IPlayer> WarPlayerSetUp(IGameMediator gm, Table table)
         {
-            List<WarPlayer> players = new();
+            List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
                 List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
