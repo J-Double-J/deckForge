@@ -210,27 +210,27 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public void TellPlayerToDoAction(int playerID, PlayerGameAction action) {
-            _players[playerID].ExecuteGameAction(action);
+        public object? TellPlayerToDoAction(int playerID, PlayerGameAction action) {
+            return _players[playerID].ExecuteGameAction(action);
         }
 
-        public void TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, PlayerGameAction action) {
-            _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
+        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, PlayerGameAction action) {
+            return _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
         }
 
-        public void TellPlayerToDoActionAgainstMultiplePlayers(int playerID, PlayerGameAction action, bool includeSelf = false) 
+        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, PlayerGameAction action, bool includeSelf = false) 
         {
-            _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
+            return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
         }
 
-        public void TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, PlayerGameAction action) {
+        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, PlayerGameAction action) {
             List<IPlayer> targettedPlayers = new();
 
             foreach (int targetID in targets) {
                 targettedPlayers.Add(_players[targetID]);
             }
 
-            _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
+            return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
         } 
     }
 }
