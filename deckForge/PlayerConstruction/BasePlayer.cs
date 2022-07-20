@@ -127,21 +127,6 @@ namespace deckForge.PlayerConstruction
             }
         }
 
-        virtual public void TellAnotherPlayerToExecuteCommand(int targetID, Action<IPlayer> command)
-        {
-            IPlayer targetPlayer = GM.GetPlayerByID(targetID);
-            command(targetPlayer);
-        }
-        virtual public void ExecuteCommand(Action command)
-        {
-            command();
-        }
-
-        virtual public void ExecuteGameAction(IAction<IPlayer> action)
-        {
-            action.execute(this);
-        }
-
         protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
         {
             var handler = PlayerPlayedCard;
@@ -469,6 +454,16 @@ namespace deckForge.PlayerConstruction
         {
             if (resource.GetType() != resourceCollection.ResourceType)
                 throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
+        }
+
+        public object? ExecuteGameAction(PlayerGameAction action) {
+            return action.execute(this);  
+        }
+        public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target) {
+            return action.execute(this, target);
+        }
+        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets) {
+            return action.execute(this, targets);
         }
     }
 }

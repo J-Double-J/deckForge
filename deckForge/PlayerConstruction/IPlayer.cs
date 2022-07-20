@@ -1,9 +1,11 @@
 using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.GameElements.Resources;
+using deckForge.PhaseActions;
 
 namespace deckForge.PlayerConstruction
 {
-    public interface IPlayer {
+    public interface IPlayer
+    {
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
         public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
         public int HandSize { get; }
@@ -25,12 +27,9 @@ namespace deckForge.PlayerConstruction
         public void IncrementResourceCollection(int resourceCollectionID);
         public void DecrementResourceCollection(int resourceCollectionID);
         public void ClearResourceCollection(int resourceCollectionID);
+        public object? ExecuteGameAction(PlayerGameAction action);
+        public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target);
+        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets);
 
-    }
-
-    public interface IPlayer_WithPersonalDeck : IPlayer {
-        public int PersonalDeckSize { get; }
-        public Card AddCardToPersonalDeck(Card c, string position = "bottom", bool shuffledDeckAfter = false);
-        public List<Card> AddCardsToPersonalDeck(List<Card> cards, string position = "bottom", bool shuffleDeckAfter = false);
     }
 }

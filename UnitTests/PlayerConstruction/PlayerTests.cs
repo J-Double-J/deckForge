@@ -4,38 +4,40 @@ using deckForge.GameRules;
 using deckForge.GameElements;
 using FluentAssertions;
 using deckForge.GameElements.Resources;
+using deckForge.PhaseActions;
 
 namespace UnitTests.PlayerConstruction
 {
     [TestClass]
     public class PlayerTests
     {
-        //Decide if execute command is valuable.
-        //[TestMethod]
-        public void PlayerExecutesPassed_DrawCommand()
+        [TestMethod]
+        public void PlayerExecutes_PassedDrawCommand()
         {
             IGameMediator gm = new BaseGameMediator(0);
             IPlayer p1 = new BasePlayer(gm);
+            PlayerGameAction action = new DrawCardsAction();
+            Table table = new(gm, 1, new Deck());
 
-            //p1.ExecuteCommand(() => { p1.DrawCard(); });
+            p1.DrawStartingHand();
+            p1.ExecuteGameAction(action);
+
             p1.HandSize.Should().Be(6, "Player was passed a command to draw a card");
         }
 
-        //TODO: Make a test GM with Add Player
-        //[TestMethod]
-        public void PlayerTellsAnotherPlayer_DrawCommand()
-        {
+        [TestMethod]
+        public void PlayerCannotExecute_DrawCommand_WithTargetting() {
             IGameMediator gm = new BaseGameMediator(0);
-            IPlayer p1 = new BasePlayer(gm, 0);
-            IPlayer p2 = new BasePlayer(gm, 1);
+            IPlayer p1 = new BasePlayer(gm);
+            IPlayer p2 = new BasePlayer(gm);
+            PlayerGameAction action = new DrawCardsAction();
+            Table table = new(gm, 1, new Deck());
 
-            //gm.AddPlayer(p1);
-            //gm.AddPlayer(p2);
+            p1.DrawStartingHand();
+            Action a = () => p1.ExecuteGameActionAgainstPlayer(action, p2);
 
-            //p1.TellAnotherPlayerToExecuteCommand(1, (IPlayer p) => p.DrawCard());
-            p2.HandSize.Should().Be(6, "Player 2 was told to draw a card");
+            a.Should().Throw<NotSupportedException>("the draw action cannot be targetted against another player");
         }
-
 
         //TODO: Write a GM stub in order to command player
         //[TestMethod]
