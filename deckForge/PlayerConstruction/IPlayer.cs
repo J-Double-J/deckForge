@@ -29,7 +29,7 @@ namespace deckForge.PlayerConstruction
         public void ClearResourceCollection(int resourceCollectionID);
         public object? ExecuteGameAction(PlayerGameAction action);
         public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target);
-        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets);
+        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets, bool includeSelf = false);
 
     }
 }

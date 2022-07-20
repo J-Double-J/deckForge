@@ -177,18 +177,6 @@ namespace deckForge.GameConstruction
             }
 
         }
-        /*
-        public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command)
-        {
-            try
-            {
-                _players[playerID].ExecuteGameAction(command);
-            }
-            catch
-            {
-                throw;
-            }
-        }*/
 
         public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
@@ -221,5 +209,28 @@ namespace deckForge.GameConstruction
                 throw;
             }
         }
+
+        public void TellPlayerToDoAction(int playerID, PlayerGameAction action) {
+            _players[playerID].ExecuteGameAction(action);
+        }
+
+        public void TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, PlayerGameAction action) {
+            _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
+        }
+
+        public void TellPlayerToDoActionAgainstMultiplePlayers(int playerID, PlayerGameAction action, bool includeSelf = false) 
+        {
+            _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
+        }
+
+        public void TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, PlayerGameAction action) {
+            List<IPlayer> targettedPlayers = new();
+
+            foreach (int targetID in targets) {
+                targettedPlayers.Add(_players[targetID]);
+            }
+
+            _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
+        } 
     }
 }

@@ -22,6 +22,8 @@ namespace deckForge.GameConstruction
         public List<Card> GetPlayedCardsOfPlayer(int playerID);
         public Card FlipSingleCard(int playerID, int cardPos, bool? facedown);
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
-        //public void TellPlayerToExecuteCommand(int playerID, PlayerGameAction command);
+        public void TellPlayerToDoAction(int playerID, PlayerGameAction action);
+        public void TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, PlayerGameAction action);
+        public void TellPlayerToDoActionAgainstMultiplePlayers(int playerID, PlayerGameAction action, bool includeSelf = false);
     }
 }

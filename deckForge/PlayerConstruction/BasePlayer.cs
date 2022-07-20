@@ -462,7 +462,20 @@ namespace deckForge.PlayerConstruction
         public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target) {
             return action.execute(this, target);
         }
-        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets) {
+        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets, bool includeSelf = false) {
+
+            List<IPlayer> targetList = targets;
+
+            //If action can be targetted against everyone but self, remove self from list
+            if (includeSelf == false) {
+                targetList = new();
+                for (int i = 0; i < targets.Count; i++) {
+                    if (i != PlayerID) {
+                        targetList.Add(targets[i]);
+                    }
+                }
+            }
+            
             return action.execute(this, targets);
         }
     }

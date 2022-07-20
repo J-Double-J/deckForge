@@ -3,6 +3,7 @@ using FluentAssertions;
 using deckForge.GameElements;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements.Resources;
+using deckForge.PhaseActions;
 
 namespace UnitTests.GameConstructionTests
 {
@@ -67,6 +68,34 @@ namespace UnitTests.GameConstructionTests
             Action a = () => new BaseGameMediator(13);
 
             a.Should().Throw<ArgumentException>("a game cannot have more than 12 players at the moment");
+        }
+
+        [TestMethod]
+        public void GameMediatorCanTellPlayerToExecuteGameAction() {
+            IGameMediator gm = new BaseGameMediator(1);
+            IPlayer player = new BasePlayer(gm);
+            Table table = new Table(gm, 1, new Deck());
+            PlayerGameAction action = new DrawCardsAction();
+
+            gm.RegisterPlayer(player);
+            gm.TellPlayerToDoAction(0, action);
+
+            player.HandSize.Should().Be(1, "the player drew a card into their hand");
+        }
+
+        [TestMethod]
+        public void GameMediatorCannotTellPlayer_ToExecuteInvalidGameAction() {
+            IGameMediator gm = new BaseGameMediator(2);
+            IPlayer player = new BasePlayer(gm);
+            IPlayer target = new BasePlayer(gm);
+            Table table = new Table(gm, 2, new Deck());
+            PlayerGameAction action = new DrawCardsAction();
+
+            gm.RegisterPlayer(player);
+            gm.RegisterPlayer(target);
+            Action a = () => gm.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, action);
+
+            a.Should().Throw<NotSupportedException>("draw cannot be targetted against another player");
         }
     }
 }
