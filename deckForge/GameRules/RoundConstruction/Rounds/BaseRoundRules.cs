@@ -1,5 +1,6 @@
 using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Interfaces;
+using deckForge.GameConstruction;
 
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
@@ -9,12 +10,15 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
         abstract public List<IPhase> Phases { get; }
         protected int CurPhase = 0;
-        public BaseRoundRules(bool subscribeToAllPhaseEvents = true)
+        protected readonly IGameMediator GM;
+        public BaseRoundRules(IGameMediator gm, bool subscribeToAllPhaseEvents = true)
         {
             if (subscribeToAllPhaseEvents)
             {
                 SubscribeToAllPhases_SkipToPhaseEvents();
             }
+
+            GM = gm;
         }
 
         virtual public void StartRound()
@@ -76,5 +80,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 phase.SkipToPhase += Phase_SkipToPhaseEvent;
             }
         }
+        
+
     }
 }

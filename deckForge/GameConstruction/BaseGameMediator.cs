@@ -231,6 +231,6 @@ namespace deckForge.GameConstruction
             }
 
             return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
-        } 
+        }
     }
 }

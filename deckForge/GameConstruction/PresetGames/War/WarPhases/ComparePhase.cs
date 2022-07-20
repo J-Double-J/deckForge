@@ -9,8 +9,8 @@ namespace deckForge.GameConstruction.PresetGames.War
     public class WarComparePhase : PlayerPhase
     {
         public List<Card>? FlippedCards { get; set; }
-        public WarComparePhase(List<IPlayer> players, string name)
-        : base(players, name)
+        public WarComparePhase(IGameMediator gm, List<IPlayer> players, string name)
+        : base(gm, players, name)
         {
             Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck());
         }

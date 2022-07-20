@@ -9,8 +9,8 @@ namespace deckForge.GameConstruction.PresetGames.War
     {
 
         List<Card?> FlippedCards = new List<Card?>();
-        public WarPlayCardsPhase(List<IPlayer> players, string name)
-        : base(players, name)
+        public WarPlayCardsPhase(IGameMediator gm, List<IPlayer> players, string name)
+        : base(gm, players, name)
         {
             Actions.Add(new PlayCardsAction(facedown: true));
             Actions.Add(new FlipOneCard_OneWay_Action(0, facedown: false));

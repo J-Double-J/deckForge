@@ -1,13 +1,22 @@
 ﻿using deckForge.PhaseActions;
 using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.PlayerConstruction;
+using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
     public class BasePhase<T> : IPhase
     {
         protected int CurrentAction = 0;
+        protected readonly IGameMediator GM;
         public event EventHandler<SkipToPhaseEventArgs>? SkipToPhase;
+
+        public BasePhase(IGameMediator gm, string phaseName = "")
+        {
+            Actions = new();
+            PhaseName = phaseName;
+            GM = gm;
+        }
+
         public string PhaseName
         {
             get;
@@ -27,12 +36,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
                     return Actions.Count;
                 }
             } 
-        }
-
-        public BasePhase(string phaseName = "")
-        {
-            Actions = new();
-            PhaseName = phaseName;
         }
 
         //These do nothing at the moment, but derived classes will call these in case this changes

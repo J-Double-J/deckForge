@@ -1,5 +1,7 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.GameRules.RoundConstruction.Interfaces;
+using deckForge.PhaseActions;
+using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
@@ -26,8 +28,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         public List<IPlayer> Players { get; }
 
 
-        public PlayerRoundRules(List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-        : base(subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
+        public PlayerRoundRules(IGameMediator gm, List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        : base(gm, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;

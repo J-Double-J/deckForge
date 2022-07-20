@@ -11,12 +11,12 @@ namespace deckForge.GameConstruction.PresetGames.War
         override public List<IPhase> Phases { get; }
         bool atWar = false;
 
-        public WarRoundRules(List<IPlayer> players) : base(players: players)
+        public WarRoundRules(IGameMediator gm, List<IPlayer> players) : base(gm, players: players)
         {
             Phases = new List<IPhase>();
-            Phases.Add(new WarPlayCardsPhase(players: players, "Plays Cards"));
-            Phases.Add(new WarComparePhase(players: players, "Compare Cards"));
-            Phases.Add(new WarPhase(players: players, "War!"));
+            Phases.Add(new WarPlayCardsPhase(gm, players: players, "Plays Cards"));
+            Phases.Add(new WarComparePhase(gm, players: players, "Compare Cards"));
+            Phases.Add(new WarPhase(gm, players: players, "War!"));
 
             foreach (IPlayer player in players) {
                 player.PlayerMessageEvent += PlayerRaisedEvent;

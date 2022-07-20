@@ -1,5 +1,6 @@
 using deckForge.PhaseActions;
 using deckForge.PlayerConstruction;
+using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
@@ -8,7 +9,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
         protected int CurrentPlayer = 0;
         protected List<IPlayer> Players;
-        public PlayerPhase(List<IPlayer> players, string phaseName = "") : base(phaseName: phaseName)
+        public PlayerPhase(IGameMediator gm, List<IPlayer> players, string phaseName = "") : base(gm, phaseName: phaseName)
         {
             Players = players;
         }
