@@ -13,6 +13,7 @@ namespace deckForge.GameConstruction
         public int PlayerCount { get; }
         public void StartGame();
         public void EndGame();
+        public void EndGameWithWinner(IPlayer winner);
         public void StartPlayerTurn(int playerID);
         public void EndPlayerTurn();
         public void PlayerPlayedCard(int playerID, Card c);

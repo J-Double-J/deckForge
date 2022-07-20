@@ -4,21 +4,32 @@ using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
 using deckForge.GameRules.RoundConstruction.Rounds;
 using deckForge.GameElements.Resources;
+using deckForge.GameRules.RoundConstruction.Interfaces;
+
 
 namespace deckForge.GameConstruction.PresetGames.War
 {
     public class War
     {
+        private IGameMediator gm;
+        private BaseSetUpRules spr;
+        private Table table;
+        private List<IPlayer> players;
+        private IRoundRules wrr;
+
         War()
         {
             const short PLAYER_COUNT = 2;
 
-            IGameMediator gm = new BaseGameMediator(PLAYER_COUNT);
-            BaseSetUpRules spr = new(initHandSize: 26);
-            IGameController gameController = new BaseGameController(PLAYER_COUNT);
-            Table table = new(gm, PLAYER_COUNT, spr.Decks);
-            List<IPlayer> players = WarPlayerSetUp(gm, table);
-            WarRoundRules wrr = new WarRoundRules(players);
+            gm = new BaseGameMediator(PLAYER_COUNT);
+            spr = new(initHandSize: 26);
+            table = new(gm, PLAYER_COUNT, spr.Decks);
+            players = WarPlayerSetUp(gm, table);
+            wrr = new WarRoundRules(players);
+        }
+
+        public void StartGame() {
+            gm.StartGame();
         }
 
         private List<IPlayer> WarPlayerSetUp(IGameMediator gm, Table table)

@@ -59,7 +59,7 @@ namespace deckForge.GameConstruction
             _players.Add(p);
         }
 
-        public void StartGame()
+        public virtual void StartGame()
         {
             try
             {
@@ -84,12 +84,12 @@ namespace deckForge.GameConstruction
                 throw;
             }
         }
-        public void StartPlayerTurn(int turn)
+        public virtual void StartPlayerTurn(int turn)
         {
             _players[turn].StartTurn();
         }
 
-        public void PlayerPlayedCard(int id, Card c)
+        public virtual void PlayerPlayedCard(int id, Card c)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public void EndPlayerTurn()
+        public virtual void EndPlayerTurn()
         {
             try
             {
@@ -113,7 +113,7 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public void EndGame()
+        public virtual void EndGame()
         {
             try
             {
@@ -125,7 +125,11 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public Card? DrawCardFromDeck()
+        public virtual void EndGameWithWinner(IPlayer winner) {
+            Console.WriteLine($"Player {winner.PlayerID} wins!");
+        }
+
+        public virtual Card? DrawCardFromDeck()
         {
             try
             {
@@ -161,7 +165,7 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public List<Card> GetPlayedCardsOfPlayer(int playerID)
+        public virtual List<Card> GetPlayedCardsOfPlayer(int playerID)
         {
             try
             {
@@ -186,7 +190,7 @@ namespace deckForge.GameConstruction
             }
         }*/
 
-        public Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
+        public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
             try
             {
@@ -206,7 +210,7 @@ namespace deckForge.GameConstruction
 
         }
 
-        public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID)
+        public virtual List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID)
         {
             try
             {

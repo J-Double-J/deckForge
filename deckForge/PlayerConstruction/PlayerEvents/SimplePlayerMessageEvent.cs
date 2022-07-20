@@ -1,9 +1,9 @@
 namespace deckForge.PlayerConstruction.PlayerEvents
 {
-    public class SimplePlayerMessageEvent : EventArgs
+    public class SimplePlayerMessageEventArgs : EventArgs
     {
         public readonly string message;
-        public SimplePlayerMessageEvent(string message)
+        public SimplePlayerMessageEventArgs(string message)
         {
             this.message = message;
         }
