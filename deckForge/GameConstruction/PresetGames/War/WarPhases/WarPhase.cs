@@ -13,7 +13,7 @@ namespace deckForge.GameConstruction.PresetGames.War
         public WarPhase(List<IPlayer> players, string name)
         : base(players, name)
         {
-            Actions.Add(new DrawCardsAction(drawCount: 2));
+            Actions.Add(new PlayCardsAction(playCount: 2));
             Actions.Add(new FlipOneCard_OneWay_Action(2 * iteration));
         }
 

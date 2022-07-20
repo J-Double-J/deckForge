@@ -56,8 +56,7 @@ namespace deckForge.GameConstruction.PresetGames.War
             }
             else
             {
-                //Action here is TakeCardsFromPlayerOnTable
-                
+                //No extra steps, time to go to war!
                 EndPhase();
             }
         }

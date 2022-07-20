@@ -17,7 +17,7 @@ namespace deckForge.PlayerConstruction
         protected List<IResourceCollection> PlayerResourceCollections;
 
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
-        public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
+        public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
 
         public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5)
         {
@@ -150,7 +150,7 @@ namespace deckForge.PlayerConstruction
                 handler(this, e);
         }
 
-        protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEvent e)
+        protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEventArgs e)
         {
             var handler = PlayerMessageEvent;
             if (handler != null)

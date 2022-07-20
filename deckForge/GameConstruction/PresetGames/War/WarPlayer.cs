@@ -24,7 +24,7 @@ namespace deckForge.GameConstruction.PresetGames.War
             }
             else
             {
-                RaiseSimplePlayerMessageEvent(new SimplePlayerMessageEvent(message: "LOSE_GAME"));
+                RaiseSimplePlayerMessageEvent(new SimplePlayerMessageEventArgs(message: "LOSE_GAME"));
                 return c;
             }
         }

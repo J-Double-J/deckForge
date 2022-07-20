@@ -1,6 +1,7 @@
 using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.GameRules.RoundConstruction.Rounds;
 using deckForge.PlayerConstruction;
+using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.GameConstruction.PresetGames.War;
 
 namespace deckForge.GameConstruction.PresetGames.War
@@ -8,7 +9,7 @@ namespace deckForge.GameConstruction.PresetGames.War
     public class WarRoundRules : PlayerRoundRules
     {
         override public List<IPhase> Phases { get; }
-        bool goingToWar = false;
+        bool atWar = false;
 
         public WarRoundRules(List<IPlayer> players) : base(players: players)
         {
@@ -16,6 +17,10 @@ namespace deckForge.GameConstruction.PresetGames.War
             Phases.Add(new WarPlayCardsPhase(players: players, "Plays Cards"));
             Phases.Add(new WarComparePhase(players: players, "Compare Cards"));
             Phases.Add(new WarPhase(players: players, "War!"));
+
+            foreach (IPlayer player in players) {
+                player.PlayerMessageEvent += PlayerRaisedEvent;
+            }
         }
 
         public override void NextPhaseHook(int phaseNum, out bool repeatPhase)
@@ -24,7 +29,9 @@ namespace deckForge.GameConstruction.PresetGames.War
 
             if (phaseNum == 0)
             {
-                goingToWar = false;
+                atWar = false;
+
+                //Reset WarPhase Counter
                 var phase = (WarPhase)Phases[2];
                 phase.resetIteration();
             }
@@ -32,14 +39,16 @@ namespace deckForge.GameConstruction.PresetGames.War
             else if (phaseNum == 1)
             {
 
-                if (goingToWar)
+                if (atWar)
                 {
+                    //Give ComparePhase the cards flipped from War
                     var warPhase = (WarPhase)Phases[2];
                     var comparePhase = (WarComparePhase)Phases[1];
                     comparePhase.FlippedCards = warPhase.GetFlippedCards();
                 }
                 else
                 {
+                    //Give ComparePhase the cards to compare
                     var phase = (WarPlayCardsPhase)Phases[0];
                     var compare = (WarComparePhase)Phases[1];
                     compare.FlippedCards = phase.GetFlippedCards();
@@ -48,10 +57,10 @@ namespace deckForge.GameConstruction.PresetGames.War
             }
             else if (phaseNum == 2)
             {
-
-                if (goingToWar == false)
+                //Update War Status, and track num of War iterations
+                if (atWar == false)
                 {
-                    goingToWar = true;
+                    atWar = true;
                 }
                 else
                 {
@@ -60,6 +69,14 @@ namespace deckForge.GameConstruction.PresetGames.War
                 }
 
             }
+        }
+
+        public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args) {
+            if (args.message == "LOSE_GAME") {
+                EndRound();
+
+            }
+
         }
     }
 }

@@ -5,7 +5,7 @@ namespace deckForge.PlayerConstruction
 {
     public interface IPlayer {
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
-        public event EventHandler<SimplePlayerMessageEvent>? PlayerMessageEvent;
+        public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
         public int HandSize { get; }
         public int PlayerID { get; }
         public List<Card> PlayedCards { get; }
