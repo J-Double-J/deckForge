@@ -456,13 +456,13 @@ namespace deckForge.PlayerConstruction
                 throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
         }
 
-        public object? ExecuteGameAction(PlayerGameAction action) {
+        public object? ExecuteGameAction(IAction<IPlayer> action) {
             return action.execute(this);  
         }
-        public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target) {
+        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target) {
             return action.execute(this, target);
         }
-        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets, bool includeSelf = false) {
+        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false) {
 
             List<IPlayer> targetList = targets;
 

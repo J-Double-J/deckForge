@@ -27,9 +27,9 @@ namespace deckForge.PlayerConstruction
         public void IncrementResourceCollection(int resourceCollectionID);
         public void DecrementResourceCollection(int resourceCollectionID);
         public void ClearResourceCollection(int resourceCollectionID);
-        public object? ExecuteGameAction(PlayerGameAction action);
-        public object? ExecuteGameActionAgainstPlayer(PlayerGameAction action, IPlayer target);
-        public object? ExecuteGameActionAgainstMultiplePlayers(PlayerGameAction action, List<IPlayer> targets, bool includeSelf = false);
+        public object? ExecuteGameAction(IAction<IPlayer> action);
+        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target);
+        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
 
     }
 }

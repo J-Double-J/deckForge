@@ -210,20 +210,20 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public object? TellPlayerToDoAction(int playerID, PlayerGameAction action) {
+        public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action) {
             return _players[playerID].ExecuteGameAction(action);
         }
 
-        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, PlayerGameAction action) {
+        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action) {
             return _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
         }
 
-        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, PlayerGameAction action, bool includeSelf = false) 
+        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false) 
         {
             return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
         }
 
-        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, PlayerGameAction action) {
+        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action) {
             List<IPlayer> targettedPlayers = new();
 
             foreach (int targetID in targets) {
