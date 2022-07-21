@@ -8,9 +8,9 @@ namespace deckForge.GameConstruction.PresetGames.War
     public class WarPlayCardsPhase : PlayerPhase
     {
 
-        List<Card?> FlippedCards = new List<Card?>();
-        public WarPlayCardsPhase(IGameMediator gm, List<IPlayer> players, string name)
-        : base(gm, players, name)
+        List<Card?> FlippedCards = new();
+        public WarPlayCardsPhase(IGameMediator gm, string name)
+        : base(gm, name)
         {
             Actions.Add(new PlayCardsAction(facedown: true));
             Actions.Add(new FlipOneCard_OneWay_Action(0, facedown: false));
@@ -26,11 +26,19 @@ namespace deckForge.GameConstruction.PresetGames.War
             return FlippedCards!;
         }
 
-        override protected void NextActionHook(IPlayer player, int actionNum, out bool repeatAction)
+        override protected void PhaseActionLogic(int playerID, int actionNum, out bool repeatAction)
         {
             repeatAction = false;
-            if (actionNum == 0)
-                FlippedCards.Add((Card?)Actions[actionNum].execute(player));
+
+            try
+            {
+                if (actionNum == 0)
+                    FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
+            }
+            catch {
+                throw;
+            }
+            
         }
 
         public override void StartPhase()

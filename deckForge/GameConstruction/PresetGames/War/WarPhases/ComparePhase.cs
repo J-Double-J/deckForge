@@ -9,8 +9,8 @@ namespace deckForge.GameConstruction.PresetGames.War
     public class WarComparePhase : PlayerPhase
     {
         public List<Card>? FlippedCards { get; set; }
-        public WarComparePhase(IGameMediator gm, List<IPlayer> players, string name)
-        : base(gm, players, name)
+        public WarComparePhase(IGameMediator gm, string name)
+        : base(gm, name)
         {
             Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck());
         }
@@ -43,12 +43,12 @@ namespace deckForge.GameConstruction.PresetGames.War
             {
                 if (FlippedCards![0].val > FlippedCards[1].val)
                 {
-                    Actions[0].execute(Players[0], Players[1]);
+                    GM.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, Actions[0]);
                     Console.WriteLine("Player 0 won this round");
                 }
                 else
                 {
-                    Actions[0].execute(Players[1], Players[0]);
+                    GM.TellPlayerToDoActionAgainstAnotherPlayer(1, 0, Actions[0]);
                     Console.WriteLine("Player 1 won this round");
                 }
                 

@@ -8,38 +8,69 @@ namespace deckForge.GameRules.RoundConstruction.Phases
     {
 
         protected int CurrentPlayer = 0;
-        protected List<IPlayer> Players;
-        public PlayerPhase(IGameMediator gm, List<IPlayer> players, string phaseName = "") : base(gm, phaseName: phaseName)
+        public PlayerPhase(IGameMediator gm, string phaseName = "") : base(gm, phaseName: phaseName)
+        {}
+
+
+        public override void StartPhase()
         {
-            Players = players;
+            throw new NotImplementedException("PlayerPhases cannot be started without parameters, try `StartPhase(List<int> playerIDs)`, or `StartPhase(playerID)`");
         }
 
-        new virtual public void StartPhase()
+        //Players take an action, then wait for other players to finish action, then all go to next action etc
+        virtual public void StartPhase(List<int> playerIDs)
         {
-            base.StartPhase();
-            NextAction(actionNum: CurrentAction);
+            DoPhaseActionsWithMultiplePlayers(playerIDs, actionNum: CurrentAction);
         }
 
-        virtual protected void NextAction(int actionNum)
+
+        //Player does all actions in phase in order
+        virtual public void StartPhase(int playerID) {
+            DoPhaseActions(playerID);
+        }
+
+        //Each action must be done by a player before going to the next actions
+        virtual protected void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
         {
-            foreach (IPlayer player in Players)
+            
+            foreach (int player in playerIDs)
             {
-                NextActionHook(player, actionNum, out bool repeatAction);
-                if (repeatAction)
-                    Actions?[actionNum].execute(player);
+                PhaseActionLogic(player, actionNum, out bool handledAction);
+                
+                //Assumes that all actions are not targetted against another player
+                if (!handledAction)
+                    GM.TellPlayerToDoAction(player, Actions[actionNum]);
             }
             CurrentAction++;
             if (CurrentAction < ActionCount - 1)
-                NextAction(CurrentAction);
+                DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
             else
                 EndPhase();
         }
+
+
+        //Do all actions in one go
+        virtual protected void DoPhaseActions(int playerID) {
+            for (var actionNum = 0; actionNum < Actions.Count; actionNum++) {
+                PhaseActionLogic(playerID, actionNum, out bool handledAction);
+
+                //Assumes that all actions are not targetted against another player
+                if (!handledAction)
+                    GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
+            }
+
+            EndPhase();
+        }
+
+
 
         new virtual public void EndPhase()
         {
             base.EndPhase();
         }
 
-        virtual protected void NextActionHook(IPlayer p, int actionNum, out bool repeatAction) { repeatAction = false; }
+        //Phases implement any logic for individual actions here. Should an action need to be executed in this function
+        //(as is often the case if an action needs to be targetted) handledAction should be set to true
+        virtual protected void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
     }
 }

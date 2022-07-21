@@ -10,19 +10,19 @@ namespace deckForge.GameConstruction.PresetGames.War
     {
         int iteration = 1;
         List<Card?> FlippedCards = new();
-        public WarPhase(IGameMediator gm, List<IPlayer> players, string name)
-        : base(gm, players, name)
+        public WarPhase(IGameMediator gm, string name)
+        : base(gm, name)
         {
             Actions.Add(new PlayCardsAction(playCount: 2));
             Actions.Add(new FlipOneCard_OneWay_Action(2 * iteration));
         }
 
-        protected override void NextActionHook(IPlayer p, int actionNum, out bool repeatAction)
+        protected override void PhaseActionLogic(int playerID, int actionNum, out bool repeatAction)
         {
             repeatAction = false;
             if (actionNum == 1)
             {
-                FlippedCards.Add((Card?)Actions[actionNum].execute(p));
+                FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
             }
         }
 

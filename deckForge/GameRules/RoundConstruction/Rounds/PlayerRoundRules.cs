@@ -3,12 +3,22 @@ using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.PhaseActions;
 using deckForge.GameConstruction;
 
+
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     abstract public class PlayerRoundRules : BaseRoundRules
     {
         abstract override public List<IPhase> Phases { get; }
         int _handLim;
+
+        public PlayerRoundRules(IGameMediator gm, List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        : base(gm, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
+        {
+            HandLimit = handlimit;
+            CardPlayLimit = cardPlayLimit;
+            Players = players;
+        }
+
         public int HandLimit
         {
             get { return _handLim; }
@@ -26,15 +36,6 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         }
         public int CardPlayLimit { get; private set; }
         public List<IPlayer> Players { get; }
-
-
-        public PlayerRoundRules(IGameMediator gm, List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-        : base(gm, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
-        {
-            HandLimit = handlimit;
-            CardPlayLimit = cardPlayLimit;
-            Players = players;
-        }
 
         new virtual public void StartRound()
         {

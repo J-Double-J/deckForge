@@ -12,10 +12,11 @@ namespace UnitTests.PlayerRoundRulesTests
     internal class TestPlayerRoundRules : PlayerRoundRules
     {
         public List<IPhase> testPhases = new();
+        public IGameMediator gm = new BaseGameMediator(0);
         override public List<IPhase> Phases { get { return testPhases; } }
-        public TestPlayerRoundRules(
-            List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-            : base(players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents) { }
+        public TestPlayerRoundRules(IGameMediator gm,
+            List<IPlayer> players,  int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+            : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents) { }
     }
 
     [TestClass]
@@ -29,7 +30,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
             List<IPlayer> players = new List<IPlayer> { new BasePlayer(gm) };
-            PlayerRoundRules rr = new TestPlayerRoundRules(players, handlimit: lim);
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players, handlimit: lim);
             rr.HandLimit.Should().Be(lim, "RoundRules was initiliazed with a max hand limit");
         }
 
@@ -41,7 +42,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
             players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(players);
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players);
             rr.HandLimit.Should().Be(64, "RoundRules was initiliazed without a max hand limit");
         }
 
@@ -53,7 +54,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
             players.Add(new BasePlayer(gm));
-            Action init = () => new TestPlayerRoundRules(players, handlimit: -2);
+            Action init = () => new TestPlayerRoundRules(gm, players, handlimit: -2);
             init.Should().Throw<ArgumentException>("you can't have a negative hand limit (except for -1 which is no limit to card play)");
         }
 
@@ -67,7 +68,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
             players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(players, cardPlayLimit: lim);
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players, cardPlayLimit: lim);
             rr.CardPlayLimit.Should().Be(lim, "RoundRules was initiliazed with a max Card Play limit");
         }
 
@@ -79,7 +80,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
             players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(players);
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players);
             rr.CardPlayLimit.Should().Be(1, "RoundRules was initiliazed with a max Card Play limit");
         }
     }

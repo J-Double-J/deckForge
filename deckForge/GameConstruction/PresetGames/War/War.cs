@@ -25,7 +25,7 @@ namespace deckForge.GameConstruction.PresetGames.War
             spr = new(initHandSize: 26);
             table = new(gm, PLAYER_COUNT, spr.Decks);
             players = WarPlayerSetUp(gm, table);
-            wrr = new WarRoundRules(players);
+            wrr = new WarRoundRules(gm, players);
         }
 
         public void StartGame() {

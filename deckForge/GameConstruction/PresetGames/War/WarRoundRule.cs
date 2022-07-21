@@ -3,6 +3,7 @@ using deckForge.GameRules.RoundConstruction.Rounds;
 using deckForge.PlayerConstruction;
 using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.GameConstruction.PresetGames.War;
+using deckForge.GameRules.RoundConstruction.Phases;
 
 namespace deckForge.GameConstruction.PresetGames.War
 {
@@ -14,9 +15,9 @@ namespace deckForge.GameConstruction.PresetGames.War
         public WarRoundRules(IGameMediator gm, List<IPlayer> players) : base(gm, players: players)
         {
             Phases = new List<IPhase>();
-            Phases.Add(new WarPlayCardsPhase(gm, players: players, "Plays Cards"));
-            Phases.Add(new WarComparePhase(gm, players: players, "Compare Cards"));
-            Phases.Add(new WarPhase(gm, players: players, "War!"));
+            Phases.Add(new WarPlayCardsPhase(gm, "Plays Cards"));
+            Phases.Add(new WarComparePhase(gm, "Compare Cards"));
+            Phases.Add(new WarPhase(gm, "War!"));
 
             foreach (IPlayer player in players) {
                 player.PlayerMessageEvent += PlayerRaisedEvent;
@@ -74,9 +75,7 @@ namespace deckForge.GameConstruction.PresetGames.War
         public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args) {
             if (args.message == "LOSE_GAME") {
                 EndRound();
-
             }
-
         }
     }
 }
