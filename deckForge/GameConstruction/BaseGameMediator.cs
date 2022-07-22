@@ -5,6 +5,11 @@ using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction
 {
+
+    /// <summary>
+    /// Mediates gameplay and iteractions between various objects such as <see cref="Table"/>,
+    /// <see cref="IPlayer"/>, <see cref="IRoundRules"/>, etc.
+    /// </summary>
     public class BaseGameMediator : IGameMediator
     {
         private IGameController? _gameController;
@@ -59,6 +64,9 @@ namespace deckForge.GameConstruction
             _players.Add(p);
         }
 
+        /// <summary>
+        /// Starts the game with the first <see cref="IPlayer"/>.
+        /// </summary>
         public virtual void StartGame()
         {
             try
@@ -84,16 +92,27 @@ namespace deckForge.GameConstruction
                 throw;
             }
         }
+
+        /// <summary>
+        /// Starts an <see cref="IPlayer"/>'s turn based on <paramref name="turn"/>
+        /// </summary>
+        /// <param name="turn">Turn number in the round used to tell that player in the List to
+        /// start their turn.</param>
         public virtual void StartPlayerTurn(int turn)
         {
             _players[turn].StartTurn();
         }
 
-        public virtual void PlayerPlayedCard(int id, Card c)
+        /// <summary>
+        /// Puts a <see cref="Card"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a card.
+        /// </summary>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played a <see cref="Card"/>.</param>
+        /// <param name="card"><see cref="Card"/> that was played.</param>
+        public virtual void PlayerPlayedCard(int playerID, Card card)
         {
             try
             {
-                _table!.PlaceCardOnTable(id, c);
+                _table!.PlaceCardOnTable(playerID, card);
             }
             catch
             {
@@ -125,7 +144,8 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public virtual void EndGameWithWinner(IPlayer winner) {
+        public virtual void EndGameWithWinner(IPlayer winner)
+        {
             Console.WriteLine($"Player {winner.PlayerID} wins!");
         }
 
@@ -143,17 +163,19 @@ namespace deckForge.GameConstruction
                     return null;
                 }
             }
-            catch {
+            catch
+            {
                 throw;
             }
-            
+
         }
 
         public IPlayer GetPlayerByID(int id)
         {
             try
             {
-                if (_players is null) {
+                if (_players is null)
+                {
                     throw new ArgumentNullException("No players have been registered with GameMediator");
                 }
                 else
@@ -210,23 +232,27 @@ namespace deckForge.GameConstruction
             }
         }
 
-        public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action) {
+        public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action)
+        {
             return _players[playerID].ExecuteGameAction(action);
         }
 
-        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action) {
+        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action)
+        {
             return _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
         }
 
-        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false) 
+        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false)
         {
             return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
         }
 
-        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action) {
+        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action)
+        {
             List<IPlayer> targettedPlayers = new();
 
-            foreach (int targetID in targets) {
+            foreach (int targetID in targets)
+            {
                 targettedPlayers.Add(_players[targetID]);
             }
 

@@ -6,8 +6,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
     public class NPCPhase<T> : BasePhase<T>, INPCPhase<T>
     {
         public NPCPhase(IGameMediator gm, string phaseName = "") : base(gm, phaseName: phaseName) { }
-
-
         virtual public void StartPhase(T t)
         {
             DoPhaseActions(t);
@@ -26,7 +24,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             EndPhase();
         }
 
-        virtual public void EndPhase() {}
+        virtual public void EndPhase() { }
 
         //Phases implement any logic for individual actions here. Should an action need to be executed in this function
         //(as is often the case if an action needs to be targetted) handledAction should be set to true
