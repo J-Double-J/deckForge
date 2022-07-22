@@ -10,8 +10,8 @@ namespace deckForge.GameConstruction.PresetGames.War
     {
         int iteration = 1;
         List<Card?> FlippedCards = new();
-        public WarPhase(IGameMediator gm, string name)
-        : base(gm, name)
+        public WarPhase(IGameMediator gm, List<int> playerIDs, string name)
+        : base(gm, playerIDs, name)
         {
             Actions.Add(new PlayCardsAction(playCount: 2));
             Actions.Add(new FlipOneCard_OneWay_Action(2 * iteration));
@@ -31,10 +31,10 @@ namespace deckForge.GameConstruction.PresetGames.War
             OnSkipToPhase(new SkipToPhaseEventArgs(1));
         }
 
-        public override void StartPhase()
+        public override void StartPhase(List<int> playerIDs)
         {
             FlippedCards = new();
-            base.StartPhase();
+            base.StartPhase(playerIDs);
         }
 
         public List<Card> GetFlippedCards()

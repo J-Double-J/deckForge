@@ -58,6 +58,9 @@ namespace deckForge.GameElements
             get;
         }
 
+        public List<List<Card>> TableState {
+            get { return PlayedCards; }
+        }
         public List<List<Card>> PlayedCards
         {
             get;
@@ -204,7 +207,7 @@ namespace deckForge.GameElements
             try {
                 return TableDecks[deckNum].DrawCard();
             } catch {
-                throw;
+                throw new ArgumentOutOfRangeException("Index was out of range. Did you give a deck to the table?");
             }
         }
 

@@ -4,13 +4,13 @@ using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
 
 namespace deckForge.GameConstruction.PresetGames.War
-{
+{ 
     public class WarPlayCardsPhase : PlayerPhase
     {
 
         List<Card?> FlippedCards = new();
-        public WarPlayCardsPhase(IGameMediator gm, string name)
-        : base(gm, name)
+        public WarPlayCardsPhase(IGameMediator gm, List<int> playerIDs, string name)
+        : base(gm, playerIDs, name)
         {
             Actions.Add(new PlayCardsAction(facedown: true));
             Actions.Add(new FlipOneCard_OneWay_Action(0, facedown: false));
@@ -26,14 +26,17 @@ namespace deckForge.GameConstruction.PresetGames.War
             return FlippedCards!;
         }
 
-        override protected void PhaseActionLogic(int playerID, int actionNum, out bool repeatAction)
+        override protected void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
         {
-            repeatAction = false;
+            handledAction = false;
 
             try
             {
                 if (actionNum == 0)
+                { 
+                    handledAction = true;
                     FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
+                }
             }
             catch {
                 throw;
@@ -45,6 +48,12 @@ namespace deckForge.GameConstruction.PresetGames.War
         {
             FlippedCards = new();
             base.StartPhase();
+        }
+
+        public override void StartPhase(List<int> playerIDs)
+        {
+            FlippedCards = new();
+            base.StartPhase(playerIDs);
         }
     }
 }

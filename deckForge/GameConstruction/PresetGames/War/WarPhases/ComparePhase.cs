@@ -9,13 +9,13 @@ namespace deckForge.GameConstruction.PresetGames.War
     public class WarComparePhase : PlayerPhase
     {
         public List<Card>? FlippedCards { get; set; }
-        public WarComparePhase(IGameMediator gm, string name)
-        : base(gm, name)
+        public WarComparePhase(IGameMediator gm, List<int> playerIDs, string name)
+        : base(gm, playerIDs, name)
         {
             Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck());
         }
 
-        public override void StartPhase()
+        public override void StartPhase(List<int> playerIDs)
         {
             bool isWar;
             if (FlippedCards != null)
