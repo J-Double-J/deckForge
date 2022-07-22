@@ -77,7 +77,6 @@ namespace UnitTests.GameConstructionTests
             Table table = new Table(gm, 1, new Deck());
             PlayerGameAction action = new DrawCardsAction();
 
-            gm.RegisterPlayer(player);
             gm.TellPlayerToDoAction(0, action);
 
             player.HandSize.Should().Be(1, "the player drew a card into their hand");
@@ -91,8 +90,6 @@ namespace UnitTests.GameConstructionTests
             Table table = new Table(gm, 2, new Deck());
             PlayerGameAction action = new DrawCardsAction();
 
-            gm.RegisterPlayer(player);
-            gm.RegisterPlayer(target);
             Action a = () => gm.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, action);
 
             a.Should().Throw<NotSupportedException>("draw cannot be targetted against another player");

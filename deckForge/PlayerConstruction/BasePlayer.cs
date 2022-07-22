@@ -29,6 +29,8 @@ namespace deckForge.PlayerConstruction
             GM = gm;
             PlayerID = playerID;
 
+            gm.RegisterPlayer(this);
+
             //TODO: remove this is for sake of testing.
             CardPlays = 1;
             CardDraws = 1;

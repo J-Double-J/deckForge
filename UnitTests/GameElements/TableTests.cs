@@ -27,7 +27,7 @@ namespace UnitTests.GameElements
             table = new(gm, 2, decks);
             output = new();
             for (var i = 0; i < 2; i++)
-                gm.RegisterPlayer(new BasePlayer(gm, i));
+                new BasePlayer(gm, i);
         }
 
         [TestMethod]
