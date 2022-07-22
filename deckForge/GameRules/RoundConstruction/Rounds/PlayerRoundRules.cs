@@ -11,12 +11,12 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         abstract override public List<IPhase> Phases { get; }
         int _handLim;
 
-        public PlayerRoundRules(IGameMediator gm, List<IPlayer> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
         : base(gm, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
-            Players = players;
+            PlayerIDs = players;
         }
 
         public int HandLimit
@@ -35,16 +35,28 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
         public int CardPlayLimit { get; private set; }
-        public List<IPlayer> Players { get; }
+        public List<int> PlayerIDs { get; }
 
         new virtual public void StartRound()
         {
-            base.StartRound();
+            CurPhase = 0;
+            NextPhase(0);
         }
 
-        new virtual protected void NextPhase(int phaseNum)
+        override protected void NextPhase(int phaseNum)
         {
-            base.NextPhase(phaseNum);
+            NextPhaseHook(phaseNum, out bool handledPhase);
+            if (!handledPhase) {
+                Phases[0].StartPhase();
+            }
+            CurPhase++;
+            if (!(CurPhase > Phases.Count - 1))
+            {
+                EndRound();
+            }
+            else {
+                NextPhase(CurPhase);
+            }
         }
 
         new virtual public void EndRound()
@@ -57,9 +69,9 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             base.SkipToPhase(phaseNum);
         }
 
-        new virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase)
+        new virtual public void NextPhaseHook(int phaseNum, out bool handledPhase)
         {
-            repeatPhase = true;
+            handledPhase = false;
         }
     }
 }

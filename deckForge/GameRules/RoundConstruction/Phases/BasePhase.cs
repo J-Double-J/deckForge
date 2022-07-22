@@ -4,9 +4,8 @@ using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
-    public class BasePhase<T> : IPhase
+    public class BasePhase<T>
     {
-        protected int CurrentAction = 0;
         protected readonly IGameMediator GM;
         public event EventHandler<SkipToPhaseEventArgs>? SkipToPhase;
 
@@ -37,10 +36,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
                 }
             } 
         }
-
-        //These do nothing at the moment, but derived classes will call these in case this changes
-        virtual public void StartPhase() { }
-        virtual public void EndPhase() { }
 
         protected virtual void OnSkipToPhase(SkipToPhaseEventArgs e)
         {

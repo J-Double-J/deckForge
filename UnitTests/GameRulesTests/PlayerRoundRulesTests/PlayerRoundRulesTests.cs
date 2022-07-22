@@ -15,7 +15,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public IGameMediator gm = new BaseGameMediator(0);
         override public List<IPhase> Phases { get { return testPhases; } }
         public TestPlayerRoundRules(IGameMediator gm,
-            List<IPlayer> players,  int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+            List<int> players,  int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
             : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents) { }
     }
 
@@ -26,35 +26,36 @@ namespace UnitTests.PlayerRoundRulesTests
         [DataRow(5)]
         public void getRoundHandLimit_SpecifiedLimit(int lim)
         {
-            BaseGameMediator gm = new(0);
+            BaseGameMediator gm = new(1);
             List<Deck> decks = new() { new Deck() };
-            Table table = new(gm, 0, decks);
-            List<IPlayer> players = new List<IPlayer> { new BasePlayer(gm) };
-            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players, handlimit: lim);
+            Table table = new(gm, 1, decks);
+            IPlayer player = new BasePlayer(gm);
+            List<int> playerIDs = new() { 0 }; 
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs, handlimit: lim);
             rr.HandLimit.Should().Be(lim, "RoundRules was initiliazed with a max hand limit");
         }
 
         [TestMethod]
         public void getRoundHandLimit_UnSpecifiedLimit()
         {
-            List<IPlayer> players = new();
-            BaseGameMediator gm = new(0);
+            BaseGameMediator gm = new(1);
             List<Deck> decks = new() { new Deck() };
-            Table table = new(gm, 0, decks);
-            players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players);
+            Table table = new(gm, 1, decks);
+            IPlayer player = new BasePlayer(gm);
+            List<int> playerIDs = new() { 0 };
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs);
             rr.HandLimit.Should().Be(64, "RoundRules was initiliazed without a max hand limit");
         }
 
         [TestMethod]
         public void setRoundHandLimitToInvalidValue()
         {
-            List<IPlayer> players = new();
-            BaseGameMediator gm = new(0);
+            BaseGameMediator gm = new(1);
             List<Deck> decks = new() { new Deck() };
-            Table table = new(gm, 0, decks);
-            players.Add(new BasePlayer(gm));
-            Action init = () => new TestPlayerRoundRules(gm, players, handlimit: -2);
+            Table table = new(gm, 1, decks);
+            IPlayer player = new BasePlayer(gm);
+            List<int> playerIDs = new() { 0 };
+            Action init = () => new TestPlayerRoundRules(gm, playerIDs, handlimit: -2);
             init.Should().Throw<ArgumentException>("you can't have a negative hand limit (except for -1 which is no limit to card play)");
         }
 
@@ -63,24 +64,25 @@ namespace UnitTests.PlayerRoundRulesTests
 
         public void getCardDrawonNewTurn_SpecifiedLimit(int lim)
         {
-            List<IPlayer> players = new();
-            BaseGameMediator gm = new(0);
+            
+            BaseGameMediator gm = new(1);
             List<Deck> decks = new() { new Deck() };
-            Table table = new(gm, 0, decks);
-            players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players, cardPlayLimit: lim);
+            Table table = new(gm, 1, decks);
+            IPlayer player = new BasePlayer(gm);
+            List<int> playerIDs = new() { 0 };
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs, cardPlayLimit: lim);
             rr.CardPlayLimit.Should().Be(lim, "RoundRules was initiliazed with a max Card Play limit");
         }
 
         [TestMethod]
         public void getCardDrawonNewTurn_UnSpecifiedLimit()
         {
-            List<IPlayer> players = new();
-            BaseGameMediator gm = new(0);
+            BaseGameMediator gm = new(1);
             List<Deck> decks = new() { new Deck() };
-            Table table = new(gm, 0, decks);
-            players.Add(new BasePlayer(gm));
-            PlayerRoundRules rr = new TestPlayerRoundRules(gm, players);
+            Table table = new(gm, 1, decks);
+            IPlayer player = new BasePlayer(gm);
+            List<int> playerIDs = new() { 0 };
+            PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs);
             rr.CardPlayLimit.Should().Be(1, "RoundRules was initiliazed with a max Card Play limit");
         }
     }

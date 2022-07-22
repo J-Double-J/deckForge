@@ -2,7 +2,8 @@ using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.GameConstruction;
 
-
+//HEY Josh, a lot of this has to be abstracted out. Figure out what methods are going to be implemented
+//by NPC and PlayerRounds and make those abstract. Remove pretty much everything else.
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     abstract public class BaseRoundRules : IRoundRules
@@ -20,34 +21,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
             GM = gm;
         }
-
-        virtual public void StartRound()
-        {
-            NextPhase(0);
-        }
-
-        virtual protected void NextPhase(int phaseNum)
-        {
-            NextPhaseHook(phaseNum, out bool repeatPhase);
-            if (repeatPhase) {
-                if (phaseNum < Phases.Count)
-                {
-                    Phases[CurPhase].StartPhase();
-                    phaseNum++;
-                }
-                if (phaseNum > Phases.Count - 1)
-                {
-                    EndRound();
-                }
-                else
-                {
-                    NextPhase(phaseNum);
-                }
-            } else
-            {
-                NextPhase(phaseNum);
-            }
-        }
+        virtual public void StartRound() { }
+        protected abstract void NextPhase(int phaseNum);
 
         virtual public void EndRound() { }
 
@@ -64,8 +39,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
-        virtual public void NextPhaseHook(int phaseNum, out bool repeatPhase) {
-            repeatPhase = true;
+        virtual public void NextPhaseHook(int phaseNum, out bool handledRound) {
+            handledRound = false;
         }
 
         virtual protected void Phase_SkipToPhaseEvent(Object? sender, SkipToPhaseEventArgs e)
@@ -80,7 +55,5 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 phase.SkipToPhase += Phase_SkipToPhaseEvent;
             }
         }
-        
-
     }
 }

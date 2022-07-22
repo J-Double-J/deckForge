@@ -1,20 +1,28 @@
 using deckForge.PhaseActions;
 using deckForge.PlayerConstruction;
 using deckForge.GameConstruction;
+using deckForge.GameRules.RoundConstruction.Interfaces;
+
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
-    public class PlayerPhase : BasePhase<IPlayer>
+    abstract public class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase, IPhase
     {
 
-        protected int CurrentPlayer = 0;
-        public PlayerPhase(IGameMediator gm, string phaseName = "") : base(gm, phaseName: phaseName)
-        {}
+        protected int CurrentAction = 0;
+        public List<int> playerIDs;
 
-
-        public override void StartPhase()
+        public PlayerPhase(IGameMediator gm, List<int> playerIDs, string phaseName = "") : base(gm, phaseName: phaseName)
         {
-            throw new NotImplementedException("PlayerPhases cannot be started without parameters, try `StartPhase(List<int> playerIDs)`, or `StartPhase(playerID)`");
+            this.playerIDs = playerIDs;
+        }
+
+        public PlayerPhase(IGameMediator gm, int playerID, string phaseName = "") : base(gm, phaseName: phaseName)
+        {
+            playerIDs = new()
+            {
+                playerID
+            };
         }
 
         //Players take an action, then wait for other players to finish action, then all go to next action etc
@@ -27,6 +35,20 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         //Player does all actions in phase in order
         virtual public void StartPhase(int playerID) {
             DoPhaseActions(playerID);
+        }
+
+        //Based on how many playerIDs this phase has, it decides what style to do
+        virtual public void StartPhase()
+        {
+            CurrentAction = 0;
+            if (playerIDs.Count == 1)
+            {
+                DoPhaseActions(playerIDs[0]);
+            }
+            else
+            {
+                DoPhaseActionsWithMultiplePlayers(playerIDs, actionNum: CurrentAction);
+            }
         }
 
         //Each action must be done by a player before going to the next actions
@@ -42,10 +64,11 @@ namespace deckForge.GameRules.RoundConstruction.Phases
                     GM.TellPlayerToDoAction(player, Actions[actionNum]);
             }
             CurrentAction++;
-            if (CurrentAction < ActionCount - 1)
+            if (!(CurrentAction > ActionCount - 1))
                 DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
-            else
+            else {
                 EndPhase();
+            }
         }
 
 
@@ -64,9 +87,8 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
 
 
-        new virtual public void EndPhase()
+        virtual public void EndPhase()
         {
-            base.EndPhase();
         }
 
         //Phases implement any logic for individual actions here. Should an action need to be executed in this function
