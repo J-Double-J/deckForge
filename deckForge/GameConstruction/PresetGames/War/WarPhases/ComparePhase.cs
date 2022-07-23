@@ -8,17 +8,19 @@ namespace deckForge.GameConstruction.PresetGames.War
 {
     public class WarComparePhase : PlayerPhase
     {
-        public List<Card>? FlippedCards { get; set; }
+        public List<Card> FlippedCards { get; set; }
         public WarComparePhase(IGameMediator gm, List<int> playerIDs, string name)
         : base(gm, playerIDs, name)
         {
+            FlippedCards = new List<Card>();
             Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck());
+            Actions.Add(new PickUpOwnCardsFromTable());
         }
 
-        public override void StartPhase(List<int> playerIDs)
+        public override void StartPhase()
         {
             bool isWar;
-            if (FlippedCards != null)
+            if (FlippedCards.Count > 0)
             {
                 if (FlippedCards[0].val != FlippedCards[1].val)
                 {
@@ -31,7 +33,7 @@ namespace deckForge.GameConstruction.PresetGames.War
             }
             else
             {
-                throw new ArgumentNullException("Cards to compare were not set");
+                throw new ArgumentOutOfRangeException(paramName: "FlippedCards", "Cards to compare were not set");
             }
 
             DecideIfGoToWarPhase(isWar);
@@ -44,11 +46,13 @@ namespace deckForge.GameConstruction.PresetGames.War
                 if (FlippedCards![0].val > FlippedCards[1].val)
                 {
                     GM.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, Actions[0]);
+                    GM.TellPlayerToDoAction(0, Actions[1]);
                     Console.WriteLine("Player 0 won this round");
                 }
                 else
                 {
                     GM.TellPlayerToDoActionAgainstAnotherPlayer(1, 0, Actions[0]);
+                    GM.TellPlayerToDoAction(1, Actions[1]);
                     Console.WriteLine("Player 1 won this round");
                 }
                 
@@ -63,7 +67,7 @@ namespace deckForge.GameConstruction.PresetGames.War
 
         public override void EndPhase()
         {
-            FlippedCards = null;
+            FlippedCards = new();
         }
     }
 }
