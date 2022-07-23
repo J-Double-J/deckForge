@@ -55,8 +55,8 @@ namespace deckForge.GameConstruction.PresetGames.War
                     GM.TellPlayerToDoAction(1, Actions[1]);
                     Console.WriteLine("Player 1 won this round");
                 }
-                
-                OnSkipToPhase(new SkipToPhaseEventArgs(0));
+
+                OnEndRoundEarly(new EndRoundEarlyArgs("War! has ended."));
             }
             else
             {

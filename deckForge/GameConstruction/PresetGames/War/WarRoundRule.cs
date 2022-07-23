@@ -14,19 +14,24 @@ namespace deckForge.GameConstruction.PresetGames.War
 
         public WarRoundRules(IGameMediator gm, List<int> players) : base(gm, players: players)
         {
-            Phases = new List<IPhase>();
-            Phases.Add(new WarPlayCardsPhase(gm, players, "Plays Cards"));
-            Phases.Add(new WarComparePhase(gm, players, "Compare Cards"));
-            Phases.Add(new WarPhase(gm, players, "War!"));
+            Phases = new List<IPhase>
+            {
+                new WarPlayCardsPhase(gm, players, "Play Cards"),
+                new WarComparePhase(gm, players, "Compare Cards"),
+                new WarPhase(gm, players, "War!")
+            };
+
+            SubscribeToAllPhases_SkipToPhaseEvents();
+            SubscribeToAllPhases_EndRoundEarlyEvents();
 
             /*foreach (IPlayer player in players) {
                 player.PlayerMessageEvent += PlayerRaisedEvent;
             }*/
         }
 
-        public override void NextPhaseHook(int phaseNum, out bool repeatPhase)
+        public override void NextPhaseHook(int phaseNum, out bool handledPhase)
         {
-            repeatPhase = true;
+            handledPhase = false;
 
             if (phaseNum == 0)
             {

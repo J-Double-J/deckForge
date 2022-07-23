@@ -2,8 +2,6 @@ using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.GameConstruction;
 
-//HEY Josh, a lot of this has to be abstracted out. Figure out what methods are going to be implemented
-//by NPC and PlayerRounds and make those abstract. Remove pretty much everything else.
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     abstract public class BaseRoundRules : IRoundRules
@@ -12,19 +10,14 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         abstract public List<IPhase> Phases { get; }
         protected int CurPhase = 0;
         protected readonly IGameMediator GM;
-        public BaseRoundRules(IGameMediator gm, bool subscribeToAllPhaseEvents = true)
+        public BaseRoundRules(IGameMediator gm)
         {
-            if (subscribeToAllPhaseEvents)
-            {
-                SubscribeToAllPhases_SkipToPhaseEvents();
-            }
-
             GM = gm;
         }
         virtual public void StartRound() { }
         protected abstract void NextPhase(int phaseNum);
 
-        virtual public void EndRound() { }
+        virtual public void EndRound() { CurPhase = -1; }
 
         virtual public void SkipToPhase(int phaseNum)
         {
@@ -43,9 +36,13 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             handledRound = false;
         }
 
-        virtual protected void Phase_SkipToPhaseEvent(Object? sender, SkipToPhaseEventArgs e)
+        virtual protected void Phase_SkipToPhaseEvent(object? sender, SkipToPhaseEventArgs e)
         {
             SkipToPhase(e.phaseNum);
+        }
+
+        virtual protected void Phase_EndRoundEarlyEvent(object? sender, EndRoundEarlyArgs e) {
+            EndRound();
         }
 
         virtual protected void SubscribeToAllPhases_SkipToPhaseEvents()
@@ -54,6 +51,11 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             {
                 phase.SkipToPhase += Phase_SkipToPhaseEvent;
             }
+        }
+
+        virtual protected void SubscribeToAllPhases_EndRoundEarlyEvents() {
+            foreach (IPhase phase in Phases)
+                phase.EndRoundEarly += Phase_EndRoundEarlyEvent;
         }
     }
 }

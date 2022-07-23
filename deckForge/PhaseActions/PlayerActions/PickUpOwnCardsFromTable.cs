@@ -6,8 +6,8 @@ namespace deckForge.PhaseActions
     public class PickUpOwnCardsFromTable : PlayerGameAction
     {
         public PickUpOwnCardsFromTable(
-            string name = "Take Cards from Player on Table",
-            string description = "Take all Cards on the Player Target's Table spot."
+            string name = "Pick up all cards owned by Player",
+            string description = "Pick up all Cards on the Players Table spot."
             ) : base(name: name, description: description)
         { }
 

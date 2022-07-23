@@ -19,7 +19,5 @@ namespace deckForge.PhaseActions
         {
             return player.PlayCard();
         }
-
-
     }
 }

@@ -13,15 +13,17 @@ namespace deckForge.GameConstruction.PresetGames.War
         public WarPhase(IGameMediator gm, List<int> playerIDs, string name)
         : base(gm, playerIDs, name)
         {
-            Actions.Add(new PlayCardsAction(playCount: 2));
+            Actions.Add(new PlayMultipleCardsAction(playCount: 2));
             Actions.Add(new FlipOneCard_OneWay_Action(2 * iteration));
         }
 
-        protected override void PhaseActionLogic(int playerID, int actionNum, out bool repeatAction)
+        protected override void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
         {
-            repeatAction = false;
+            handledAction = false;
+
             if (actionNum == 1)
             {
+                handledAction = true;
                 FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
             }
         }

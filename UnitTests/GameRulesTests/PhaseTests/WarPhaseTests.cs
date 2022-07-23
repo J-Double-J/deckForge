@@ -10,7 +10,7 @@ using FluentAssertions;
 namespace UnitTests.PhaseTests
 {
     [TestClass]
-    public class War_PlayCardsPhaseTest
+    public class WarPhaseTests
     {
 
         #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -106,6 +106,25 @@ namespace UnitTests.PhaseTests
             //Player did not play a card directly out of their deck, so they have init deck size (26)
             players[0].CountOfResourceCollection(0).Should().Be(26, "their card is still on the table and they didn't pick up any other cards");
             players[1].CountOfResourceCollection(0).Should().Be(26, "their card is still on the table and they didn't pick up any other cards");
+        }
+
+        [TestMethod]
+        public void WarPhasePlacesMoreCardsOnTable() {
+            table.PlaceCardOnTable(0, new Card(1, "H"));
+            table.PlaceCardOnTable(1, new Card(2, "H"));
+
+            IPhase phase = new WarPhase(gm, playerIDs, "War!");
+            phase.StartPhase();
+
+            table.PrintTableState();
+            List<List<Card>> tableState = table.TableState;
+
+            tableState.Count.Should().Be(2, "there are two players at the table");
+            foreach (List<Card> playedCardsInFrontOfPlayer in tableState) {
+                playedCardsInFrontOfPlayer.Count.Should().Be(3, "player played 1 card before, then in War! phase played 2 more cards");
+                playedCardsInFrontOfPlayer[1].Facedown.Should().Be(true, "the 2nd card should be facedown");
+                playedCardsInFrontOfPlayer[2].Facedown.Should().Be(false, "the 3rd card was flipped faceup");
+            }
         }
     }
 }

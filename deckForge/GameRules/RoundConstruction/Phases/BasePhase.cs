@@ -8,6 +8,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
     {
         protected readonly IGameMediator GM;
         public event EventHandler<SkipToPhaseEventArgs>? SkipToPhase;
+        public event EventHandler<EndRoundEarlyArgs>? EndRoundEarly;
 
         public BasePhase(IGameMediator gm, string phaseName = "")
         {
@@ -40,6 +41,10 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         protected virtual void OnSkipToPhase(SkipToPhaseEventArgs e)
         {
             SkipToPhase?.Invoke(this, e);
+        }
+
+        protected virtual void OnEndRoundEarly(EndRoundEarlyArgs e) {
+            EndRoundEarly?.Invoke(this, e);
         }
     }
 }

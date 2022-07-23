@@ -6,13 +6,13 @@ using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
-    abstract public class PlayerRoundRules : BaseRoundRules
+    abstract public class PlayerRoundRules : BaseRoundRules, IRoundRules
     {
         abstract override public List<IPhase> Phases { get; }
         int _handLim;
 
-        public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-        : base(gm, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents)
+        public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1)
+        : base(gm)
         {
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
@@ -47,21 +47,22 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         {
             NextPhaseHook(phaseNum, out bool handledPhase);
             if (!handledPhase) {
-                Phases[0].StartPhase();
+                Phases[phaseNum].StartPhase();
             }
-            CurPhase++;
-            if (!(CurPhase > Phases.Count - 1))
-            {
+            //If a round is ended early by a phase, CurPhase will be -1
+            if (CurPhase >= 0) {
+                CurPhase++;
+                if (!(CurPhase > Phases.Count - 1))
+                {
+                    NextPhase(CurPhase);
+                }
+                else
+                {
+                    EndRound();
+                }
+            } else {
                 EndRound();
             }
-            else {
-                NextPhase(CurPhase);
-            }
-        }
-
-        new virtual public void EndRound()
-        {
-            base.EndRound();
         }
 
         new virtual public void SkipToPhase(int phaseNum)

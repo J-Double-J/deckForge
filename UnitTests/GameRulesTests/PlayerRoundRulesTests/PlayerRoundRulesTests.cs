@@ -16,7 +16,7 @@ namespace UnitTests.PlayerRoundRulesTests
         override public List<IPhase> Phases { get { return testPhases; } }
         public TestPlayerRoundRules(IGameMediator gm,
             List<int> players,  int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
-            : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit, subscribeToAllPhaseEvents: subscribeToAllPhaseEvents) { }
+            : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit) { }
     }
 
     [TestClass]
