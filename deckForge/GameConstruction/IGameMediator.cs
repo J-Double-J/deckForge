@@ -12,25 +12,25 @@ namespace deckForge.GameConstruction
     public interface IGameMediator
     {
         /// <summary>
-        /// Informs the IGameMediator to keep track of this <paramref name="IPlayer"/>.
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <paramref name="IPlayer"/>.
         /// </summary>
         /// <param name="player">Player to Register</param>
         public void RegisterPlayer(IPlayer player);
 
         /// <summary>
-        /// Informs the IGameMediator to keep track of this <c>Table</c>. 
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="Table"/>. 
         /// </summary>
         /// <param name="table">Table to Register</param>
         public void RegisterTable(Table table);
 
         /// <summary>
-        /// Informs the IGameMediator to keep track of this <c>IGameController</c>
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <c>IGameController</c>
         /// </summary>
         /// <param name="gameController">Game Controller</param>
         public void RegisterGameController(IGameController gameController);
 
         /// <value>
-        /// Property <c>PlayerCount</c> is the number of <see cref="IPlayer"/> registered with <see cref="IGameMediator"/>.
+        /// Property <c>PlayerCount</c> is the number of <see cref="IPlayer"/>s registered with <see cref="IGameMediator"/>.
         /// </value>
         public int PlayerCount { get; }
 
@@ -45,7 +45,7 @@ namespace deckForge.GameConstruction
         public void EndGame();
 
         /// <summary>
-        /// Optional way to end the game, by declaring a winner to <see cref="IGameMediator"/> to announce.
+        /// Optional way to end the game, by declaring a <paramref name="winner"/> for <see cref="IGameMediator"/> to announce.
         /// </summary>
         /// <param name="winner">Winner</param>
         public void EndGameWithWinner(IPlayer winner);
@@ -62,16 +62,16 @@ namespace deckForge.GameConstruction
         public void EndPlayerTurn();
 
         /// <summary>
-        /// Called everytime <see cref="IPlayer"/> notifies <see cref="IGameMediator"/> that it played a card.
+        /// Called everytime <see cref="IPlayer"/> notifies <see cref="IGameMediator"/> that it played a <see cref="Card"/>.
         /// </summary>
         /// <param name="playerID">Player's ID</param>
         /// <param name="card">Card that is played</param>
         public void PlayerPlayedCard(int playerID, Card card);
 
         /// <summary>
-        /// Called whenever an <see cref="IPlayer"/> tries to draw a card.
+        /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="Card"/>.
         /// </summary>
-        /// <returns>The <see cref="Card"/> that was drawn from a deck or nothing.</returns>
+        /// <returns>A nullable <see cref="Card"/> that was drawn from a <see cref="Deck"/>.</returns>
         public Card? DrawCardFromDeck();
 
         /// <summary>
@@ -82,14 +82,14 @@ namespace deckForge.GameConstruction
         public IPlayer GetPlayerByID(int playerID);
 
         /// <summary>
-        /// Gets the list of cards the <see cref="IPlayer"/> has played.
+        /// Gets the List of <see cref="Card"/>s the <see cref="IPlayer"/> has played.
         /// </summary>
         /// <param name="playerID">The ID of the <see cref="IPlayer"/> of interest</param>
         /// <returns>The list of cards that was played by the <see cref="IPlayer"/>.</returns>
         public List<Card> GetPlayedCardsOfPlayer(int playerID);
 
         /// <summary>
-        /// Flips a specified card on the table, for a specific player, a specific way.
+        /// Flips a specified card on the <see cref="Table"/>, for a specific <see cref="IPlayer"/>, a specific way.
         /// </summary>
         /// <param name="playerID">ID of <see cref="IPlayer"/> whose card is getting flipped</param>
         /// <param name="cardPos">Specific card's position on the table for that player</param>
@@ -98,10 +98,10 @@ namespace deckForge.GameConstruction
         public Card FlipSingleCard(int playerID, int cardPos, bool? facedown);
 
         /// <summary>
-        /// Pick up all cards belonging to an <see cref="IPlayer"/> on the table.
+        /// Pick up all <see cref="Card"/>s belonging to an <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
-        /// <param name="playerID">ID of IPlayer whose cards are being picked up</param>
-        /// <returns>A reference to the list of cards picked up.</returns>
+        /// <param name="playerID">ID of IPlayer whose <see cref="Card"/>s are being picked up</param>
+        /// <returns>A reference to the List of <see cref="Card"/>s picked up.</returns>
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace deckForge.GameConstruction
         /// </summary>
         /// <param name="playerID"></param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s</param>
-        /// <returns>A nullable <see langword="object"/> that is a reference to what the action may have interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
         public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action);
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace deckForge.GameConstruction
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action</param>
         /// <param name="playerTargetID">ID of the target <see cref="IPlayer"/></param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s</param>
-        /// <returns>A nullable <see langword="object"/> that is a reference to what the action may have interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
         public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action);
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace deckForge.GameConstruction
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s</param>
         /// <param name="includeSelf">Specifies whether <see cref="IPlayer"/> with <paramref name="playerID"/> should target themself if true.</param>
-        /// <returns>A nullable <see langword="object"/> that is a reference to what the action may have interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
         public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false);
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace deckForge.GameConstruction
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action</param>
         /// <param name="targets">IDs of the target <see cref="IPlayer"/>s</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s</param>
-        /// <returns>A nullable <see langword="object"/> that is a reference of what the action may have interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action);
     }
 }

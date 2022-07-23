@@ -1,6 +1,7 @@
 using deckForge.PlayerConstruction.PlayerEvents;
 using deckForge.GameElements.Resources;
 using deckForge.PhaseActions;
+using deckForge.GameElements;
 
 namespace deckForge.PlayerConstruction
 {
@@ -52,12 +53,12 @@ namespace deckForge.PlayerConstruction
         public Card? PlayCard(bool facedown = false);
 
         /// <summary>
-        /// Flips a single card belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
+        /// Flips a single <see cref="Card"/> belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
         /// <param name="cardPos">Position of the card on the <see cref="Table"/></param>
         /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>, 
         /// otherwise flipped regardless of current orientation.</param>
-        /// <returns>Reference to <see cref="Card"/> that was flipped</returns>
+        /// <returns>Reference to <see cref="Card"/> that was flipped.</returns>
         public Card FlipSingleCard(int cardPos, bool? facedown = null);
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace deckForge.PlayerConstruction
         public int FindCorrectPoolID(Type resourceType);
 
         /// <summary>
-        /// Gets the number of resources in a <see cref="IResourceCollection"/>
+        /// Gets the number of resources in an <see cref="IResourceCollection"/>.
         /// </summary>
         /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/></param>
         /// <returns>The number of resources in the collection.</returns>
@@ -93,7 +94,7 @@ namespace deckForge.PlayerConstruction
         /// </summary>
         /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/></param>
         /// <returns>
-        /// A nullable <see langword="object"/> that is of the type of resource managed by the <see cref="IResourceCollection"/>.
+        /// A nullable <see cref="object"/> that is of the type of resource managed by the <see cref="IResourceCollection"/>.
         /// </returns>
         public object? TakeResourceFromCollection(int resourceCollectionID);
 
@@ -141,7 +142,7 @@ namespace deckForge.PlayerConstruction
         /// <see cref="IPlayer"/> executes an action.
         /// </summary>
         /// <param name="action">An action that interacts with <see cref="IPlayer"/>s.</param>
-        /// <returns>A nullable <see langword="object"/> that <paramref name="action"/> interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameAction(IAction<IPlayer> action);
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace deckForge.PlayerConstruction
         /// </summary>
         /// <param name="action">Action that interacts with <see cref="IPlayer"/>s.</param>
         /// <param name="target"><see cref="IPlayer"/> to be targetted by <paramref name= "action"/></param>
-        /// <returns>A nullable <see langword="object"/> that <paramref name="action"/> interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target);
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace deckForge.PlayerConstruction
         /// <param name="action">Action that interacts with <see cref="IPlayer"/>s.</param>
         /// <param name="targets">List of <see cref="IPlayer"/>s to be targetted by <paramref name="action"/>.</param>
         /// <param name="includeSelf">Specifies whether to include <see cref="IPlayer"/> executing action in target list if <c>true</c></param>
-        /// <returns>A nullable <see langword="object"/> that <paramref name="action"/> interacted with.</returns>
+        /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
 
     }
