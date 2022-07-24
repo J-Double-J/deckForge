@@ -2,13 +2,14 @@
 using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.PhaseActions;
 using deckForge.GameConstruction;
-
+using deckForge.GameRules.RoundConstruction.Phases;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     abstract public class PlayerRoundRules : BaseRoundRules, IRoundRules
     {
         abstract override public List<IPhase> Phases { get; }
+        public List<int> playerTurnOrder;
         int _handLim;
 
         public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1)
@@ -17,6 +18,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
             PlayerIDs = players;
+            playerTurnOrder = players;
         }
 
         public int HandLimit
@@ -34,11 +36,18 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 }
             }
         }
+
         public int CardPlayLimit { get; private set; }
         public List<int> PlayerIDs { get; }
 
         new virtual public void StartRound()
         {
+            List<int> newTurnOrder = GM.TurnOrder;
+            if (playerTurnOrder != newTurnOrder) {
+                playerTurnOrder = GM.TurnOrder;
+                UpdatePhasesPlayerTurnOrder(newTurnOrder);
+            }
+
             CurPhase = 0;
             NextPhase(0);
         }
@@ -73,6 +82,18 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         new virtual public void NextPhaseHook(int phaseNum, out bool handledPhase)
         {
             handledPhase = false;
+        }
+
+        /// <summary>
+        /// Updates each <see cref="IPhase"/>'s turn order with the <paramref name="newTurnOrder"/>.
+        /// <para>Each <see cref="IPhase"/> must be of <see cref="Type"/> <see cref="PlayerPhase"/>.</para>
+        /// </summary>
+        /// <param name="newTurnOrder">Turn order of <see cref="IPlayer"/> by their IDs</param>
+        public void UpdatePhasesPlayerTurnOrder(List<int> newTurnOrder) {
+            foreach (IPhase phase in Phases) {
+                var playerPhase = (PlayerPhase)phase;
+                playerPhase.PlayerTurnOrder = newTurnOrder;
+            }
         }
     }
 }

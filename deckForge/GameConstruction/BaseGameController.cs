@@ -5,51 +5,49 @@ namespace deckForge.GameConstruction
 {
     public class BaseGameController : IGameController
     {
-        Deck deck;
-        int playerCount;
-        TurnHandler turnOrder;
+        private int _playerCount;
+        private readonly TurnHandler _turnHandler;
 
         public BaseGameController(int playerCount, bool turnRandomizer = false)
         {
             PlayerCount = playerCount;
-            deck = new Deck();
-            turnOrder = new TurnHandler(playerCount, turnRandomizer);
+            _turnHandler = new TurnHandler(playerCount, turnRandomizer);
         }
 
         public int PlayerCount
         {
-            get { return playerCount; }
-            private set { playerCount = value; }
+            get { return _playerCount; }
+            private set { _playerCount = value; }
+        }
+
+        public List<int> TurnOrder {
+            get { return _turnHandler.TurnOrder; }
         }
 
         public int NextPlayerTurn()
         {
             //TODO: Inter-Round Rules Abstraction (Game win? Shuffle Pieces? etc)
-            turnOrder.incrementTurnOrder();
-            return turnOrder.GetWhoseTurn();
+            _turnHandler.incrementTurnOrder();
+            return _turnHandler.GetWhoseTurn();
         }
 
         public int PlayerTurnXTurnsFromNow(int turns = 1)
         {
-            return turnOrder.GetWhoseTurnXTurnsFromNow(turns);
+            return _turnHandler.GetWhoseTurnXTurnsFromNow(turns);
         }
 
-        public Card? DrawCard()
+        public void ShiftTurnOrderClockwise() {
+            _turnHandler.ShiftTurnOrderClockwise();
+        }
+
+        public void ShiftTurnOrderCounterClockwise()
         {
-            Card? c = deck.DrawCard();
-            if (c != null)
-            {
-                return c;
-            }
-            else
-            {
-                return null;
-            }
+            _turnHandler.ShiftTurnOrderCounterClockwise();
         }
 
         public int GetCurrentPlayer()
         {
-            return turnOrder.GetWhoseTurn();
+            return _turnHandler.GetWhoseTurn();
         }
 
         public void EndGame()
@@ -60,26 +58,15 @@ namespace deckForge.GameConstruction
 
         private class TurnHandler : ITurnHandler
         {
-            private Random rng = new Random();
-            private List<int> order = new List<int>();
-            int turnNum;
-            public int TurnNum
-            {
-                get { return turnNum; }
-                private set { turnNum = value; }
-            }
+            private readonly Random _rng = new();
+            private List<int> _order = new();
+            private int _turnNum;
 
-            public List<int> TurnOrder
-            {
-                get { return order; }
-                private set { order = value; }
-            }
             public TurnHandler(int playerCount, bool turnRandomizer)
             {
-
                 for (var i = 0; i < playerCount; i++)
                 {
-                    order.Add(i);
+                    _order.Add(i);
                 }
                 if (turnRandomizer)
                 {
@@ -87,27 +74,47 @@ namespace deckForge.GameConstruction
                     while (n > 1)
                     {
                         n--;
-                        int k = rng.Next(n + 1);
-                        int value = order[k];
-                        order[k] = order[n];
-                        order[n] = value;
+                        int k = _rng.Next(n + 1);
+                        int value = _order[k];
+                        _order[k] = _order[n];
+                        _order[n] = value;
                     }
                 }
             }
 
+            public int TurnNum
+            {
+                get { return _turnNum; }
+                private set { _turnNum = value; }
+            }
+
+            public List<int> TurnOrder
+            {
+                get { return _order; }
+                private set { _order = value; }
+            }
+
+            public void ShiftTurnOrderClockwise() {
+                _order = _order.Skip(1).Concat(_order.Take(1)).ToList();
+            }
+
+            public void ShiftTurnOrderCounterClockwise() {
+                _order = _order.Skip(_order.Count - 1).Concat(_order.Take(_order.Count - 1)).ToList();
+            }
+
             public void incrementTurnOrder()
             {
-                turnNum++;
+                _turnNum++;
             }
 
             public int GetWhoseTurn()
             {
-                return turnNum % order.Count;
+                return _turnNum % _order.Count;
             }
 
             public int GetWhoseTurnXTurnsFromNow(int turns)
             {
-                return (turnNum + turns) % order.Count;
+                return (_turnNum + turns) % _order.Count;
             }
         }
     }

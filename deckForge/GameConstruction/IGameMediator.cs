@@ -2,6 +2,7 @@ using deckForge.PhaseActions;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements;
 using deckForge.GameElements.Resources;
+using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameConstruction
 {
@@ -24,15 +25,26 @@ namespace deckForge.GameConstruction
         public void RegisterTable(Table table);
 
         /// <summary>
-        /// Informs the <see cref="IGameMediator"/> to keep track of this <c>IGameController</c>
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="IGameController"/>.
         /// </summary>
         /// <param name="gameController">Game Controller</param>
         public void RegisterGameController(IGameController gameController);
+
+        /// <summary>
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="IRoundRules"/>.
+        /// </summary>
+        /// <param name="roundRules">The Rounds Rules to keep track</param>
+        public void RegisterRoundRules(IRoundRules roundRules);
 
         /// <value>
         /// Property <c>PlayerCount</c> is the number of <see cref="IPlayer"/>s registered with <see cref="IGameMediator"/>.
         /// </value>
         public int PlayerCount { get; }
+
+        /// <value>
+        /// Property <c>TurnOrder</c> gives the current turn order of <see cref="IPlayer"/>s by their IDs.
+        /// </value>
+        public List<int> TurnOrder { get; }
 
         /// <summary>
         /// Starts the game.
@@ -103,6 +115,11 @@ namespace deckForge.GameConstruction
         /// <param name="playerID">ID of IPlayer whose <see cref="Card"/>s are being picked up</param>
         /// <returns>A reference to the List of <see cref="Card"/>s picked up.</returns>
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
+
+        /// <summary>
+        /// Informs the <see cref="IGameMediator"/> that the current <see cref="IRoundRules"/> ended.
+        /// </summary>
+        public void RoundEnded();
 
         /// <summary>
         /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/>.

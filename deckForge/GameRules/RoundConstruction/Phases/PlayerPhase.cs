@@ -11,6 +11,11 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
         protected int CurrentAction = 0;
         public List<int> playerIDs;
+        public List<int> PlayerTurnOrder { 
+            get { return playerIDs; }
+            set { playerIDs = value; } 
+        }
+
 
         public PlayerPhase(IGameMediator gm, List<int> playerIDs, string phaseName = "") : base(gm, phaseName: phaseName)
         {

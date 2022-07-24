@@ -2,19 +2,21 @@
 using deckForge.GameElements;
 using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
+using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameConstruction
 {
 
     /// <summary>
-    /// Mediates gameplay and iteractions between various objects such as <see cref="Table"/>,
+    /// Mediates gameplay and iteractions between various objects such as <see cref="GameElements.Table"/>,
     /// <see cref="IPlayer"/>, <see cref="IRoundRules"/>, etc.
     /// </summary>
     public class BaseGameMediator : IGameMediator
     {
-        private IGameController? _gameController;
-        private List<IPlayer> _players = new();
-        private Table? _table;
+        protected IGameController? GameController;
+        protected List<IRoundRules>? RoundRules;
+        protected List<IPlayer>? Players;
+        protected Table? GameTable;
 
         //TODO: Remove PlayerCount
         public BaseGameMediator(int playerCount)
@@ -30,7 +32,7 @@ namespace deckForge.GameConstruction
                     throw new ArgumentException(message: "Game cannot have more than 12 players");
                 }
 
-                _players = new List<IPlayer>();
+                Players = new List<IPlayer>();
             }
             catch
             {
@@ -40,28 +42,40 @@ namespace deckForge.GameConstruction
 
         public void RegisterPlayer(IPlayer player)
         {
-            _players.Add(player);
+            if (Players is null)
+                Players = new();
+            Players.Add(player);
         }
 
         public void RegisterTable(Table table)
         {
-            _table = table;
+            GameTable = table;
         }
 
         public void RegisterGameController(IGameController gameController)
         {
-            _gameController = gameController;
+            GameController = gameController;
+        }
+
+        public void RegisterRoundRules(IRoundRules roundRules) {
+            if (RoundRules is null)
+                RoundRules = new();
+            RoundRules.Add(roundRules);
         }
 
         public int PlayerCount
         {
-            get { return _players.Count; }
+            get { return Players!.Count; }
+        }
+
+        public List<int> TurnOrder {
+            get { return GameController!.TurnOrder; }
         }
 
         //TODO: Only used for testing at this moment. Does not fix bad ID's
         public void AddPlayer(IPlayer p)
         {
-            _players.Add(p);
+            Players!.Add(p);
         }
 
         /// <summary>
@@ -71,20 +85,22 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                if (_gameController is null || _players is null || _table is null)
+                if (GameController is null || Players is null || GameTable is null || RoundRules is null)
                 {
                     string errorMessage = "GameMediator is not fully initialized: \n";
-                    if (_gameController is null)
+                    if (GameController is null)
                         errorMessage += "GameController is null \n";
-                    if (_players is null)
+                    if (Players is null)
                         errorMessage += "Players is null \n";
-                    if (_table is null)
+                    if (GameTable is null)
                         errorMessage += "Table is null \n";
+                    if (RoundRules is null)
+                        errorMessage += "Round Rules is null \n";
                     throw new ArgumentNullException(errorMessage);
                 }
                 else
                 {
-                    StartPlayerTurn(_gameController.GetCurrentPlayer());
+                    StartPlayerTurn(GameController!.GetCurrentPlayer());
                 }
             }
             catch
@@ -100,11 +116,11 @@ namespace deckForge.GameConstruction
         /// start their turn.</param>
         public virtual void StartPlayerTurn(int turn)
         {
-            _players[turn].StartTurn();
+            Players![turn].StartTurn();
         }
 
         /// <summary>
-        /// Puts a <see cref="Card"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a card.
+        /// Puts a <see cref="Card"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a <see cref="Card"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> who played a <see cref="Card"/>.</param>
         /// <param name="card"><see cref="Card"/> that was played.</param>
@@ -112,7 +128,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                _table!.PlaceCardOnTable(playerID, card);
+                GameTable!.PlaceCardOnTable(playerID, card);
             }
             catch
             {
@@ -124,7 +140,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                StartPlayerTurn(_gameController!.NextPlayerTurn());
+                StartPlayerTurn(GameController!.NextPlayerTurn());
             }
             catch
             {
@@ -136,7 +152,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                _gameController!.EndGame();
+                GameController!.EndGame();
             }
             catch
             {
@@ -153,7 +169,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                Card? c = _table!.DrawCardFromDeck();
+                Card? c = GameTable!.DrawCardFromDeck();
                 if (c != null)
                 {
                     return c;
@@ -174,12 +190,12 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                if (_players is null)
+                if (Players is null)
                 {
-                    throw new ArgumentNullException("No players have been registered with GameMediator");
+                    throw new NullReferenceException("No players have been registered with GameMediator");
                 }
                 else
-                    return _players[id];
+                    return Players[id];
             }
             catch
             {
@@ -191,7 +207,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                return _table!.GetCardsForSpecificPlayer(playerID);
+                return GameTable!.GetCardsForSpecificPlayer(playerID);
             }
             catch
             {
@@ -200,17 +216,19 @@ namespace deckForge.GameConstruction
 
         }
 
+        public virtual void RoundEnded() {}
+
         public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
             try
             {
                 if (facedown is null)
                 {
-                    return _table!.Flip_SpecificCard_SpecificPlayer(playerID, cardPos);
+                    return GameTable!.Flip_SpecificCard_SpecificPlayer(playerID, cardPos);
                 }
                 else
                 {
-                    return _table!.Flip_SpecificCard_SpecificPlayer_SpecificWay(playerID, cardPos, (bool)facedown);
+                    return GameTable!.Flip_SpecificCard_SpecificPlayer_SpecificWay(playerID, cardPos, (bool)facedown);
                 }
             }
             catch
@@ -224,7 +242,7 @@ namespace deckForge.GameConstruction
         {
             try
             {
-                return _table!.PickUpAllCards_FromPlayer(playerID);
+                return GameTable!.PickUpAllCards_FromPlayer(playerID);
             }
             catch
             {
@@ -234,17 +252,17 @@ namespace deckForge.GameConstruction
 
         public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action)
         {
-            return _players[playerID].ExecuteGameAction(action);
+            return Players![playerID].ExecuteGameAction(action);
         }
 
         public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action)
         {
-            return _players[playerID].ExecuteGameActionAgainstPlayer(action, _players[playerTargetID]);
+            return Players![playerID].ExecuteGameActionAgainstPlayer(action, Players[playerTargetID]);
         }
 
         public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false)
         {
-            return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, _players, includeSelf);
+            return Players![playerID].ExecuteGameActionAgainstMultiplePlayers(action, Players, includeSelf);
         }
 
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action)
@@ -253,10 +271,10 @@ namespace deckForge.GameConstruction
 
             foreach (int targetID in targets)
             {
-                targettedPlayers.Add(_players[targetID]);
+                targettedPlayers.Add(Players![targetID]);
             }
 
-            return _players[playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
+            return Players![playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
         }
     }
 }

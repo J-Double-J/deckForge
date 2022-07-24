@@ -4,16 +4,15 @@ namespace deckForge.GameConstruction.PresetGames.War
 {
     public class WarGameMediator : BaseGameMediator
     {
-        IRoundRules _roundRules;
-        public WarGameMediator(int playerCount, IRoundRules roundRules) : base(playerCount) {
-            _roundRules = roundRules;
-        }
+        public WarGameMediator(int playerCount) : base(playerCount) {}
 
         public override void StartGame() {
-            //Single perpetual round
-            _roundRules.StartRound();
-            EndGame();
+            RoundRules![0].StartRound();
         }
 
+        override public void RoundEnded() {
+            GameController!.ShiftTurnOrderClockwise();
+            RoundRules![0].StartRound();
+        }
     }
 }

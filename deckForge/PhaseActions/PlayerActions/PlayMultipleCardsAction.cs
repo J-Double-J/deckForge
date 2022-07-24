@@ -20,12 +20,12 @@ namespace deckForge.PhaseActions
 
         public override List<Card?> execute(IPlayer player)
         {
-            List<Card?> drawnCards = new List<Card?>();
+            List<Card?> playedCards = new();
 
             for (var i = 0; i < PlayCount; i++)
-                drawnCards.Add(player.PlayCard());
+                playedCards.Add(player.PlayCard());
             
-            return drawnCards;
+            return playedCards;
         }
     }
 }
