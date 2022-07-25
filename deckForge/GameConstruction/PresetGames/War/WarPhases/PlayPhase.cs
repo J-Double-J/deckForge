@@ -2,6 +2,7 @@ using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.PlayerConstruction;
 using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
+using deckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace deckForge.GameConstruction.PresetGames.War
 { 
@@ -35,7 +36,12 @@ namespace deckForge.GameConstruction.PresetGames.War
                 if (actionNum == 0)
                 { 
                     handledAction = true;
-                    FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
+                    Card? drawnCard = (Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
+
+                    if (drawnCard is not null)
+                        FlippedCards.Add(drawnCard);
+                    else
+                        OnEndRoundEarly(new EndRoundEarlyArgs());
                 }
             }
             catch {

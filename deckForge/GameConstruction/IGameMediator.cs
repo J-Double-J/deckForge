@@ -3,6 +3,7 @@ using deckForge.PlayerConstruction;
 using deckForge.GameElements;
 using deckForge.GameElements.Resources;
 using deckForge.GameRules.RoundConstruction.Interfaces;
+using deckForge.PlayerConstruction.PlayerEvents;
 
 namespace deckForge.GameConstruction
 {
@@ -45,6 +46,9 @@ namespace deckForge.GameConstruction
         /// Property <c>TurnOrder</c> gives the current turn order of <see cref="IPlayer"/>s by their IDs.
         /// </value>
         public List<int> TurnOrder { get; }
+
+        public void ShiftTurnOrderClockwise();
+        public void ShiftTurnOrderCounterClockwise();
 
         /// <summary>
         /// Starts the game.
@@ -157,5 +161,19 @@ namespace deckForge.GameConstruction
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s</param>
         /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action);
+
+        /// <summary>
+        /// Called whenever an <see cref="IPlayer"/> raises a simple message.
+        /// </summary>
+        /// <param name="sender"><see cref="IPlayer"/> sender.</param>
+        /// <param name="e">The SimplePlayerMessageEventArgs has only a message is attached to be interpretted.</param>
+        public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e);
+
+        /// <summary>
+        /// <see cref="IPlayer"/> is removed from the game, and calls any additional logic required by the 
+        /// game to handle an <see cref="IPlayer"/> losing.
+        /// </summary>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> that lost/</param>
+        public void PlayerLost(int playerID);
     }
 }

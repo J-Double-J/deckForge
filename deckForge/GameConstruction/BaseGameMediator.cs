@@ -3,6 +3,8 @@ using deckForge.GameElements;
 using deckForge.PhaseActions;
 using deckForge.GameElements.Resources;
 using deckForge.GameRules.RoundConstruction.Interfaces;
+using deckForge.PlayerConstruction.PlayerEvents;
+using deckForge.GameRules.RoundConstruction.Rounds;
 
 namespace deckForge.GameConstruction
 {
@@ -13,6 +15,7 @@ namespace deckForge.GameConstruction
     /// </summary>
     public class BaseGameMediator : IGameMediator
     {
+        protected int CurRound = 0;
         protected IGameController? GameController;
         protected List<IRoundRules>? RoundRules;
         protected List<IPlayer>? Players;
@@ -45,6 +48,7 @@ namespace deckForge.GameConstruction
             if (Players is null)
                 Players = new();
             Players.Add(player);
+            player.PlayerMessageEvent += OnSimplePlayerMessage;
         }
 
         public void RegisterTable(Table table)
@@ -70,6 +74,15 @@ namespace deckForge.GameConstruction
 
         public List<int> TurnOrder {
             get { return GameController!.TurnOrder; }
+        }
+
+        public void ShiftTurnOrderClockwise()
+        {
+            GameController!.ShiftTurnOrderClockwise();
+        }
+
+        public void ShiftTurnOrderCounterClockwise() {
+            GameController!.ShiftTurnOrderCounterClockwise();
         }
 
         //TODO: Only used for testing at this moment. Does not fix bad ID's
@@ -275,6 +288,45 @@ namespace deckForge.GameConstruction
             }
 
             return Players![playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
+        }
+
+        public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e) {
+            if (e.message == "LOSE_GAME") {
+                if (RoundRules is not null)
+                    RoundRules![CurRound].EndRound();
+                CurRound = -1;
+                IPlayer playerSender = (IPlayer)sender!;
+                PlayerLost(playerSender.PlayerID);
+            }
+        }
+
+        virtual public void PlayerLost(int playerID) {
+            
+            Players!.Remove(GetPlayerByID(playerID));
+
+            //Could use LINQ most likely here
+            List<int> remaingPlayerIDs = new();
+            foreach (IPlayer player in Players) {
+                remaingPlayerIDs.Add(player.PlayerID);
+            }
+
+            GameController!.UpdatePlayerList(remaingPlayerIDs);
+            GameTable!.PickUpAllCards_FromPlayer(playerID);
+
+            if (RoundRules is not null) {
+                foreach (IRoundRules rr in RoundRules!)
+                {
+                    if (rr is PlayerRoundRules)
+                    {
+                        PlayerRoundRules playerRound = (PlayerRoundRules)rr;
+                        playerRound.UpdatePlayerList(remaingPlayerIDs);
+                    }
+                }
+            }
+            
+            if (Players.Count == 1) {
+                EndGameWithWinner(GetPlayerByID(Players[0].PlayerID));
+            }
         }
     }
 }

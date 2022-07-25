@@ -1,6 +1,7 @@
 using deckForge.GameRules.RoundConstruction.Phases;
 using deckForge.GameRules.RoundConstruction.Interfaces;
 using deckForge.GameConstruction;
+using deckForge.PhaseActions;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
@@ -17,7 +18,20 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         virtual public void StartRound() { }
         protected abstract void NextPhase(int phaseNum);
 
-        virtual public void EndRound() { CurPhase = -1; }
+
+        /// <summary>
+        /// Ends the round and sets the <c>CurPhase</c> to -1 and ends any <see cref="IAction{T}"/> ongoing 
+        /// in any <see cref="IPhase"/> in case of an early round termination. 
+        /// </summary>
+        virtual public void EndRound() {
+            //Prevents multiple clean ups if CurPhase is already -1
+            if (CurPhase >= 0) {
+                if (CurPhase >= 0 && CurPhase < Phases.Count)
+                    Phases[CurPhase].EndPhaseEarly();
+
+                CurPhase = -1;
+            }
+        }
 
         virtual public void SkipToPhase(int phaseNum)
         {

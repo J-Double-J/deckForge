@@ -95,5 +95,16 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 playerPhase.PlayerTurnOrder = newTurnOrder;
             }
         }
+
+        public void UpdatePlayerList(List<int> newPlayerList) {
+            playerTurnOrder = playerTurnOrder.Intersect(newPlayerList).ToList();
+
+            foreach (IPhase phase in Phases) {
+                if (phase is IPlayerPhase) {
+                    IPlayerPhase playerPhase = (IPlayerPhase)phase;
+                    playerPhase.UpdatePlayerList(playerTurnOrder);
+                }
+            }
+        }
     }
 }

@@ -30,9 +30,34 @@ namespace deckForge.PlayerConstruction
         public List<Card> PlayedCards { get; }
 
         /// <summary>
+        /// The <see cref="IPlayer"/> is active if <c>true</c>, inactive if <c>false</c>. 
+        /// </summary>
+        /// <remarks>
+        /// This is primarily used to mark an <see cref="IPlayer"/> as active in a round or phase.
+        /// If the player is out of the game permanently use <c>IsOut</c>.
+        /// </remarks>
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// If <see cref="IPlayer"/> is in the game <c>false</c>, otherwise <c>true</c>. Once <c>IsOut</c> is
+        /// <c>true</c>, <c>IsOut</c> cannot be changed.
+        /// </summary>
+        /// <remarks>
+        /// This is used to remove an <see cref="IPlayer"/> from the game and turn order.
+        /// If the player is not to be considered in play temporarily, use <c>IsActive</c>.
+        /// <see cref="IPlayer"/>s on default are not removed from turn order until a round is over.
+        /// </remarks>
+        public bool IsOut { get; set; }
+
+        /// <summary>
         /// Starts <see cref="IPlayer"/>'s turn.
         /// </summary>
         public void StartTurn();
+
+        /// <summary>
+        /// <see cref="IPlayer"/> loses the game.
+        /// </summary>
+        public void LoseGame();
 
         /// <summary>
         /// Draws <see cref="IPlayer"/>'s starting hand for the game.

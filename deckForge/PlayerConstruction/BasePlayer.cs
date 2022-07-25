@@ -9,6 +9,9 @@ namespace deckForge.PlayerConstruction
 {
     public class BasePlayer : IPlayer
     {
+        protected bool IsOutVal = false;
+        protected bool IsActiveVal = false;
+
         protected readonly IGameMediator GM;
         protected int CardPlays;
         protected int CardDraws;
@@ -56,6 +59,24 @@ namespace deckForge.PlayerConstruction
             }
         }
 
+        public bool IsActive {
+            get { return IsActiveVal; }
+            set {
+                if (IsOutVal == false)
+                    IsActive = value;
+            }
+        }
+
+        public bool IsOut {
+            get { return IsOutVal;  }
+            set {
+                if (value) {
+                    IsOutVal = value;
+                    IsActive = false;
+                }
+            } 
+        }
+
         virtual public void DrawStartingHand() {
             for (var i = 0; i < InitHandSize; i++)
             {
@@ -74,6 +95,10 @@ namespace deckForge.PlayerConstruction
                 PlayCard();
             }
             GM.EndPlayerTurn();
+        }
+
+        virtual public void LoseGame() {
+            RaiseSimplePlayerMessageEvent(new SimplePlayerMessageEventArgs("LOSE_GAME"));
         }
 
         //Returns which card was drawn

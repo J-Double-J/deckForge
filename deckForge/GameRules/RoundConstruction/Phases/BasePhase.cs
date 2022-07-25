@@ -7,6 +7,8 @@ namespace deckForge.GameRules.RoundConstruction.Phases
     public class BasePhase<T>
     {
         protected readonly IGameMediator GM;
+        protected int CurrentAction = 0;
+
         public event EventHandler<SkipToPhaseEventArgs>? SkipToPhase;
         public event EventHandler<EndRoundEarlyArgs>? EndRoundEarly;
 
@@ -36,6 +38,10 @@ namespace deckForge.GameRules.RoundConstruction.Phases
                     return Actions.Count;
                 }
             } 
+        }
+
+        public void EndPhaseEarly() {
+            CurrentAction = -1;
         }
 
         protected virtual void OnSkipToPhase(SkipToPhaseEventArgs e)

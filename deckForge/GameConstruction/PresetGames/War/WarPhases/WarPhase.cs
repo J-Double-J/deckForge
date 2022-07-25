@@ -25,6 +25,12 @@ namespace deckForge.GameConstruction.PresetGames.War
             {
                 handledAction = true;
                 FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
+                foreach (Card? card in FlippedCards) {
+                    if (card is null) {
+                        OnEndRoundEarly(new EndRoundEarlyArgs());
+                        break;
+                    }
+                }
             }
         }
 

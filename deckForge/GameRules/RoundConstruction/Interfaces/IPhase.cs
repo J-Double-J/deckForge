@@ -4,6 +4,7 @@ namespace deckForge.GameRules.RoundConstruction.Interfaces
     public interface IPhase
     {
         public void StartPhase();
+        public void EndPhaseEarly();
         public string PhaseName { get; }
 
         event EventHandler<SkipToPhaseEventArgs> SkipToPhase;
