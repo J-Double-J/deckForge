@@ -15,6 +15,7 @@ namespace deckForge.GameConstruction
     /// </summary>
     public class BaseGameMediator : IGameMediator
     {
+        protected bool gameOver = false;
         protected int CurRound = 0;
         protected IGameController? GameController;
         protected List<IRoundRules>? RoundRules;
@@ -179,6 +180,11 @@ namespace deckForge.GameConstruction
         public virtual void EndGameWithWinner(IPlayer winner)
         {
             Console.WriteLine($"Player {winner.PlayerID} wins!");
+            if (RoundRules is not null)
+            {
+                RoundRules[CurRound].EndRound();
+                gameOver = true;
+            }
         }
 
         public virtual Card? DrawCardFromDeck()
@@ -290,7 +296,7 @@ namespace deckForge.GameConstruction
         {
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
 
-            return playerIndex is not -1 ? 
+            return playerIndex is not -1 ?
             Players![playerIndex].ExecuteGameActionAgainstMultiplePlayers(action, Players, includeSelf)
             : null;
         }
@@ -302,7 +308,7 @@ namespace deckForge.GameConstruction
             foreach (int targetID in targets)
             {
                 int targetIndex = IndexOfPlayerByPlayerID(targetID);
-                if(targetIndex is not -1)
+                if (targetIndex is not -1)
                     targettedPlayers.Add(Players![targetIndex]);
             }
 
@@ -324,7 +330,7 @@ namespace deckForge.GameConstruction
 
         virtual public void PlayerLost(int playerID)
         {
-            
+
             Players!.Remove(GetPlayerByID(playerID)!);
 
             //Could use LINQ most likely here

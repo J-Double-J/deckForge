@@ -117,6 +117,29 @@ namespace UnitTests.PlayerRoundRulesTests
             round.PlayerTurnOrder.Should().BeEquivalentTo(targetPlayOrder);
             gm.TurnOrder.Should().BeEquivalentTo(targetPlayOrder);
         }
+
+        [TestMethod]
+        public void RoundEndsEarlyOnceAllPlayersButOneAreOut()
+        {
+            IGameMediator gm = new TestGameMediator(2);
+            IGameController gc = new BaseGameController(2);
+            Table table = new(gm, 2, new Deck());
+            gm.RegisterGameController(gc);
+
+            List<int> playerIDs = new();
+            List<IPlayer> players = new();
+            for (var i = 0; i < 2; i++)
+            {
+                players.Add(new WarPlayer(gm, i, new Deck()));
+                playerIDs.Add(i);
+            }
+
+            PlayerRoundRules round = new TestRoundWithLosingPlayer(gm, playerIDs);
+
+            round.StartRound();
+
+            table.TableState[0].Count.Should().Be(2, "game ended before player could play 2 more cards as normal in a round");
+        }
     }
 
     internal class TestWarPlayerPlayCardsOnTablePhase : PlayerPhase

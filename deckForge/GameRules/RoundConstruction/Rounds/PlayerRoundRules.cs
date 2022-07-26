@@ -50,7 +50,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             List<int> newTurnOrder = GM.TurnOrder;
             if (PlayerTurnOrder != newTurnOrder)
             {
-                PlayerTurnOrder = GM.TurnOrder;
+                PlayerTurnOrder = newTurnOrder;
                 UpdatePhasesPlayerTurnOrder(newTurnOrder);
             }
 
