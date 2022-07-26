@@ -94,8 +94,11 @@ namespace deckForge.GameConstruction
         /// Gets the <see cref="IPlayer"/> by their ID.
         /// </summary>
         /// <param name="playerID">ID of IPlayer to search for.</param>
-        /// <returns>The <see cref="IPlayer"/> with the associated ID.</returns>
-        public IPlayer GetPlayerByID(int playerID);
+        /// <returns>
+        /// The <see cref="IPlayer"/> with the associated ID else
+        /// if <see cref="IPlayer"/> is not found then null;
+        /// </returns>
+        public IPlayer? GetPlayerByID(int playerID);
 
         /// <summary>
         /// Gets the List of <see cref="Card"/>s the <see cref="IPlayer"/> has played.

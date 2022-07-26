@@ -23,10 +23,6 @@ namespace deckForge.GameConstruction.PresetGames.War
 
             SubscribeToAllPhases_SkipToPhaseEvents();
             SubscribeToAllPhases_EndRoundEarlyEvents();
-
-            /*foreach (IPlayer player in players) {
-                player.PlayerMessageEvent += PlayerRaisedEvent;
-            }*/
         }
 
         public override void NextPhaseHook(int phaseNum, out bool handledPhase)

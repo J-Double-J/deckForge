@@ -61,7 +61,8 @@ namespace deckForge.GameConstruction
             GameController = gameController;
         }
 
-        public void RegisterRoundRules(IRoundRules roundRules) {
+        public void RegisterRoundRules(IRoundRules roundRules)
+        {
             if (RoundRules is null)
                 RoundRules = new();
             RoundRules.Add(roundRules);
@@ -72,7 +73,8 @@ namespace deckForge.GameConstruction
             get { return Players!.Count; }
         }
 
-        public List<int> TurnOrder {
+        public List<int> TurnOrder
+        {
             get { return GameController!.TurnOrder; }
         }
 
@@ -81,7 +83,8 @@ namespace deckForge.GameConstruction
             GameController!.ShiftTurnOrderClockwise();
         }
 
-        public void ShiftTurnOrderCounterClockwise() {
+        public void ShiftTurnOrderCounterClockwise()
+        {
             GameController!.ShiftTurnOrderCounterClockwise();
         }
 
@@ -199,7 +202,7 @@ namespace deckForge.GameConstruction
 
         }
 
-        public IPlayer GetPlayerByID(int id)
+        public IPlayer? GetPlayerByID(int playerID)
         {
             try
             {
@@ -208,7 +211,10 @@ namespace deckForge.GameConstruction
                     throw new NullReferenceException("No players have been registered with GameMediator");
                 }
                 else
-                    return Players[id];
+                {
+                    int index = IndexOfPlayerByPlayerID(playerID);
+                    return index != -1 ? Players[IndexOfPlayerByPlayerID(playerID)] : null;
+                }
             }
             catch
             {
@@ -229,7 +235,7 @@ namespace deckForge.GameConstruction
 
         }
 
-        public virtual void RoundEnded() {}
+        public virtual void RoundEnded() { }
 
         public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
@@ -265,17 +271,28 @@ namespace deckForge.GameConstruction
 
         public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action)
         {
-            return Players![playerID].ExecuteGameAction(action);
+            int index = IndexOfPlayerByPlayerID(playerID);
+            return index != -1 ? Players![index].ExecuteGameAction(action) : null;
         }
 
         public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action)
         {
-            return Players![playerID].ExecuteGameActionAgainstPlayer(action, Players[playerTargetID]);
+            int playerIndex = IndexOfPlayerByPlayerID(playerID);
+            int targetIndex = IndexOfPlayerByPlayerID(playerTargetID);
+
+            if (playerIndex is not -1 && targetIndex is not -1)
+                return Players![playerIndex].ExecuteGameActionAgainstPlayer(action, Players[targetIndex]);
+            else
+                return null;
         }
 
         public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false)
         {
-            return Players![playerID].ExecuteGameActionAgainstMultiplePlayers(action, Players, includeSelf);
+            int playerIndex = IndexOfPlayerByPlayerID(playerID);
+
+            return playerIndex is not -1 ? 
+            Players![playerIndex].ExecuteGameActionAgainstMultiplePlayers(action, Players, includeSelf)
+            : null;
         }
 
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action)
@@ -284,36 +301,44 @@ namespace deckForge.GameConstruction
 
             foreach (int targetID in targets)
             {
-                targettedPlayers.Add(Players![targetID]);
+                int targetIndex = IndexOfPlayerByPlayerID(targetID);
+                if(targetIndex is not -1)
+                    targettedPlayers.Add(Players![targetIndex]);
             }
 
-            return Players![playerID].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers);
+            int playerIndex = IndexOfPlayerByPlayerID(playerID);
+
+            return playerIndex is not -1 ?
+            Players![playerIndex].ExecuteGameActionAgainstMultiplePlayers(action, targettedPlayers)
+            : null;
         }
 
-        public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e) {
-            if (e.message == "LOSE_GAME") {
-                if (RoundRules is not null)
-                    RoundRules![CurRound].EndRound();
-                CurRound = -1;
+        public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e)
+        {
+            if (e.message == "LOSE_GAME")
+            {
                 IPlayer playerSender = (IPlayer)sender!;
                 PlayerLost(playerSender.PlayerID);
             }
         }
 
-        virtual public void PlayerLost(int playerID) {
+        virtual public void PlayerLost(int playerID)
+        {
             
-            Players!.Remove(GetPlayerByID(playerID));
+            Players!.Remove(GetPlayerByID(playerID)!);
 
             //Could use LINQ most likely here
             List<int> remaingPlayerIDs = new();
-            foreach (IPlayer player in Players) {
+            foreach (IPlayer player in Players)
+            {
                 remaingPlayerIDs.Add(player.PlayerID);
             }
 
             GameController!.UpdatePlayerList(remaingPlayerIDs);
             GameTable!.PickUpAllCards_FromPlayer(playerID);
 
-            if (RoundRules is not null) {
+            if (RoundRules is not null)
+            {
                 foreach (IRoundRules rr in RoundRules!)
                 {
                     if (rr is PlayerRoundRules)
@@ -323,10 +348,29 @@ namespace deckForge.GameConstruction
                     }
                 }
             }
-            
-            if (Players.Count == 1) {
-                EndGameWithWinner(GetPlayerByID(Players[0].PlayerID));
+
+            if (Players.Count == 1)
+            {
+                EndGameWithWinner(GetPlayerByID(Players[0].PlayerID)!);
             }
+        }
+
+        /// <summary>
+        /// Gets the index of an <see cref="IPlayer"/> by their <paramref name="playerID"/> in the Players array. 
+        /// </summary>
+        /// <remarks>
+        /// This is the safest way to see if an <see cref="IPlayer"/> is still in the Players
+        /// list, as an <see cref="IPlayer"/> may be knocked out of the game at any point.
+        /// </remarks>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> to search for.</param>
+        /// <returns>
+        /// Index of the <see cref="IPlayer"/> in the Players list or
+        /// -1 if the <see cref="IPlayer"/> is not found.
+        /// </returns>
+        protected int IndexOfPlayerByPlayerID(int playerID)
+        {
+            IPlayer? foundPlayer = Players!.Find(player => player.PlayerID == playerID);
+            return foundPlayer is not null ? Players!.IndexOf(foundPlayer) : -1;
         }
     }
 }

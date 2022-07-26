@@ -30,19 +30,20 @@ namespace deckForge.GameConstruction.PresetGames.War
             players = WarPlayerSetUp(gm, table);
 
             List<int> playerIDs = new();
-            foreach (IPlayer player in players) {
-                playerIDs.Add(player.PlayerID); 
+            foreach (IPlayer player in players)
+            {
+                playerIDs.Add(player.PlayerID);
             }
             wrr = new WarRoundRules(gm, playerIDs);
-            gm.RegisterRoundRules(wrr);
         }
 
 
         // probably not right
-        public void StartGame() {
+        public void StartGame()
+        {
             gm.StartGame();
         }
-        
+
         private List<IPlayer> WarPlayerSetUp(IGameMediator gm, Table table)
         {
             List<IPlayer> players = new();
@@ -53,20 +54,23 @@ namespace deckForge.GameConstruction.PresetGames.War
                 IPlayer player = new WarPlayer(gm, i, deck);
                 player.PlayerMessageEvent += OnSimplePlayerMessageEvent;
                 players.Add(player);
-                
+
             }
 
             return players;
         }
 
-        private void OnSimplePlayerMessageEvent(object? sender, SimplePlayerMessageEventArgs e) {
-            if (e.message == "LOSE_GAME") {
+        private void OnSimplePlayerMessageEvent(object? sender, SimplePlayerMessageEventArgs e)
+        {
+            if (e.message == "LOSE_GAME")
+            {
                 IPlayer loser = (IPlayer)sender!;
                 if (loser.PlayerID == 0)
                 {
                     gm.EndGameWithWinner(players[1]);
                 }
-                else {
+                else
+                {
                     gm.EndGameWithWinner(players[0]);
                 }
             }

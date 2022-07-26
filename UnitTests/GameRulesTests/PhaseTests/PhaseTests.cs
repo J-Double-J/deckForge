@@ -14,7 +14,8 @@ namespace UnitTests.PlayerRoundRulesTests
     public class PhaseTests
     {
         [TestMethod]
-        public void PlayerPhaseCanChangeTurnOrder() {
+        public void PlayerPhaseCanChangeTurnOrder()
+        {
             IGameMediator gm = new TestGameMediator(3);
             IGameController gc = new BaseGameController(3);
             gm.RegisterGameController(gc);
@@ -22,7 +23,8 @@ namespace UnitTests.PlayerRoundRulesTests
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < 3; i++)
+            {
                 players.Add(new WarPlayer(gm, i, new Deck()));
                 playerIDs.Add(i);
             }
@@ -31,11 +33,12 @@ namespace UnitTests.PlayerRoundRulesTests
 
             playerPhase.StartPhase();
             gm.RoundEnded();
-            playerPhase.UpdatePlayerList(gm.TurnOrder);
+            playerPhase.UpdateTurnOrder(gm.TurnOrder);
             playerPhase.StartPhase();
 
             playerPhase.PlayerTurnOrder.Should().BeEquivalentTo(gm.TurnOrder, "the turn order of the phase should be what GameMediator says it is.");
-            foreach (IPlayer player in players) {
+            foreach (IPlayer player in players)
+            {
                 player.HandSize.Should().Be(6, "each player was told to draw 3 cards twice");
             }
         }
@@ -43,7 +46,8 @@ namespace UnitTests.PlayerRoundRulesTests
         //DEBUG THIS. Trying to use the method of IsActive and IsOut, and this was partially done, but probably
         //not properly.
         [TestMethod]
-        public void PlayerPhaseLosesPlayerMidPhase() {
+        public void PlayerPhaseLosesPlayerMidPhase()
+        {
             IGameMediator gm = new TestGameMediator(3);
             IGameController gc = new BaseGameController(3);
             gm.RegisterGameController(gc);
@@ -58,19 +62,22 @@ namespace UnitTests.PlayerRoundRulesTests
             }
             List<int> targetPlayOrder = new List<int>() { 0, 2 };
 
-            PlayerPhase playerPhase = new TestPhaseTwo((TestGameMediator)gm, playerIDs, "Test Phase");
-            
+            PlayerPhase playerPhase = new PlayerTwoLosesInPhase((TestGameMediator)gm, playerIDs, "Test Phase");
+
             playerPhase.StartPhase();
 
             table.TableState.Count.Should().Be(3, "even though a player is out, their table spot remains");
             table.TableState[1].Count.Should().Be(0, "all cards belonging to Player 2 should've been picked up");
             gm.TurnOrder.Should().BeEquivalentTo(targetPlayOrder);
+            playerPhase.PlayerTurnOrder.Should().BeEquivalentTo(targetPlayOrder);
         }
     }
 
     //Test Objects
-    internal class TestPhase : PlayerPhase {
-        public TestPhase(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name) {
+    internal class TestPhase : PlayerPhase
+    {
+        public TestPhase(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name)
+        {
             Actions.Add(new DrawCardsAction());
             Actions.Add(new DrawCardsAction());
             Actions.Add(new DrawCardsAction());
@@ -78,9 +85,9 @@ namespace UnitTests.PlayerRoundRulesTests
         }
     }
 
-    internal class TestPhaseTwo : PlayerPhase
+    internal class PlayerTwoLosesInPhase : PlayerPhase
     {
-        public TestPhaseTwo(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name)
+        public PlayerTwoLosesInPhase(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name)
         {
             Actions.Add(new DrawCardsAction());
             Actions.Add(new DrawCardsAction());
@@ -90,14 +97,16 @@ namespace UnitTests.PlayerRoundRulesTests
         }
     }
 
-    internal class TestGameMediator : BaseGameMediator {
+    internal class TestGameMediator : BaseGameMediator
+    {
         public TestGameMediator(int playerCount) : base(playerCount)
         {
         }
 
         PlayerPhase? phase;
 
-        public void RegisterPhase(PlayerPhase phase) {
+        public void RegisterPhase(PlayerPhase phase)
+        {
             this.phase = phase;
         }
 
@@ -109,19 +118,22 @@ namespace UnitTests.PlayerRoundRulesTests
         public override void PlayerLost(int playerID)
         {
             base.PlayerLost(playerID);
-            phase!.UpdatePlayerList(TurnOrder);
+            phase!.UpdateTurnOrder(TurnOrder);
         }
     }
 
-    internal class TestActionPlayerTwoLoses: PlayerGameAction {
+    internal class TestActionPlayerTwoLoses : PlayerGameAction
+    {
         IGameMediator gm;
-        public TestActionPlayerTwoLoses(IGameMediator gm) {
+        public TestActionPlayerTwoLoses(IGameMediator gm)
+        {
             this.gm = gm;
         }
 
         public override object? execute(IPlayer player)
         {
-            if (player.PlayerID == 1) {
+            if (player.PlayerID == 1)
+            {
                 player.LoseGame();
             }
             return null;

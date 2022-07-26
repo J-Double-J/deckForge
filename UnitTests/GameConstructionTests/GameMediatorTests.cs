@@ -18,8 +18,10 @@ namespace UnitTests.GameConstructionTests
             Table table = new(gm, 0, decks);
             new BasePlayer(gm, 0);
             new BasePlayer(gm, 1);
-            Action a = () => gm.GetPlayerByID(3);
-            a.Should().Throw<ArgumentException>("an invalid player ID was passed to the GameMediator");
+
+            IPlayer? foundPlayer = gm.GetPlayerByID(3);
+
+            foundPlayer.Should().BeNull("an invalid player ID was passed to the GameMediator");
         }
 
         [TestMethod]
@@ -29,9 +31,9 @@ namespace UnitTests.GameConstructionTests
             List<Deck> decks = new() { new Deck() };
             Table table = new(gm, 0, decks);
 
-            Card c = gm.DrawCardFromDeck()!;
+            Card card = gm.DrawCardFromDeck()!;
 
-            c.Should().NotBeNull("a new deck was created so it should have cards");
+            card.Should().NotBeNull("a new deck was created so it should have cards");
         }
 
         [TestMethod]
@@ -71,7 +73,8 @@ namespace UnitTests.GameConstructionTests
         }
 
         [TestMethod]
-        public void GameMediatorCanTellPlayerToExecuteGameAction() {
+        public void GameMediatorCanTellPlayerToExecuteGameAction()
+        {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new BasePlayer(gm);
             Table table = new Table(gm, 1, new Deck());
@@ -83,10 +86,11 @@ namespace UnitTests.GameConstructionTests
         }
 
         [TestMethod]
-        public void GameMediatorCannotTellPlayer_ToExecuteInvalidGameAction() {
+        public void GameMediatorCannotTellPlayer_ToExecuteInvalidGameAction()
+        {
             IGameMediator gm = new BaseGameMediator(2);
-            IPlayer player = new BasePlayer(gm);
-            IPlayer target = new BasePlayer(gm);
+            IPlayer player = new BasePlayer(gm, 0);
+            IPlayer target = new BasePlayer(gm, 1);
             Table table = new Table(gm, 2, new Deck());
             PlayerGameAction action = new DrawCardsAction();
 

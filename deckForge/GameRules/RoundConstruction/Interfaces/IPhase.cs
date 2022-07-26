@@ -9,7 +9,7 @@ namespace deckForge.GameRules.RoundConstruction.Interfaces
 
         event EventHandler<SkipToPhaseEventArgs> SkipToPhase;
         event EventHandler<EndRoundEarlyArgs> EndRoundEarly;
-
+        event EventHandler<PhaseEndedArgs> PhaseEnded;
     }
 
     public class SkipToPhaseEventArgs : EventArgs
@@ -23,5 +23,17 @@ namespace deckForge.GameRules.RoundConstruction.Interfaces
         public readonly string? message;
         public EndRoundEarlyArgs() { }
         public EndRoundEarlyArgs(string message) { this.message = message; }
+    }
+
+    public class PhaseEndedArgs : EventArgs
+    {
+        public readonly string? message;
+        public readonly string phaseName;
+        public PhaseEndedArgs(string phaseName) { this.phaseName = phaseName; }
+        public PhaseEndedArgs(string phaseName, string message)
+        {
+            this.phaseName = phaseName;
+            this.message = message;
+        }
     }
 }

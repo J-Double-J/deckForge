@@ -6,6 +6,6 @@
         public void StartPhase(List<int> playerIDs);
         public void EndPhase();
         public void EndPlayerTurn();
-        public void UpdatePlayerList(List<int> newPlayerList);
+        public void UpdateTurnOrder(List<int> newPlayerList);
     }
 }

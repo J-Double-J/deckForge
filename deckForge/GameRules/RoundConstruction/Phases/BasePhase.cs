@@ -4,13 +4,14 @@ using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
-    public class BasePhase<T>
+    abstract public class BasePhase<T>
     {
         protected readonly IGameMediator GM;
         protected int CurrentAction = 0;
 
         public event EventHandler<SkipToPhaseEventArgs>? SkipToPhase;
         public event EventHandler<EndRoundEarlyArgs>? EndRoundEarly;
+        public event EventHandler<PhaseEndedArgs>? PhaseEnded;
 
         public BasePhase(IGameMediator gm, string phaseName = "")
         {
@@ -30,17 +31,23 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             set;
         }
 
-        public int ActionCount { 
-            get { 
-                if (Actions is null) {
+        public int ActionCount
+        {
+            get
+            {
+                if (Actions is null)
+                {
                     return 0;
-                } else {
+                }
+                else
+                {
                     return Actions.Count;
                 }
-            } 
+            }
         }
 
-        public void EndPhaseEarly() {
+        public void EndPhaseEarly()
+        {
             CurrentAction = -1;
         }
 
@@ -49,8 +56,14 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             SkipToPhase?.Invoke(this, e);
         }
 
-        protected virtual void OnEndRoundEarly(EndRoundEarlyArgs e) {
+        protected virtual void OnEndRoundEarly(EndRoundEarlyArgs e)
+        {
             EndRoundEarly?.Invoke(this, e);
+        }
+
+        protected virtual void OnPhaseEnded(PhaseEndedArgs e)
+        {
+            PhaseEnded?.Invoke(this, e);
         }
     }
 }

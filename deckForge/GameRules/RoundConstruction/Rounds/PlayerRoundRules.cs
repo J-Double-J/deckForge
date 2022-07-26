@@ -8,9 +8,9 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 {
     abstract public class PlayerRoundRules : BaseRoundRules, IRoundRules
     {
+        private int _handLim;
         abstract override public List<IPhase> Phases { get; }
-        public List<int> playerTurnOrder;
-        int _handLim;
+        protected List<int>? ToBeUpdatedTurnOrder;
 
         public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1)
         : base(gm)
@@ -18,7 +18,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             HandLimit = handlimit;
             CardPlayLimit = cardPlayLimit;
             PlayerIDs = players;
-            playerTurnOrder = players;
+            PlayerTurnOrder = players;
         }
 
         public int HandLimit
@@ -39,12 +39,18 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
         public int CardPlayLimit { get; private set; }
         public List<int> PlayerIDs { get; }
+        public List<int> PlayerTurnOrder
+        {
+            get;
+            private set;
+        }
 
         new virtual public void StartRound()
         {
             List<int> newTurnOrder = GM.TurnOrder;
-            if (playerTurnOrder != newTurnOrder) {
-                playerTurnOrder = GM.TurnOrder;
+            if (PlayerTurnOrder != newTurnOrder)
+            {
+                PlayerTurnOrder = GM.TurnOrder;
                 UpdatePhasesPlayerTurnOrder(newTurnOrder);
             }
 
@@ -55,11 +61,13 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         override protected void NextPhase(int phaseNum)
         {
             NextPhaseHook(phaseNum, out bool handledPhase);
-            if (!handledPhase) {
+            if (!handledPhase)
+            {
                 Phases[phaseNum].StartPhase();
             }
             //If a round is ended early by a phase, CurPhase will be -1
-            if (CurPhase >= 0) {
+            if (CurPhase >= 0)
+            {
                 CurPhase++;
                 if (!(CurPhase > Phases.Count - 1))
                 {
@@ -69,7 +77,9 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 {
                     EndRound();
                 }
-            } else {
+            }
+            else
+            {
                 EndRound();
             }
         }
@@ -89,21 +99,37 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         /// <para>Each <see cref="IPhase"/> must be of <see cref="Type"/> <see cref="PlayerPhase"/>.</para>
         /// </summary>
         /// <param name="newTurnOrder">Turn order of <see cref="IPlayer"/> by their IDs</param>
-        public void UpdatePhasesPlayerTurnOrder(List<int> newTurnOrder) {
-            foreach (IPhase phase in Phases) {
+        public void UpdatePhasesPlayerTurnOrder(List<int> newTurnOrder)
+        {
+            ToBeUpdatedTurnOrder = newTurnOrder;
+            foreach (IPhase phase in Phases)
+            {
                 var playerPhase = (PlayerPhase)phase;
-                playerPhase.PlayerTurnOrder = newTurnOrder;
+                playerPhase.UpdateTurnOrder(newTurnOrder);
             }
         }
 
-        public void UpdatePlayerList(List<int> newPlayerList) {
-            playerTurnOrder = playerTurnOrder.Intersect(newPlayerList).ToList();
+        public void UpdatePlayerList(List<int> newPlayerList)
+        {
+            PlayerTurnOrder = PlayerTurnOrder.Intersect(newPlayerList).ToList();
 
-            foreach (IPhase phase in Phases) {
-                if (phase is IPlayerPhase) {
+            foreach (IPhase phase in Phases)
+            {
+                if (phase is IPlayerPhase)
+                {
                     IPlayerPhase playerPhase = (IPlayerPhase)phase;
-                    playerPhase.UpdatePlayerList(playerTurnOrder);
+                    playerPhase.UpdateTurnOrder(PlayerTurnOrder);
                 }
+            }
+        }
+
+        protected override void PhaseEndedEvent(object? sender, PhaseEndedArgs e)
+        {
+            base.PhaseEndedEvent(sender, e);
+            if (ToBeUpdatedTurnOrder is not null)
+            {
+                PlayerTurnOrder = ToBeUpdatedTurnOrder;
+                ToBeUpdatedTurnOrder = null;
             }
         }
     }
