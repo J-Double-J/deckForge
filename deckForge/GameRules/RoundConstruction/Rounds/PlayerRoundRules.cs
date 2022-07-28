@@ -1,6 +1,5 @@
 ﻿using deckForge.PlayerConstruction;
 using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.PhaseActions;
 using deckForge.GameConstruction;
 using deckForge.GameRules.RoundConstruction.Phases;
 
@@ -9,7 +8,6 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
     abstract public class PlayerRoundRules : BaseRoundRules, IRoundRules
     {
         private int _handLim;
-        abstract override public List<IPhase> Phases { get; }
         protected List<int>? ToBeUpdatedTurnOrder;
 
         public PlayerRoundRules(IGameMediator gm, List<int> players, int handlimit = 64, int cardPlayLimit = 1)
@@ -19,6 +17,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             CardPlayLimit = cardPlayLimit;
             PlayerIDs = players;
             PlayerTurnOrder = players;
+            Phases = new();
         }
 
         public int HandLimit
@@ -37,8 +36,12 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
+        override public List<IPhase> Phases { get; }
+
         public int CardPlayLimit { get; private set; }
+
         public List<int> PlayerIDs { get; }
+
         public List<int> PlayerTurnOrder
         {
             get;
@@ -51,7 +54,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             if (PlayerTurnOrder != newTurnOrder)
             {
                 PlayerTurnOrder = newTurnOrder;
-                UpdatePhasesPlayerTurnOrder(newTurnOrder);
+                UpdatePhasesPlayerTurnOrder(newTurnOrder); //TODO: Evaluate if this is needed
             }
 
             CurPhase = 0;
