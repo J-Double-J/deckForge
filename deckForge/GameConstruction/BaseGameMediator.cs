@@ -79,6 +79,10 @@ namespace deckForge.GameConstruction
             get { return GameController!.TurnOrder; }
         }
 
+        public List<List<Card>> CurrentTableState {
+            get { return GameTable!.TableState; }
+        }
+
         public void ShiftTurnOrderClockwise()
         {
             GameController!.ShiftTurnOrderClockwise();
@@ -89,35 +93,22 @@ namespace deckForge.GameConstruction
             GameController!.ShiftTurnOrderCounterClockwise();
         }
 
-        //TODO: Only used for testing at this moment. Does not fix bad ID's
-        public void AddPlayer(IPlayer p)
-        {
-            Players!.Add(p);
-        }
-
-        /// <summary>
-        /// Starts the game with the first <see cref="IPlayer"/>.
-        /// </summary>
         public virtual void StartGame()
         {
             try
             {
-                if (GameController is null || Players is null || GameTable is null || RoundRules is null)
+                CheckGameMediatorSetUp();
+                while (gameOver != true)
                 {
-                    string errorMessage = "GameMediator is not fully initialized: \n";
-                    if (GameController is null)
-                        errorMessage += "GameController is null \n";
-                    if (Players is null)
-                        errorMessage += "Players is null \n";
-                    if (GameTable is null)
-                        errorMessage += "Table is null \n";
-                    if (RoundRules is null)
-                        errorMessage += "Round Rules is null \n";
-                    throw new ArgumentNullException(errorMessage);
-                }
-                else
-                {
-                    StartPlayerTurn(GameController!.GetCurrentPlayer());
+                    CurRound = 0;
+                    foreach (IRoundRules rr in RoundRules!)
+                    {
+                        if (gameOver != true)
+                        {
+                            rr.StartRound();
+                            CurRound++;
+                        }
+                    }
                 }
             }
             catch
@@ -377,6 +368,23 @@ namespace deckForge.GameConstruction
         {
             IPlayer? foundPlayer = Players!.Find(player => player.PlayerID == playerID);
             return foundPlayer is not null ? Players!.IndexOf(foundPlayer) : -1;
+        }
+
+        virtual protected void CheckGameMediatorSetUp()
+        {
+            if (GameController is null || Players is null || GameTable is null || RoundRules is null)
+            {
+                string errorMessage = "GameMediator is not fully initialized: \n";
+                if (GameController is null)
+                    errorMessage += "GameController is null \n";
+                if (Players is null)
+                    errorMessage += "Players is null \n";
+                if (GameTable is null)
+                    errorMessage += "Table is null \n";
+                if (RoundRules is null)
+                    errorMessage += "Round Rules is null \n";
+                throw new ArgumentNullException(errorMessage);
+            }
         }
     }
 }

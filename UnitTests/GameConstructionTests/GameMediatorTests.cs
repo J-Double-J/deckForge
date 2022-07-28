@@ -4,12 +4,17 @@ using deckForge.GameElements;
 using deckForge.PlayerConstruction;
 using deckForge.GameElements.Resources;
 using deckForge.PhaseActions;
+using deckForge.GameRules.RoundConstruction.Phases;
+using deckForge.GameRules.RoundConstruction.Rounds;
+using deckForge.GameConstruction.PresetGames.War;
 
 namespace UnitTests.GameConstructionTests
 {
     [TestClass]
     public class GameMediatorTests
     {
+        private static StringWriter output = new();
+
         [TestMethod]
         public void GetPlayerByID_ThrowsOnInvalidID()
         {
@@ -97,6 +102,94 @@ namespace UnitTests.GameConstructionTests
             Action a = () => gm.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, action);
 
             a.Should().Throw<NotSupportedException>("draw cannot be targetted against another player");
+        }
+
+        [TestMethod]
+        public void GameMediatorLoopsThroughRoundsCorrectlyAndEndsWithWinner()
+        {
+            Console.SetOut(output);
+            IGameMediator gm = new BaseGameMediator(2);
+            IGameController gc = new BaseGameController(2);
+            gm.RegisterGameController(gc);
+            Table table = new(gm, 2, new Deck());
+
+            List<int> playerIDs = new();
+            List<IPlayer> players = new();
+            for (var i = 0; i < 2; i++)
+            {
+                players.Add(new WarPlayer(gm, i, new Deck()));
+                playerIDs.Add(i);
+            }
+
+            new TestRoundWithTwoPlayCardsActions(gm, playerIDs);
+            new RoundWithArbitraryLosingRules(gm, playerIDs);
+
+            gm.StartGame();
+
+            if (OperatingSystem.IsMacOS())
+                output.ToString().Should().Be("Player 1 wins!\n");
+            else if (OperatingSystem.IsWindows())
+                output.ToString().Should().Be("Player 1 wins!\r\n");
+        }
+    }
+
+    internal class PlayerLosesIfPlayer0AndHasAtLeast3CardsAction : PlayerGameAction
+    {
+        IGameMediator gm;
+        public PlayerLosesIfPlayer0AndHasAtLeast3CardsAction(
+            IGameMediator gm,
+            string name = "PlayerLosesIfPlayer0AndHas3CardsAction",
+            string description = "Very specific test action") : base(name, description)
+        {
+            this.gm = gm;
+        }
+
+        public override object? execute(IPlayer player)
+        {
+            var tableState = gm.CurrentTableState;
+            if (player.PlayerID == 0 && tableState[0].Count >= 3)
+            {
+                player.LoseGame();
+            }
+            return null;
+        }
+    }
+
+    internal class CheckIfPlayerLosesArbitrarilyPhase : PlayerPhase
+    {
+        public CheckIfPlayerLosesArbitrarilyPhase(
+            IGameMediator gm,
+            List<int> playerIDs,
+            string name = "CheckIfPlayerLosesArbitrarilyPhase"
+        ) : base(gm, playerIDs, name)
+        {
+            Actions.Add(new PlayerLosesIfPlayer0AndHasAtLeast3CardsAction(gm));
+        }
+    }
+
+    internal class RoundWithArbitraryLosingRules : PlayerRoundRules
+    {
+        public RoundWithArbitraryLosingRules(
+            IGameMediator gm,
+            List<int> playerIDs) : base(gm, playerIDs)
+        {
+            Phases.Add(new CheckIfPlayerLosesArbitrarilyPhase(gm, playerIDs));
+        }
+    }
+
+    internal class TestRoundWithTwoPlayCardsActions : PlayerRoundRules
+    {
+        public TestRoundWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs) : base(gm, playerIDs)
+        {
+            Phases.Add(new TestPhaseWithTwoPlayCardsActions(gm, playerIDs));
+        }
+    }
+
+    internal class TestPhaseWithTwoPlayCardsActions : PlayerPhase
+    {
+        public TestPhaseWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs) : base(gm, playerIDs)
+        {
+            Actions.Add(new PlayMultipleCardsAction(2));
         }
     }
 }

@@ -74,6 +74,6 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
             //Since players never played directly from their starting deck, 26 starting cards + 3 Player 0 cards + 3 Player 1 cards
             players[0].CountOfResourceCollection(0).Should().Be(32, "they added 6 cards to their deck");
             players[1].CountOfResourceCollection(0).Should().Be(26, "player 1 lost 3 of their cards");
-        }
+        }        
     }
 }

@@ -46,6 +46,7 @@ namespace deckForge.GameConstruction
         /// Property <c>TurnOrder</c> gives the current turn order of <see cref="IPlayer"/>s by their IDs.
         /// </value>
         public List<int> TurnOrder { get; }
+        public List<List<Card>> CurrentTableState { get; }
 
         public void ShiftTurnOrderClockwise();
         public void ShiftTurnOrderCounterClockwise();
