@@ -79,7 +79,8 @@ namespace deckForge.GameConstruction
             get { return GameController!.TurnOrder; }
         }
 
-        public List<List<Card>> CurrentTableState {
+        public List<List<Card>> CurrentTableState
+        {
             get { return GameTable!.TableState; }
         }
 
@@ -108,7 +109,14 @@ namespace deckForge.GameConstruction
                             rr.StartRound();
                             CurRound++;
                         }
+                        //Since a game can end midround, check again.
+                        if (gameOver != true)
+                        {
+                            RoundEndedHook();
+                        }
                     }
+                    if (gameOver is not true)
+                        AfterAllRoundsEndedHook();
                 }
             }
             catch
@@ -231,8 +239,6 @@ namespace deckForge.GameConstruction
             }
 
         }
-
-        public virtual void RoundEnded() { }
 
         public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
@@ -386,5 +392,26 @@ namespace deckForge.GameConstruction
                 throw new ArgumentNullException(errorMessage);
             }
         }
+
+        /// <summary>
+        /// Any logic put in this hook will execute after all <see cref = "IRoundRules"/> in a loop have
+        /// executed and before it starts with <see cref="IGameMediator"/>'s first <see cref = "IRoundRules"/> again.
+        /// </summary>
+        /// <remarks>
+        /// If one wanted to shift the turn order and do certain checks before the top of a round, override this function.
+        /// Functionally similar to RoundEndedHook(). This function is not called if the game ends 
+        /// before loop is finished.
+        /// </remarks>
+        virtual protected void AfterAllRoundsEndedHook() { }
+
+        /// <summary>
+        /// Called everytime any <see cref = "IRoundRules"/> has ended. Override to execute any logic between rounds.
+        /// </summary>
+        /// <remarks>
+        /// Functionally similar to AfterAllRoundsHook(). This function is not called if the game
+        /// ends in the middle of a round.
+        /// </remarks>
+        protected virtual void RoundEndedHook() { }
+
     }
 }

@@ -125,11 +125,6 @@ namespace deckForge.GameConstruction
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
 
         /// <summary>
-        /// Informs the <see cref="IGameMediator"/> that the current <see cref="IRoundRules"/> ended.
-        /// </summary>
-        public void RoundEnded();
-
-        /// <summary>
         /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/>.
         /// </summary>
         /// <param name="playerID"></param>

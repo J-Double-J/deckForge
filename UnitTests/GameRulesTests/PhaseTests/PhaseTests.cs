@@ -32,7 +32,8 @@ namespace UnitTests.PlayerRoundRulesTests
             PlayerPhase playerPhase = new TestPhase((TestGameMediator)gm, playerIDs, "Test Phase");
 
             playerPhase.StartPhase();
-            gm.RoundEnded();
+            TestGameMediator tgm = (TestGameMediator)gm;
+            tgm.PhaseEnded();
             playerPhase.UpdateTurnOrder(gm.TurnOrder);
             playerPhase.StartPhase();
 
@@ -110,7 +111,7 @@ namespace UnitTests.PlayerRoundRulesTests
             this.phase = phase;
         }
 
-        public override void RoundEnded()
+        public void PhaseEnded()
         {
             GameController!.ShiftTurnOrderClockwise();
         }

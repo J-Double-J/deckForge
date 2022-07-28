@@ -74,7 +74,8 @@ namespace deckForge.GameRules.RoundConstruction.Phases
                 if (!handledAction)
                     GM.TellPlayerToDoAction(player, Actions[actionNum]);
             }
-            CurrentAction++;
+            if (CurrentAction >= 0)
+                CurrentAction++;
             if (!(CurrentAction > ActionCount - 1) && !(CurrentAction < 0))
                 DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
             else
