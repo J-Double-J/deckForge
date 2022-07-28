@@ -1,13 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using deckForge.GameConstruction;
+using deckForge.GameConstruction.PresetGames.War;
 
 Console.WriteLine("Starting game!");
 
 try
 {
-    BaseGameMediator gm = new(2);
-    gm.StartGame();
+    War war = new War();
+    war.StartGame();
 }
 catch (Exception e)
 {

@@ -36,9 +36,6 @@ namespace deckForge.GameConstruction.PresetGames.War
             }
             wrr = new WarRoundRules(gm, playerIDs);
         }
-
-
-        // probably not right
         public void StartGame()
         {
             gm.StartGame();
@@ -52,28 +49,10 @@ namespace deckForge.GameConstruction.PresetGames.War
                 List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
                 Deck deck = new(cards);
                 IPlayer player = new WarPlayer(gm, i, deck);
-                player.PlayerMessageEvent += OnSimplePlayerMessageEvent;
                 players.Add(player);
-
             }
 
             return players;
-        }
-
-        private void OnSimplePlayerMessageEvent(object? sender, SimplePlayerMessageEventArgs e)
-        {
-            if (e.message == "LOSE_GAME")
-            {
-                IPlayer loser = (IPlayer)sender!;
-                if (loser.PlayerID == 0)
-                {
-                    gm.EndGameWithWinner(players[1]);
-                }
-                else
-                {
-                    gm.EndGameWithWinner(players[0]);
-                }
-            }
         }
     }
 }

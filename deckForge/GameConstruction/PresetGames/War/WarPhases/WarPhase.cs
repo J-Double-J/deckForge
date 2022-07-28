@@ -36,7 +36,8 @@ namespace deckForge.GameConstruction.PresetGames.War
 
         public override void EndPhase()
         {
-            OnSkipToPhase(new SkipToPhaseEventArgs(1));
+            if (CurrentAction  >= 0)
+                OnSkipToPhase(new SkipToPhaseEventArgs(1));
         }
 
         public override void StartPhase(List<int> playerIDs)

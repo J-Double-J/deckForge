@@ -1,18 +1,14 @@
-﻿using deckForge.GameRules.RoundConstruction.Interfaces;
-
-namespace deckForge.GameConstruction.PresetGames.War
+﻿namespace deckForge.GameConstruction.PresetGames.War
 {
     public class WarGameMediator : BaseGameMediator
     {
-        public WarGameMediator(int playerCount) : base(playerCount) {}
-
-        public override void StartGame() {
-            RoundRules![0].StartRound();
-        }
-
-        override public void RoundEnded() {
+        public WarGameMediator(int playerCount) : base(playerCount) { }
+        override protected void RoundEndedHook()
+        {
             GameController!.ShiftTurnOrderClockwise();
-            RoundRules![0].StartRound();
+            Console.WriteLine("Rounded Ended. Current Player Deck Count:");
+            Console.WriteLine($"Player 0:  {GetPlayerByID(0)?.CountOfResourceCollection(0)}");
+            Console.WriteLine($"Player 1:  {GetPlayerByID(1)?.CountOfResourceCollection(0)}");
         }
     }
 }
