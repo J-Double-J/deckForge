@@ -380,3 +380,5 @@ obj/
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+.vscode/tasks.json
+.vscode/launch.json
