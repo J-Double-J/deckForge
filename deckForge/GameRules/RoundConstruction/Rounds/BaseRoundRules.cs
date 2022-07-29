@@ -8,16 +8,27 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
     abstract public class BaseRoundRules : IRoundRules
     {
 
-        abstract public List<IPhase> Phases { get; }
+        /// <summary>
+        /// List of all the Phases that the Round owns.
+        /// </summary>
+        public List<IPhase> Phases { get; protected set; }
         protected int CurPhase = 0;
         protected readonly IGameMediator GM;
+
         public BaseRoundRules(IGameMediator gm)
         {
             GM = gm;
             gm.RegisterRoundRules(this);
+            Phases = new();
         }
-        virtual public void StartRound() { }
-        protected abstract void NextPhase(int phaseNum);
+
+        abstract public void StartRound();
+
+        /// <summary>
+        /// Begins the next <see cref="IPhase"/> based on <paramref name ="phaseNum"/>.
+        /// </summary>
+        /// <param name="phaseNum">The phase index in the <see cref="IPhase"/> list.</param>
+        abstract protected void NextPhase(int phaseNum);
 
 
         /// <summary>
@@ -36,6 +47,11 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
+        /// <summary>
+        /// Skips ahead to an <see cref="IPhase"/> that could be out of 
+        /// the order of the typical <see cref="IPhase"/> iteration.
+        /// </summary>
+        /// <param name="phaseNum">Index of the <see cref="IPhase"/> in the <see cref="IPhase"/> list.</param>
         virtual public void SkipToPhase(int phaseNum)
         {
             try
@@ -49,11 +65,30 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
-        virtual public void NextPhaseHook(int phaseNum, out bool handledRound)
+        /// <summary>
+        ///  Called before every <see cref="IPhase"/> to execute any logic in the function.
+        /// </summary>
+        /// <remarks>
+        /// Override this function in derived class. Returns false on default.
+        /// </remarks>
+        /// <param name="phaseNum">Index of <see cref="IPhase"/> in Phases list</param>
+        /// <param name="handledRound"></param>
+        /// <returns>
+        /// If the <see cref="IPhase"/> was executed in the hook returns <c>true</c>, else returns <c>false</c>.
+        /// </returns>
+        virtual protected bool NextPhaseHook(int phaseNum)
         {
-            handledRound = false;
+            return false;
         }
 
+        /// <summary>
+        /// Skip to specific <see cref="IPhase"/> based on <see cref="SkipToPhaseEventArgs"/>.
+        /// </summary>
+        /// <param name="sender">
+        /// Object that sent notification to skip to a phase.
+        /// Usually another phase.
+        /// </param>
+        /// <param name="e">The arguments containing what <see cref="IPhase"/> to skip to.</param>
         virtual protected void Phase_SkipToPhaseEvent(object? sender, SkipToPhaseEventArgs e)
         {
             SkipToPhase(e.phaseNum);
@@ -66,18 +101,28 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
         virtual protected void PhaseEndedEvent(object? sender, PhaseEndedArgs e) { }
 
+
+        /// <summary>
+        /// Subscribes the Round to listen to phases informing Round to skip to another <see cref="IPhase"/>.
+        /// </summary>
         virtual protected void SubscribeToAllPhases_SkipToPhaseEvents()
         {
             foreach (IPhase phase in Phases)
                 phase.SkipToPhase += Phase_SkipToPhaseEvent;
         }
 
+        /// <summary>
+        /// Subscribes the Round to listen to phases informing Round to end earlier than usual.
+        /// </summary>
         virtual protected void SubscribeToAllPhases_EndRoundEarlyEvents()
         {
             foreach (IPhase phase in Phases)
                 phase.EndRoundEarly += Phase_EndRoundEarlyEvent;
         }
 
+        /// <summary>
+        /// Subscribes the Round to listen to phases informing Round that the <see cref="IPhase"/> ended.
+        /// </summary>
         virtual protected void SubscribeToAllPhases_PhasesEndedEvents()
         {
             foreach (IPhase phase in Phases)

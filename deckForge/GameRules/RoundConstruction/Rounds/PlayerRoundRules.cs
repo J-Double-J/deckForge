@@ -17,7 +17,6 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             CardPlayLimit = cardPlayLimit;
             PlayerIDs = players;
             PlayerTurnOrder = players;
-            Phases = new();
         }
 
         public int HandLimit
@@ -35,9 +34,6 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 }
             }
         }
-
-        override public List<IPhase> Phases { get; }
-
         public int CardPlayLimit { get; private set; }
 
         public List<int> PlayerIDs { get; }
@@ -48,7 +44,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             private set;
         }
 
-        new virtual public void StartRound()
+        override public void StartRound()
         {
             List<int> newTurnOrder = GM.TurnOrder;
             if (PlayerTurnOrder != newTurnOrder)
@@ -63,8 +59,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
 
         override protected void NextPhase(int phaseNum)
         {
-            NextPhaseHook(phaseNum, out bool handledPhase);
-            if (!handledPhase)
+            if (!NextPhaseHook(phaseNum))
             {
                 Phases[phaseNum].StartPhase();
             }
@@ -92,10 +87,10 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             base.SkipToPhase(phaseNum);
         }
 
-        new virtual public void NextPhaseHook(int phaseNum, out bool handledPhase)
-        {
-            handledPhase = false;
-        }
+        // new virtual protected bool NextPhaseHook(int phaseNum)
+        // {
+        //     return false;
+        // }
 
         /// <summary>
         /// Updates each <see cref="IPhase"/>'s turn order with the <paramref name="newTurnOrder"/>.

@@ -13,9 +13,7 @@ namespace UnitTests.PlayerRoundRulesTests
 {
     public class TestPlayerRoundRules : PlayerRoundRules
     {
-        public List<IPhase> testPhases = new();
         public IGameMediator gm = new BaseGameMediator(0);
-        override public List<IPhase> Phases { get { return testPhases; } }
         public TestPlayerRoundRules(IGameMediator gm,
             List<int> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
             : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit) { }
@@ -154,7 +152,6 @@ namespace UnitTests.PlayerRoundRulesTests
 
     internal class TestRoundWithLosingPlayer : PlayerRoundRules
     {
-        override public List<IPhase> Phases { get; }
         public TestRoundWithLosingPlayer(IGameMediator gm, List<int> playerIDs)
         : base(gm, playerIDs)
         {

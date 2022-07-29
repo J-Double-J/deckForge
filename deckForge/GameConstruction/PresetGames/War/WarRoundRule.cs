@@ -9,7 +9,6 @@ namespace deckForge.GameConstruction.PresetGames.War
 {
     public class WarRoundRules : PlayerRoundRules
     {
-        override public List<IPhase> Phases { get; }
         bool atWar = false;
 
         public WarRoundRules(IGameMediator gm, List<int> players) : base(gm, players: players)
@@ -25,9 +24,9 @@ namespace deckForge.GameConstruction.PresetGames.War
             SubscribeToAllPhases_EndRoundEarlyEvents();
         }
 
-        public override void NextPhaseHook(int phaseNum, out bool handledPhase)
+        override protected bool NextPhaseHook(int phaseNum)
         {
-            handledPhase = false;
+            bool handledPhase = false;
 
             if (phaseNum == 0)
             {
@@ -71,10 +70,14 @@ namespace deckForge.GameConstruction.PresetGames.War
                 }
 
             }
+
+            return handledPhase;
         }
 
-        public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args) {
-            if (args.message == "LOSE_GAME") {
+        public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args)
+        {
+            if (args.message == "LOSE_GAME")
+            {
                 EndRound();
             }
         }
