@@ -33,7 +33,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         }
 
         //Based on how many playerIDs this phase has, it decides what style to do
-        virtual public void StartPhase()
+        override public void StartPhase()
         {
             CurrentAction = 0;
             if (playerIDs.Count == 1)
@@ -64,7 +64,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         //Each action must be done by a player before going to the next actions
         virtual protected void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
         {
-
             foreach (int player in playerIDs)
             {
                 CurrentPlayerTurn = player;
@@ -106,9 +105,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             EndPhase();
         }
 
-
-
-        virtual public void EndPhase()
+        override public void EndPhase()
         {
             CurrentPlayerTurn = -1;
             CurrentAction = -1;

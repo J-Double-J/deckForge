@@ -4,7 +4,7 @@ using deckForge.GameConstruction;
 
 namespace deckForge.GameRules.RoundConstruction.Phases
 {
-    abstract public class BasePhase<T>
+    abstract public class BasePhase<T> : IPhase
     {
         protected readonly IGameMediator GM;
         protected int CurrentAction = 0;
@@ -46,6 +46,13 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             }
         }
 
+        virtual public void StartPhase() { }
+
+        virtual public void EndPhase()
+        {
+            CurrentAction = -1;
+        }
+
         public void EndPhaseEarly()
         {
             CurrentAction = -1;
@@ -53,6 +60,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
 
         protected virtual void OnSkipToPhase(SkipToPhaseEventArgs e)
         {
+            CurrentAction = -1;
             SkipToPhase?.Invoke(this, e);
         }
 

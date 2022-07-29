@@ -22,14 +22,11 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             Phases = new();
         }
 
-        abstract public void StartRound();
-
         /// <summary>
-        /// Begins the next <see cref="IPhase"/> based on <paramref name ="phaseNum"/>.
+        /// Begins the Round by iterating through all its <see cref="IPhase">s and handling any rules
+        /// between them.
         /// </summary>
-        /// <param name="phaseNum">The phase index in the <see cref="IPhase"/> list.</param>
-        abstract protected void NextPhase(int phaseNum);
-
+        abstract public void StartRound();
 
         /// <summary>
         /// Ends the round and sets the <c>CurPhase</c> to -1 and ends any <see cref="IAction{T}"/> ongoing 
@@ -56,8 +53,8 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         {
             try
             {
-                CurPhase = phaseNum;
-                NextPhase(CurPhase);
+                //-1 to account for For loop in derived StartRounds increasing CurPhase by 1 after a phase completes.
+                CurPhase = phaseNum - 1;
             }
             catch
             {

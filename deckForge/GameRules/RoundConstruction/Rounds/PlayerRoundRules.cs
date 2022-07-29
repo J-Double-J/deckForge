@@ -53,30 +53,20 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
                 UpdatePhasesPlayerTurnOrder(newTurnOrder); //TODO: Evaluate if this is needed
             }
 
-            CurPhase = 0;
-            NextPhase(0);
-        }
-
-        override protected void NextPhase(int phaseNum)
-        {
-            if (!NextPhaseHook(phaseNum))
+            for (CurPhase = 0; CurPhase < Phases.Count; CurPhase++)
             {
-                Phases[phaseNum].StartPhase();
-            }
-            //If a round is ended early by a phase, CurPhase will be -1
-            if (CurPhase >= 0)
-            {
-                CurPhase++;
-                if (!(CurPhase > Phases.Count - 1))
+                if (!NextPhaseHook(CurPhase))
                 {
-                    NextPhase(CurPhase);
+                    Phases[CurPhase].StartPhase();
                 }
-                else
+                if (CurPhase < 0)
                 {
                     EndRound();
+                    break;
                 }
             }
-            else
+
+            if (!(CurPhase < 0))
             {
                 EndRound();
             }
@@ -86,11 +76,6 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         {
             base.SkipToPhase(phaseNum);
         }
-
-        // new virtual protected bool NextPhaseHook(int phaseNum)
-        // {
-        //     return false;
-        // }
 
         /// <summary>
         /// Updates each <see cref="IPhase"/>'s turn order with the <paramref name="newTurnOrder"/>.

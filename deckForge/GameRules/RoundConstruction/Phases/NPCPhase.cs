@@ -24,8 +24,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             EndPhase();
         }
 
-        virtual public void EndPhase() { }
-
         //Phases implement any logic for individual actions here. Should an action need to be executed in this function
         //(as is often the case if an action needs to be targetted) handledAction should be set to true
         virtual protected void PhaseActionLogic(out bool handledAction) { handledAction = false; }
