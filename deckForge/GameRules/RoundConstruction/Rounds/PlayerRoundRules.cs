@@ -5,7 +5,11 @@ using deckForge.GameRules.RoundConstruction.Phases;
 
 namespace deckForge.GameRules.RoundConstruction.Rounds
 {
-    abstract public class PlayerRoundRules : BaseRoundRules, IRoundRules
+    /// <summary>
+    /// Base class for all Rounds involving <see cref= "IPlayer"/>s. 
+    /// Outlines <see cref="IPhase"/>s and the algorithm for <see cref="IPhase"/> looping.
+    /// </summary>
+    public abstract class PlayerRoundRules : BaseRoundRules, IRoundRules
     {
         private int _handLim;
         protected List<int>? ToBeUpdatedTurnOrder;
@@ -44,7 +48,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             private set;
         }
 
-        override public void StartRound()
+        public override void StartRound()
         {
             List<int> newTurnOrder = GM.TurnOrder;
             if (PlayerTurnOrder != newTurnOrder)
@@ -72,7 +76,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
-        new virtual public void SkipToPhase(int phaseNum)
+        public override void SkipToPhase(int phaseNum)
         {
             base.SkipToPhase(phaseNum);
         }
@@ -92,6 +96,11 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
             }
         }
 
+        /// <summary>
+        /// Updates the Player Turn Order to the <paramref name="newPlayerList"/> for the Round
+        /// and all <see cref="IPhase"/>s managed by it.
+        /// </summary>
+        /// <param name="newPlayerList"></param>
         public void UpdatePlayerList(List<int> newPlayerList)
         {
             PlayerTurnOrder = PlayerTurnOrder.Intersect(newPlayerList).ToList();
