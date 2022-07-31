@@ -18,7 +18,7 @@ namespace DeckForge.PhaseActions
 
         public int PlayCount { get; }
 
-        public override List<Card?> execute(IPlayer player)
+        public override List<Card?> Execute(IPlayer player)
         {
             List<Card?> playedCards = new();
 

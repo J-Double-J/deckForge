@@ -144,7 +144,7 @@ namespace UnitTests.GameConstructionTests
             this.gm = gm;
         }
 
-        public override object? execute(IPlayer player)
+        public override object? Execute(IPlayer player)
         {
             var tableState = gm.CurrentTableState;
             if (player.PlayerID == 0 && tableState[0].Count >= 3)

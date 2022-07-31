@@ -178,7 +178,7 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <param name="action">An action that interacts with <see cref="IPlayer"/>s.</param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
-        public object? ExecuteGameAction(IAction<IPlayer> action);
+        public object? ExecuteGameAction(IGameAction<IPlayer> action);
 
         /// <summary>
         /// <see cref="IPlayer"/> executes an action against another <see cref="IPlayer"/>.
@@ -186,7 +186,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="action">Action that interacts with <see cref="IPlayer"/>s.</param>
         /// <param name="target"><see cref="IPlayer"/> to be targetted by <paramref name= "action"/></param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
-        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target);
+        public object? ExecuteGameActionAgainstPlayer(IGameAction<IPlayer> action, IPlayer target);
 
         /// <summary>
         /// <see cref="IPlayer"/> executes an action against multiple other <see cref="IPlayer"/>s.
@@ -195,7 +195,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="targets">List of <see cref="IPlayer"/>s to be targetted by <paramref name="action"/>.</param>
         /// <param name="includeSelf">Specifies whether to include <see cref="IPlayer"/> executing action in target list if <c>true</c></param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
-        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
+        public object? ExecuteGameActionAgainstMultiplePlayers(IGameAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
 
     }
 }

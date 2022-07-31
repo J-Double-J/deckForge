@@ -16,7 +16,7 @@ namespace DeckForge.PhaseActions
         }
 
         //Returns the list of cards that was drawn into the player's hand
-        override public List<Card?> execute(IPlayer player)
+        override public List<Card?> Execute(IPlayer player)
         {
             List<Card?> cards = new();
             for (int i = 0; i < DrawCount; i++)

@@ -20,7 +20,7 @@ namespace DeckForge.PhaseActions
         }
 
         //Returns what card was targetted for the flip
-        public override Card execute(IPlayer p)
+        public override Card Execute(IPlayer p)
         {
             return p.FlipSingleCard(_specificCardTablePos, _facedown);
         }

@@ -10,7 +10,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
     /// All <see cref="IPhase"/>s are required to inherit from this class.
     /// </summary>
     /// <typeparam name="T">The type of object that is targetted by the <see cref="IPhase"/>. This is
-    /// primarily for <see cref="IPhase"/>s that have <see cref="IAction{T}"/> that target types of objects.</typeparam>
+    /// primarily for <see cref="IPhase"/>s that have <see cref="IGameAction{T}"/> that target types of objects.</typeparam>
     public abstract class BasePhase<T> : IPhase
     {
 
@@ -63,7 +63,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         }
 
         /// <summary>
-        /// Gets or sets the CurrentAction index as the <see cref="IPhase"/> iterates through its <see cref="IAction{T}"/>s.
+        /// Gets or sets the CurrentAction index as the <see cref="IPhase"/> iterates through its <see cref="IGameAction{T}"/>s.
         /// </summary>
         protected int CurrentAction
         {
@@ -72,9 +72,9 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         }
 
         /// <summary>
-        /// Gets or Sets list of <see cref="IAction{T}"/> that the <see cref="IPhase"/> manages.
+        /// Gets or Sets list of <see cref="IGameAction{T}"/> that the <see cref="IPhase"/> manages.
         /// </summary>
-        protected List<IAction<T>> Actions
+        protected List<IGameAction<T>> Actions
         {
             get;
             set;
@@ -116,7 +116,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
         /// <summary>
         /// Invokes <see cref="PhaseEnded"/> and informs interested subscribers that the <see cref="IPhase"/>
-        /// finished iterating through its <see cref="IAction{T}"/>s.
+        /// finished iterating through its <see cref="IGameAction{T}"/>s.
         /// </summary>
         /// <param name="e">Arguments for the <see cref="IPhase"/> ending.</param>
         protected virtual void OnPhaseEnded(PhaseEndedArgs e)

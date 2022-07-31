@@ -11,7 +11,7 @@ namespace DeckForge.PhaseActions
             ) : base(name: name, description: description)
         { }
 
-        public override List<Card> execute(IPlayer player)
+        public override List<Card> Execute(IPlayer player)
         {
             try
             {

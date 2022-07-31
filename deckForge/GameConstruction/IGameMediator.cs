@@ -136,41 +136,41 @@ namespace DeckForge.GameConstruction
         public List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID);
 
         /// <summary>
-        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/>.
+        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IGameAction{IPlayer}"/>.
         /// </summary>
         /// <param name="playerID">ID of the executing <see cref="IPlayer"/>.</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s.</param>
         /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
-        public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action);
+        public object? TellPlayerToDoAction(int playerID, IGameAction<IPlayer> action);
 
         /// <summary>
-        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/> against another <see cref="IPlayer"/>.
+        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IGameAction{IPlayer}"/> against another <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action.</param>
         /// <param name="playerTargetID">ID of the target <see cref="IPlayer"/>.</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s.</param>
         /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
-        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action);
+        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IGameAction<IPlayer> action);
 
         /// <summary>
-        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/> against many other <see cref="IPlayer"/>s.<br />
+        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IGameAction{IPlayer}"/> against many other <see cref="IPlayer"/>s.<br />
         /// If <paramref name="includeSelf"/> is true, <see cref="IPlayer"/> with <paramref name="playerID"/> includes themselves when targetting.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action.</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s.</param>
         /// <param name="includeSelf">Specifies whether <see cref="IPlayer"/> with <paramref name="playerID"/> should target themself if true.</param>
         /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
-        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false);
+        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IGameAction<IPlayer> action, bool includeSelf = false);
 
         /// <summary>
-        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IAction{IPlayer}"/> against many other <see cref="IPlayer"/>s.
+        /// Tells an <see cref="IPlayer"/> to execute an <see cref="IGameAction{IPlayer}"/> against many other <see cref="IPlayer"/>s.
         /// Targets are specified by their Player IDs.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> triggering the Action.</param>
         /// <param name="targets">IDs of the target <see cref="IPlayer"/>s.</param>
         /// <param name="action"> Action that must be able to target <see cref="IPlayer"/>s.</param>
         /// <returns>A nullable <see cref="object"/> that is a reference to what the <paramref name="action"/> may have interacted with.</returns>
-        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action);
+        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IGameAction<IPlayer> action);
 
         /// <summary>
         /// Called whenever an <see cref="IPlayer"/> raises a simple message.

@@ -26,8 +26,8 @@ namespace UnitTests.ActionTests
             table.PlaceCardOnTable(0, (Card)player.TakeResourceFromCollection(0)!);
             table.PlaceCardOnTable(1, (Card)opponent.TakeResourceFromCollection(0)!);
 
-            IAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck();
-            gameAction.execute(player, opponent);
+            IGameAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck();
+            gameAction.Execute(player, opponent);
 
             player.CountOfResourceCollection(0).Should().Be(51, "they added two cards from their opponent and still have a card on the table");
         }

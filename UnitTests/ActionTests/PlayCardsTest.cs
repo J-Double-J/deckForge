@@ -28,7 +28,7 @@ namespace UnitTests.ActionTests
 
             p.PlayerPlayedCard += (sender, e) => eventRaised = true;
 
-            action.execute(p);
+            action.Execute(p);
             p.HandSize.Should().Be(4, "player played a card from their hand");
             eventRaised.Should().Be(true, "player should raise an event whenever it plays a card");
         }
@@ -48,8 +48,8 @@ namespace UnitTests.ActionTests
 
             PlayerGameAction action = new PlayCardsAction();
 
-            Action a = () => action.execute(p, p2);
-            Action b = () => action.execute(p, targetPlayers);
+            Action a = () => action.Execute(p, p2);
+            Action b = () => action.Execute(p, targetPlayers);
 
             a.Should().Throw<NotSupportedException>("this method does not allow Players to target plays against one another");
             b.Should().Throw<NotSupportedException>("this method does not allow Players to target plays against one another");

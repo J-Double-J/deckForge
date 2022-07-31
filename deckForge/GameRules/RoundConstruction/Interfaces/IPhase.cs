@@ -4,7 +4,7 @@ using DeckForge.PhaseActions;
 namespace DeckForge.GameRules.RoundConstruction.Interfaces
 {
     /// <summary>
-    /// A collection of related <see cref="IAction{T}"/>s and the logic that occurs between them.
+    /// A collection of related <see cref="IGameAction{T}"/>s and the logic that occurs between them.
     /// <see cref="IPhase"/>s are similar to <see cref="IRoundRules"/> but concern
     /// themselves with a smaller chunk of rules.
     /// </summary>
@@ -31,7 +31,7 @@ namespace DeckForge.GameRules.RoundConstruction.Interfaces
         public string PhaseName { get; }
 
         /// <summary>
-        /// Starts the <see cref="IPhase"/> and begins iterating through its <see cref="IAction{T}"/>s.
+        /// Starts the <see cref="IPhase"/> and begins iterating through its <see cref="IGameAction{T}"/>s.
         /// </summary>
         public void StartPhase();
 

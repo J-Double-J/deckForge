@@ -81,7 +81,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
         /// <summary>
         /// Starts the <see cref="IPlayerPhase"/> and based on the number of <see cref="IPlayer"/> IDs this
-        /// <see cref="IPlayerPhase"/> manages decides what method of <see cref="IAction{T}"/> iteration it will use.
+        /// <see cref="IPlayerPhase"/> manages decides what method of <see cref="IGameAction{T}"/> iteration it will use.
         /// </summary>
         public override void StartPhase()
         {
@@ -136,16 +136,16 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         }
 
         /// <summary>
-        /// Executes the <see cref="PlayerPhase"/>'s <see cref="IAction{T}"/>s in order where each
-        /// <see cref="IPlayer"/> must execute the <see cref="IAction{T}"/> before any <see cref="IPlayer"/>
-        /// can execute the next <see cref="IAction{T}"/>.
+        /// Executes the <see cref="PlayerPhase"/>'s <see cref="IGameAction{T}"/>s in order where each
+        /// <see cref="IPlayer"/> must execute the <see cref="IGameAction{T}"/> before any <see cref="IPlayer"/>
+        /// can execute the next <see cref="IGameAction{T}"/>.
         /// </summary>
         /// <remarks>
-        /// All <see cref="IAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
+        /// All <see cref="IGameAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
         /// this function, or overriding <see cref="PhaseActionLogic(int, int, out bool)"/>.
         /// </remarks>
-        /// <param name="playerIDs">IDs of all the <see cref="IPlayer"/>s taking <see cref="IAction{T}"/>s.</param>
-        /// <param name="actionNum">Index of the <see cref="IAction{T}"/> in the list managed by the <see cref="PlayerPhase"/>.</param>
+        /// <param name="playerIDs">IDs of all the <see cref="IPlayer"/>s taking <see cref="IGameAction{T}"/>s.</param>
+        /// <param name="actionNum">Index of the <see cref="IGameAction{T}"/> in the list managed by the <see cref="PlayerPhase"/>.</param>
         protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
         {
             foreach (int player in playerIDs)
@@ -174,13 +174,13 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         }
 
         /// <summary>
-        /// <see cref="IPlayer"/> executes all <see cref="IAction{T}"/>s in order.
+        /// <see cref="IPlayer"/> executes all <see cref="IGameAction{T}"/>s in order.
         /// </summary>
         /// <remarks>
-        /// All <see cref="IAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
+        /// All <see cref="IGameAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
         /// this function, or overriding <see cref="PhaseActionLogic(int, int)"/>.
         /// </remarks>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IAction{T}"/>.</param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IGameAction{T}"/>.</param>
         protected virtual void DoPhaseActions(int playerID)
         {
             for (var actionNum = 0; actionNum < Actions.Count; actionNum++)
@@ -203,12 +203,12 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
         /// <summary>
         /// Any logic or extra function calls should be overriden here and will be called before each <see cref="IPlayer"/>
-        /// executes an <see cref="IAction{T}"/>.
+        /// executes an <see cref="IGameAction{T}"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IAction{T}"/>.</param>
-        /// <param name="actionNum">Index of the <see cref="IAction{T}"/> in the <see cref="PhaseActions"/> list.</param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IGameAction{T}"/>.</param>
+        /// <param name="actionNum">Index of the <see cref="IGameAction{T}"/> in the <see cref="PhaseActions"/> list.</param>
         /// <returns>
-        /// Returns true if an <see cref="IAction{T}"/> is handled in this function call, else false.
+        /// Returns true if an <see cref="IGameAction{T}"/> is handled in this function call, else false.
         /// </returns>
         protected virtual bool PhaseActionLogic(int playerID, int actionNum)
         {

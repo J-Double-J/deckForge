@@ -9,14 +9,14 @@ namespace DeckForge.GameRules.RoundConstruction.Interfaces
     public interface IPlayerPhase
     {
         /// <summary>
-        /// Starts the turn of one <see cref="IPlayer"/> and loops through the <see cref="IPlayerPhase"/>'s <see cref="IAction{T}"/>s.
+        /// Starts the turn of one <see cref="IPlayer"/> and loops through the <see cref="IPlayerPhase"/>'s <see cref="IGameAction{T}"/>s.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> of interest.</param>
         public void StartPhase(int playerID);
 
         /// <summary>
         /// Starts the turns of all the <see cref="IPlayer"/>s that it manages and lets each <see cref="IPlayer"/>
-        /// execute an <see cref="IAction{T}"/> before going onto the next <see cref="IAction{T}"/>.
+        /// execute an <see cref="IGameAction{T}"/> before going onto the next <see cref="IGameAction{T}"/>.
         /// </summary>
         /// <param name="playerIDs">IDs of the <see cref="IPlayer"/>s that are in the <see cref="IPlayerPhase"/>.</param>
         public void StartPhase(List<int> playerIDs);

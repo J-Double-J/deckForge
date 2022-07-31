@@ -537,19 +537,19 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public object? ExecuteGameAction(IAction<IPlayer> action)
+        public object? ExecuteGameAction(IGameAction<IPlayer> action)
         {
-            return action.execute(this);
+            return action.Execute(this);
         }
 
         /// <inheritdoc/>
-        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target)
+        public object? ExecuteGameActionAgainstPlayer(IGameAction<IPlayer> action, IPlayer target)
         {
-            return action.execute(this, target);
+            return action.Execute(this, target);
         }
 
         /// <inheritdoc/>
-        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false)
+        public object? ExecuteGameActionAgainstMultiplePlayers(IGameAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false)
         {
             List<IPlayer> targetList = targets;
 
@@ -559,7 +559,7 @@ namespace DeckForge.PlayerConstruction
                 targetList.RemoveAll(p => p.PlayerID == PlayerID);
             }
 
-            return action.execute(this, targetList);
+            return action.Execute(this, targetList);
         }
 
         /// <summary>

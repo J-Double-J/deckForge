@@ -18,7 +18,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
             {
                 PhaseActionLogic(out bool handledAction);
                 if (!handledAction)
-                    Actions[actionNum].execute(t);
+                    Actions[actionNum].Execute(t);
             }
 
             EndPhase();

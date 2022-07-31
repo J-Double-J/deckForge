@@ -131,7 +131,7 @@ namespace UnitTests.PlayerRoundRulesTests
             this.gm = gm;
         }
 
-        public override object? execute(IPlayer player)
+        public override object? Execute(IPlayer player)
         {
             if (player.PlayerID == 1)
             {

@@ -326,14 +326,14 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action)
+        public object? TellPlayerToDoAction(int playerID, IGameAction<IPlayer> action)
         {
             int index = IndexOfPlayerByPlayerID(playerID);
             return index != -1 ? Players![index].ExecuteGameAction(action) : null;
         }
 
         /// <inheritdoc/>
-        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action)
+        public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IGameAction<IPlayer> action)
         {
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
             int targetIndex = IndexOfPlayerByPlayerID(playerTargetID);
@@ -349,7 +349,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false)
+        public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IGameAction<IPlayer> action, bool includeSelf = false)
         {
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
 
@@ -359,7 +359,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action)
+        public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IGameAction<IPlayer> action)
         {
             List<IPlayer> targettedPlayers = new ();
 

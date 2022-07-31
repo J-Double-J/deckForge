@@ -11,7 +11,7 @@ namespace DeckForge.PhaseActions
             ) : base(name: name, description: description)
         { }
 
-        public override List<Card> execute(IPlayer playerExecutor, IPlayer playerTarget)
+        public override List<Card> Execute(IPlayer playerExecutor, IPlayer playerTarget)
         {
             try {
                 int resourceCollectionID = playerExecutor.FindCorrectResourceCollectionID(typeof(Card));

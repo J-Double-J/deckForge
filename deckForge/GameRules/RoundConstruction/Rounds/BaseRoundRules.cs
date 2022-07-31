@@ -32,7 +32,7 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
         public abstract void StartRound();
 
         /// <summary>
-        /// Ends the round and sets the <c>CurPhase</c> to -1 and ends any <see cref="IAction{T}"/> ongoing 
+        /// Ends the round and sets the <c>CurPhase</c> to -1 and ends any <see cref="IGameAction{T}"/> ongoing 
         /// in any <see cref="IPhase"/> in case of an early round termination. 
         /// </summary>
         public virtual void EndRound()
