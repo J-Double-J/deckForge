@@ -1,5 +1,5 @@
-using DeckForge.PhaseActions;
 using DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs;
+using DeckForge.PhaseActions;
 
 namespace DeckForge.GameRules.RoundConstruction.Interfaces
 {
