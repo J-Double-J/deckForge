@@ -129,7 +129,6 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
             ToBeUpdatedTurnOrder = newPlayerList;
         }
 
-
         /// <inheritdoc/>
         public virtual void EndPlayerTurn()
         {
@@ -147,7 +146,8 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// </remarks>
         /// <param name="playerIDs">IDs of all the <see cref="IPlayer"/>s taking <see cref="IAction{T}"/>s.</param>
         /// <param name="actionNum">Index of the <see cref="IAction{T}"/> in the list managed by the <see cref="PlayerPhase"/>.</param>
-        protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum) {
+        protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
+        {
             foreach (int player in playerIDs)
             {
                 CurrentPlayerTurn = player;
@@ -178,7 +178,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// </summary>
         /// <remarks>
         /// All <see cref="IAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
-        /// this function, or overriding <see cref="PhaseActionLogic(int, int, out bool)"/>.
+        /// this function, or overriding <see cref="PhaseActionLogic(int, int)"/>.
         /// </remarks>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IAction{T}"/>.</param>
         protected virtual void DoPhaseActions(int playerID)
@@ -200,9 +200,6 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
             EndPhase();
         }
-
-        // Phases implement any logic for individual actions here. Should an action need to be executed in this function
-        // (as is often the case if an action needs to be targetted) handledAction should be set to true
 
         /// <summary>
         /// Any logic or extra function calls should be overriden here and will be called before each <see cref="IPlayer"/>

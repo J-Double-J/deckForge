@@ -34,7 +34,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
 
                 //Reset WarPhase Counter
                 var phase = (WarPhase)Phases[2];
-                phase.resetIteration();
+                phase.ResetIteration();
             }
 
             else if (phaseNum == 1)
@@ -66,7 +66,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
                 else
                 {
                     var phase = (WarPhase)Phases[2];
-                    phase.increaseIteration();
+                    phase.IncreaseIteration();
                 }
 
             }
