@@ -28,27 +28,34 @@ namespace DeckForge.GameConstruction.PresetGames.War
             return FlippedCards!;
         }
 
-        override protected void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
+        /// <inheritdoc/>
+        protected override bool PhaseActionLogic(int playerID, int actionNum)
         {
-            handledAction = false;
+            bool handledAction = false;
 
             try
             {
                 if (actionNum == 0)
-                { 
+                {
                     handledAction = true;
                     Card? drawnCard = (Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
 
                     if (drawnCard is not null)
+                    {
                         FlippedCards.Add(drawnCard);
+                    }
                     else
+                    {
                         OnEndRoundEarly(new EndRoundEarlyArgs());
+                    }
                 }
+
+                return handledAction;
             }
-            catch {
+            catch
+            {
                 throw;
             }
-            
         }
 
         public override void StartPhase()

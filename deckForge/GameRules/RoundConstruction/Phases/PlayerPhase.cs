@@ -151,10 +151,8 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
             foreach (int player in playerIDs)
             {
                 CurrentPlayerTurn = player;
-                PhaseActionLogic(player, actionNum, out bool handledAction);
 
-                // Assumes that all actions are not targetted against another player
-                if (!handledAction)
+                if (!PhaseActionLogic(player, actionNum))
                 {
                     GM.TellPlayerToDoAction(player, Actions[actionNum]);
                 }
@@ -194,10 +192,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
                     break;
                 }
 
-                PhaseActionLogic(playerID, actionNum, out bool handledAction);
-
-                // Assumes that all actions are not targetted against another player
-                if (!handledAction)
+                if (!PhaseActionLogic(playerID, actionNum))
                 {
                     GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
                 }
@@ -218,9 +213,9 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// <returns>
         /// Returns true if an <see cref="IAction{T}"/> is handled in this function call, else false.
         /// </returns>
-        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
+        protected virtual bool PhaseActionLogic(int playerID, int actionNum)
         {
-            handledAction = false;
+            return false;
         }
     }
 }

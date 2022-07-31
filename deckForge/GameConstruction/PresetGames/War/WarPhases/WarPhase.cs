@@ -19,21 +19,26 @@ namespace DeckForge.GameConstruction.PresetGames.War
             Actions.Add(new FlipOneCard_OneWay_Action(2 * iteration));
         }
 
-        protected override void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
+        /// <inheritdoc/>
+        protected override bool PhaseActionLogic(int playerID, int actionNum)
         {
-            handledAction = false;
+            bool handledAction = false;
 
             if (actionNum == 1)
             {
                 handledAction = true;
                 FlippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
-                foreach (Card? card in FlippedCards) {
-                    if (card is null) {
+                foreach (Card? card in FlippedCards)
+                {
+                    if (card is null)
+                    {
                         OnEndRoundEarly(new EndRoundEarlyArgs());
                         break;
                     }
                 }
             }
+
+            return handledAction;
         }
 
         public override void EndPhase()
