@@ -1,36 +1,44 @@
-using DeckForge.PlayerConstruction.PlayerEvents;
+using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
-using DeckForge.GameElements;
+using DeckForge.PlayerConstruction.PlayerEvents;
 
 namespace DeckForge.PlayerConstruction
 {
     /// <summary>
-    /// IPlayer is the driver of the game and makes all the choices and key interactions
+    /// IPlayer is one of drivers of the game and makes all the choices and key interactions
     /// in the game.
     /// </summary>
     public interface IPlayer
     {
+        /// <summary>
+        /// Handles the event that the <see cref="IPlayer"/> played a <see cref="Card"/>.
+        /// </summary>
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
+
+        /// <summary>
+        /// Handles the event that the <see cref="IPlayer"/> raises a message.
+        /// </summary>
         public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
 
-        /// <value>
+        /// <summary>
         /// Gets the size of <see cref="IPlayer"/>'s hand.
-        /// </value>
+        /// </summary>
         public int HandSize { get; }
 
-        /// <value>
+        /// <summary>
         /// Gets the ID of <see cref="IPlayer"/>.
-        /// </value>
+        /// </summary>
         public int PlayerID { get; }
 
-        /// <value>
+        /// <summary>
         /// Gets the list of <see cref="Card"/>s that <see cref="IPlayer"/>'s has played.
-        /// </value>
+        /// </summary>
         public List<Card> PlayedCards { get; }
 
         /// <summary>
-        /// The <see cref="IPlayer"/> is active if <c>true</c>, inactive if <c>false</c>. 
+        /// Gets or sets a value indicating
+        /// whether the <see cref="IPlayer"/> is active (<c>true</c>) or inactive (<c>false</c>).
         /// </summary>
         /// <remarks>
         /// This is primarily used to mark an <see cref="IPlayer"/> as active in a round or phase.
@@ -39,7 +47,8 @@ namespace DeckForge.PlayerConstruction
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// If <see cref="IPlayer"/> is in the game <c>false</c>, otherwise <c>true</c>. Once <c>IsOut</c> is
+        /// Gets or sets a value indicating whether <see cref="IPlayer"/> out of the game (<c>true</c>),
+        /// or is in the game (<c>false</c>). Once <see cref="IsOut"/> is
         /// <c>true</c>, <c>IsOut</c> cannot be changed.
         /// </summary>
         /// <remarks>
@@ -103,9 +112,10 @@ namespace DeckForge.PlayerConstruction
         /// Finds the <see cref="IResourceCollection"/> that manages <paramref name="resourceType"/>
         /// and returns its ID in the List of collections that <see cref="IPlayer"/> manages.
         /// </summary>
-        /// <param name="resourceType"></param>
+        /// <param name="resourceType">Type of the resource managed by a <see cref="IResourceCollection"/>
+        /// that <see cref="IPlayer"/> owns.</param>
         /// <returns>An int ID that corresponds to the <see cref="IResourceCollection"/>.</returns>
-        public int FindCorrectPoolID(Type resourceType);
+        public int FindCorrectResourceCollectionID(Type resourceType);
 
         /// <summary>
         /// Gets the number of resources in an <see cref="IResourceCollection"/>.

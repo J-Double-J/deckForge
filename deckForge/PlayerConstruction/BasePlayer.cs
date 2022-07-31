@@ -1,32 +1,34 @@
-using DeckForge.GameConstruction;
-using DeckForge.PlayerConstruction.PlayerEvents;
-using DeckForge.PhaseActions;
-using DeckForge.GameElements.Resources;
-using System.Reflection;
 using System.Collections;
+using System.Linq;
+using System.Reflection;
+using DeckForge.GameConstruction;
+using DeckForge.GameElements.Resources;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction.PlayerEvents;
 
 namespace DeckForge.PlayerConstruction
 {
+    /// <summary>
+    /// Base class for all <see cref="IPlayer"/>s that must be inherited from.
+    /// </summary>
     public class BasePlayer : IPlayer
     {
-        protected bool IsOutVal = false;
-        protected bool IsActiveVal = false;
+        private readonly int initHandSize;
+        private bool isOutVal = false;
+        private bool isActiveVal = true;
 
-        protected readonly IGameMediator GM;
-        protected int CardPlays;
-        protected int CardDraws;
-        protected int InitHandSize;
-        protected Hand PlayerHand; 
-        protected List<IResourceCollection> PlayerResourceCollections;
-
-        public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
-        public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasePlayer"/> class.
+        /// </summary>
+        /// <param name="gm"><see cref="IGameMediator"/> that the <see cref="BasePlayer"/> will use to communicate
+        /// with other game elements.</param>
+        /// <param name="playerID">ID of the <see cref="BasePlayer"/>.</param>
+        /// <param name="initHandSize">The size of the initial hand that the <see cref="BasePlayer"/> will start with.</param>
         public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5)
         {
-            PlayerHand = new();
+            PlayerHand = new ();
 
-            //PlayerHand is not considered part of PlayerResourceCollections despite being a collection
+            // PlayerHand is not considered part of PlayerResourceCollections despite being a collection
             PlayerResourceCollections = new List<IResourceCollection>();
 
             GM = gm;
@@ -34,23 +36,28 @@ namespace DeckForge.PlayerConstruction
 
             gm.RegisterPlayer(this);
 
-            //TODO: remove this is for sake of testing.
-            CardPlays = 1;
-            CardDraws = 1;
-
-            InitHandSize = initHandSize;
+            this.initHandSize = initHandSize;
         }
 
+        /// <inheritdoc/>
+        public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
+
+        /// <inheritdoc/>
+        public event EventHandler<SimplePlayerMessageEventArgs>? PlayerMessageEvent;
+
+        /// <inheritdoc/>
         public int HandSize
         {
-            get { return PlayerHand.CurrentHandSize; }
+            get
+            {
+                return PlayerHand.CurrentHandSize;
+            }
         }
 
-        public int PlayerID
-        {
-            get;
-        }
+        /// <inheritdoc/>
+        public int PlayerID { get; }
 
+        /// <inheritdoc/>
         public List<Card> PlayedCards
         {
             get
@@ -59,50 +66,100 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        public bool IsActive {
-            get { return IsActiveVal; }
-            set {
-                if (IsOutVal == false)
-                    IsActive = value;
+        /// <inheritdoc/>
+        public bool IsActive
+        {
+            get
+            {
+                return isActiveVal;
+            }
+
+            set
+            {
+                if (isOutVal == false)
+                {
+                    isActiveVal = value;
+                }
             }
         }
 
-        public bool IsOut {
-            get { return IsOutVal;  }
-            set {
-                if (value) {
-                    IsOutVal = value;
-                    IsActive = false;
+        /// <inheritdoc/>
+        public bool IsOut
+        {
+            get
+            {
+                return isOutVal;
+            }
+
+            set
+            {
+                if (value is true)
+                {
+                    isOutVal = value;
+                    isActiveVal = false;
                 }
-            } 
+            }
         }
 
-        virtual public void DrawStartingHand() {
-            for (var i = 0; i < InitHandSize; i++)
+        /// <summary>
+        /// Gets or sets the number of cards plays a turn a <see cref="BasePlayer"/> can do.
+        /// </summary>
+        protected int CardPlays { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of card draws they get at the start of their turn.
+        /// </summary>
+        protected int CardDraws { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hand of the <see cref="BasePlayer"/>.
+        /// </summary>
+        protected Hand PlayerHand { get; set; }
+
+        /// <summary>
+        /// Gets or sets a list of the <see cref="IResourceCollection"/>s that the <see cref="BasePlayer"/> manages.
+        /// </summary>
+        protected List<IResourceCollection> PlayerResourceCollections { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IGameMediator"/> that the <see cref="BasePlayer"/> will use to
+        /// communicate to other game elements.
+        /// </summary>
+        protected IGameMediator GM { get; }
+
+        /// <inheritdoc/>
+        public virtual void DrawStartingHand()
+        {
+            for (var i = 0; i < initHandSize; i++)
             {
                 DrawCard();
             }
         }
 
-        virtual public void StartTurn()
+        /// <inheritdoc/>
+        public virtual void StartTurn() // TODO: Remove outdated function.
         {
             for (var i = 0; i < CardDraws; i++)
             {
                 DrawCard();
             }
+
             for (var j = 0; j < CardPlays; j++)
             {
                 PlayCard();
             }
+
             GM.EndPlayerTurn();
         }
 
-        virtual public void LoseGame() {
+        /// <inheritdoc/>
+        public virtual void LoseGame()
+        {
             RaiseSimplePlayerMessageEvent(new SimplePlayerMessageEventArgs("LOSE_GAME"));
         }
 
-        //Returns which card was drawn
-        virtual public Card? DrawCard()
+        /// <inheritdoc/>
+        public virtual Card? DrawCard()
         {
             Card? c = GM.DrawCardFromDeck();
             if (c != null)
@@ -117,85 +174,68 @@ namespace DeckForge.PlayerConstruction
             return c;
         }
 
-        //Returns PlayedCard
-        virtual public Card? PlayCard(bool facedown = false)
+        /// <inheritdoc/>
+        public virtual Card? PlayCard(bool facedown = false)
         {
-            //TODO: Remove
-            if (HandSize == 0)
+            string? input;
+            int selectedVal;
+
+            Console.WriteLine("Which card would you like to play?");
+            for (var i = 0; i < HandSize; i++)
             {
-                GM.EndGame();
-                return null;
+                Console.WriteLine($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
             }
-            else
+
+            do
             {
-                Console.WriteLine("Which card would you like to play?");
-                for (var i = 0; i < HandSize; i++)
-                {
-                    Console.WriteLine($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
-                }
-                string? input;
-                int selectedVal;
-                do
-                {
-                    input = Console.ReadLine();
-                } while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
-
-                Card c = PlayerHand.GetCardAt(selectedVal);
-                PlayerHand.RemoveResource(c);
-
-                if (facedown)
-                    c.Flip();
-
-                //TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-                GM.PlayerPlayedCard(PlayerID, c);
-                OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
-
-                return c;
+                input = Console.ReadLine();
             }
+            while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
+
+            Card c = PlayerHand.GetCardAt(selectedVal);
+            PlayerHand.RemoveResource(c);
+
+            if (facedown)
+            {
+                c.Flip();
+            }
+
+            // TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
+            GM.PlayerPlayedCard(PlayerID, c);
+            OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
+
+            return c;
         }
 
-        protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
-        {
-            var handler = PlayerPlayedCard;
-
-            if (handler != null)
-                handler(this, e);
-        }
-
-        protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEventArgs e)
-        {
-            var handler = PlayerMessageEvent;
-            if (handler != null)
-                handler(this, e);
-        }
-
-        //Gets Flipped Card
+        /// <inheritdoc/>
         public Card FlipSingleCard(int cardNum, bool? facedown = null)
         {
             return GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
+        /// <inheritdoc/>
         public List<Card> TakeAllCardsFromTable()
         {
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
 
+        /// <inheritdoc/>
         public void AddResourceCollection(IResourceCollection collection)
         {
             PlayerResourceCollections.Add(collection);
         }
 
-        //Finds first resource match or returns -1 if not found
-        public virtual int FindCorrectPoolID(Type resourceType)
+        /// <inheritdoc/>
+        public virtual int FindCorrectResourceCollectionID(Type resourceType)
         {
             int resourcePoolID = -1;
 
-            try {
+            try
+            {
                 Type? collectionType = null;
 
                 for (var i = 0; i < PlayerResourceCollections.Count; i++)
                 {
-
                     ThrowIf_InvalidResourceID(i);
 
                     IResourceCollection resourceCollection = PlayerResourceCollections[i];
@@ -217,16 +257,20 @@ namespace DeckForge.PlayerConstruction
                         break;
                     }
                 }
-            } 
-            catch { 
-                throw; 
             }
-            
+            catch
+            {
+                throw;
+            }
+
             return resourcePoolID;
         }
 
-        public int CountOfResourceCollection(int resourceCollectionID) {
-            try {
+        /// <inheritdoc/>
+        public int CountOfResourceCollection(int resourceCollectionID)
+        {
+            try
+            {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
@@ -242,6 +286,7 @@ namespace DeckForge.PlayerConstruction
                         return (int)property.GetValue(instance, null)!;
                     }
                 }
+
                 return -1;
             }
             catch (TargetInvocationException e)
@@ -254,6 +299,7 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
+        /// <inheritdoc/>
         public object? TakeResourceFromCollection(int resourceCollectionID)
         {
             try
@@ -267,8 +313,10 @@ namespace DeckForge.PlayerConstruction
                 instance = resourceCollection;
                 MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos) {
-                    if (method.Name == "GainResource") {
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "GainResource")
+                    {
                         gainedResource = method.Invoke(instance, null);
                         break;
                     }
@@ -286,7 +334,9 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        public void AddResourceToCollection(int resourceCollectionID, object resource) {
+        /// <inheritdoc/>
+        public void AddResourceToCollection(int resourceCollectionID, object resource)
+        {
             try
             {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
@@ -295,7 +345,9 @@ namespace DeckForge.PlayerConstruction
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
 
                 if (resource.GetType() != resourceCollection.ResourceType)
+                {
                     throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
+                }
 
                 instance = resourceCollection;
                 MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
@@ -319,7 +371,9 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        public void RemoveResourceFromCollection(int resourceCollectionID, object resource) {
+        /// <inheritdoc/>
+        public void RemoveResourceFromCollection(int resourceCollectionID, object resource)
+        {
             try
             {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
@@ -331,8 +385,10 @@ namespace DeckForge.PlayerConstruction
 
                 instance = resourceCollection;
                 MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
-                foreach (MethodInfo method in methodInfos) {
-                    if (method.Name == "RemoveResource") {
+                foreach (MethodInfo method in methodInfos)
+                {
+                    if (method.Name == "RemoveResource")
+                    {
                         object[] args = { resource };
                         method.Invoke(instance, args);
                     }
@@ -348,8 +404,9 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        //Individual resources must have a 
-        public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources) {
+        /// <inheritdoc/>
+        public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources)
+        {
             try
             {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
@@ -386,7 +443,9 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        public void IncrementResourceCollection(int resourceCollectionID) {
+        /// <inheritdoc/>
+        public void IncrementResourceCollection(int resourceCollectionID)
+        {
             try
             {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
@@ -409,14 +468,17 @@ namespace DeckForge.PlayerConstruction
             {
                 throw e.InnerException ?? e;
             }
-            catch {
+            catch
+            {
                 throw;
             }
         }
 
+        /// <inheritdoc/>
         public void DecrementResourceCollection(int resourceCollectionID)
         {
-            try {
+            try
+            {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
@@ -441,11 +503,13 @@ namespace DeckForge.PlayerConstruction
             {
                 throw;
             }
-
         }
 
-        public void ClearResourceCollection(int resourceCollectionID) {
-            try {
+        /// <inheritdoc/>
+        public void ClearResourceCollection(int resourceCollectionID)
+        {
+            try
+            {
                 ThrowIf_InvalidResourceID(resourceCollectionID);
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
@@ -472,38 +536,64 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        private void ThrowIf_InvalidResourceID(int resourceCollectionID) {
-            if (resourceCollectionID < 0 || resourceCollectionID > PlayerResourceCollections.Count)
-                throw new ArgumentOutOfRangeException($"PlayerResouceCollections[{resourceCollectionID}] does not exist. Did you forget to add a collection to Player?");
-        }
-
-        private void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
+        /// <inheritdoc/>
+        public object? ExecuteGameAction(IAction<IPlayer> action)
         {
-            if (resource.GetType() != resourceCollection.ResourceType)
-                throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
+            return action.execute(this);
         }
 
-        public object? ExecuteGameAction(IAction<IPlayer> action) {
-            return action.execute(this);  
-        }
-        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target) {
+        /// <inheritdoc/>
+        public object? ExecuteGameActionAgainstPlayer(IAction<IPlayer> action, IPlayer target)
+        {
             return action.execute(this, target);
         }
-        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false) {
 
+        /// <inheritdoc/>
+        public object? ExecuteGameActionAgainstMultiplePlayers(IAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false)
+        {
             List<IPlayer> targetList = targets;
 
-            //If action can be targetted against everyone but self, remove self from list
-            if (includeSelf == false) {
-                targetList = new();
-                for (int i = 0; i < targets.Count; i++) {
-                    if (i != PlayerID) {
-                        targetList.Add(targets[i]);
-                    }
-                }
+            // If action is targetted against everyone but self, remove self from list
+            if (includeSelf == false)
+            {
+                targetList.RemoveAll(p => p.PlayerID == PlayerID);
             }
-            
-            return action.execute(this, targets);
+
+            return action.execute(this, targetList);
+        }
+
+        /// <summary>
+        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="Card"/>.
+        /// </summary>
+        /// <param name="e">The arguments of the <see cref="PlayerPlayedCardEventArgs"/>.</param>
+        protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
+        {
+            PlayerPlayedCard?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Invokes <see cref="PlayerMessageEvent"/> with <see cref="SimplePlayerMessageEventArgs"/>.
+        /// </summary>
+        /// <param name="e">The arguments of the <see cref="SimplePlayerMessageEventArgs"/>.</param>
+        protected void RaiseSimplePlayerMessageEvent(SimplePlayerMessageEventArgs e)
+        {
+            PlayerMessageEvent?.Invoke(this, e);
+        }
+
+        private static void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
+        {
+            if (resource.GetType() != resourceCollection.ResourceType)
+            {
+                throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
+            }
+        }
+
+        private void ThrowIf_InvalidResourceID(int resourceCollectionID)
+        {
+            if (resourceCollectionID < 0 || resourceCollectionID > PlayerResourceCollections.Count)
+            {
+                throw new ArgumentOutOfRangeException($"PlayerResouceCollections[{resourceCollectionID}] does not exist. Did you forget to add a collection to Player?");
+            }
         }
     }
 }

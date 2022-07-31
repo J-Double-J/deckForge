@@ -14,7 +14,7 @@ namespace DeckForge.PhaseActions
         public override List<Card> execute(IPlayer playerExecutor, IPlayer playerTarget)
         {
             try {
-                int resourceCollectionID = playerExecutor.FindCorrectPoolID(typeof(Card));
+                int resourceCollectionID = playerExecutor.FindCorrectResourceCollectionID(typeof(Card));
                 List<Card> cards = playerTarget.TakeAllCardsFromTable();
                 List<object> objectCards = cards.Cast<object>().ToList();
 

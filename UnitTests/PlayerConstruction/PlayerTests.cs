@@ -64,7 +64,7 @@ namespace UnitTests.PlayerConstruction
             Deck d = new Deck();
 
             p.AddResourceCollection(d);
-            int pos = p.FindCorrectPoolID(typeof(Card));
+            int pos = p.FindCorrectResourceCollectionID(typeof(Card));
 
             pos.Should().Be(0, "the deck collection is at the 0th spot");
         }

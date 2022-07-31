@@ -1,18 +1,31 @@
-﻿using DeckForge.PlayerConstruction;
+﻿using DeckForge.GameElements.Resources;
+using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
-using DeckForge.GameElements.Resources;
 
 namespace DeckForge.GameConstruction.PresetGames.War
 {
+    /// <summary>
+    /// An <see cref="IPlayer"/> that plays <see cref="War"/>.
+    /// </summary>
     public class WarPlayer : BasePlayer
     {
-        Deck personalDeck;
-        public WarPlayer(IGameMediator gm, int playerID, Deck deck) : base(gm, playerID: playerID, initHandSize: 0)
+        private readonly Deck personalDeck;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarPlayer"/> class.
+        /// </summary>
+        /// <param name="gm"><see cref="IGameMediator"/> that the <see cref="WarPlayer"/> uses to communicate
+        /// with other game elements.</param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
+        /// <param name="deck">Personal deck that the <see cref="WarPlayer"/> manages.</param>
+        public WarPlayer(IGameMediator gm, int playerID, Deck deck)
+            : base(gm, playerID: playerID, initHandSize: 0)
         {
             personalDeck = deck;
             AddResourceCollection(personalDeck);
         }
 
+        /// <inheritdoc/>
         public override Card? PlayCard(bool facedown = false)
         {
             Card? c = personalDeck!.DrawCard(drawFacedown: true);

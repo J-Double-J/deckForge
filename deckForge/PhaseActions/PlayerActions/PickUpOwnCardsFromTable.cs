@@ -15,7 +15,7 @@ namespace DeckForge.PhaseActions
         {
             try
             {
-                int resourceCollectionID = player.FindCorrectPoolID(typeof(Card));
+                int resourceCollectionID = player.FindCorrectResourceCollectionID(typeof(Card));
                 List<Card> cards = player.TakeAllCardsFromTable();
                 List<object> objectCards = cards.Cast<object>().ToList();
 
