@@ -5,60 +5,112 @@ using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameRules.RoundConstruction.Phases
 {
+    /// <summary>
+    /// An <see cref="IPhase"/> that concerns itself with managing <see cref="IPlayer"/>s playing through its ruleset.
+    /// </summary>
     public abstract class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase, IPhase
     {
-        protected int CurrentPlayerTurn;
-        protected List<int> playerIDs;
-        protected List<int>? ToBeUpdatedTurnOrder;
-
-        public PlayerPhase(IGameMediator gm, List<int> playerIDs, string phaseName = "") : base(gm, phaseName: phaseName)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerPhase"/> class. Concerns itself with one or more <see cref="IPlayer"/>s.
+        /// </summary>
+        /// <param name="gm">
+        /// <see cref="IGameMediator"/> that the <see cref="PlayerPhase"/> will use to communicate
+        /// with other game elements.
+        /// </param>
+        /// <param name="playerIDs">IDs of the <see cref="IPlayer"/>s managed by the <see cref="PlayerPhase"/>.</param>
+        /// <param name="phaseName">Name of the <see cref="PlayerPhase"/>.</param>
+        public PlayerPhase(IGameMediator gm, List<int> playerIDs, string phaseName = "")
+            : base(gm, phaseName: phaseName)
         {
-            this.playerIDs = playerIDs;
+            PlayerIDs = playerIDs;
         }
 
-        public PlayerPhase(IGameMediator gm, int playerID, string phaseName = "") : base(gm, phaseName: phaseName)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerPhase"/> class. Concerns itself with only one <see cref="IPlayer"/>.
+        /// </summary>
+        /// <param name="gm">
+        /// <see cref="IGameMediator"/> that the <see cref="PlayerPhase"/> will use to communicate
+        /// with other game elements.
+        /// </param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> managed by the <see cref="PlayerPhase"/>.</param>
+        /// <param name="phaseName">Name of the <see cref="PlayerPhase"/>.</param>
+        public PlayerPhase(IGameMediator gm, int playerID, string phaseName = "")
+            : base(gm, phaseName: phaseName)
         {
-            playerIDs = new()
+            PlayerIDs = new ()
             {
                 playerID
             };
         }
 
+        /// <summary>
+        /// Gets or sets the TurnOrder of the <see cref="IPlayer"/>s in the <see cref="PlayerPhase"/>.
+        /// </summary>
         public List<int> PlayerTurnOrder
         {
-            get { return playerIDs; }
-            private set { playerIDs = value; }
+            get { return PlayerIDs; }
+            protected set { PlayerIDs = value; }
         }
 
-        // Based on how many playerIDs this phase has, it decides what style to do
+        /// <summary>
+        /// Gets or sets the current ID of the <see cref="IPlayer"/>.
+        /// </summary>
+        protected int CurrentPlayerTurn
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the list of IDs of the <see cref="IPlayer"/>s in the game.
+        /// </summary>
+        protected List<int> PlayerIDs
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the new turn order that PlayerTurnOrder is to be set to later.
+        /// </summary>
+        protected List<int>? ToBeUpdatedTurnOrder
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Starts the <see cref="IPlayerPhase"/> and based on the number of <see cref="IPlayer"/> IDs this
+        /// <see cref="IPlayerPhase"/> manages decides what method of <see cref="IAction{T}"/> iteration it will use.
+        /// </summary>
         public override void StartPhase()
         {
             CurrentAction = 0;
-            if (playerIDs.Count == 1)
+            if (PlayerIDs.Count == 1)
             {
-                CurrentPlayerTurn = playerIDs[0];
-                DoPhaseActions(playerIDs[0]);
+                CurrentPlayerTurn = PlayerIDs[0];
+                DoPhaseActions(PlayerIDs[0]);
             }
             else
             {
-                DoPhaseActionsWithMultiplePlayers(playerIDs, actionNum: CurrentAction);
+                DoPhaseActionsWithMultiplePlayers(PlayerIDs, actionNum: CurrentAction);
             }
         }
 
-        // Players take an action, then wait for other players to finish action, then all go to next action etc
+        /// <inheritdoc/>
         public virtual void StartPhase(List<int> playerIDs)
         {
             DoPhaseActionsWithMultiplePlayers(playerIDs, actionNum: CurrentAction);
         }
 
-
-        // Player does all actions in phase in order
+        /// <inheritdoc/>
         public virtual void StartPhase(int playerID)
         {
             CurrentPlayerTurn = playerID;
             DoPhaseActions(playerID);
         }
 
+        /// <inheritdoc/>
         public override void EndPhase()
         {
             CurrentPlayerTurn = -1;
@@ -71,20 +123,30 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
             }
         }
 
+        /// <inheritdoc/>
         public virtual void UpdateTurnOrder(List<int> newPlayerList)
         {
             ToBeUpdatedTurnOrder = newPlayerList;
         }
 
-        /// <summary>
-        /// Ends the current <see cref="IPlayer"/>'s turn in the phase.
-        /// </summary>
+
+        /// <inheritdoc/>
         public virtual void EndPlayerTurn()
         {
             CurrentAction = -1;
         }
 
-        // Each action must be done by a player before going to the next actions
+        /// <summary>
+        /// Executes the <see cref="PlayerPhase"/>'s <see cref="IAction{T}"/>s in order where each
+        /// <see cref="IPlayer"/> must execute the <see cref="IAction{T}"/> before any <see cref="IPlayer"/>
+        /// can execute the next <see cref="IAction{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// All <see cref="IAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
+        /// this function, or overriding <see cref="PhaseActionLogic(int, int, out bool)"/>.
+        /// </remarks>
+        /// <param name="playerIDs">IDs of all the <see cref="IPlayer"/>s taking <see cref="IAction{T}"/>s.</param>
+        /// <param name="actionNum">Index of the <see cref="IAction{T}"/> in the list managed by the <see cref="PlayerPhase"/>.</param>
         protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum) {
             foreach (int player in playerIDs)
             {
@@ -113,7 +175,14 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
             }
         }
 
-        // Do all actions in one go
+        /// <summary>
+        /// <see cref="IPlayer"/> executes all <see cref="IAction{T}"/>s in order.
+        /// </summary>
+        /// <remarks>
+        /// All <see cref="IAction{T}"/>s by default presume that the action is untargetted. If it should be targetted, consider overriding
+        /// this function, or overriding <see cref="PhaseActionLogic(int, int, out bool)"/>.
+        /// </remarks>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IAction{T}"/>.</param>
         protected virtual void DoPhaseActions(int playerID)
         {
             for (var actionNum = 0; actionNum < Actions.Count; actionNum++)
@@ -139,6 +208,19 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
         // Phases implement any logic for individual actions here. Should an action need to be executed in this function
         // (as is often the case if an action needs to be targetted) handledAction should be set to true
-        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
+
+        /// <summary>
+        /// Any logic or extra function calls should be overriden here and will be called before each <see cref="IPlayer"/>
+        /// executes an <see cref="IAction{T}"/>.
+        /// </summary>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> executing the <see cref="IAction{T}"/>.</param>
+        /// <param name="actionNum">Index of the <see cref="IAction{T}"/> in the <see cref="PhaseActions"/> list.</param>
+        /// <returns>
+        /// Returns true if an <see cref="IAction{T}"/> is handled in this function call, else false.
+        /// </returns>
+        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction)
+        {
+            handledAction = false;
+        }
     }
 }
