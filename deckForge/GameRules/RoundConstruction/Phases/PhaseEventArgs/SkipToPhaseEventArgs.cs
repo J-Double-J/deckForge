@@ -11,7 +11,10 @@ namespace DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs
         /// Initializes a new instance of the <see cref="SkipToPhaseEventArgs"/> class.
         /// </summary>
         /// <param name="phaseNum">Index of the <see cref="IPhase"/> to skip to in the Round.</param>
-        public SkipToPhaseEventArgs(int phaseNum) { this.PhaseNum = phaseNum; }
+        public SkipToPhaseEventArgs(int phaseNum)
+        {
+            PhaseNum = phaseNum;
+        }
 
         /// <summary>
         /// Gets the Index of the <see cref="IPhase"/> to skip to in the Round.

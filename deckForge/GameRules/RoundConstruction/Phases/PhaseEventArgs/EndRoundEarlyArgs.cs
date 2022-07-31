@@ -17,7 +17,10 @@
         /// Initializes a new instance of the <see cref="EndRoundEarlyArgs"/> class.
         /// </summary>
         /// <param name="message">Message to pass along to the Round or any other subscriber.</param>
-        public EndRoundEarlyArgs(string message) { Message = message; }
+        public EndRoundEarlyArgs(string message)
+        {
+            Message = message;
+        }
 
         /// <summary>
         /// Gets the Message stored in the <see cref="EndRoundEarlyArgs"/>.

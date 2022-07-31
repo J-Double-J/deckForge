@@ -12,8 +12,10 @@ namespace DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs
         /// Initializes a new instance of the <see cref="PhaseEndedArgs"/> class.
         /// </summary>
         /// <param name="phaseName">The name of the <see cref="IPhase"/> that ended.</param>
-        public PhaseEndedArgs(string phaseName) { PhaseName = phaseName; }
-
+        public PhaseEndedArgs(string phaseName)
+        {
+            PhaseName = phaseName;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PhaseEndedArgs"/> class.
