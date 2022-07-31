@@ -19,7 +19,7 @@ namespace UnitTests.ActionTests
             Table table = new(gm, 1, decks);
             IPlayer p = new BasePlayer(gm);
             p.DrawStartingHand();
-            PlayerGameAction action = new PlayCardsAction();
+            PlayerGameAction action = new PlayCardAction();
 
             //StringWriter and Reader are for the console.
             var sr = new StringReader("0");
@@ -46,7 +46,7 @@ namespace UnitTests.ActionTests
                 p2, p3
             };
 
-            PlayerGameAction action = new PlayCardsAction();
+            PlayerGameAction action = new PlayCardAction();
 
             Action a = () => action.Execute(p, p2);
             Action b = () => action.Execute(p, targetPlayers);

@@ -23,8 +23,8 @@ namespace DeckForge.GameConstruction.PresetGames.War
         : base(gm, playerIDs, phaseName)
         {
             FlippedCards = new List<Card>();
-            Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeck());
-            Actions.Add(new PickUpOwnCardsFromTable());
+            Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction());
+            Actions.Add(new PickUpOwnCardsFromTableAction());
         }
 
         /// <summary>

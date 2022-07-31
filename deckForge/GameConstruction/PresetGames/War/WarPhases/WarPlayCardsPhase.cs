@@ -24,8 +24,8 @@ namespace DeckForge.GameConstruction.PresetGames.War
         public WarPlayCardsPhase(IGameMediator gm, List<int> playerIDs, string phaseName)
         : base(gm, playerIDs, phaseName)
         {
-            Actions.Add(new PlayCardsAction(facedown: true));
-            Actions.Add(new FlipOneCard_OneWay_Action(0, facedown: false));
+            Actions.Add(new PlayCardAction());
+            Actions.Add(new FlipOneCard_OneWayAction(0, facedown: false));
         }
 
         /// <summary>

@@ -145,8 +145,8 @@ namespace UnitTests.PlayerRoundRulesTests
         public TestWarPlayerPlayCardsOnTablePhase(IGameMediator gm, List<int> playerIDs, string phaseName = "Test Phase")
         : base(gm, playerIDs, phaseName)
         {
-            Actions.Add(new PlayCardsAction());
-            Actions.Add(new PlayCardsAction());
+            Actions.Add(new PlayCardAction());
+            Actions.Add(new PlayCardAction());
         }
     }
 
