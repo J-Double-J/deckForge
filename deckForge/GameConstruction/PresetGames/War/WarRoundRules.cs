@@ -1,17 +1,24 @@
 using DeckForge.GameRules.RoundConstruction.Interfaces;
 using DeckForge.GameRules.RoundConstruction.Rounds;
-using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
-using DeckForge.GameConstruction.PresetGames.War;
-using DeckForge.GameRules.RoundConstruction.Phases;
 
 namespace DeckForge.GameConstruction.PresetGames.War
 {
+    /// <summary>
+    /// All the rules involving playing the game of <see cref="War"/>.
+    /// </summary>
     public class WarRoundRules : PlayerRoundRules
     {
-        bool atWar = false;
+        private bool atWar = false;
 
-        public WarRoundRules(IGameMediator gm, List<int> players) : base(gm, players: players)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarRoundRules"/> class.
+        /// </summary>
+        /// <param name="gm"><see cref="IGameMediator"/> that the <see cref="WarRoundRules"/> will use to
+        /// communicate with other game elements.</param>
+        /// <param name="players">IDs of all the playing <see cref="PlayerConstruction.IPlayer"/>s.</param>
+        public WarRoundRules(IGameMediator gm, List<int> players)
+            : base(gm, players: players)
         {
             Phases = new List<IPhase>
             {
@@ -24,7 +31,24 @@ namespace DeckForge.GameConstruction.PresetGames.War
             SubscribeToAllPhases_EndRoundEarlyEvents();
         }
 
-        override protected bool NextPhaseHook(int phaseNum)
+        /// <summary>
+        /// Function that is called when a <see cref="PlayerConstruction.IPlayer"/> raises a simple
+        /// message. Checks if the <see cref="PlayerConstruction.IPlayer"/> is informing the rules that
+        /// it lost the game.
+        /// </summary>
+        /// <param name="sender">Object (usually a <see cref="PlayerConstruction.IPlayer"/>) that sent the message.</param>
+        /// <param name="args">The <see cref="SimplePlayerMessageEventArgs"/> that the <see cref="PlayerConstruction.IPlayer"/>
+        /// passed.</param>
+        public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args)
+        {
+            if (args.message == "LOSE_GAME")
+            {
+                EndRound();
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override bool NextPhaseHook(int phaseNum)
         {
             bool handledPhase = false;
 
@@ -32,24 +56,22 @@ namespace DeckForge.GameConstruction.PresetGames.War
             {
                 atWar = false;
 
-                //Reset WarPhase Counter
+                // Reset WarPhase Counter
                 var phase = (WarPhase)Phases[2];
                 phase.ResetIteration();
             }
-
             else if (phaseNum == 1)
             {
-
                 if (atWar)
                 {
-                    //Give ComparePhase the cards flipped from War
+                    // Give ComparePhase the cards flipped from War
                     var warPhase = (WarPhase)Phases[2];
                     var comparePhase = (WarComparePhase)Phases[1];
                     comparePhase.FlippedCards = warPhase.GetFlippedCards();
                 }
                 else
                 {
-                    //Give ComparePhase the cards to compare
+                    // Give ComparePhase the cards to compare
                     var phase = (WarPlayCardsPhase)Phases[0];
                     var compare = (WarComparePhase)Phases[1];
                     compare.FlippedCards = phase.GetFlippedCards();
@@ -58,7 +80,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
             }
             else if (phaseNum == 2)
             {
-                //Update War Status, and track num of War iterations
+                // Update War Status, and track num of War iterations
                 if (atWar == false)
                 {
                     atWar = true;
@@ -68,18 +90,9 @@ namespace DeckForge.GameConstruction.PresetGames.War
                     var phase = (WarPhase)Phases[2];
                     phase.IncreaseIteration();
                 }
-
             }
 
             return handledPhase;
-        }
-
-        public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args)
-        {
-            if (args.message == "LOSE_GAME")
-            {
-                EndRound();
-            }
         }
     }
 }
