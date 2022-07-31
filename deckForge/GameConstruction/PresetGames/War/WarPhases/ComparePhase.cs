@@ -1,14 +1,14 @@
-using DeckForge.GameRules.RoundConstruction.Phases;
-using DeckForge.PlayerConstruction;
-using DeckForge.PhaseActions;
-using DeckForge.GameRules.RoundConstruction.Interfaces;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs;
+using DeckForge.PhaseActions;
 
 namespace DeckForge.GameConstruction.PresetGames.War
 {
     public class WarComparePhase : PlayerPhase
     {
         public List<Card> FlippedCards { get; set; }
+
         public WarComparePhase(IGameMediator gm, List<int> playerIDs, string name)
         : base(gm, playerIDs, name)
         {

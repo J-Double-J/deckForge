@@ -1,4 +1,6 @@
 using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs;
+
 using DeckForge.GameConstruction;
 using DeckForge.PhaseActions;
 
@@ -89,7 +91,7 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
         /// <param name="e">The arguments containing what <see cref="IPhase"/> to skip to.</param>
         protected virtual void Phase_SkipToPhaseEvent(object? sender, SkipToPhaseEventArgs e)
         {
-            SkipToPhase(e.phaseNum);
+            SkipToPhase(e.PhaseNum);
         }
 
         /// <summary>

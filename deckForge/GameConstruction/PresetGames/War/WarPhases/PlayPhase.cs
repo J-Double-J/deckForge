@@ -3,6 +3,7 @@ using DeckForge.PlayerConstruction;
 using DeckForge.PhaseActions;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs;
 
 namespace DeckForge.GameConstruction.PresetGames.War
 { 
