@@ -1,31 +1,62 @@
-﻿using DeckForge.GameRules.RoundConstruction.Interfaces;
-using DeckForge.GameConstruction;
+﻿using DeckForge.GameConstruction;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
 
 namespace DeckForge.GameRules.RoundConstruction.Phases
 {
+    /// <summary>
+    /// Non-Player-Controlled Phases are <see cref="IPhase"/>s that do not involve <see cref="IPlayer"/>s
+    /// direct involvement and happens mostly outside of their control.
+    /// </summary>
+    /// <typeparam name="T">Type of object that will be controlled by the <see cref="NPCPhase{T}"/>.</typeparam>
     public class NPCPhase<T> : BasePhase<T>, INPCPhase<T>
     {
-        public NPCPhase(IGameMediator gm, string phaseName = "") : base(gm, phaseName: phaseName) { }
-        virtual public void StartPhase(T t)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NPCPhase{T}"/> class.
+        /// </summary>
+        /// <param name="gm"><see cref="IGameMediator"/> that <see cref="NPCPhase{T}"/> will use to communicate
+        /// with other game elements.</param>
+        /// <param name="phaseName">Name of the phase.</param>
+        public NPCPhase(IGameMediator gm, string phaseName = "")
+            : base(gm, phaseName: phaseName)
+        {
+        }
+
+        /// <summary>
+        /// Starts the phase with <paramref name="t"/> being targeted.
+        /// </summary>
+        /// <param name="t">Object involved in the <see cref="NPCPhase{T}"/>.</param>
+        public virtual void StartPhase(T t)
         {
             DoPhaseActions(t);
         }
 
-        //Do all actions in one go, passing in the object type that IAction<T> is
-        virtual protected void DoPhaseActions(T t)
+        /// <summary>
+        /// Executes all the <see cref="PhaseActions.IGameAction{T}"/> in order on <paramref name="t"/>.
+        /// </summary>
+        /// <param name="t">The object that executes or targetted by the <see cref="PhaseActions.IGameAction{T}"/>s.</param>
+        protected virtual void DoPhaseActions(T t)
         {
             for (var actionNum = 0; actionNum < Actions.Count; actionNum++)
             {
-                PhaseActionLogic(out bool handledAction);
-                if (!handledAction)
+                if (!PhaseActionLogic())
+                {
                     Actions[actionNum].Execute(t);
+                }
             }
 
             EndPhase();
         }
 
-        //Phases implement any logic for individual actions here. Should an action need to be executed in this function
-        //(as is often the case if an action needs to be targetted) handledAction should be set to true
-        virtual protected void PhaseActionLogic(out bool handledAction) { handledAction = false; }
+        /// <summary>
+        /// Any logic or extra function calls should be overriden here and will be called
+        /// before each <see cref="PhaseActions.IGameAction{T}"/>.
+        /// </summary>
+        /// <returns>
+        /// Returns true if an <see cref="PhaseActions.IGameAction{T}"/> is handled in this function call, else false.
+        /// </returns>
+        protected virtual bool PhaseActionLogic()
+        {
+            return false;
+        }
     }
 }

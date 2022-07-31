@@ -13,7 +13,6 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
     /// primarily for <see cref="IPhase"/>s that have <see cref="IGameAction{T}"/> that target types of objects.</typeparam>
     public abstract class BasePhase<T> : IPhase
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BasePhase{T}"/> class.
         /// </summary>
@@ -81,7 +80,9 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         }
 
         /// <inheritdoc/>
-        public virtual void StartPhase() { }
+        public virtual void StartPhase()
+        {
+        }
 
         /// <inheritdoc/>
         public virtual void EndPhase()

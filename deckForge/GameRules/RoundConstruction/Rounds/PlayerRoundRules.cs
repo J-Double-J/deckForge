@@ -16,7 +16,7 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerRoundRules"/> class involving <see cref="IPlayer"/>s.
-        /// </summary> 
+        /// </summary>
         /// <param name="gm">Gamemediator that the Round uses to communicate with other objects.</param>
         /// <param name="players">List of the <see cref="IPlayer"/> IDs.</param>
         /// <param name="handlimit">Hand limit of each <see cref="IPlayer"/> in the game.</param>
@@ -122,7 +122,7 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
         /// Updates each <see cref="IPhase"/>'s turn order with the <paramref name="newTurnOrder"/>.
         /// <para>Each <see cref="IPhase"/> must be of <see cref="Type"/> <see cref="PlayerPhase"/>.</para>
         /// </summary>
-        /// <param name="newTurnOrder">Turn order of <see cref="IPlayer"/> by their IDs</param>
+        /// <param name="newTurnOrder">Turn order of <see cref="IPlayer"/> by their IDs.</param>
         public void UpdatePhasesPlayerTurnOrder(List<int> newTurnOrder)
         {
             ToBeUpdatedTurnOrder = newTurnOrder;
@@ -144,9 +144,8 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
 
             foreach (IPhase phase in Phases)
             {
-                if (phase is IPlayerPhase)
+                if (phase is IPlayerPhase playerPhase)
                 {
-                    IPlayerPhase playerPhase = (IPlayerPhase)phase;
                     playerPhase.UpdateTurnOrder(PlayerTurnOrder);
                 }
             }
