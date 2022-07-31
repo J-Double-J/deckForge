@@ -76,7 +76,6 @@ namespace DeckForge.GameConstruction.PresetGames.War
                     var compare = (WarComparePhase)Phases[1];
                     compare.FlippedCards = phase.GetFlippedCards();
                 }
-
             }
             else if (phaseNum == 2)
             {

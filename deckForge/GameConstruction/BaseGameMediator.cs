@@ -1,28 +1,23 @@
-﻿using DeckForge.PlayerConstruction;
-using DeckForge.GameElements;
-using DeckForge.PhaseActions;
+﻿using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
-using DeckForge.PlayerConstruction.PlayerEvents;
 using DeckForge.GameRules.RoundConstruction.Rounds;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
+using DeckForge.PlayerConstruction.PlayerEvents;
 
 namespace DeckForge.GameConstruction
 {
-
     /// <summary>
-    /// Mediates gameplay and iteractions between various objects such as <see cref="GameElements.Table"/>,
+    /// Mediates gameplay and iteractions between various objects such as <see cref="Table"/>,
     /// <see cref="IPlayer"/>, <see cref="IRoundRules"/>, etc.
     /// </summary>
     public class BaseGameMediator : IGameMediator
     {
-        protected bool gameOver = false;
-        protected int CurRound = 0;
-        protected IGameController? GameController;
-        protected List<IRoundRules>? RoundRules;
-        protected List<IPlayer>? Players;
-        protected Table? GameTable;
-
-        //TODO: Remove PlayerCount
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseGameMediator"/> class.
+        /// </summary>
+        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
         public BaseGameMediator(int playerCount)
         {
             try
@@ -42,81 +37,134 @@ namespace DeckForge.GameConstruction
             {
                 throw;
             }
+
+            GameOver = false;
+            CurRound = 0;
         }
 
-        public void RegisterPlayer(IPlayer player)
-        {
-            if (Players is null)
-                Players = new();
-            Players.Add(player);
-            player.PlayerMessageEvent += OnSimplePlayerMessage;
-        }
-
-        public void RegisterTable(Table table)
-        {
-            GameTable = table;
-        }
-
-        public void RegisterGameController(IGameController gameController)
-        {
-            GameController = gameController;
-        }
-
-        public void RegisterRoundRules(IRoundRules roundRules)
-        {
-            if (RoundRules is null)
-                RoundRules = new();
-            RoundRules.Add(roundRules);
-        }
-
+        /// <inheritdoc/>
         public int PlayerCount
         {
             get { return Players!.Count; }
         }
 
+        /// <inheritdoc/>
         public List<int> TurnOrder
         {
             get { return GameController!.TurnOrder; }
         }
 
+        /// <inheritdoc/>
         public List<List<Card>> CurrentTableState
         {
             get { return GameTable!.TableState; }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IGameController"/>.
+        /// </summary>
+        protected IGameController? GameController { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of Rounds that <see cref="BaseGameMediator"/> manages.
+        /// </summary>
+        protected List<IRoundRules>? RoundRules { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the game is over or not.
+        /// </summary>
+        protected bool GameOver { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current round that the GameMediator is on.
+        /// </summary>
+        protected int CurRound { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current list of <see cref="IPlayer"/>s that are playing.
+        /// </summary>
+        protected List<IPlayer>? Players { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Table"/> that the game is played on.
+        /// </summary>
+        protected Table? GameTable { get; set; }
+
+        /// <inheritdoc/>
+        public void RegisterPlayer(IPlayer player)
+        {
+            if (Players is null)
+            {
+                Players = new ();
+            }
+
+            Players.Add(player);
+            player.PlayerMessageEvent += OnSimplePlayerMessage;
+        }
+
+        /// <inheritdoc/>
+        public void RegisterTable(Table table)
+        {
+            GameTable = table;
+        }
+
+        /// <inheritdoc/>
+        public void RegisterGameController(IGameController gameController)
+        {
+            GameController = gameController;
+        }
+
+        /// <inheritdoc/>
+        public void RegisterRoundRules(IRoundRules roundRules)
+        {
+            if (RoundRules is null)
+            {
+                RoundRules = new ();
+            }
+
+            RoundRules.Add(roundRules);
+        }
+
+        /// <inheritdoc/>
         public void ShiftTurnOrderClockwise()
         {
             GameController!.ShiftTurnOrderClockwise();
         }
 
+        /// <inheritdoc/>
         public void ShiftTurnOrderCounterClockwise()
         {
             GameController!.ShiftTurnOrderCounterClockwise();
         }
 
+        /// <inheritdoc/>
         public virtual void StartGame()
         {
             try
             {
                 CheckGameMediatorSetUp();
-                while (gameOver != true)
+                while (GameOver != true)
                 {
                     CurRound = 0;
                     foreach (IRoundRules rr in RoundRules!)
                     {
-                        if (gameOver != true)
+                        if (GameOver != true)
                         {
                             rr.StartRound();
                             CurRound++;
                         }
-                        //Since a game can end midround, check again.
-                        if (gameOver != true)
+
+                        // Since a game can end midround, check again.
+                        if (GameOver != true)
                         {
                             RoundEndedHook();
                         }
                     }
-                    if (gameOver is not true)
+
+                    if (GameOver is not true)
+                    {
                         AfterAllRoundsEndedHook();
+                    }
                 }
             }
             catch
@@ -126,7 +174,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <summary>
-        /// Starts an <see cref="IPlayer"/>'s turn based on <paramref name="turn"/>
+        /// Starts an <see cref="IPlayer"/>'s turn based on <paramref name="turn"/>.
         /// </summary>
         /// <param name="turn">Turn number in the round used to tell that player in the List to
         /// start their turn.</param>
@@ -152,6 +200,7 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual void EndPlayerTurn()
         {
             try
@@ -164,6 +213,7 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual void EndGame()
         {
             try
@@ -176,16 +226,18 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual void EndGameWithWinner(IPlayer winner)
         {
             Console.WriteLine($"Player {winner.PlayerID} wins!");
             if (RoundRules is not null)
             {
                 RoundRules[CurRound].EndRound();
-                gameOver = true;
+                GameOver = true;
             }
         }
 
+        /// <inheritdoc/>
         public virtual Card? DrawCardFromDeck()
         {
             try
@@ -204,9 +256,9 @@ namespace DeckForge.GameConstruction
             {
                 throw;
             }
-
         }
 
+        /// <inheritdoc/>
         public IPlayer? GetPlayerByID(int playerID)
         {
             try
@@ -227,6 +279,7 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual List<Card> GetPlayedCardsOfPlayer(int playerID)
         {
             try
@@ -237,9 +290,9 @@ namespace DeckForge.GameConstruction
             {
                 throw;
             }
-
         }
 
+        /// <inheritdoc/>
         public virtual Card FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
             try
@@ -257,9 +310,9 @@ namespace DeckForge.GameConstruction
             {
                 throw;
             }
-
         }
 
+        /// <inheritdoc/>
         public virtual List<Card> PickUpAllCards_FromTable_FromPlayer(int playerID)
         {
             try
@@ -272,23 +325,30 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public object? TellPlayerToDoAction(int playerID, IAction<IPlayer> action)
         {
             int index = IndexOfPlayerByPlayerID(playerID);
             return index != -1 ? Players![index].ExecuteGameAction(action) : null;
         }
 
+        /// <inheritdoc/>
         public object? TellPlayerToDoActionAgainstAnotherPlayer(int playerID, int playerTargetID, IAction<IPlayer> action)
         {
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
             int targetIndex = IndexOfPlayerByPlayerID(playerTargetID);
 
             if (playerIndex is not -1 && targetIndex is not -1)
+            {
                 return Players![playerIndex].ExecuteGameActionAgainstPlayer(action, Players[targetIndex]);
+            }
             else
+            {
                 return null;
+            }
         }
 
+        /// <inheritdoc/>
         public object? TellPlayerToDoActionAgainstMultiplePlayers(int playerID, IAction<IPlayer> action, bool includeSelf = false)
         {
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
@@ -298,15 +358,18 @@ namespace DeckForge.GameConstruction
             : null;
         }
 
+        /// <inheritdoc/>
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IAction<IPlayer> action)
         {
-            List<IPlayer> targettedPlayers = new();
+            List<IPlayer> targettedPlayers = new ();
 
             foreach (int targetID in targets)
             {
                 int targetIndex = IndexOfPlayerByPlayerID(targetID);
                 if (targetIndex is not -1)
+                {
                     targettedPlayers.Add(Players![targetIndex]);
+                }
             }
 
             int playerIndex = IndexOfPlayerByPlayerID(playerID);
@@ -316,6 +379,7 @@ namespace DeckForge.GameConstruction
             : null;
         }
 
+        /// <inheritdoc/>
         public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e)
         {
             if (e.message == "LOSE_GAME")
@@ -325,13 +389,13 @@ namespace DeckForge.GameConstruction
             }
         }
 
-        virtual public void PlayerLost(int playerID)
+        /// <inheritdoc/>
+        public virtual void PlayerLost(int playerID)
         {
-
             Players!.Remove(GetPlayerByID(playerID)!);
 
-            //Could use LINQ most likely here
-            List<int> remaingPlayerIDs = new();
+            // Could use LINQ most likely here7
+            List<int> remaingPlayerIDs = new ();
             foreach (IPlayer player in Players)
             {
                 remaingPlayerIDs.Add(player.PlayerID);
@@ -344,9 +408,8 @@ namespace DeckForge.GameConstruction
             {
                 foreach (IRoundRules rr in RoundRules!)
                 {
-                    if (rr is PlayerRoundRules)
+                    if (rr is PlayerRoundRules playerRound)
                     {
-                        PlayerRoundRules playerRound = (PlayerRoundRules)rr;
                         playerRound.UpdatePlayerList(remaingPlayerIDs);
                     }
                 }
@@ -359,7 +422,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <summary>
-        /// Gets the index of an <see cref="IPlayer"/> by their <paramref name="playerID"/> in the Players array. 
+        /// Gets the index of an <see cref="IPlayer"/> by their <paramref name="playerID"/> in the Players array.
         /// </summary>
         /// <remarks>
         /// This is the safest way to see if an <see cref="IPlayer"/> is still in the Players
@@ -376,19 +439,35 @@ namespace DeckForge.GameConstruction
             return foundPlayer is not null ? Players!.IndexOf(foundPlayer) : -1;
         }
 
-        virtual protected void CheckGameMediatorSetUp()
+        /// <summary>
+        /// Verifies that all important objects have registered themselves with the GameMediator before the game starts.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Throws exception if any important object is missing.</exception>
+        protected virtual void CheckGameMediatorSetUp()
         {
             if (GameController is null || Players is null || GameTable is null || RoundRules is null)
             {
                 string errorMessage = "GameMediator is not fully initialized: \n";
                 if (GameController is null)
+                {
                     errorMessage += "GameController is null \n";
+                }
+
                 if (Players is null)
+                {
                     errorMessage += "Players is null \n";
+                }
+
                 if (GameTable is null)
+                {
                     errorMessage += "Table is null \n";
+                }
+
                 if (RoundRules is null)
+                {
                     errorMessage += "Round Rules is null \n";
+                }
+
                 throw new ArgumentNullException(errorMessage);
             }
         }
@@ -399,10 +478,12 @@ namespace DeckForge.GameConstruction
         /// </summary>
         /// <remarks>
         /// If one wanted to shift the turn order and do certain checks before the top of a round, override this function.
-        /// Functionally similar to RoundEndedHook(). This function is not called if the game ends 
+        /// Functionally similar to RoundEndedHook(). This function is not called if the game ends.
         /// before loop is finished.
         /// </remarks>
-        virtual protected void AfterAllRoundsEndedHook() { }
+        protected virtual void AfterAllRoundsEndedHook()
+        {
+        }
 
         /// <summary>
         /// Called everytime any <see cref = "IRoundRules"/> has ended. Override to execute any logic between rounds.
@@ -411,7 +492,8 @@ namespace DeckForge.GameConstruction
         /// Functionally similar to AfterAllRoundsHook(). This function is not called if the game
         /// ends in the middle of a round.
         /// </remarks>
-        protected virtual void RoundEndedHook() { }
-
+        protected virtual void RoundEndedHook()
+        {
+        }
     }
 }
