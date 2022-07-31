@@ -12,13 +12,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         protected List<int> playerIDs;
         protected List<int>? ToBeUpdatedTurnOrder;
 
-        public List<int> PlayerTurnOrder
-        {
-            get { return playerIDs; }
-            private set { playerIDs = value; }
-        }
-
-
         public PlayerPhase(IGameMediator gm, List<int> playerIDs, string phaseName = "") : base(gm, phaseName: phaseName)
         {
             this.playerIDs = playerIDs;
@@ -32,7 +25,13 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             };
         }
 
-        //Based on how many playerIDs this phase has, it decides what style to do
+        public List<int> PlayerTurnOrder
+        {
+            get { return playerIDs; }
+            private set { playerIDs = value; }
+        }
+
+        // Based on how many playerIDs this phase has, it decides what style to do
         override public void StartPhase()
         {
             CurrentAction = 0;
@@ -47,23 +46,22 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             }
         }
 
-        //Players take an action, then wait for other players to finish action, then all go to next action etc
-        virtual public void StartPhase(List<int> playerIDs)
+        // Players take an action, then wait for other players to finish action, then all go to next action etc
+        public virtual void StartPhase(List<int> playerIDs)
         {
             DoPhaseActionsWithMultiplePlayers(playerIDs, actionNum: CurrentAction);
         }
 
 
-        //Player does all actions in phase in order
-        virtual public void StartPhase(int playerID)
+        // Player does all actions in phase in order
+        public virtual void StartPhase(int playerID)
         {
             CurrentPlayerTurn = playerID;
             DoPhaseActions(playerID);
         }
 
         //Each action must be done by a player before going to the next actions
-        virtual protected void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
-        {
+        virtual protected void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum) {
             foreach (int player in playerIDs)
             {
                 CurrentPlayerTurn = player;
@@ -117,11 +115,11 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             }
         }
 
-        //Phases implement any logic for individual actions here. Should an action need to be executed in this function
-        //(as is often the case if an action needs to be targetted) handledAction should be set to true
-        virtual protected void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
+        // Phases implement any logic for individual actions here. Should an action need to be executed in this function
+        // (as is often the case if an action needs to be targetted) handledAction should be set to true
+        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
 
-        virtual public void UpdateTurnOrder(List<int> newPlayerList)
+        public virtual void UpdateTurnOrder(List<int> newPlayerList)
         {
             ToBeUpdatedTurnOrder = newPlayerList;
         }

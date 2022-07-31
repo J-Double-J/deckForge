@@ -25,8 +25,7 @@ namespace deckForge.GameRules.RoundConstruction.Rounds
         public List<IPhase> Phases { get; protected set; }
 
         /// <summary>
-        /// Begins the Round by iterating through all its <see cref="IPhase">s and handling any rules
-        /// between them.
+        /// Starts the Round and begins iterating through its <see cref="IPhase"/>s.
         /// </summary>
         public abstract void StartRound();
 
