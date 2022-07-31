@@ -1,4 +1,4 @@
-namespace deckForge.PhaseActions
+namespace DeckForge.PhaseActions
 {
     public interface IAction<T>
     {

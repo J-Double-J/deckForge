@@ -1,7 +1,7 @@
-﻿using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.GameConstruction;
+﻿using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameConstruction;
 
-namespace deckForge.GameRules.RoundConstruction.Phases
+namespace DeckForge.GameRules.RoundConstruction.Phases
 {
     public class NPCPhase<T> : BasePhase<T>, INPCPhase<T>
     {

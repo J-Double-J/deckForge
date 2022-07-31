@@ -1,12 +1,12 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.GameConstruction;
-using deckForge.GameRules.RoundConstruction.Phases;
+﻿using DeckForge.GameConstruction;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.PlayerConstruction;
 
-namespace deckForge.GameRules.RoundConstruction.Rounds
+namespace DeckForge.GameRules.RoundConstruction.Rounds
 {
     /// <summary>
-    /// Base class for all Rounds involving <see cref= "IPlayer"/>s. 
+    /// Base class for all Rounds involving <see cref= "IPlayer"/>s.
     /// Outlines <see cref="IPhase"/>s and the algorithm for <see cref="IPhase"/> looping.
     /// </summary>
     public abstract class PlayerRoundRules : BaseRoundRules, IRoundRules

@@ -1,7 +1,7 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.GameRules.RoundConstruction.Phases;
-using deckForge.GameElements.Resources;
-namespace deckForge.PhaseActions
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.GameElements.Resources;
+namespace DeckForge.PhaseActions
 {
     public class PlayerGameAction : IAction<IPlayer>
     {

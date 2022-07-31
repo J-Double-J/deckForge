@@ -1,4 +1,4 @@
-﻿namespace deckForge.GameConstruction.PresetGames.War
+﻿namespace DeckForge.GameConstruction.PresetGames.War
 {
     public class WarGameMediator : BaseGameMediator
     {

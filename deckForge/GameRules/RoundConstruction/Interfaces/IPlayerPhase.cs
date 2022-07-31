@@ -1,4 +1,4 @@
-﻿namespace deckForge.GameRules.RoundConstruction.Interfaces
+﻿namespace DeckForge.GameRules.RoundConstruction.Interfaces
 {
     public interface IPlayerPhase
     {

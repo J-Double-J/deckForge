@@ -1,9 +1,9 @@
-using deckForge.PlayerConstruction.PlayerEvents;
-using deckForge.GameElements.Resources;
-using deckForge.PhaseActions;
-using deckForge.GameElements;
+using DeckForge.PlayerConstruction.PlayerEvents;
+using DeckForge.GameElements.Resources;
+using DeckForge.PhaseActions;
+using DeckForge.GameElements;
 
-namespace deckForge.PlayerConstruction
+namespace DeckForge.PlayerConstruction
 {
     /// <summary>
     /// IPlayer is the driver of the game and makes all the choices and key interactions

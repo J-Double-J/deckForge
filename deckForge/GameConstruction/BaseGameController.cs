@@ -1,8 +1,8 @@
-using deckForge.PlayerConstruction;
-using deckForge.GameElements.Resources;
-using deckForge.GameConstruction;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameElements.Resources;
+using DeckForge.GameConstruction;
 
-namespace deckForge.GameConstruction
+namespace DeckForge.GameConstruction
 {
     public class BaseGameController : IGameController
     {

@@ -1,8 +1,8 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.PlayerConstruction.PlayerEvents;
-using deckForge.GameElements.Resources;
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.PlayerConstruction.PlayerEvents;
+using DeckForge.GameElements.Resources;
 
-namespace deckForge.GameConstruction.PresetGames.War
+namespace DeckForge.GameConstruction.PresetGames.War
 {
     public class WarPlayer : BasePlayer
     {

@@ -1,5 +1,5 @@
-using deckForge.GameElements.Resources;
-namespace deckForge.GameElements
+using DeckForge.GameElements.Resources;
+namespace DeckForge.GameElements
 {
     public interface ITable {
         public List<Deck> TableDecks { get; }

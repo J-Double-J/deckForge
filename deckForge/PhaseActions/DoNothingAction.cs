@@ -1,7 +1,7 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.PhaseActions;
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.PhaseActions;
 
-namespace deckForge.PhaseActions
+namespace DeckForge.PhaseActions
 {
     public class DoNothingAction<T> : IAction<T>
     {

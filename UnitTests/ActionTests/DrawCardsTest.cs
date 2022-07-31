@@ -1,9 +1,9 @@
-﻿using deckForge.PhaseActions;
+﻿using DeckForge.PhaseActions;
 using FluentAssertions;
-using deckForge.GameConstruction;
-using deckForge.PlayerConstruction;
-using deckForge.GameElements;
-using deckForge.GameElements.Resources;
+using DeckForge.GameConstruction;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameElements;
+using DeckForge.GameElements.Resources;
 
 namespace UnitTests.ActionTests
 {

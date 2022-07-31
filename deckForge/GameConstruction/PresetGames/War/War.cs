@@ -1,13 +1,13 @@
-﻿using deckForge.GameRules;
-using deckForge.GameElements;
-using deckForge.PlayerConstruction;
-using deckForge.GameConstruction;
-using deckForge.GameRules.RoundConstruction.Rounds;
-using deckForge.GameElements.Resources;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.PlayerConstruction.PlayerEvents;
+﻿using DeckForge.GameRules;
+using DeckForge.GameElements;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameConstruction;
+using DeckForge.GameRules.RoundConstruction.Rounds;
+using DeckForge.GameElements.Resources;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.PlayerConstruction.PlayerEvents;
 
-namespace deckForge.GameConstruction.PresetGames.War
+namespace DeckForge.GameConstruction.PresetGames.War
 {
     public class War
     {

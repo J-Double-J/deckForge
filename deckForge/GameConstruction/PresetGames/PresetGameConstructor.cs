@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace deckForge.GameConstruction.PresetGames
+namespace DeckForge.GameConstruction.PresetGames
 {
     public class PresetGameConstructor
     {

@@ -1,4 +1,4 @@
-namespace deckForge.GameConstruction
+namespace DeckForge.GameConstruction
 {
     public interface IGameController
     {

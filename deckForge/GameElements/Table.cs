@@ -1,7 +1,7 @@
-using deckForge.GameConstruction;
-using deckForge.GameElements.Resources;
+using DeckForge.GameConstruction;
+using DeckForge.GameElements.Resources;
 
-namespace deckForge.GameElements
+namespace DeckForge.GameElements
 {
     public class Table : ITable
     {

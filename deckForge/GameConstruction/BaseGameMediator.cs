@@ -1,12 +1,12 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.GameElements;
-using deckForge.PhaseActions;
-using deckForge.GameElements.Resources;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.PlayerConstruction.PlayerEvents;
-using deckForge.GameRules.RoundConstruction.Rounds;
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.GameElements;
+using DeckForge.PhaseActions;
+using DeckForge.GameElements.Resources;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.PlayerConstruction.PlayerEvents;
+using DeckForge.GameRules.RoundConstruction.Rounds;
 
-namespace deckForge.GameConstruction
+namespace DeckForge.GameConstruction
 {
 
     /// <summary>

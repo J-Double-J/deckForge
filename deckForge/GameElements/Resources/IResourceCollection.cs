@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace deckForge.GameElements.Resources
+namespace DeckForge.GameElements.Resources
 {
 
     public interface IResourceCollection {

@@ -1,4 +1,4 @@
-﻿namespace deckForge.GameRules
+﻿namespace DeckForge.GameRules
 {
     public class CreateGameRules
     {

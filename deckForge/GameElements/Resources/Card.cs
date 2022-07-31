@@ -1,4 +1,4 @@
-namespace deckForge.GameElements.Resources
+namespace DeckForge.GameElements.Resources
 {
     public class Card
     {

@@ -1,8 +1,8 @@
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.GameConstruction;
-using deckForge.PhaseActions;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameConstruction;
+using DeckForge.PhaseActions;
 
-namespace deckForge.GameRules.RoundConstruction.Rounds
+namespace DeckForge.GameRules.RoundConstruction.Rounds
 {
     /// <summary>
     /// Base class for all rounds. Outlines <see cref="IPhase"/>s and the algorithm for <see cref="IPhase"/> looping.

@@ -1,11 +1,11 @@
-﻿using deckForge.GameConstruction;
-using deckForge.GameConstruction.PresetGames.War;
-using deckForge.GameElements;
-using deckForge.GameElements.Resources;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.GameRules.RoundConstruction.Phases;
-using deckForge.PhaseActions;
-using deckForge.PlayerConstruction;
+﻿using DeckForge.GameConstruction;
+using DeckForge.GameConstruction.PresetGames.War;
+using DeckForge.GameElements;
+using DeckForge.GameElements.Resources;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
 using FluentAssertions;
 
 namespace UnitTests.PlayerRoundRulesTests

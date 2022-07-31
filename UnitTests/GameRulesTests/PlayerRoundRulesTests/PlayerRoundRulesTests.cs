@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
-using deckForge.GameRules.RoundConstruction.Phases;
-using deckForge.GameRules.RoundConstruction.Rounds;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.PlayerConstruction;
-using deckForge.GameConstruction;
-using deckForge.GameElements;
-using deckForge.GameElements.Resources;
-using deckForge.PhaseActions;
-using deckForge.GameConstruction.PresetGames.War;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.GameRules.RoundConstruction.Rounds;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameConstruction;
+using DeckForge.GameElements;
+using DeckForge.GameElements.Resources;
+using DeckForge.PhaseActions;
+using DeckForge.GameConstruction.PresetGames.War;
 
 namespace UnitTests.PlayerRoundRulesTests
 {

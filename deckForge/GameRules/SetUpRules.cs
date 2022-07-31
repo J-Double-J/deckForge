@@ -1,6 +1,6 @@
-﻿using deckForge.GameElements.Resources;
+﻿using DeckForge.GameElements.Resources;
 
-namespace deckForge.GameRules
+namespace DeckForge.GameRules
 {
     public class BaseSetUpRules
     {

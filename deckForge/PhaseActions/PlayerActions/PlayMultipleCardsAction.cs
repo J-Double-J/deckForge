@@ -1,7 +1,7 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.GameElements.Resources;
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.GameElements.Resources;
 
-namespace deckForge.PhaseActions
+namespace DeckForge.PhaseActions
 {
     public class PlayMultipleCardsAction : PlayerGameAction
     {

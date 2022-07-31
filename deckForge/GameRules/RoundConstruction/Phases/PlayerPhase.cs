@@ -1,12 +1,11 @@
-using deckForge.PhaseActions;
-using deckForge.PlayerConstruction;
-using deckForge.GameConstruction;
-using deckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameConstruction;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
 
-
-namespace deckForge.GameRules.RoundConstruction.Phases
+namespace DeckForge.GameRules.RoundConstruction.Phases
 {
-    abstract public class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase, IPhase
+    public abstract class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase, IPhase
     {
         protected int CurrentPlayerTurn;
         protected List<int> playerIDs;
@@ -32,7 +31,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         }
 
         // Based on how many playerIDs this phase has, it decides what style to do
-        override public void StartPhase()
+        public override void StartPhase()
         {
             CurrentAction = 0;
             if (playerIDs.Count == 1)
@@ -60,50 +59,7 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             DoPhaseActions(playerID);
         }
 
-        //Each action must be done by a player before going to the next actions
-        virtual protected void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum) {
-            foreach (int player in playerIDs)
-            {
-                CurrentPlayerTurn = player;
-                PhaseActionLogic(player, actionNum, out bool handledAction);
-
-                //Assumes that all actions are not targetted against another player
-                if (!handledAction)
-                    GM.TellPlayerToDoAction(player, Actions[actionNum]);
-            }
-            if (CurrentAction >= 0)
-                CurrentAction++;
-            if (!(CurrentAction > ActionCount - 1) && !(CurrentAction < 0))
-                DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
-            else
-            {
-                EndPhase();
-            }
-        }
-
-
-        //Do all actions in one go
-        virtual protected void DoPhaseActions(int playerID)
-        {
-            for (var actionNum = 0; actionNum < Actions.Count; actionNum++)
-            {
-                if (CurrentAction == -1 ||
-                GM.GetPlayerByID(playerID) is null ||
-                GM.GetPlayerByID(playerID)?.IsActive == false)
-                {
-                    break;
-                }
-                PhaseActionLogic(playerID, actionNum, out bool handledAction);
-
-                //Assumes that all actions are not targetted against another player
-                if (!handledAction)
-                    GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
-            }
-
-            EndPhase();
-        }
-
-        override public void EndPhase()
+        public override void EndPhase()
         {
             CurrentPlayerTurn = -1;
             CurrentAction = -1;
@@ -115,10 +71,6 @@ namespace deckForge.GameRules.RoundConstruction.Phases
             }
         }
 
-        // Phases implement any logic for individual actions here. Should an action need to be executed in this function
-        // (as is often the case if an action needs to be targetted) handledAction should be set to true
-        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
-
         public virtual void UpdateTurnOrder(List<int> newPlayerList)
         {
             ToBeUpdatedTurnOrder = newPlayerList;
@@ -127,9 +79,66 @@ namespace deckForge.GameRules.RoundConstruction.Phases
         /// <summary>
         /// Ends the current <see cref="IPlayer"/>'s turn in the phase.
         /// </summary>
-        virtual public void EndPlayerTurn()
+        public virtual void EndPlayerTurn()
         {
             CurrentAction = -1;
         }
+
+        // Each action must be done by a player before going to the next actions
+        protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum) {
+            foreach (int player in playerIDs)
+            {
+                CurrentPlayerTurn = player;
+                PhaseActionLogic(player, actionNum, out bool handledAction);
+
+                // Assumes that all actions are not targetted against another player
+                if (!handledAction)
+                {
+                    GM.TellPlayerToDoAction(player, Actions[actionNum]);
+                }
+            }
+
+            if (CurrentAction >= 0)
+            {
+                CurrentAction++;
+            }
+
+            if (!(CurrentAction > ActionCount - 1) && !(CurrentAction < 0))
+            {
+                DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
+            }
+            else
+            {
+                EndPhase();
+            }
+        }
+
+        // Do all actions in one go
+        protected virtual void DoPhaseActions(int playerID)
+        {
+            for (var actionNum = 0; actionNum < Actions.Count; actionNum++)
+            {
+                if (CurrentAction == -1 ||
+                GM.GetPlayerByID(playerID) is null ||
+                GM.GetPlayerByID(playerID)?.IsActive == false)
+                {
+                    break;
+                }
+
+                PhaseActionLogic(playerID, actionNum, out bool handledAction);
+
+                // Assumes that all actions are not targetted against another player
+                if (!handledAction)
+                {
+                    GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
+                }
+            }
+
+            EndPhase();
+        }
+
+        // Phases implement any logic for individual actions here. Should an action need to be executed in this function
+        // (as is often the case if an action needs to be targetted) handledAction should be set to true
+        protected virtual void PhaseActionLogic(int playerID, int actionNum, out bool handledAction) { handledAction = false; }
     }
 }

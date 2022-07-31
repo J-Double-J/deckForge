@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using deckForge.GameConstruction;
-using deckForge.GameConstruction.PresetGames.War;
+using DeckForge.GameConstruction;
+using DeckForge.GameConstruction.PresetGames.War;
 
 Console.WriteLine("Starting game!");
 

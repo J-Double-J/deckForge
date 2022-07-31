@@ -1,10 +1,10 @@
-﻿using deckForge.PlayerConstruction;
-using deckForge.GameConstruction;
-using deckForge.GameRules;
-using deckForge.GameElements;
+﻿using DeckForge.PlayerConstruction;
+using DeckForge.GameConstruction;
+using DeckForge.GameRules;
+using DeckForge.GameElements;
 using FluentAssertions;
-using deckForge.GameElements.Resources;
-using deckForge.PhaseActions;
+using DeckForge.GameElements.Resources;
+using DeckForge.PhaseActions;
 
 namespace UnitTests.PlayerConstruction
 {

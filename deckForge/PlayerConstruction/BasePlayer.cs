@@ -1,11 +1,11 @@
-using deckForge.GameConstruction;
-using deckForge.PlayerConstruction.PlayerEvents;
-using deckForge.PhaseActions;
-using deckForge.GameElements.Resources;
+using DeckForge.GameConstruction;
+using DeckForge.PlayerConstruction.PlayerEvents;
+using DeckForge.PhaseActions;
+using DeckForge.GameElements.Resources;
 using System.Reflection;
 using System.Collections;
 
-namespace deckForge.PlayerConstruction
+namespace DeckForge.PlayerConstruction
 {
     public class BasePlayer : IPlayer
     {

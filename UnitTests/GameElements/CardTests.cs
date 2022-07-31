@@ -1,4 +1,4 @@
-﻿using deckForge.GameElements.Resources;
+﻿using DeckForge.GameElements.Resources;
 using FluentAssertions;
 
 namespace UnitTests.GameElements

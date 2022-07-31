@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using deckForge.GameRules;
-using deckForge.GameConstruction;
-using deckForge.PlayerConstruction;
-using deckForge.GameElements;
-using deckForge.GameElements.Resources;
+using DeckForge.GameRules;
+using DeckForge.GameConstruction;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameElements;
+using DeckForge.GameElements.Resources;
 
 namespace UnitTests.GameRulesTests
 {

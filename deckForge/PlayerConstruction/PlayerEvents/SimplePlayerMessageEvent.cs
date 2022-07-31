@@ -1,4 +1,4 @@
-namespace deckForge.PlayerConstruction.PlayerEvents
+namespace DeckForge.PlayerConstruction.PlayerEvents
 {
     public class SimplePlayerMessageEventArgs : EventArgs
     {

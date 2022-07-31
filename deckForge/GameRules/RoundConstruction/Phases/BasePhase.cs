@@ -1,8 +1,8 @@
-﻿using deckForge.PhaseActions;
-using deckForge.GameRules.RoundConstruction.Interfaces;
-using deckForge.GameConstruction;
+﻿using DeckForge.PhaseActions;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameConstruction;
 
-namespace deckForge.GameRules.RoundConstruction.Phases
+namespace DeckForge.GameRules.RoundConstruction.Phases
 {
     abstract public class BasePhase<T> : IPhase
     {

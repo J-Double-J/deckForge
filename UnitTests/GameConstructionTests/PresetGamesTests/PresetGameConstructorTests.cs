@@ -1,4 +1,4 @@
-﻿using deckForge.GameConstruction.PresetGames;
+﻿using DeckForge.GameConstruction.PresetGames;
 using FluentAssertions;
 
 namespace UnitTests.GameConstructionTests.PresetGamesTests

@@ -1,8 +1,8 @@
-using deckForge.GameConstruction;
-using deckForge.PhaseActions;
-using deckForge.PlayerConstruction;
+using DeckForge.GameConstruction;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
 
-namespace deckForge.GameRules.RoundConstruction.Phases
+namespace DeckForge.GameRules.RoundConstruction.Phases
 {
     public class DoNothingPlayerPhase : PlayerPhase
     {

@@ -1,8 +1,8 @@
-﻿using deckForge.GameElements;
-using deckForge.GameConstruction;
+﻿using DeckForge.GameElements;
+using DeckForge.GameConstruction;
 using FluentAssertions;
-using deckForge.PlayerConstruction;
-using deckForge.GameElements.Resources;
+using DeckForge.PlayerConstruction;
+using DeckForge.GameElements.Resources;
 
 namespace UnitTests.GameElements
 {

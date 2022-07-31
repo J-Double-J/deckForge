@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using deckForge.GameConstruction;
+using DeckForge.GameConstruction;
 
 namespace UnitTests
 {
