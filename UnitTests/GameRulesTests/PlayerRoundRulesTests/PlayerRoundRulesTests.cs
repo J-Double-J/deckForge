@@ -90,9 +90,9 @@ namespace UnitTests.PlayerRoundRulesTests
         public void RoundLosePlayerMidWayThrough()
         {
             IGameMediator gm = new TestGameMediator(3);
-            IGameController gc = new BaseGameController(3);
             Table table = new(gm, 3, new Deck());
-            gm.RegisterGameController(gc);
+            ITurnHandler th = new TurnHandler(3, false);
+            gm.RegisterTurnHandler(th);
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
@@ -120,9 +120,9 @@ namespace UnitTests.PlayerRoundRulesTests
         public void RoundEndsEarlyOnceAllPlayersButOneAreOut()
         {
             IGameMediator gm = new TestGameMediator(2);
-            IGameController gc = new BaseGameController(2);
             Table table = new(gm, 2, new Deck());
-            gm.RegisterGameController(gc);
+            ITurnHandler th = new TurnHandler(2, false);
+            gm.RegisterTurnHandler(th);
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();

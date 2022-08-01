@@ -17,7 +17,7 @@
         /// <inheritdoc/>
         protected override void RoundEndedHook()
         {
-            GameController!.ShiftTurnOrderClockwise();
+            TurnHandler!.ShiftTurnOrderClockwise();
             Console.WriteLine("Rounded Ended. Current Player Deck Count:");
             Console.WriteLine($"Player 0:  {GetPlayerByID(0)?.CountOfResourceCollection(0)}");
             Console.WriteLine($"Player 1:  {GetPlayerByID(1)?.CountOfResourceCollection(0)}");

@@ -109,8 +109,8 @@ namespace UnitTests.GameConstructionTests
         {
             Console.SetOut(output);
             IGameMediator gm = new BaseGameMediator(2);
-            IGameController gc = new BaseGameController(2);
-            gm.RegisterGameController(gc);
+            ITurnHandler th = new TurnHandler(2, false);
+            gm.RegisterTurnHandler(th);
             Table table = new(gm, 2, new Deck());
 
             List<int> playerIDs = new();

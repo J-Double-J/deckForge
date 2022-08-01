@@ -17,8 +17,8 @@ namespace UnitTests.PlayerRoundRulesTests
         public void PlayerPhaseCanChangeTurnOrder()
         {
             IGameMediator gm = new TestGameMediator(3);
-            IGameController gc = new BaseGameController(3);
-            gm.RegisterGameController(gc);
+            ITurnHandler th = new TurnHandler(3, false);
+            gm.RegisterTurnHandler(th);
             Table table = new(gm, 3, new Deck());
 
             List<int> playerIDs = new();
@@ -44,14 +44,14 @@ namespace UnitTests.PlayerRoundRulesTests
             }
         }
 
-        //DEBUG THIS. Trying to use the method of IsActive and IsOut, and this was partially done, but probably
-        //not properly.
+        // TODO: DEBUG THIS. Trying to use the method of IsActive and IsOut, and this was partially done, but probably
+        // not properly.
         [TestMethod]
         public void PlayerPhaseLosesPlayerMidPhase()
         {
             IGameMediator gm = new TestGameMediator(3);
-            IGameController gc = new BaseGameController(3);
-            gm.RegisterGameController(gc);
+            ITurnHandler th = new TurnHandler(3, false);
+            gm.RegisterTurnHandler(th);
             Table table = new(gm, 3, new Deck());
 
             List<int> playerIDs = new();
@@ -113,7 +113,7 @@ namespace UnitTests.PlayerRoundRulesTests
 
         public void PhaseEnded()
         {
-            GameController!.ShiftTurnOrderClockwise();
+            TurnHandler!.ShiftTurnOrderClockwise();
         }
 
         public override void PlayerLost(int playerID)

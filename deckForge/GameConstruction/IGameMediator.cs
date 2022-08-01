@@ -41,10 +41,10 @@ namespace DeckForge.GameConstruction
         public void RegisterTable(Table table);
 
         /// <summary>
-        /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="IGameController"/>.
+        /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="ITurnHandler"/>.
         /// </summary>
-        /// <param name="gameController">Game Controller.</param>
-        public void RegisterGameController(IGameController gameController);
+        /// <param name="turnHandler">TurnHandler to register.</param>
+        public void RegisterTurnHandler(ITurnHandler turnHandler);
 
         /// <summary>
         /// Informs the <see cref="IGameMediator"/> to keep track of this <see cref="IRoundRules"/>.

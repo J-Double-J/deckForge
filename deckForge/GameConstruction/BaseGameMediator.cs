@@ -51,7 +51,7 @@ namespace DeckForge.GameConstruction
         /// <inheritdoc/>
         public List<int> TurnOrder
         {
-            get { return GameController!.TurnOrder; }
+            get { return TurnHandler!.TurnOrder; }
         }
 
         /// <inheritdoc/>
@@ -61,9 +61,9 @@ namespace DeckForge.GameConstruction
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IGameController"/>.
+        /// Gets or sets the ITurnHandler.
         /// </summary>
-        protected IGameController? GameController { get; set; }
+        protected ITurnHandler? TurnHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the list of Rounds that <see cref="BaseGameMediator"/> manages.
@@ -109,9 +109,9 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public void RegisterGameController(IGameController gameController)
+        public void RegisterTurnHandler(ITurnHandler turnHandler)
         {
-            GameController = gameController;
+            TurnHandler = turnHandler;
         }
 
         /// <inheritdoc/>
@@ -128,13 +128,13 @@ namespace DeckForge.GameConstruction
         /// <inheritdoc/>
         public void ShiftTurnOrderClockwise()
         {
-            GameController!.ShiftTurnOrderClockwise();
+            TurnHandler!.ShiftTurnOrderClockwise();
         }
 
         /// <inheritdoc/>
         public void ShiftTurnOrderCounterClockwise()
         {
-            GameController!.ShiftTurnOrderCounterClockwise();
+            TurnHandler!.ShiftTurnOrderCounterClockwise();
         }
 
         /// <inheritdoc/>
@@ -203,27 +203,11 @@ namespace DeckForge.GameConstruction
         /// <inheritdoc/>
         public virtual void EndPlayerTurn()
         {
-            try
-            {
-                StartPlayerTurn(GameController!.NextPlayerTurn());
-            }
-            catch
-            {
-                throw;
-            }
         }
 
         /// <inheritdoc/>
         public virtual void EndGame()
         {
-            try
-            {
-                GameController!.EndGame();
-            }
-            catch
-            {
-                throw;
-            }
         }
 
         /// <inheritdoc/>
@@ -401,7 +385,7 @@ namespace DeckForge.GameConstruction
                 remaingPlayerIDs.Add(player.PlayerID);
             }
 
-            GameController!.UpdatePlayerList(remaingPlayerIDs);
+            TurnHandler!.UpdatePlayerList(remaingPlayerIDs);
             GameTable!.PickUpAllCards_FromPlayer(playerID);
 
             if (RoundRules is not null)
@@ -445,12 +429,12 @@ namespace DeckForge.GameConstruction
         /// <exception cref="ArgumentNullException">Throws exception if any important object is missing.</exception>
         protected virtual void CheckGameMediatorSetUp()
         {
-            if (GameController is null || Players is null || GameTable is null || RoundRules is null)
+            if (TurnHandler is null || Players is null || GameTable is null || RoundRules is null)
             {
                 string errorMessage = "GameMediator is not fully initialized: \n";
-                if (GameController is null)
+                if (TurnHandler is null)
                 {
-                    errorMessage += "GameController is null \n";
+                    errorMessage += "TurnHandler is null \n";
                 }
 
                 if (Players is null)

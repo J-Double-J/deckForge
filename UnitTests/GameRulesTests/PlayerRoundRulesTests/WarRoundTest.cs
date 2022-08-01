@@ -13,7 +13,7 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
     {
         #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         IGameMediator gm;
-        IGameController controller;
+        ITurnHandler th;
         Table table;
         List<IPlayer> players;
         List<int> playerIDs;
@@ -24,8 +24,8 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
         {
             gm = new BaseGameMediator(2);
             table = new(gm, 2, new Deck());
-            controller = new BaseGameController(2);
-            gm.RegisterGameController(controller);
+            th = new TurnHandler(2, false);
+            gm.RegisterTurnHandler(th);
 
             players = new();
             for (var i = 0; i < 2; i++)
