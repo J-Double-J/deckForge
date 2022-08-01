@@ -366,7 +366,7 @@ namespace DeckForge.GameConstruction
         /// <inheritdoc/>
         public void OnSimplePlayerMessage(object? sender, SimplePlayerMessageEventArgs e)
         {
-            if (e.message == "LOSE_GAME")
+            if (e.Message == "LOSE_GAME")
             {
                 IPlayer playerSender = (IPlayer)sender!;
                 PlayerLost(playerSender.PlayerID);

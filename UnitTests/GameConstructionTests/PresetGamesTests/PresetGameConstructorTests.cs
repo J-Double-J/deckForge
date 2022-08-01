@@ -4,12 +4,14 @@ using FluentAssertions;
 namespace UnitTests.GameConstructionTests.PresetGamesTests
 {
     [TestClass]
-    public class PresetGameConstructorTests {
+    public class PresetGameConstructorTests
+    {
 
         [TestMethod]
-        public void PassInvalidGameName() {
+        public void PassInvalidGameName()
+        {
             string name = "ThisIsAFakeGameName";
- 
+
             Action a = () => new PresetGameConstructor(name);
             a.Should().Throw<ArgumentException>($"because there is no game called {name}");
         }
@@ -18,10 +20,11 @@ namespace UnitTests.GameConstructionTests.PresetGamesTests
         [DataRow("war")]
         [DataRow("WAR")]
         [DataRow("wAr")]
-        public void PassValidGameName_WithVariousCasing(string name) {
+        public void PassValidGameName_WithVariousCasing(string name)
+        {
             PresetGameConstructor pgc = new PresetGameConstructor(name);
 
-            pgc.isValidGame().Should().Be(true, "the game should be able to be found and be case insensitive");
+            pgc.IsValidGame().Should().Be(true, "the game should be able to be found and be case insensitive");
         }
     }
 }

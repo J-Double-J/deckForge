@@ -90,7 +90,7 @@ namespace DeckForge.PlayerConstruction
         /// Flips a single <see cref="Card"/> belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
         /// <param name="cardPos">Position of the card on the <see cref="Table"/></param>
-        /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>, 
+        /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>,
         /// otherwise flipped regardless of current orientation.</param>
         /// <returns>Reference to <see cref="Card"/> that was flipped.</returns>
         public Card FlipSingleCard(int cardPos, bool? facedown = null);
@@ -100,7 +100,6 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <returns>Reference to the List of <see cref="Card"/>s that were picked up.</returns>
         public List<Card> TakeAllCardsFromTable();
-
 
         /// <summary>
         /// Adds an <see cref="IResourceCollection"/> for <see cref="IPlayer"/> to manage.
@@ -142,7 +141,7 @@ namespace DeckForge.PlayerConstruction
 
         /// <summary>
         /// Removes a specific resource from the <see cref="IResourceCollection"/>. If resources
-        /// are not unique, then any resource will be removed. 
+        /// are not unique, then any resource will be removed.
         /// </summary>
         /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/>.</param>
         /// <param name="resource">Resource to remove. Resource must match type managed by <see cref="IResourceCollection"/></param>
@@ -196,6 +195,5 @@ namespace DeckForge.PlayerConstruction
         /// <param name="includeSelf">Specifies whether to include <see cref="IPlayer"/> executing action in target list if <c>true</c></param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameActionAgainstMultiplePlayers(IGameAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
-
     }
 }

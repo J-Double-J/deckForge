@@ -1,6 +1,5 @@
 namespace DeckForge.GameRules.RoundConstruction.Interfaces
 {
-
     /// <summary>
     /// Contains all the rules and information regarding to how a round plays from start to finish.
     /// </summary>

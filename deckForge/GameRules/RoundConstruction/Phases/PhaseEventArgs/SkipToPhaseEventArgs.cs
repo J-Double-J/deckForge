@@ -20,6 +20,5 @@ namespace DeckForge.GameRules.RoundConstruction.Phases.PhaseEventArgs
         /// Gets the Index of the <see cref="IPhase"/> to skip to in the Round.
         /// </summary>
         public int PhaseNum { get; }
-
     }
 }

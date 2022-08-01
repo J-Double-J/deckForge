@@ -41,7 +41,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// passed.</param>
         public void PlayerRaisedEvent(object? sender, SimplePlayerMessageEventArgs args)
         {
-            if (args.message == "LOSE_GAME")
+            if (args.Message == "LOSE_GAME")
             {
                 EndRound();
             }
