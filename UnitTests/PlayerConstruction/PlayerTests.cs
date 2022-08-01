@@ -26,7 +26,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerCannotExecute_DrawCommand_WithTargetting() {
+        public void PlayerCannotExecute_DrawCommand_WithTargetting()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             IPlayer p1 = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
@@ -58,7 +59,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerFindsCorrectResourceCollection() {
+        public void PlayerFindsCorrectResourceCollection()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck();
@@ -70,7 +72,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerDrawsCardFromDeckResource() {
+        public void PlayerDrawsCardFromDeckResource()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck();
@@ -79,7 +82,7 @@ namespace UnitTests.PlayerConstruction
             p.AddResourceCollection(d);
 
             Card? c = (Card?)p.TakeResourceFromCollection(0);
-            c!.val.Should().Be(21, "the deck had 21W be added to the top");
+            c!.Val.Should().Be(21, "the deck had 21W be added to the top");
         }
 
         [TestMethod]
@@ -93,11 +96,12 @@ namespace UnitTests.PlayerConstruction
             p.AddResourceToCollection(0, new Card(21, "W"));
 
             Card? c = (Card?)p.TakeResourceFromCollection(0);
-            c!.val.Should().Be(21, "the card 21W was added to the collection by the player");
+            c!.Val.Should().Be(21, "the card 21W was added to the collection by the player");
         }
 
         [TestMethod]
-        public void PlayerCannotAdd_InvalidResourcesToCollection() {
+        public void PlayerCannotAdd_InvalidResourcesToCollection()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck(defaultAddCardPos: "top");
@@ -109,7 +113,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerCanAdd_MultipleResourcesToCollection() {
+        public void PlayerCanAdd_MultipleResourcesToCollection()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck(defaultAddCardPos: "top");
@@ -121,11 +126,12 @@ namespace UnitTests.PlayerConstruction
             p.AddMultipleResourcesToCollection(0, objects);
             Card drawnCard = (Card)p.TakeResourceFromCollection(0)!;
 
-            drawnCard.val.Should().Be(24, "the last card added was 24W");
+            drawnCard.Val.Should().Be(24, "the last card added was 24W");
         }
 
         [TestMethod]
-        public void PlayerCannotAdd_MultipleInvalidResourcesToCollection() {
+        public void PlayerCannotAdd_MultipleInvalidResourcesToCollection()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck(defaultAddCardPos: "top");
@@ -153,7 +159,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerCanIncrement_ResourceCollection() {
+        public void PlayerCanIncrement_ResourceCollection()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck();
@@ -178,7 +185,8 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerKnowsTheirDeckCount() {
+        public void PlayerKnowsTheirDeckCount()
+        {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Deck d = new Deck();

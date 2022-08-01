@@ -7,7 +7,8 @@ namespace UnitTests.GameElements
     public class HandTests
     {
         [TestMethod]
-        public void HandCanBeGivenCard() {
+        public void HandCanBeGivenCard()
+        {
             Hand h = new();
 
             h.AddResource(new Card(21, "W"));
@@ -23,11 +24,12 @@ namespace UnitTests.GameElements
             h.AddResource(new Card(21, "W"));
             Card c = h.GetCardAt(0);
 
-            c.val.Should().Be(21, "the card at 0 pos in the hand was the card 21W");
+            c.Val.Should().Be(21, "the card at 0 pos in the hand was the card 21W");
         }
 
         [TestMethod]
-        public void HandCannotGetCardAt_InvalidPos() {
+        public void HandCannotGetCardAt_InvalidPos()
+        {
             Hand h = new();
 
             h.AddResource(new Card(21, "W"));
@@ -37,7 +39,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void RemoveSpecificCardInHand() {
+        public void RemoveSpecificCardInHand()
+        {
             Hand h = new();
             Card c = new Card(21, "W");
 
@@ -48,7 +51,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void HandCannotDecrementOrIncrement() {
+        public void HandCannotDecrementOrIncrement()
+        {
             Hand h = new();
 
             Action a = () => h.IncrementResourceCollection();
@@ -59,7 +63,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void HandCannotGainResource() {
+        public void HandCannotGainResource()
+        {
             Hand h = new();
 
             Action a = () => h.GainResource();
@@ -68,7 +73,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void HandCanClearCollection() {
+        public void HandCanClearCollection()
+        {
             Hand h = new();
 
             h.AddResource(new Card(21, "W"));

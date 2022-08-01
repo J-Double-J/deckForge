@@ -38,7 +38,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
             bool isWar;
             if (FlippedCards.Count > 0)
             {
-                if (FlippedCards[0].val != FlippedCards[1].val)
+                if (FlippedCards[0].Val != FlippedCards[1].Val)
                 {
                     isWar = false;
                 }
@@ -58,7 +58,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <inheritdoc/>
         public override void EndPhase()
         {
-            FlippedCards = new ();
+            FlippedCards = new();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         {
             if (!isWar)
             {
-                if (FlippedCards![0].val > FlippedCards[1].val)
+                if (FlippedCards![0].Val > FlippedCards[1].Val)
                 {
                     GM.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, Actions[0]);
                     GM.TellPlayerToDoAction(0, Actions[1]);

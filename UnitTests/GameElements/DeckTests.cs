@@ -67,7 +67,7 @@ namespace UnitTests.GameElements
             deck.AddCardToDeck(c, pos: "top");
             Card drawn = deck.DrawCard()!;
 
-            drawn.val.Should().Be(99, "the special card was added to the top of the deck");
+            drawn.Val.Should().Be(99, "the special card was added to the top of the deck");
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace UnitTests.GameElements
             }
             Card drawn = deck.DrawCard()!;
 
-            drawn.val.Should().Be(99, "the special card was added to the bottom of the deck");
+            drawn.Val.Should().Be(99, "the special card was added to the bottom of the deck");
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace UnitTests.GameElements
             }
             Card drawn = deck.DrawCard()!;
 
-            drawn.val.Should().Be(99, "the special card was added to the middle of the deck");
+            drawn.Val.Should().Be(99, "the special card was added to the middle of the deck");
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace UnitTests.GameElements
                 deck.DrawCard();
             }
             Card drawn = deck.DrawCard()!;
-            drawn.val.Should().Be(99, "the special card was put 2 cards from the top");
+            drawn.Val.Should().Be(99, "the special card was put 2 cards from the top");
         }
 
         [TestMethod]
@@ -145,18 +145,20 @@ namespace UnitTests.GameElements
         //Testing IResourceCollection Implementation
 
         [TestMethod]
-        public void AddResouceToDeck() {
+        public void AddResouceToDeck()
+        {
             Card c = new(21, "J");
             Deck d = new Deck(defaultAddCardPos: "top");
 
             d.AddResource(c);
             var cardDrawn = d.DrawCard();
 
-            c.val.Should().Be(21, "the card '21J' was added to the top of the deck and then drawn");
+            c.Val.Should().Be(21, "the card '21J' was added to the top of the deck and then drawn");
         }
 
         [TestMethod]
-        public void RemoveResourceFromDeck() {
+        public void RemoveResourceFromDeck()
+        {
             Card c = new(21, "J");
             Deck d = new Deck(defaultAddCardPos: "top");
 
@@ -167,7 +169,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void DeckCannotIncrementResourceCollection() {
+        public void DeckCannotIncrementResourceCollection()
+        {
             Deck d = new Deck();
 
             Action a = () => { d.IncrementResourceCollection(); };
@@ -176,7 +179,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void DeckDecrementsDeckSize() {
+        public void DeckDecrementsDeckSize()
+        {
             Deck d = new Deck();
 
             d.DecrementResourceCollection();
@@ -185,17 +189,19 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void DeckCanGiveResource() {
+        public void DeckCanGiveResource()
+        {
             Deck d = new(defaultAddCardPos: "top");
 
             d.AddResource(new Card(21, "W"));
             Card? c = d.GainResource();
 
-            c!.val.Should().Be(21, "the card 21W was added to the top of the deck");
+            c!.Val.Should().Be(21, "the card 21W was added to the top of the deck");
         }
 
         [TestMethod]
-        public void DeckCanBeCleared() {
+        public void DeckCanBeCleared()
+        {
             Deck d = new();
 
             d.ClearCollection();
@@ -204,7 +210,8 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void DeckCanResourceCount() {
+        public void DeckCanResourceCount()
+        {
             Deck d = new();
 
             d.DrawCard();
