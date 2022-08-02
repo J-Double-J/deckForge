@@ -17,7 +17,6 @@ namespace UnitTests.GameElements
             deck.DrawCard();
 
             deck.Count.Should().Be(initSize - 1, "a card was drawn");
-            //Assert.IsTrue((deck.Size() == initSize - 1), "Deck did not shrink on card draw");
         }
 
         [TestMethod]
@@ -36,7 +35,7 @@ namespace UnitTests.GameElements
         public void CardsWereDrawn_FromDeckXTimes(int count)
         {
             DeckOfPlayingCards deck = new();
-            List<PlayingCard>? cards = new();
+            List<PlayingCard?> cards = new();
 
             cards = deck.DrawMultipleCards(count);
 
@@ -48,7 +47,7 @@ namespace UnitTests.GameElements
         public void CardsWereDrawn_FromNearEmptyDeckXTimes(int count)
         {
             DeckOfPlayingCards deck = new();
-            List<PlayingCard>? cards = new();
+            List<PlayingCard?> cards = new();
 
             deck.DrawMultipleCards(49);
             int initDeckSize = deck.Count;
