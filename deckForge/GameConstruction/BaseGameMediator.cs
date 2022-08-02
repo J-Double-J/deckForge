@@ -405,6 +405,12 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
+        public void ShuffleDeckOnTable(int deckPosition)
+        {
+            GameTable!.ShuffleDeck(deckPosition);
+        }
+
         /// <summary>
         /// Gets the index of an <see cref="IPlayer"/> by their <paramref name="playerID"/> in the Players array.
         /// </summary>

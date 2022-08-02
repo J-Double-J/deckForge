@@ -109,5 +109,11 @@ namespace DeckForge.GameElements
         /// <param name="deckNum">ID of the <see cref="DeckOfPlayingCards"/> of interest on the <see cref="ITable"/>.</param>
         /// <returns>A list of nullable <see cref="PlayingCard"/>s that were drawn.</returns>
         public List<PlayingCard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum);
+
+        /// <summary>
+        /// Shuffles a <see cref="DeckOfPlayingCards"/> on the <see cref="ITable"/>.
+        /// </summary>
+        /// <param name="deckPosition">Index or position of the <see cref="DeckOfPlayingCards"/>.</param>
+        public void ShuffleDeck(int deckPosition);
     }
 }

@@ -185,5 +185,12 @@ namespace DeckForge.GameConstruction
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> that lost.</param>
         public void PlayerLost(int playerID);
+
+        /// <summary>
+        /// Shuffles a <see cref="Deck"/> on the <see cref="Table"/>
+        /// </summary>
+        /// <param name="deckPosition">Position of the <see cref="Deck"/>
+        /// on the table.</param>
+        public void ShuffleDeckOnTable(int deckPosition);
     }
 }

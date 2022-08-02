@@ -20,14 +20,14 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new ();
+            PlayedCards = new();
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new ();
+                List<PlayingCard> cards = new();
                 PlayedCards.Add(cards);
             }
 
-            TableDecks = new ();
+            TableDecks = new();
         }
 
         /// <summary>
@@ -42,14 +42,14 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new ();
+            PlayedCards = new();
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new ();
+                List<PlayingCard> cards = new();
                 PlayedCards.Add(cards);
             }
 
-            TableDecks = new ()
+            TableDecks = new()
             {
                 initDeck
             };
@@ -67,10 +67,10 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new ();
+            PlayedCards = new();
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new ();
+                List<PlayingCard> cards = new();
                 PlayedCards.Add(cards);
             }
 
@@ -235,7 +235,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                List<PlayingCard> cards = new ();
+                List<PlayingCard> cards = new();
                 var numCardsToGrab = PlayedCards[playerID].Count;
                 for (var i = 0; i < numCardsToGrab; i++)
                 {
@@ -268,7 +268,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public List<PlayingCard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0)
         {
-            List<PlayingCard?> cards = new ();
+            List<PlayingCard?> cards = new();
             try
             {
                 for (var i = 0; i < cardCount; i++)
@@ -277,6 +277,18 @@ namespace DeckForge.GameElements
                 }
 
                 return cards;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void ShuffleDeck(int deckPosition)
+        {
+            try
+            {
+                TableDecks[deckPosition].Shuffle();
             }
             catch
             {
