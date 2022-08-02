@@ -19,13 +19,13 @@ namespace UnitTests.PlayerRoundRulesTests
             IGameMediator gm = new TestGameMediator(3);
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 3, new Deck());
+            Table table = new(gm, 3, new DeckOfPlayingCards());
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
             for (var i = 0; i < 3; i++)
             {
-                players.Add(new WarPlayer(gm, i, new Deck()));
+                players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
 
@@ -52,13 +52,13 @@ namespace UnitTests.PlayerRoundRulesTests
             IGameMediator gm = new TestGameMediator(3);
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 3, new Deck());
+            Table table = new(gm, 3, new DeckOfPlayingCards());
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
             for (var i = 0; i < 3; i++)
             {
-                players.Add(new WarPlayer(gm, i, new Deck()));
+                players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
             List<int> targetPlayOrder = new List<int>() { 0, 2 };

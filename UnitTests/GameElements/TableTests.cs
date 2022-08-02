@@ -10,7 +10,7 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-        static readonly List<Deck> decks = new() { new Deck(), new Deck(), new Deck() };
+        static readonly List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
         private static IGameMediator gm = new BaseGameMediator(2);
         private static Table table = new(gm, 2, decks);
         private static StringWriter output = new();
@@ -35,7 +35,7 @@ namespace UnitTests.GameElements
         [DataRow(7)]
         public void PlaceCardOnTableInFrontOfNonexistantPlayer(int fakePlayerID)
         {
-            Action a = () => table.PlaceCardOnTable(fakePlayerID, new Card(8, "J"));
+            Action a = () => table.PlaceCardOnTable(fakePlayerID, new PlayingCard(8, "J"));
 
             a.Should().Throw<ArgumentException>($"there is no player with the id of {fakePlayerID}");
         }
@@ -45,12 +45,12 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.PlaceCardOnTable(0, new Card(8, "J", facedown: false));
-            table.PlaceCardOnTable(0, new Card(9, "J", facedown: false));
-            table.PlaceCardOnTable(0, new Card(10, "J", facedown: false));
-            table.PlaceCardOnTable(1, new Card(8, "J", facedown: false));
-            table.PlaceCardOnTable(1, new Card(9, "J", facedown: false));
-            table.PlaceCardOnTable(1, new Card(10, "J", facedown: false));
+            table.PlaceCardOnTable(0, new PlayingCard(8, "J", facedown: false));
+            table.PlaceCardOnTable(0, new PlayingCard(9, "J", facedown: false));
+            table.PlaceCardOnTable(0, new PlayingCard(10, "J", facedown: false));
+            table.PlaceCardOnTable(1, new PlayingCard(8, "J", facedown: false));
+            table.PlaceCardOnTable(1, new PlayingCard(9, "J", facedown: false));
+            table.PlaceCardOnTable(1, new PlayingCard(10, "J", facedown: false));
 
             table.PrintTableState();
             if (OperatingSystem.IsMacOS())
@@ -65,9 +65,9 @@ namespace UnitTests.GameElements
             string s = String.Empty;
             setUpTableForTests();
 
-            List<Card> cards = table.GetCardsForSpecificPlayer(0);
+            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0);
 
-            foreach (Card c in cards)
+            foreach (PlayingCard c in cards)
                 s += c.PrintCard();
 
             s.Should().Be("8J9J", "these are the cards that Player 0 has in front of them");
@@ -205,7 +205,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void PickUpAllCards_From_APlayerTableSpot()
         {
-            List<Card> cards;
+            List<PlayingCard> cards;
 
             setUpTableForTests();
 
@@ -267,20 +267,20 @@ namespace UnitTests.GameElements
         [DataRow(2)]
         public void TableCanDrawCard_FromSpecificDeck(int deckNum)
         {
-            Card? c = table.DrawCardFromDeck(0)!;
+            PlayingCard? c = table.DrawCardFromDeck(0)!;
 
             c.Should().NotBeNull("because a new card is being drawn from this deck");
         }
 
         [TestMethod]
         public void TableCanDrawManyCards_FromSpecificDeck() {
-            List<Card?> cards  = new List<Card?>();
+            List<PlayingCard?> cards  = new List<PlayingCard?>();
 
             cards = table.DrawMultipleCardsFromDeck(5);
 
             cards.Count.Should().Be(5, "5 cards was drawn from the first deck");
 
-            foreach(Card? c in cards)
+            foreach(PlayingCard? c in cards)
             {
                 c.Should().NotBeNull("the deck is new and should not be empty");
             }
@@ -299,10 +299,10 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.PlaceCardOnTable(0, new Card(8, "J", facedown: false));
-            table.PlaceCardOnTable(0, new Card(9, "J", facedown: false));
-            table.PlaceCardOnTable(1, new Card(1, "Q", facedown: false));
-            table.PlaceCardOnTable(1, new Card(2, "Q", facedown: true));
+            table.PlaceCardOnTable(0, new PlayingCard(8, "J", facedown: false));
+            table.PlaceCardOnTable(0, new PlayingCard(9, "J", facedown: false));
+            table.PlaceCardOnTable(1, new PlayingCard(1, "Q", facedown: false));
+            table.PlaceCardOnTable(1, new PlayingCard(2, "Q", facedown: true));
         }
     }
 }

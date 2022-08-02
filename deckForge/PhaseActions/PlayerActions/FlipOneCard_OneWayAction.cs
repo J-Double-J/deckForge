@@ -31,15 +31,15 @@ namespace DeckForge.PhaseActions
         }
 
         /// <summary>
-        /// Gets or sets the specific <see cref="Card"/> position on the table to specify
-        /// which <see cref="Card"/> to flip.
+        /// Gets or sets the specific <see cref="PlayingCard"/> position on the table to specify
+        /// which <see cref="PlayingCard"/> to flip.
         /// </summary>
         public int SpecificCardTablePos { get; set; }
 
         // Returns what card was targetted for the flip
 
         /// <inheritdoc/>
-        public override Card Execute(IPlayer player)
+        public override PlayingCard Execute(IPlayer player)
         {
             return player.FlipSingleCard(SpecificCardTablePos, facedown);
         }

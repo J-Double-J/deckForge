@@ -55,15 +55,15 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <param name="gm"><see cref="IGameMediator"/> that all the <see cref="IPlayer"/>s will use to communicate
         /// with other game elements.</param>
         /// <param name="table"><see cref="Table"/> that the <see cref="IPlayer"/>s will draw their
-        /// <see cref="Card"/>s from.</param>
+        /// <see cref="PlayingCard"/>s from.</param>
         /// <returns>List of prepared <see cref="IPlayer"/>s for <see cref="War"/>.</returns>
         private static List<IPlayer> WarPlayerSetUp(IGameMediator gm, Table table)
         {
             List<IPlayer> players = new ();
             for (var i = 0; i < 2; i++)
             {
-                List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
-                Deck deck = new (cards);
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                DeckOfPlayingCards deck = new (cards);
                 IPlayer player = new WarPlayer(gm, i, deck);
                 players.Add(player);
             }

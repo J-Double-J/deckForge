@@ -8,11 +8,11 @@ namespace DeckForge.GameConstruction.PresetGames.War
 {
     /// <summary>
     /// First <see cref="PlayerPhase"/> of <see cref="War"/>. <see cref="IPlayer"/>s will
-    /// draw a <see cref="Card"/> and then flip it.
+    /// draw a <see cref="PlayingCard"/> and then flip it.
     /// </summary>
     public class WarPlayCardsPhase : PlayerPhase
     {
-        private List<Card?> flippedCards = new ();
+        private List<PlayingCard?> flippedCards = new ();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarPlayCardsPhase"/> class.
@@ -31,11 +31,11 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <summary>
         /// Gets the flipped cards during <see cref="WarPlayCardsPhase"/>.
         /// </summary>
-        /// <returns>List of <see cref="Card"/>s that were flipped.</returns>
-        /// <exception cref="NullReferenceException">Throws exception if a <see cref="Card"/> is nonexistant.</exception>
-        public List<Card> GetFlippedCards()
+        /// <returns>List of <see cref="PlayingCard"/>s that were flipped.</returns>
+        /// <exception cref="NullReferenceException">Throws exception if a <see cref="PlayingCard"/> is nonexistant.</exception>
+        public List<PlayingCard> GetFlippedCards()
         {
-            foreach (Card? c in flippedCards)
+            foreach (PlayingCard? c in flippedCards)
             {
                 if (c is null)
                 {
@@ -70,7 +70,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
                 if (actionNum == 0)
                 {
                     handledAction = true;
-                    Card? drawnCard = (Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
+                    PlayingCard? drawnCard = (PlayingCard?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]);
 
                     if (drawnCard is not null)
                     {

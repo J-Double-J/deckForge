@@ -7,7 +7,7 @@ using DeckForge.PlayerConstruction;
 namespace DeckForge.GameConstruction.PresetGames.War
 {
     /// <summary>
-    /// Second phase of War where <see cref="Card"/>s are compared against one another.
+    /// Second phase of War where <see cref="PlayingCard"/>s are compared against one another.
     /// <see cref="WarComparePhase"/> then decides if it should end the Round or go to <see cref="WarPhase"/>.
     /// </summary>
     public class WarComparePhase : PlayerPhase
@@ -22,15 +22,15 @@ namespace DeckForge.GameConstruction.PresetGames.War
         public WarComparePhase(IGameMediator gm, List<int> playerIDs, string phaseName)
         : base(gm, playerIDs, phaseName)
         {
-            FlippedCards = new List<Card>();
+            FlippedCards = new List<PlayingCard>();
             Actions.Add(new TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction());
             Actions.Add(new PickUpOwnCardsFromTableAction());
         }
 
         /// <summary>
-        /// Gets or sets the flipped <see cref="Card"/>s that the <see cref="WarComparePhase"/> will compare.
+        /// Gets or sets the flipped <see cref="PlayingCard"/>s that the <see cref="WarComparePhase"/> will compare.
         /// </summary>
-        public List<Card> FlippedCards { get; set; }
+        public List<PlayingCard> FlippedCards { get; set; }
 
         /// <inheritdoc/>
         public override void StartPhase()
@@ -62,11 +62,11 @@ namespace DeckForge.GameConstruction.PresetGames.War
         }
 
         /// <summary>
-        /// Decides if the game needs to go to <see cref="WarPhase"/> or not. Gives <see cref="Card"/>s to
+        /// Decides if the game needs to go to <see cref="WarPhase"/> or not. Gives <see cref="PlayingCard"/>s to
         /// winning <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="isWar">If <c>true</c> game will go to <see cref="WarPhase"/>
-        /// else it will give <see cref="Card"/>s to winning <see cref="IPlayer"/>.</param>
+        /// else it will give <see cref="PlayingCard"/>s to winning <see cref="IPlayer"/>.</param>
         private void DecideIfGoToWarPhase(bool isWar)
         {
             if (!isWar)

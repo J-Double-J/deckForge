@@ -13,7 +13,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
     public class WarPhase : PlayerPhase
     {
         private int iteration = 1;
-        private List<Card?> flippedCards = new ();
+        private List<PlayingCard?> flippedCards = new ();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarPhase"/> class.
@@ -48,11 +48,11 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <summary>
         /// Gets the flipped cards up cards in the War phase.
         /// </summary>
-        /// <returns>List of <see cref="Card"/>s that were flipped.</returns>
+        /// <returns>List of <see cref="PlayingCard"/>s that were flipped.</returns>
         /// <exception cref="NullReferenceException">Throws exception if flipped card was nonexistant.</exception>
-        public List<Card> GetFlippedCards()
+        public List<PlayingCard> GetFlippedCards()
         {
-            foreach (Card? c in flippedCards)
+            foreach (PlayingCard? c in flippedCards)
             {
                 if (c is null)
                 {
@@ -88,8 +88,8 @@ namespace DeckForge.GameConstruction.PresetGames.War
             if (actionNum == 1)
             {
                 handledAction = true;
-                flippedCards.Add((Card?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
-                foreach (Card? card in flippedCards)
+                flippedCards.Add((PlayingCard?)GM.TellPlayerToDoAction(playerID, Actions[actionNum]));
+                foreach (PlayingCard? card in flippedCards)
                 {
                     if (card is null)
                     {

@@ -2,20 +2,20 @@ using System.Collections;
 
 namespace DeckForge.GameElements.Resources
 {
-    public class Deck : IResourceCollection<Card>
+    public class DeckOfPlayingCards : IResourceCollection<PlayingCard>
     {
-        private List<Card> deck = new List<Card>();
+        private List<PlayingCard> deck = new List<PlayingCard>();
         private string _defaultAddCardPos;
         private bool _defaultShuffleOnAddCard;
 
-        public Deck() {
+        public DeckOfPlayingCards() {
             createDeck();
             Shuffle();
             _defaultAddCardPos = "bottom";
             _defaultShuffleOnAddCard = false;
         }
 
-        public Deck(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
+        public DeckOfPlayingCards(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             createDeck();
             Shuffle();
@@ -23,18 +23,18 @@ namespace DeckForge.GameElements.Resources
             _defaultShuffleOnAddCard = defaultShuffleOnAddCard;
         }
 
-        public Deck(List<Card> cards, string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
+        public DeckOfPlayingCards(List<PlayingCard> cards, string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             deck = cards;
             _defaultAddCardPos = defaultAddCardPos;
             _defaultShuffleOnAddCard = defaultShuffleOnAddCard;
         }
 
-        public Card? DrawCard(bool drawFacedown = false)
+        public PlayingCard? DrawCard(bool drawFacedown = false)
         {
             if (deck.Count != 0)
             {
-                Card c = deck[deck.Count - 1];
+                PlayingCard c = deck[deck.Count - 1];
                 deck.RemoveAt(deck.Count - 1);
 
                 if (c.Facedown != drawFacedown)
@@ -47,12 +47,12 @@ namespace DeckForge.GameElements.Resources
             }
         }
 
-        public List<Card>? DrawMultipleCards(int count)
+        public List<PlayingCard>? DrawMultipleCards(int count)
         {
-            List<Card>? cards = new();
+            List<PlayingCard>? cards = new();
             for (int i = 0; i < count; i++)
             {
-                Card? c = DrawCard();
+                PlayingCard? c = DrawCard();
                 if (c != null)
                     cards.Add(c);
                 else
@@ -71,7 +71,7 @@ namespace DeckForge.GameElements.Resources
             {
                 n--;
                 int k = rng.Next(n + 1);
-                Card value = deck[k];
+                PlayingCard value = deck[k];
                 deck[k] = deck[n];
                 deck[n] = value;
             }
@@ -92,23 +92,23 @@ namespace DeckForge.GameElements.Resources
                     switch (j)
                     {
                         case 0:
-                            deck.Add(new Card(i, "H"));
+                            deck.Add(new PlayingCard(i, "H"));
                             break;
                         case 1:
-                            deck.Add(new Card(i, "D"));
+                            deck.Add(new PlayingCard(i, "D"));
                             break;
                         case 2:
-                            deck.Add(new Card(i, "S"));
+                            deck.Add(new PlayingCard(i, "S"));
                             break;
                         case 3:
-                            deck.Add(new Card(i, "C"));
+                            deck.Add(new PlayingCard(i, "C"));
                             break;
                     }
                 }
             }
         }
 
-        public void AddCardToDeck(Card card, string pos = "bottom", bool shuffleAfter = false)
+        public void AddCardToDeck(PlayingCard card, string pos = "bottom", bool shuffleAfter = false)
         {
             if (pos == "bottom")
             {
@@ -149,11 +149,11 @@ namespace DeckForge.GameElements.Resources
             }
         }
 
-        public void AddMultipleCardsToDeck(List<Card> cards, string pos = "bottom", bool shuffleAfter = false)
+        public void AddMultipleCardsToDeck(List<PlayingCard> cards, string pos = "bottom", bool shuffleAfter = false)
         {
             try
             {
-                foreach (Card c in cards)
+                foreach (PlayingCard c in cards)
                 {
                     AddCardToDeck(c, pos: pos);
                 }
@@ -169,15 +169,15 @@ namespace DeckForge.GameElements.Resources
 
         public Type ResourceType
         {
-            get { return typeof(Card); }
+            get { return typeof(PlayingCard); }
         }
 
-        public void AddResource(Card resource)
+        public void AddResource(PlayingCard resource)
         {
             AddCardToDeck(resource, pos: _defaultAddCardPos, shuffleAfter: _defaultShuffleOnAddCard);
         }
 
-        public void RemoveResource(Card resource)
+        public void RemoveResource(PlayingCard resource)
         {
             for (int i = 0; i < Count; i++) {
                 if (deck[i] == resource) {
@@ -192,7 +192,7 @@ namespace DeckForge.GameElements.Resources
             {
                 for (int i = 0; i < resources.Count; i++)
                 {
-                    AddResource((Card)Convert.ChangeType(resources[i], typeof(Card))!);
+                    AddResource((PlayingCard)Convert.ChangeType(resources[i], typeof(PlayingCard))!);
                 }
             }
             catch {
@@ -210,14 +210,14 @@ namespace DeckForge.GameElements.Resources
             deck.RemoveAt(deck.Count - 1);
         }
 
-        public Card? GainResource()
+        public PlayingCard? GainResource()
         {
             return DrawCard();
         }
 
-        public List<Card>? ClearCollection()
+        public List<PlayingCard>? ClearCollection()
         {
-            List<Card> cardsRemoved = deck;
+            List<PlayingCard> cardsRemoved = deck;
             deck.Clear();
 
             return cardsRemoved;

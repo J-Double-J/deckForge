@@ -11,7 +11,7 @@ namespace UnitTests.GameElements
         {
             Hand h = new();
 
-            h.AddResource(new Card(21, "W"));
+            h.AddResource(new PlayingCard(21, "W"));
 
             h.CurrentHandSize.Should().Be(1, "a card was added to the hand");
         }
@@ -21,8 +21,8 @@ namespace UnitTests.GameElements
         {
             Hand h = new();
 
-            h.AddResource(new Card(21, "W"));
-            Card c = h.GetCardAt(0);
+            h.AddResource(new PlayingCard(21, "W"));
+            PlayingCard c = h.GetCardAt(0);
 
             c.Val.Should().Be(21, "the card at 0 pos in the hand was the card 21W");
         }
@@ -32,7 +32,7 @@ namespace UnitTests.GameElements
         {
             Hand h = new();
 
-            h.AddResource(new Card(21, "W"));
+            h.AddResource(new PlayingCard(21, "W"));
             Action a = () => h.GetCardAt(1);
 
             a.Should().Throw<ArgumentOutOfRangeException>("there is no card at pos 1");
@@ -42,7 +42,7 @@ namespace UnitTests.GameElements
         public void RemoveSpecificCardInHand()
         {
             Hand h = new();
-            Card c = new Card(21, "W");
+            PlayingCard c = new PlayingCard(21, "W");
 
             h.AddResource(c);
             h.RemoveResource(c);
@@ -77,7 +77,7 @@ namespace UnitTests.GameElements
         {
             Hand h = new();
 
-            h.AddResource(new Card(21, "W"));
+            h.AddResource(new PlayingCard(21, "W"));
             h.ClearCollection();
 
             h.CurrentHandSize.Should().Be(0, "hand had its cards removed cleared from it");

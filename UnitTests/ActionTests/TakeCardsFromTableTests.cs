@@ -16,15 +16,15 @@ namespace UnitTests.ActionTests
             IPlayer player = new BasePlayer(gm);
             IPlayer opponent = new BasePlayer(gm, 1);
             Table table = new (gm, 2);
-            Deck deckOne = new Deck();
-            Deck deckTwo = new Deck();
+            DeckOfPlayingCards deckOne = new DeckOfPlayingCards();
+            DeckOfPlayingCards deckTwo = new DeckOfPlayingCards();
 
             player.AddResourceCollection(deckOne);
             opponent.AddResourceCollection(deckTwo);
 
-            table.PlaceCardOnTable(0, (Card)player.TakeResourceFromCollection(0)!);
-            table.PlaceCardOnTable(0, (Card)player.TakeResourceFromCollection(0)!);
-            table.PlaceCardOnTable(1, (Card)opponent.TakeResourceFromCollection(0)!);
+            table.PlaceCardOnTable(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
+            table.PlaceCardOnTable(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
+            table.PlaceCardOnTable(1, (PlayingCard)opponent.TakeResourceFromCollection(0)!);
 
             IGameAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction();
             gameAction.Execute(player, opponent);

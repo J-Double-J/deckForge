@@ -23,15 +23,15 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
         public void InitializeTableTests()
         {
             gm = new BaseGameMediator(2);
-            table = new(gm, 2, new Deck());
+            table = new(gm, 2, new DeckOfPlayingCards());
             th = new TurnHandler(2, false);
             gm.RegisterTurnHandler(th);
 
             players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
-                Deck deck = new(cards, defaultAddCardPos: "top");
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                DeckOfPlayingCards deck = new(cards, defaultAddCardPos: "top");
                 players.Add(new WarPlayer(gm, i, deck));
             }
 
@@ -44,16 +44,16 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
 
         [TestMethod]
         public void WarRoundGoesThroughAllPhasesCorrectly() {
-            List<Card> riggedCardsForPlayerZero = new List<Card>() {
-                new Card(10, "H"), //Win in 2nd comparison phase
-                new Card(2, "H"),
-                new Card(3, "H")   //Tie in 1st comparison phase
+            List<PlayingCard> riggedCardsForPlayerZero = new List<PlayingCard>() {
+                new PlayingCard(10, "H"), //Win in 2nd comparison phase
+                new PlayingCard(2, "H"),
+                new PlayingCard(3, "H")   //Tie in 1st comparison phase
             };
 
-            List<Card> riggedCardsForPlayerOne = new List<Card>() {
-                new Card(7, "C"),
-                new Card(2, "C"),
-                new Card(3, "C")
+            List<PlayingCard> riggedCardsForPlayerOne = new List<PlayingCard>() {
+                new PlayingCard(7, "C"),
+                new PlayingCard(2, "C"),
+                new PlayingCard(3, "C")
             };
 
             List<object> resourcesToAdd = riggedCardsForPlayerZero.Cast<object>().ToList();
@@ -67,7 +67,7 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
             rr.StartRound();
 
             table.PrintTableState();
-            List<List<Card>> tableState = table.TableState;
+            List<List<PlayingCard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
             

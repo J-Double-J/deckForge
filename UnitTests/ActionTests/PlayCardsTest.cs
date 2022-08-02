@@ -15,7 +15,7 @@ namespace UnitTests.ActionTests
         {
             bool eventRaised = false;
             IGameMediator gm = new BaseGameMediator(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer p = new BasePlayer(gm);
             p.DrawStartingHand();
@@ -37,7 +37,7 @@ namespace UnitTests.ActionTests
         public void UnsupportedExecutes_ThrowErrors()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
             IPlayer p = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);

@@ -9,7 +9,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
     /// </summary>
     public class WarPlayer : BasePlayer
     {
-        private readonly Deck personalDeck;
+        private readonly DeckOfPlayingCards personalDeck;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarPlayer"/> class.
@@ -18,7 +18,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// with other game elements.</param>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
         /// <param name="deck">Personal deck that the <see cref="WarPlayer"/> manages.</param>
-        public WarPlayer(IGameMediator gm, int playerID, Deck deck)
+        public WarPlayer(IGameMediator gm, int playerID, DeckOfPlayingCards deck)
             : base(gm, playerID: playerID, initHandSize: 0)
         {
             personalDeck = deck;
@@ -26,9 +26,9 @@ namespace DeckForge.GameConstruction.PresetGames.War
         }
 
         /// <inheritdoc/>
-        public override Card? PlayCard(bool facedown = false)
+        public override PlayingCard? PlayCard(bool facedown = false)
         {
-            Card? c = personalDeck!.DrawCard(drawFacedown: true);
+            PlayingCard? c = personalDeck!.DrawCard(drawFacedown: true);
             if (c != null)
             {
                 GM.PlayerPlayedCard(PlayerID, c);

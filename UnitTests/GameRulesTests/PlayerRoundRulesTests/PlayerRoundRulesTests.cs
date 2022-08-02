@@ -27,7 +27,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetRoundHandLimit_SpecifiedLimit(int lim)
         {
             BaseGameMediator gm = new(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -39,7 +39,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetRoundHandLimit_UnSpecifiedLimit()
         {
             BaseGameMediator gm = new(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -51,7 +51,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void SetRoundHandLimitToInvalidValue()
         {
             BaseGameMediator gm = new(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -66,7 +66,7 @@ namespace UnitTests.PlayerRoundRulesTests
         {
 
             BaseGameMediator gm = new(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -78,7 +78,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetCardDrawonNewTurn_UnSpecifiedLimit()
         {
             BaseGameMediator gm = new(1);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -90,7 +90,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void RoundLosePlayerMidWayThrough()
         {
             IGameMediator gm = new TestGameMediator(3);
-            Table table = new(gm, 3, new Deck());
+            Table table = new(gm, 3, new DeckOfPlayingCards());
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
 
@@ -98,7 +98,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<IPlayer> players = new();
             for (var i = 0; i < 3; i++)
             {
-                players.Add(new WarPlayer(gm, i, new Deck()));
+                players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
 
@@ -120,7 +120,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void RoundEndsEarlyOnceAllPlayersButOneAreOut()
         {
             IGameMediator gm = new TestGameMediator(2);
-            Table table = new(gm, 2, new Deck());
+            Table table = new(gm, 2, new DeckOfPlayingCards());
             ITurnHandler th = new TurnHandler(2, false);
             gm.RegisterTurnHandler(th);
 
@@ -128,7 +128,7 @@ namespace UnitTests.PlayerRoundRulesTests
             List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
-                players.Add(new WarPlayer(gm, i, new Deck()));
+                players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
 

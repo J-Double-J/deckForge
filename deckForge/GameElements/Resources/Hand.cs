@@ -2,13 +2,13 @@
 
 namespace DeckForge.GameElements.Resources
 {
-    public class Hand : IResourceCollection<Card>
+    public class Hand : IResourceCollection<PlayingCard>
     {
-        List<Card> hand;
+        List<PlayingCard> hand;
         private int _maxHandSize;
         
         public Hand(int maxHandSize = -1) {
-            hand = new List<Card>();
+            hand = new List<PlayingCard>();
             _maxHandSize = maxHandSize;
         }
 
@@ -25,7 +25,7 @@ namespace DeckForge.GameElements.Resources
             get { return hand.Count; }
         }
 
-        public Card GetCardAt(int i) {
+        public PlayingCard GetCardAt(int i) {
             try
             {
                 return hand[i];
@@ -36,21 +36,21 @@ namespace DeckForge.GameElements.Resources
         }
 
         public Type ResourceType {
-            get { return typeof(Card); }
+            get { return typeof(PlayingCard); }
         }
 
         //If already at hand limit, card is not added.
-        public void AddResource(Card resource)
+        public void AddResource(PlayingCard resource)
         {
             if (MaxHandSize < 0 || CurrentHandSize < MaxHandSize) {
-                hand.Add((Card)resource);
+                hand.Add((PlayingCard)resource);
             }
         }
 
-        public void RemoveResource(Card resource)
+        public void RemoveResource(PlayingCard resource)
         {
             for (var i = 0; i < hand.Count; i++) {
-                if (hand[i] == (Card)resource) {
+                if (hand[i] == (PlayingCard)resource) {
                     hand.RemoveAt(i);
                     i--;
                 }
@@ -63,7 +63,7 @@ namespace DeckForge.GameElements.Resources
             {
                 for (int i = 0; i < resources.Count; i++)
                 {
-                    AddResource((Card)Convert.ChangeType(resources[i], typeof(Card))!);
+                    AddResource((PlayingCard)Convert.ChangeType(resources[i], typeof(PlayingCard))!);
                 }
             }
             catch
@@ -77,7 +77,7 @@ namespace DeckForge.GameElements.Resources
             throw new NotImplementedException();
         }
 
-        public Card? GainResource()
+        public PlayingCard? GainResource()
         {
             throw new NotImplementedException();
         }
@@ -87,8 +87,8 @@ namespace DeckForge.GameElements.Resources
             throw new NotImplementedException();
         }
 
-        public List<Card>? ClearCollection() {
-            List<Card> cardsRemoved = hand;
+        public List<PlayingCard>? ClearCollection() {
+            List<PlayingCard> cardsRemoved = hand;
             hand.Clear();
 
             return cardsRemoved;

@@ -58,7 +58,7 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <inheritdoc/>
-        public List<Card> PlayedCards
+        public List<PlayingCard> PlayedCards
         {
             get
             {
@@ -159,9 +159,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual Card? DrawCard()
+        public virtual PlayingCard? DrawCard()
         {
-            Card? c = GM.DrawCardFromDeck();
+            PlayingCard? c = GM.DrawCardFromDeck();
             if (c != null)
             {
                 PlayerHand.AddResource(c);
@@ -175,7 +175,7 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual Card? PlayCard(bool facedown = false)
+        public virtual PlayingCard? PlayCard(bool facedown = false)
         {
             string? input;
             int selectedVal;
@@ -192,7 +192,7 @@ namespace DeckForge.PlayerConstruction
             }
             while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-            Card c = PlayerHand.GetCardAt(selectedVal);
+            PlayingCard c = PlayerHand.GetCardAt(selectedVal);
             PlayerHand.RemoveResource(c);
 
             if (facedown)
@@ -208,13 +208,13 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public Card FlipSingleCard(int cardNum, bool? facedown = null)
+        public PlayingCard FlipSingleCard(int cardNum, bool? facedown = null)
         {
             return GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
         /// <inheritdoc/>
-        public List<Card> TakeAllCardsFromTable()
+        public List<PlayingCard> TakeAllCardsFromTable()
         {
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
@@ -563,7 +563,7 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <summary>
-        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="Card"/>.
+        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="PlayingCard"/>.
         /// </summary>
         /// <param name="e">The arguments of the <see cref="PlayerPlayedCardEventArgs"/>.</param>
         protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)

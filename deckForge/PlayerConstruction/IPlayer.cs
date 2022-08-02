@@ -12,7 +12,7 @@ namespace DeckForge.PlayerConstruction
     public interface IPlayer
     {
         /// <summary>
-        /// Handles the event that the <see cref="IPlayer"/> played a <see cref="Card"/>.
+        /// Handles the event that the <see cref="IPlayer"/> played a <see cref="PlayingCard"/>.
         /// </summary>
         public event EventHandler<PlayerPlayedCardEventArgs>? PlayerPlayedCard;
 
@@ -32,9 +32,9 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <summary>
-        /// Gets the list of <see cref="Card"/>s that <see cref="IPlayer"/>'s has played.
+        /// Gets the list of <see cref="PlayingCard"/>s that <see cref="IPlayer"/>'s has played.
         /// </summary>
-        public List<Card> PlayedCards { get; }
+        public List<PlayingCard> PlayedCards { get; }
 
         /// <summary>
         /// Gets or sets a value indicating
@@ -76,30 +76,30 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Draws a card.
         /// </summary>
-        /// <returns>The <see cref="Card"/> that was drawn or null.</returns>
-        public Card? DrawCard();
+        /// <returns>The <see cref="PlayingCard"/> that was drawn or null.</returns>
+        public PlayingCard? DrawCard();
 
         /// <summary>
         /// Plays a card.
         /// </summary>
         /// <param name="facedown">Plays card facedown if <c>true</c>, otherwise faceup.</param>
-        /// <returns>The <see cref="Card"/> that was played or null.</returns>
-        public Card? PlayCard(bool facedown = false);
+        /// <returns>The <see cref="PlayingCard"/> that was played or null.</returns>
+        public PlayingCard? PlayCard(bool facedown = false);
 
         /// <summary>
-        /// Flips a single <see cref="Card"/> belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
+        /// Flips a single <see cref="PlayingCard"/> belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
         /// <param name="cardPos">Position of the card on the <see cref="Table"/></param>
         /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>,
         /// otherwise flipped regardless of current orientation.</param>
-        /// <returns>Reference to <see cref="Card"/> that was flipped.</returns>
-        public Card FlipSingleCard(int cardPos, bool? facedown = null);
+        /// <returns>Reference to <see cref="PlayingCard"/> that was flipped.</returns>
+        public PlayingCard FlipSingleCard(int cardPos, bool? facedown = null);
 
         /// <summary>
         /// Takes all cards that the <see cref="IPlayer"/> owns off the table.
         /// </summary>
-        /// <returns>Reference to the List of <see cref="Card"/>s that were picked up.</returns>
-        public List<Card> TakeAllCardsFromTable();
+        /// <returns>Reference to the List of <see cref="PlayingCard"/>s that were picked up.</returns>
+        public List<PlayingCard> TakeAllCardsFromTable();
 
         /// <summary>
         /// Adds an <see cref="IResourceCollection"/> for <see cref="IPlayer"/> to manage.

@@ -29,7 +29,7 @@ namespace DeckForge.GameRules
                 throw;
             }
 
-            foreach (Deck d in Decks)
+            foreach (DeckOfPlayingCards d in Decks)
             {
                 d.Shuffle();
             }
@@ -38,7 +38,7 @@ namespace DeckForge.GameRules
         /// <summary>
         /// Gets the list of Decks that <see cref="BaseSetUpRules"/> has.
         /// </summary>
-        public List<Deck> Decks { get; }
+        public List<DeckOfPlayingCards> Decks { get; }
 
         /// <summary>
         /// Gets the number of decks that are managed by <see cref="BaseSetUpRules"/>.
@@ -57,7 +57,7 @@ namespace DeckForge.GameRules
                     deckCount = value;
                     for (var i = 0; i < value; i++)
                     {
-                        Decks.Add(new Deck()); // TODO: use better logic to create the right decks and their types
+                        Decks.Add(new DeckOfPlayingCards()); // TODO: use better logic to create the right decks and their types
                     }
                 }
                 else

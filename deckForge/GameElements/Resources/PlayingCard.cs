@@ -1,10 +1,10 @@
 namespace DeckForge.GameElements.Resources
 {
-    public class Card
+    public class PlayingCard
     {
         private bool facedown;
 
-        public Card(int val, string suit, bool facedown = true)
+        public PlayingCard(int val, string suit, bool facedown = true)
         {
             Val = val;
             Suit = suit;

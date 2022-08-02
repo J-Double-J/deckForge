@@ -4,7 +4,7 @@ using DeckForge.PlayerConstruction;
 namespace DeckForge.PhaseActions
 {
     /// <summary>
-    /// Picks up all the <see cref="Card"/>s from the <see cref="GameElements.ITable"/> that the <see cref="IPlayer"/> owns.
+    /// Picks up all the <see cref="PlayingCard"/>s from the <see cref="GameElements.ITable"/> that the <see cref="IPlayer"/> owns.
     /// </summary>
     public class PickUpOwnCardsFromTableAction : PlayerGameAction
     {
@@ -21,12 +21,12 @@ namespace DeckForge.PhaseActions
         }
 
         /// <inheritdoc/>
-        public override List<Card> Execute(IPlayer player)
+        public override List<PlayingCard> Execute(IPlayer player)
         {
             try
             {
-                int resourceCollectionID = player.FindCorrectResourceCollectionID(typeof(Card));
-                List<Card> cards = player.TakeAllCardsFromTable();
+                int resourceCollectionID = player.FindCorrectResourceCollectionID(typeof(PlayingCard));
+                List<PlayingCard> cards = player.TakeAllCardsFromTable();
                 List<object> objectCards = cards.Cast<object>().ToList();
 
                 player.AddMultipleResourcesToCollection(resourceCollectionID, objectCards);

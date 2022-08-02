@@ -23,13 +23,13 @@ namespace UnitTests.PhaseTests
         [TestInitialize()]
         public void InitializeTableTests() {
             gm = new BaseGameMediator(2);
-            table = new(gm, 2, new Deck());
+            table = new(gm, 2, new DeckOfPlayingCards());
 
             players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<Card> cards = table.DrawMultipleCardsFromDeck(26)!;
-                Deck deck = new(cards);
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                DeckOfPlayingCards deck = new(cards);
                 players.Add(new WarPlayer(gm, i, deck));
             }
 
@@ -50,7 +50,7 @@ namespace UnitTests.PhaseTests
             table.PrintTableState();
 
             table.TableState.Count.Should().Be(2, "there are two players at the table");
-            foreach (List<Card> playedCardsInFrontOfPlayer in table.TableState) {
+            foreach (List<PlayingCard> playedCardsInFrontOfPlayer in table.TableState) {
                 playedCardsInFrontOfPlayer.Count().Should().Be(1, "only one card was drawn and played in front of each player");
                 playedCardsInFrontOfPlayer[0].Facedown.Should().Be(false, "the players were told to flip their cards faceup");
             }
@@ -60,8 +60,8 @@ namespace UnitTests.PhaseTests
         [DataRow(true)]
         [DataRow(false)] //Player two wins
         public void WarComparesCardsPhase_PlayerWins(bool playerZeroWins) {
-            Card cardOne = new Card(7, "C");
-            Card cardTwo = new Card(5, "H");
+            PlayingCard cardOne = new PlayingCard(7, "C");
+            PlayingCard cardTwo = new PlayingCard(5, "H");
 
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             if (playerZeroWins)
@@ -90,8 +90,8 @@ namespace UnitTests.PhaseTests
 
         [TestMethod]
         public void NoClearWinnerInComparePhase() {
-            Card cardOne = new(5, "C");
-            Card cardTwo = new(5, "H");
+            PlayingCard cardOne = new(5, "C");
+            PlayingCard cardTwo = new(5, "H");
 
             table.PlaceCardOnTable(0, cardOne);
             table.PlaceCardOnTable(1, cardTwo);
@@ -110,17 +110,17 @@ namespace UnitTests.PhaseTests
 
         [TestMethod]
         public void WarPhasePlacesMoreCardsOnTable() {
-            table.PlaceCardOnTable(0, new Card(1, "H"));
-            table.PlaceCardOnTable(1, new Card(2, "H"));
+            table.PlaceCardOnTable(0, new PlayingCard(1, "H"));
+            table.PlaceCardOnTable(1, new PlayingCard(2, "H"));
 
             IPhase phase = new WarPhase(gm, playerIDs, "War!");
             phase.StartPhase();
 
             table.PrintTableState();
-            List<List<Card>> tableState = table.TableState;
+            List<List<PlayingCard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
-            foreach (List<Card> playedCardsInFrontOfPlayer in tableState) {
+            foreach (List<PlayingCard> playedCardsInFrontOfPlayer in tableState) {
                 playedCardsInFrontOfPlayer.Count.Should().Be(3, "player played 1 card before, then in War! phase played 2 more cards");
                 playedCardsInFrontOfPlayer[1].Facedown.Should().Be(true, "the 2nd card should be facedown");
                 playedCardsInFrontOfPlayer[2].Facedown.Should().Be(false, "the 3rd card was flipped faceup");

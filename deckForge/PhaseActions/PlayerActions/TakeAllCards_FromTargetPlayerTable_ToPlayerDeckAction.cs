@@ -5,7 +5,7 @@ namespace DeckForge.PhaseActions
 {
     /// <summary>
     /// Takes all the cards from a target <see cref="IPlayer"/>'s spot on the <see cref="GameElements.Table"/> and
-    /// puts its in the <see cref="Deck"/> managed by the <see cref="IPlayer"/>.
+    /// puts its in the <see cref="DeckOfPlayingCards"/> managed by the <see cref="IPlayer"/>.
     /// </summary>
     public class TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction : PlayerGameAction
     {
@@ -22,12 +22,12 @@ namespace DeckForge.PhaseActions
         }
 
         /// <inheritdoc/>
-        public override List<Card> Execute(IPlayer playerExecutor, IPlayer playerTarget)
+        public override List<PlayingCard> Execute(IPlayer playerExecutor, IPlayer playerTarget)
         {
             try
             {
-                int resourceCollectionID = playerExecutor.FindCorrectResourceCollectionID(typeof(Card));
-                List<Card> cards = playerTarget.TakeAllCardsFromTable();
+                int resourceCollectionID = playerExecutor.FindCorrectResourceCollectionID(typeof(PlayingCard));
+                List<PlayingCard> cards = playerTarget.TakeAllCardsFromTable();
                 List<object> objectCards = cards.Cast<object>().ToList();
 
                 playerExecutor.AddMultipleResourcesToCollection(resourceCollectionID, objectCards);

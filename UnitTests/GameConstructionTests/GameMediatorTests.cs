@@ -19,7 +19,7 @@ namespace UnitTests.GameConstructionTests
         public void GetPlayerByID_ThrowsOnInvalidID()
         {
             IGameMediator gm = new BaseGameMediator(2);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
             new BasePlayer(gm, 0);
             new BasePlayer(gm, 1);
@@ -33,10 +33,10 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCanDrawCard()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
-            Card card = gm.DrawCardFromDeck()!;
+            PlayingCard card = gm.DrawCardFromDeck()!;
 
             card.Should().NotBeNull("a new deck was created so it should have cards");
         }
@@ -45,10 +45,10 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCannotDrawFromEmptyDeck()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<Deck> decks = new() { new Deck() };
+            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
-            Card? c;
+            PlayingCard? c;
 
             for (var i = 0; i < 52; i++)
             {
@@ -82,7 +82,7 @@ namespace UnitTests.GameConstructionTests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new BasePlayer(gm);
-            Table table = new Table(gm, 1, new Deck());
+            Table table = new Table(gm, 1, new DeckOfPlayingCards());
             PlayerGameAction action = new DrawCardsAction();
 
             gm.TellPlayerToDoAction(0, action);
@@ -96,7 +96,7 @@ namespace UnitTests.GameConstructionTests
             IGameMediator gm = new BaseGameMediator(2);
             IPlayer player = new BasePlayer(gm, 0);
             IPlayer target = new BasePlayer(gm, 1);
-            Table table = new Table(gm, 2, new Deck());
+            Table table = new Table(gm, 2, new DeckOfPlayingCards());
             PlayerGameAction action = new DrawCardsAction();
 
             Action a = () => gm.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, action);
@@ -111,13 +111,13 @@ namespace UnitTests.GameConstructionTests
             IGameMediator gm = new BaseGameMediator(2);
             ITurnHandler th = new TurnHandler(2, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 2, new Deck());
+            Table table = new(gm, 2, new DeckOfPlayingCards());
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
-                players.Add(new WarPlayer(gm, i, new Deck()));
+                players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
 

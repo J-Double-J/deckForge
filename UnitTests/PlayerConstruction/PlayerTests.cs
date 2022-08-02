@@ -17,7 +17,7 @@ namespace UnitTests.PlayerConstruction
             IGameMediator gm = new BaseGameMediator(0);
             IPlayer p1 = new BasePlayer(gm);
             PlayerGameAction action = new DrawCardsAction();
-            Table table = new(gm, 1, new Deck());
+            Table table = new(gm, 1, new DeckOfPlayingCards());
 
             p1.DrawStartingHand();
             p1.ExecuteGameAction(action);
@@ -32,7 +32,7 @@ namespace UnitTests.PlayerConstruction
             IPlayer p1 = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
             PlayerGameAction action = new DrawCardsAction();
-            Table table = new(gm, 1, new Deck());
+            Table table = new(gm, 1, new DeckOfPlayingCards());
 
             p1.DrawStartingHand();
             Action a = () => p1.ExecuteGameActionAgainstPlayer(action, p2);
@@ -44,7 +44,7 @@ namespace UnitTests.PlayerConstruction
         //[TestMethod]
         public void PlayerGetsTheirPlayedCards_FromTable()
         {
-            List<Deck> decks = new List<Deck> { new Deck() };
+            List<DeckOfPlayingCards> decks = new List<DeckOfPlayingCards> { new DeckOfPlayingCards() };
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Table table = new(gm, playerCount: 1, decks);
@@ -63,10 +63,10 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
             p.AddResourceCollection(d);
-            int pos = p.FindCorrectResourceCollectionID(typeof(Card));
+            int pos = p.FindCorrectResourceCollectionID(typeof(PlayingCard));
 
             pos.Should().Be(0, "the deck collection is at the 0th spot");
         }
@@ -76,12 +76,12 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
-            d.AddCardToDeck(new Card(21, "W"), pos: "top");
+            d.AddCardToDeck(new PlayingCard(21, "W"), pos: "top");
             p.AddResourceCollection(d);
 
-            Card? c = (Card?)p.TakeResourceFromCollection(0);
+            PlayingCard? c = (PlayingCard?)p.TakeResourceFromCollection(0);
             c!.Val.Should().Be(21, "the deck had 21W be added to the top");
         }
 
@@ -90,12 +90,12 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
-            p.AddResourceToCollection(0, new Card(21, "W"));
+            p.AddResourceToCollection(0, new PlayingCard(21, "W"));
 
-            Card? c = (Card?)p.TakeResourceFromCollection(0);
+            PlayingCard? c = (PlayingCard?)p.TakeResourceFromCollection(0);
             c!.Val.Should().Be(21, "the card 21W was added to the collection by the player");
         }
 
@@ -104,7 +104,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
             Action action = () => p.AddResourceToCollection(0, new BasePlayer(gm, playerID: 1));
@@ -117,14 +117,14 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck(defaultAddCardPos: "top");
-            List<Card> cards = new() { new Card(21, "W"), new Card(22, "W"), new Card(23, "W"), new Card(24, "W"), };
+            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            List<PlayingCard> cards = new() { new PlayingCard(21, "W"), new PlayingCard(22, "W"), new PlayingCard(23, "W"), new PlayingCard(24, "W"), };
 
             p.AddResourceCollection(d);
             List<object> objects = cards.Cast<object>().ToList();
 
             p.AddMultipleResourcesToCollection(0, objects);
-            Card drawnCard = (Card)p.TakeResourceFromCollection(0)!;
+            PlayingCard drawnCard = (PlayingCard)p.TakeResourceFromCollection(0)!;
 
             drawnCard.Val.Should().Be(24, "the last card added was 24W");
         }
@@ -134,7 +134,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
             List<BasePlayer> players = new() { new BasePlayer(gm, 1), new BasePlayer(gm, 2), new BasePlayer(gm, 3) };
 
             p.AddResourceCollection(d);
@@ -149,11 +149,11 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
             p.AddResourceCollection(d);
             p.ClearResourceCollection(0);
-            Card? card = (Card?)p.TakeResourceFromCollection(0);
+            PlayingCard? card = (PlayingCard?)p.TakeResourceFromCollection(0);
 
             card.Should().BeNull("there are no card left in the deck");
         }
@@ -163,7 +163,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
             p.AddResourceCollection(d);
             Action a = () => p.IncrementResourceCollection(0);
@@ -176,7 +176,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
             p.AddResourceCollection(d);
             p.DecrementResourceCollection(0);
@@ -189,7 +189,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            Deck d = new Deck();
+            DeckOfPlayingCards d = new DeckOfPlayingCards();
 
             p.AddResourceCollection(d);
             p.TakeResourceFromCollection(0);
