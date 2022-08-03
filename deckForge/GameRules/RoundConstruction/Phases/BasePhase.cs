@@ -9,19 +9,17 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
     /// Base class for all <see cref="IPhase"/>s that outlines functions for any <see cref="IPhase"/>.
     /// All <see cref="IPhase"/>s are required to inherit from this class.
     /// </summary>
-    /// <typeparam name="T">The type of object that is targetted by the <see cref="IPhase"/>. This is
-    /// primarily for <see cref="IPhase"/>s that have <see cref="IGameAction{T}"/> that target types of objects.</typeparam>
-    public abstract class BasePhase<T> : IPhase
+    public abstract class BasePhase : IPhase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasePhase{T}"/> class.
+        /// Initializes a new instance of the <see cref="BasePhase"/> class.
         /// </summary>
         /// <param name="gm">GameMediator that the <see cref="IPhase"/> will use to communicate with the
         /// other elements in the game.</param>
         /// <param name="phaseName">Name of the <see cref="IPhase"/>.</param>
         public BasePhase(IGameMediator gm, string phaseName = "")
         {
-            Actions = new ();
+            Actions = new();
             PhaseName = phaseName;
             GM = gm;
             CurrentAction = 0;
@@ -45,7 +43,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// <summary>
         /// Gets the number of Actions that the <see cref="IPhase"/> manages.
         /// </summary>
-        public int ActionCount
+        public virtual int ActionCount
         {
             get
             {
@@ -73,7 +71,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// <summary>
         /// Gets or Sets list of <see cref="IGameAction{T}"/> that the <see cref="IPhase"/> manages.
         /// </summary>
-        protected List<IGameAction<T>> Actions
+        protected virtual List<IGameAction> Actions
         {
             get;
             set;
