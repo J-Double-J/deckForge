@@ -37,7 +37,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         public PlayerPhase(IGameMediator gm, int playerID, string phaseName = "")
             : base(gm, phaseName: phaseName)
         {
-            PlayerIDs = new ()
+            PlayerIDs = new()
             {
                 playerID
             };

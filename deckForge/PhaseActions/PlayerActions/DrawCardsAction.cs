@@ -31,7 +31,7 @@ namespace DeckForge.PhaseActions
         /// <inheritdoc/>
         public override List<PlayingCard?> Execute(IPlayer player)
         {
-            List<PlayingCard?> cards = new ();
+            List<PlayingCard?> cards = new();
             for (int i = 0; i < DrawCount; i++)
             {
                 cards.Add(player.DrawCard());

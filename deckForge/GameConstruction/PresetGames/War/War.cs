@@ -32,7 +32,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
             table = new (gm, PLAYER_COUNT, spr.Decks);
             players = WarPlayerSetUp(gm, table);
 
-            List<int> playerIDs = new ();
+            List<int> playerIDs = new();
             foreach (IPlayer player in players)
             {
                 playerIDs.Add(player.PlayerID);
@@ -59,7 +59,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <returns>List of prepared <see cref="IPlayer"/>s for <see cref="War"/>.</returns>
         private static List<IPlayer> WarPlayerSetUp(IGameMediator gm, Table table)
         {
-            List<IPlayer> players = new ();
+            List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
                 List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;

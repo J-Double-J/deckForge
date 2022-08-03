@@ -19,7 +19,7 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
         {
             GM = gm;
             gm.RegisterRoundRules(this);
-            Phases = new ();
+            Phases = new();
             CurPhase = 0;
         }
 

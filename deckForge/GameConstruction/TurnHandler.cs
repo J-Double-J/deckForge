@@ -2,8 +2,8 @@ namespace DeckForge.GameConstruction
 {
     public class TurnHandler : ITurnHandler
     {
-        private readonly Random rng = new ();
-        private List<int> turnOrder = new ();
+        private readonly Random rng = new();
+        private List<int> turnOrder = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TurnHandler"/> class.

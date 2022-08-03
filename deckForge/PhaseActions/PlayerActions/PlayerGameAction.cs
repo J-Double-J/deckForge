@@ -75,7 +75,7 @@ namespace DeckForge.PhaseActions
         /// may have interacted with. </returns>
         public virtual List<object?> Execute(IPlayer playerExecutor, List<IPlayer> playerGroup)
         {
-            List<object?> objects = new ();
+            List<object?> objects = new();
             foreach (IPlayer player in playerGroup)
             {
                 objects.Add(Execute(playerExecutor, player));

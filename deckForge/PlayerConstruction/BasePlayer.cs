@@ -26,7 +26,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="initHandSize">The size of the initial hand that the <see cref="BasePlayer"/> will start with.</param>
         public BasePlayer(IGameMediator gm, int playerID = 0, int initHandSize = 5)
         {
-            PlayerHand = new ();
+            PlayerHand = new();
 
             // PlayerHand is not considered part of PlayerResourceCollections despite being a collection
             PlayerResourceCollections = new List<IResourceCollection>();

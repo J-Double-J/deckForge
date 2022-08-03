@@ -12,7 +12,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
     /// </summary>
     public class WarPlayCardsPhase : PlayerPhase
     {
-        private List<PlayingCard?> flippedCards = new ();
+        private List<PlayingCard?> flippedCards = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarPlayCardsPhase"/> class.
@@ -49,14 +49,14 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <inheritdoc/>
         public override void StartPhase()
         {
-            flippedCards = new ();
+            flippedCards = new();
             base.StartPhase();
         }
 
         /// <inheritdoc/>
         public override void StartPhase(List<int> playerIDs)
         {
-            flippedCards = new ();
+            flippedCards = new();
             base.StartPhase(playerIDs);
         }
 

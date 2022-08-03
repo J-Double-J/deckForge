@@ -7,7 +7,7 @@ namespace DeckForge.GameElements.Resources
     /// </summary>
     public abstract class BaseDeck : IDeck
     {
-        private static readonly Random RNG = new ();
+        private static readonly Random RNG = new();
         private readonly string defaultAddCardPos;
         private readonly bool defaultShuffleOnAddCard;
 
@@ -20,7 +20,7 @@ namespace DeckForge.GameElements.Resources
         /// any <see cref="PlayingCard"/> by default. Default can be overriden when needed.</param>
         public BaseDeck(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
-            Deck = new ();
+            Deck = new();
             CreateDeck();
             Shuffle();
             this.defaultAddCardPos = defaultAddCardPos;
@@ -85,7 +85,7 @@ namespace DeckForge.GameElements.Resources
         /// <inheritdoc/>
         public List<PlayingCard?> DrawMultipleCards(int count)
         {
-            List<PlayingCard?> cards = new ();
+            List<PlayingCard?> cards = new();
             for (int i = 0; i < count; i++)
             {
                 PlayingCard? c = DrawCard();

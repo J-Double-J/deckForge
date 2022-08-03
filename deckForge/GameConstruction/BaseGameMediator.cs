@@ -95,7 +95,7 @@ namespace DeckForge.GameConstruction
         {
             if (Players is null)
             {
-                Players = new ();
+                Players = new();
             }
 
             Players.Add(player);
@@ -119,7 +119,7 @@ namespace DeckForge.GameConstruction
         {
             if (RoundRules is null)
             {
-                RoundRules = new ();
+                RoundRules = new();
             }
 
             RoundRules.Add(roundRules);
@@ -345,7 +345,7 @@ namespace DeckForge.GameConstruction
         /// <inheritdoc/>
         public object? TellPlayerToDoActionAgainstSpecificMultiplePlayers(int playerID, List<int> targets, IGameAction<IPlayer> action)
         {
-            List<IPlayer> targettedPlayers = new ();
+            List<IPlayer> targettedPlayers = new();
 
             foreach (int targetID in targets)
             {
@@ -379,7 +379,7 @@ namespace DeckForge.GameConstruction
             Players!.Remove(GetPlayerByID(playerID)!);
 
             // Could use LINQ most likely here7
-            List<int> remaingPlayerIDs = new ();
+            List<int> remaingPlayerIDs = new();
             foreach (IPlayer player in Players)
             {
                 remaingPlayerIDs.Add(player.PlayerID);

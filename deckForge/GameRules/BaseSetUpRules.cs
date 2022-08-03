@@ -18,7 +18,7 @@ namespace DeckForge.GameRules
         /// of the game.</param>
         public BaseSetUpRules(int deckCount = 1, int initHandSize = 0)
         {
-            Decks = new ();
+            Decks = new();
             try
             {
                 DeckCount = deckCount;
