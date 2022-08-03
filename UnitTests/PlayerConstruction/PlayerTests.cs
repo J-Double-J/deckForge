@@ -1,10 +1,9 @@
-﻿using DeckForge.PlayerConstruction;
-using DeckForge.GameConstruction;
-using DeckForge.GameRules;
+﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements;
-using FluentAssertions;
 using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
+using FluentAssertions;
 
 namespace UnitTests.PlayerConstruction
 {
@@ -50,8 +49,6 @@ namespace UnitTests.PlayerConstruction
             Table table = new(gm, playerCount: 1, decks);
             var stringReader = new StringReader("0");
             Console.SetIn(stringReader);
-
-            //gm.AddPlayer(p);
 
             p.PlayCard();
 
@@ -117,7 +114,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
             List<PlayingCard> cards = new() { new PlayingCard(21, "W"), new PlayingCard(22, "W"), new PlayingCard(23, "W"), new PlayingCard(24, "W"), };
 
             p.AddResourceCollection(d);
@@ -149,7 +146,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             p.AddResourceCollection(d);
             p.ClearResourceCollection(0);
@@ -163,7 +160,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             p.AddResourceCollection(d);
             Action a = () => p.IncrementResourceCollection(0);
@@ -176,7 +173,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             p.AddResourceCollection(d);
             p.DecrementResourceCollection(0);
@@ -189,7 +186,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             p.AddResourceCollection(d);
             p.TakeResourceFromCollection(0);
@@ -197,6 +194,19 @@ namespace UnitTests.PlayerConstruction
             p.TakeResourceFromCollection(0);
 
             p.CountOfResourceCollection(0).Should().Be(49, "3 cards were drawn from the standard deck");
+        }
+
+        [TestMethod]
+        public void PlayerCanAddCardToHand()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            IPlayer p = new BasePlayer(gm, 0);
+            IDeck deck = new DeckOfPlayingCards();
+
+            PlayingCard? drawnCard = deck.DrawCard();
+            p.AddCardToHand(drawnCard!);
+
+            p.HandSize.Should().Be(1, "because a card was added to the player's hand");
         }
     }
 }

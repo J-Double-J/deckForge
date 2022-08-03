@@ -159,9 +159,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? DrawCard()
+        public virtual PlayingCard? DrawCard(int deckPosition = 0)
         {
-            PlayingCard? c = GM.DrawCardFromDeck();
+            PlayingCard? c = GM.DrawCardFromDeck(deckPosition);
             if (c != null)
             {
                 PlayerHand.AddResource(c);
@@ -172,6 +172,11 @@ namespace DeckForge.PlayerConstruction
             }
 
             return c;
+        }
+
+        public virtual void AddCardToHand(PlayingCard card)
+        {
+            PlayerHand.AddResource(card);
         }
 
         /// <inheritdoc/>

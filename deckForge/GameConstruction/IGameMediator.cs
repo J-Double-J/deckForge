@@ -29,6 +29,11 @@ namespace DeckForge.GameConstruction
         public List<List<PlayingCard>> CurrentTableState { get; }
 
         /// <summary>
+        /// Gets the ITable registered to the <see cref="IGameMediator"/>.
+        /// </summary>
+        public ITable? Table { get; }
+
+        /// <summary>
         /// Informs the <see cref="IGameMediator"/> to keep track of this <paramref name="IPlayer"/>.
         /// </summary>
         /// <param name="player">Player to Register.</param>
@@ -99,8 +104,9 @@ namespace DeckForge.GameConstruction
         /// <summary>
         /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="PlayingCard"/>.
         /// </summary>
+        /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="IDeck"/>.</param>
         /// <returns>A nullable <see cref="PlayingCard"/> that was drawn from a <see cref="DeckOfPlayingCards"/>.</returns>
-        public PlayingCard? DrawCardFromDeck();
+        public PlayingCard? DrawCardFromDeck(int deckPosition);
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> by their ID.
@@ -187,10 +193,17 @@ namespace DeckForge.GameConstruction
         public void PlayerLost(int playerID);
 
         /// <summary>
-        /// Shuffles a <see cref="Deck"/> on the <see cref="Table"/>
+        /// Deal a number of <see cref="PlayingCard"/>s from the specified <see cref="IDeck"/> on the <see cref="ITable"/> to each
+        /// <see cref="IPlayer"/>.
         /// </summary>
-        /// <param name="deckPosition">Position of the <see cref="Deck"/>
-        /// on the table.</param>
-        public void ShuffleDeckOnTable(int deckPosition);
+        /// <remarks>
+        /// By default, <see cref="IGameMediator"/> will keep dealing <see cref="PlayingCard"/>s equally until the correct
+        /// number of <see cref="PlayingCard"/>s are dealt or until the <see cref="IDeck"/> runs out of <see cref="PlayingCard"/>s.
+        /// This can mean an unequal number of <see cref="PlayingCard"/>s are dealt to each <see cref="IPlayer"/> if there are not
+        /// enough <see cref="PlayingCard"/>s to be divided evenly.
+        /// </remarks>
+        /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="ITable"/>.</param>
+        /// <param name="numberOfCardsToDealToEachPlayer">Number of cards each <see cref="IPlayer"/> will be dealt.</param>
+        public void DealCardsFromDeckToAllPlayers(int deckPosition, int numberOfCardsToDealToEachPlayer);
     }
 }

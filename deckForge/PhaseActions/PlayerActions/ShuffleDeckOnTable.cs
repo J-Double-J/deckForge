@@ -6,6 +6,7 @@ namespace DeckForge.PhaseActions
     public class ShuffleDeckOnTable : BaseGameAction
     {
         private IGameMediator gm;
+
         public ShuffleDeckOnTable(
             IGameMediator gm,
             int deckPosition,
@@ -18,9 +19,10 @@ namespace DeckForge.PhaseActions
         }
 
         public int DeckPosition { get; set; }
+
         public override object? Execute()
         {
-            gm.ShuffleDeckOnTable(DeckPosition);
+            gm.Table?.ShuffleDeck(DeckPosition);
             return null;
         }
     }

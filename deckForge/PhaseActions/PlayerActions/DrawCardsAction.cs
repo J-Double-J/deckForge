@@ -26,9 +26,8 @@ namespace DeckForge.PhaseActions
         /// </summary>
         public int DrawCount { get; set; }
 
-        // Returns the list of cards that was drawn into the player's hand
-
         /// <inheritdoc/>
+        /// <returns>The list of cards that was drawn into the player's hand.</returns>
         public override List<PlayingCard?> Execute(IPlayer player)
         {
             List<PlayingCard?> cards = new();

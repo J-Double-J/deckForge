@@ -23,7 +23,8 @@ namespace DeckForge.PhaseActions
         /// Executes the <see cref="IGameAction"/>.
         /// </summary>
         /// <returns>A nullable object that references what the <see cref="IGameAction"/>
-        /// may have interacted with.</returns>
+        /// may have interacted with. If object could reveal private
+        /// object information about another object (such as cards in a player's hand) return null.</returns>
         public object? Execute();
     }
 }

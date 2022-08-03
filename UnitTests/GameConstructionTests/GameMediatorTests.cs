@@ -36,7 +36,7 @@ namespace UnitTests.GameConstructionTests
             List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
-            PlayingCard card = gm.DrawCardFromDeck()!;
+            PlayingCard card = gm.DrawCardFromDeck(0)!;
 
             card.Should().NotBeNull("a new deck was created so it should have cards");
         }
@@ -52,10 +52,10 @@ namespace UnitTests.GameConstructionTests
 
             for (var i = 0; i < 52; i++)
             {
-                c = gm.DrawCardFromDeck()!;
+                c = gm.DrawCardFromDeck(0)!;
             }
 
-            c = gm.DrawCardFromDeck();
+            c = gm.DrawCardFromDeck(0);
 
 
             c.Should().BeNull("the deck was exhausted and there are no more cards to draw");
@@ -127,19 +127,65 @@ namespace UnitTests.GameConstructionTests
             gm.StartGame();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("Player 1 wins!\n");
+            }
             else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("Player 1 wins!\r\n");
+            }
+        }
+
+        [TestMethod]
+        public void GameMediatorCanDealCardsToPlayers()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            ITable table = new Table(gm, 3, new DeckOfPlayingCards());
+            List<IPlayer> players = new()
+            {
+                new BasePlayer(gm, 0),
+                new BasePlayer(gm, 1),
+                new BasePlayer(gm, 2)
+            };
+
+            gm.DealCardsFromDeckToAllPlayers(0, 2);
+
+            foreach (IPlayer player in players)
+            {
+                player.HandSize.Should().Be(2, "because each player should have been dealt two cards");
+            }
+        }
+
+        [TestMethod]
+        public void GameMediatorDealsAsManyCardsAsItCanToPlayers()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            ITable table = new Table(gm, 3, new DeckOfPlayingCards());
+            List<IPlayer> players = new()
+            {
+                new BasePlayer(gm, 0),
+                new BasePlayer(gm, 1),
+                new BasePlayer(gm, 2)
+            };
+
+            gm.DealCardsFromDeckToAllPlayers(0, 20);
+
+            players[0].HandSize.Should().Be(18, "there were not enough"
+                + "cards to get to 20 and the last extra card was dealt to the first player");
+            players[1].HandSize.Should().Be(17, "there were not enough cards to get to 20");
+            players[2].HandSize.Should().Be(17, "there were not enough cards to get to 20");
         }
     }
 
     internal class PlayerLosesIfPlayer0AndHasAtLeast3CardsAction : PlayerGameAction
     {
-        IGameMediator gm;
+        private IGameMediator gm;
+
         public PlayerLosesIfPlayer0AndHasAtLeast3CardsAction(
             IGameMediator gm,
             string name = "PlayerLosesIfPlayer0AndHas3CardsAction",
-            string description = "Very specific test action") : base(name, description)
+            string description = "Very specific test action")
+            : base(name, description)
         {
             this.gm = gm;
         }
@@ -151,6 +197,7 @@ namespace UnitTests.GameConstructionTests
             {
                 player.LoseGame();
             }
+
             return null;
         }
     }
@@ -160,8 +207,8 @@ namespace UnitTests.GameConstructionTests
         public CheckIfPlayerLosesArbitrarilyPhase(
             IGameMediator gm,
             List<int> playerIDs,
-            string name = "CheckIfPlayerLosesArbitrarilyPhase"
-        ) : base(gm, playerIDs, name)
+            string name = "CheckIfPlayerLosesArbitrarilyPhase")
+            : base(gm, playerIDs, name)
         {
             Actions.Add(new PlayerLosesIfPlayer0AndHasAtLeast3CardsAction(gm));
         }
@@ -171,7 +218,8 @@ namespace UnitTests.GameConstructionTests
     {
         public RoundWithArbitraryLosingRules(
             IGameMediator gm,
-            List<int> playerIDs) : base(gm, playerIDs)
+            List<int> playerIDs)
+            : base(gm, playerIDs)
         {
             Phases.Add(new CheckIfPlayerLosesArbitrarilyPhase(gm, playerIDs));
         }
@@ -179,7 +227,8 @@ namespace UnitTests.GameConstructionTests
 
     internal class TestRoundWithTwoPlayCardsActions : PlayerRoundRules
     {
-        public TestRoundWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs) : base(gm, playerIDs)
+        public TestRoundWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs)
+            : base(gm, playerIDs)
         {
             Phases.Add(new TestPhaseWithTwoPlayCardsActions(gm, playerIDs));
         }
@@ -187,7 +236,8 @@ namespace UnitTests.GameConstructionTests
 
     internal class TestPhaseWithTwoPlayCardsActions : PlayerPhase
     {
-        public TestPhaseWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs) : base(gm, playerIDs)
+        public TestPhaseWithTwoPlayCardsActions(IGameMediator gm, List<int> playerIDs)
+            : base(gm, playerIDs)
         {
             Actions.Add(new PlayMultipleCardsAction(2));
         }

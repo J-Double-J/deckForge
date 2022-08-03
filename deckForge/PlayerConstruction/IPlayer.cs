@@ -76,8 +76,15 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Draws a card.
         /// </summary>
+        /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="Table"/>.</param>
         /// <returns>The <see cref="PlayingCard"/> that was drawn or null.</returns>
-        public PlayingCard? DrawCard();
+        public PlayingCard? DrawCard(int deckPosition = 0);
+
+        /// <summary>
+        /// Adds a <see cref="PlayingCard"/> to the <see cref="IPlayer"/>'s hand.
+        /// </summary>
+        /// <param name="card"><see cref="PlayingCard"/> to add to the hand.</param>
+        public void AddCardToHand(PlayingCard card);
 
         /// <summary>
         /// Plays a card.

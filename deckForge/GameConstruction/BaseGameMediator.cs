@@ -60,6 +60,15 @@ namespace DeckForge.GameConstruction
             get { return GameTable!.TableState; }
         }
 
+        /// <inheritdoc/>
+        public ITable? Table
+        {
+            get
+            {
+                return GameTable;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the ITurnHandler.
         /// </summary>
@@ -222,11 +231,11 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? DrawCardFromDeck()
+        public virtual PlayingCard? DrawCardFromDeck(int deckPosition)
         {
             try
             {
-                PlayingCard? c = GameTable!.DrawCardFromDeck();
+                PlayingCard? c = GameTable!.DrawCardFromDeck(deckPosition);
                 if (c != null)
                 {
                     return c;
@@ -406,9 +415,31 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public void ShuffleDeckOnTable(int deckPosition)
+        public virtual void DealCardsFromDeckToAllPlayers(int deckPos, int numberOfCardsToDealToEachPlayer)
         {
-            GameTable!.ShuffleDeck(deckPosition);
+            bool nullCardDrawn = false;
+
+            for (var i = 0; i < numberOfCardsToDealToEachPlayer; i++)
+            {
+                foreach (IPlayer player in Players!)
+                {
+                    PlayingCard? drawnCard = DrawCardFromDeck(deckPos);
+                    if (drawnCard != null)
+                    {
+                        player.AddCardToHand(drawnCard);
+                    }
+                    else
+                    {
+                        nullCardDrawn = true;
+                        break;
+                    }
+
+                    if (nullCardDrawn)
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
