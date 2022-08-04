@@ -1,6 +1,6 @@
 ﻿using DeckForge.GameConstruction;
 
-namespace DeckForge.PhaseActions.PlayerActions
+namespace DeckForge.PhaseActions
 {
     /// <summary>
     /// Deals a certain number of <see cref="PlayingCard"/>s to each <see cref="IPlayer"/>.
@@ -13,8 +13,8 @@ namespace DeckForge.PhaseActions.PlayerActions
             IGameMediator gm,
             int deckPos,
             int numberOfCardsToDealToEachPlayer,
-            string name,
-            string description)
+            string name = "Deal Cards",
+            string description = "Deal a number of cards to each player")
             : base(name: name, description: description)
         {
             this.gm = gm;

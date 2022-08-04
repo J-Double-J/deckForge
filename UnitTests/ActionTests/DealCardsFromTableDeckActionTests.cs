@@ -2,7 +2,6 @@
 using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
-using DeckForge.PhaseActions.PlayerActions;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
 
