@@ -13,7 +13,6 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
         {
             Actions.Add(new ShuffleDeckOnTable(gm, 0));
             Actions.Add(new DealCardsFromTableDeckToPlayers(gm, 0, 2));
-
         }
     }
 }

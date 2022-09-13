@@ -39,20 +39,26 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding and checking.
         /// </summary>
         /// <returns>A string representing their choice of action.</returns>
-        public static string GetPreFlopBettingAction()
+        public string GetPreFlopBettingAction()
         {
             string preFlopPromptString = "Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) Check";
             PlayerPrompter preFlopPrompt = new(preFlopPromptString, 4);
             int responseVal = preFlopPrompt.Prompt();
 
-            return responseVal switch
+            switch (responseVal)
             {
-                1 => "CALL",
-                2 => "RAISE",
-                3 => "FOLD",
-                4 => "CHECK",
-                _ => throw new Exception("'responseVal' was not between 1-4 in 'GetPreFlopBettingAction()'"),
-            };
+                case 1:
+                    Call();
+                    return "CALL";
+                case 2:
+                    Raise();
+                    return "RAISE";
+                case 3:
+                    Fold();
+                    return "FOLD";
+                default:
+                    throw new Exception("'responseVal' was not between 1-4 in 'GetPreFlopBettingAction()'");
+            }
         }
 
         /// <summary>
