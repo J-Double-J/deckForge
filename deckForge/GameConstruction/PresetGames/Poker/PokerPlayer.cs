@@ -7,7 +7,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
     /// </summary>
     public class PokerPlayer : BasePlayer
     {
-        private int bettingCash;
+        private PokerGameMediator pokerGM; // Same GM that BasePlayer has but avoids repeated casts throughout PokerPlayer.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PokerPlayer"/> class.
@@ -17,36 +17,34 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// <param name="playerID">ID of the <see cref="BasePlayer"/>.</param>
         /// <param name="bettingCash">Amount of cash that the <see cref="PokerPlayer"/> will
         /// start with at the table.</param>
-        public PokerPlayer(IGameMediator gm, int playerID, int bettingCash)
+        public PokerPlayer(PokerGameMediator gm, int playerID, int bettingCash)
             : base(gm, playerID)
         {
-            this.bettingCash = bettingCash;
+            BettingCash = bettingCash;
+            pokerGM = gm;
         }
+
+        /// <summary>
+        /// Gets or sets the amount of cash invested from the <see cref="PokerPlayer"/> that is
+        /// sitting on the table for this round.
+        /// </summary>
+        public int InvestedCash { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the amount of betting cash that the <see cref="PokerPlayer"/> has left.
+        /// </summary>
+        public int BettingCash { get; protected set; }
 
         /// <summary>
         /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding and checking.
         /// </summary>
         /// <returns>A string representing their choice of action.</returns>
-        public string GetPreFlopBettingAction()
+        public static string GetPreFlopBettingAction()
         {
-            string? response;
-            int responseVal;
+            string preFlopPromptString = "Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) Check";
+            PlayerPrompter preFlopPrompt = new(preFlopPromptString, 4);
+            int responseVal = preFlopPrompt.Prompt();
 
-            do
-            {
-                Console.WriteLine("Would you like to:");
-                Console.WriteLine("1) Call");
-                Console.WriteLine("2) Raise");
-                Console.WriteLine("3) Fold");
-
-                // TODO: check if can check.
-                Console.WriteLine("4) Check");
-
-                response = Console.ReadLine();
-            }
-            while (ResponseIsNotValid(response));
-
-            responseVal = int.Parse(response!);
             return responseVal switch
             {
                 1 => "CALL",
@@ -58,28 +56,62 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         }
 
         /// <summary>
-        /// Checks if the <see cref="PokerPlayer"/> response to asking for their action is valid.
+        /// <see cref="PokerPlayer"/> matches the current bet at the table.
         /// </summary>
-        /// <param name="response">Response from the user when asked what game action they will take.</param>
-        /// <returns><see langword="true"/> if the <paramref name="response"/> is not valid,
-        /// otherwise <see langword="false"/>.</returns>
-        private static bool ResponseIsNotValid(string? response)
+        /// <exception cref="InvalidOperationException">Throws exception if <see cref="PokerPlayer"/> does not
+        /// have enough betting cash to match the current bet.</exception>
+        public void Call()
         {
-            if (int.TryParse(response, out int numericResponse))
+            // TODO: GetCurrentCallAmount
+            if (BettingCash >= pokerGM.CurrentBet)
             {
-                // TODO: Check if can check.
-                if (numericResponse > 0 && numericResponse <= 4)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                BettingCash -= pokerGM.CurrentBet;
+                InvestedCash += pokerGM.CurrentBet;
             }
             else
             {
-                return true;
+                throw new InvalidOperationException("Cannot 'Call' this bet with insufficient betting cash.");
+            }
+        }
+
+        /// <summary>
+        /// <see cref="PokerPlayer"/> raises the current bet to one of their choosing.
+        /// </summary>
+        public void Raise()
+        {
+            string? response;
+            int raiseAmount;
+
+            while (true)
+            {
+                Console.WriteLine("What would you like to raise to?");
+                response = Console.ReadLine();
+
+                if (int.TryParse(response, out raiseAmount))
+                {
+                    if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            BettingCash -= raiseAmount;
+            InvestedCash += raiseAmount;
+            pokerGM.CurrentBet = raiseAmount;
+        }
+
+        /// <summary>
+        /// <see cref="PokerPlayer"/> removes themselves from the current round. If they have no cash as a result of this
+        /// they are removed from the game.
+        /// </summary>
+        public void Fold()
+        {
+            IsActive = false;
+
+            if (BettingCash == 0)
+            {
+                IsOut = true;
             }
         }
     }
