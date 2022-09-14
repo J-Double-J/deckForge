@@ -1,5 +1,6 @@
-﻿using FluentAssertions;
-using DeckForge.GameConstruction.PresetGames.Poker;
+﻿using DeckForge.GameConstruction.PresetGames.Poker;
+using FluentAssertions;
+using UnitTests.PokerTests.TestablePokerPlayer;
 
 namespace UnitTests.PokerTests
 {
@@ -10,7 +11,7 @@ namespace UnitTests.PokerTests
         public void PokerPlayerCanCall()
         {
             PokerGameMediator gm = new(1);
-            PokerPlayer player = new(gm, 0, 100);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
 
             gm.CurrentBet = 10;
             player.Call();
@@ -22,13 +23,12 @@ namespace UnitTests.PokerTests
         [TestMethod]
         public void PokerPlayerCanRaise()
         {
-            var stringReader = new StringReader("20");
-            Console.SetIn(stringReader);
             PokerGameMediator gm = new(1);
-            PokerPlayer player = new(gm, 0, 100);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
 
             gm.CurrentBet = 10;
-            player.Raise();
+            player.Commands.Add("RAISE");
+            player.GetPreFlopBettingAction();
 
             gm.CurrentBet.Should().Be(20, "the player raised the bet to 20");
             player.BettingCash.Should().Be(80, "player raised the bet to 20");
@@ -39,7 +39,7 @@ namespace UnitTests.PokerTests
         public void PokerPlayerCanFold()
         {
             PokerGameMediator gm = new(1);
-            PokerPlayer player = new(gm, 0, 100);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
 
             player.Fold();
 
@@ -51,7 +51,7 @@ namespace UnitTests.PokerTests
         public void PokerPlayerCannotCall_WithInsufficientFunds()
         {
             PokerGameMediator gm = new(1);
-            PokerPlayer player = new(gm, 0, 10);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 10);
 
             gm.CurrentBet = 20;
             Action call = () => player.Call();
@@ -59,60 +59,55 @@ namespace UnitTests.PokerTests
             call.Should().Throw<InvalidOperationException>("the player does not have enough betting cash to call the current bet");
         }
 
-        // TODO: Determine how to properly test the while loop in the Raise() method
+        [TestMethod]
         [DataRow(-1)]
         [DataRow(2)]
         [DataRow(1000)]
         public void PokerPlayerCannotRaiseBet_ToInvalidIntegerValue(int value)
         {
-            var stringReader = new StringReader(value.ToString());
-            Console.SetIn(stringReader);
             PokerGameMediator gm = new(1);
-            PokerPlayer player = new(gm, 0, 100);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
 
             gm.CurrentBet = 10;
-            Action raise = () => player.Raise();
+            player.RaiseToAmount = value;
+            player.Commands.Add("RAISE");
+            Action raise = () => player.GetPreFlopBettingAction();
 
-            //raise.Should().Throw<>
+            raise.Should().Throw<ArgumentException>($"the player attempted to raise to the invalid value {value}");
+        }
+
+        [TestMethod]
+        public void PokerPlayerInvestedCash_IsCorrect_AfterMultipleRaises()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
+
+            gm.CurrentBet = 10;
+            player.RaiseToAmount = 20;
+            player.Commands.AddRange(new List<string> { "RAISE", "RAISE", "RAISE" });
+            player.GetPreFlopBettingAction();
+            player.RaiseToAmount = 30;
+            player.GetPreFlopBettingAction();
+            player.RaiseToAmount = 35;
+            player.GetPreFlopBettingAction();
+
+            player.InvestedCash.Should().Be(35, "the player raised 3 times to eventually 35");
+            player.BettingCash.Should().Be(65, "the player has invested a total of 35 to the current round");
+        }
+
+        [TestMethod]
+        public void PokerPlayerInvestedCash_IsCorrect_AfterRaisingAndCalling()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
+
+            gm.CurrentBet = 10;
+            player.RaiseToAmount = 20;
+            player.Commands.AddRange(new List<string> { "RAISE", "CALL" });
+            player.GetPreFlopBettingAction();
+            player.GetPreFlopBettingAction();
+
+            player.InvestedCash.Should().Be(20, "the player raised to 20 and stayed at that amount even when erroneously calling instead of checking");
         }
     }
-
-    /*
-    internal class PokerPlayerLoopless : PokerPlayer
-    {
-        PokerGameMediator pokerGM;
-
-        public PokerPlayerLoopless(PokerGameMediator gm, int playerID, int bettingCash)
-            : base(gm, playerID, bettingCash)
-        {
-            pokerGM = gm;
-        }
-
-        public new void Raise()
-        {
-            string? response;
-            int raiseAmount;
-
-            Console.WriteLine("What would you like to raise to?");
-            response = Console.ReadLine();
-
-            if (int.TryParse(response, out raiseAmount))
-            {
-                if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
-                {
-                    BettingCash -= raiseAmount;
-                    InvestedCash += raiseAmount;
-                    pokerGM.CurrentBet = raiseAmount;
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Cannot make a bet of {raiseAmount}");
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException($"Cannot make a bet of {response}");
-            }
-        }
-    }*/
 }

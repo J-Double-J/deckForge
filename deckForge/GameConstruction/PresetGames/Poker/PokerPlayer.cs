@@ -28,7 +28,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// Gets or sets the amount of cash invested from the <see cref="PokerPlayer"/> that is
         /// sitting on the table for this round.
         /// </summary>
-        public int InvestedCash { get; protected set; }
+        public int InvestedCash { get; protected set; } = 0;
 
         /// <summary>
         /// Gets or sets the amount of betting cash that the <see cref="PokerPlayer"/> has left.
@@ -39,7 +39,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding and checking.
         /// </summary>
         /// <returns>A string representing their choice of action.</returns>
-        public string GetPreFlopBettingAction()
+        public virtual string GetPreFlopBettingAction()
         {
             string preFlopPromptString = "Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) Check";
             PlayerPrompter preFlopPrompt = new(preFlopPromptString, 4);
@@ -71,8 +71,11 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             // TODO: GetCurrentCallAmount
             if (BettingCash >= pokerGM.CurrentBet)
             {
-                BettingCash -= pokerGM.CurrentBet;
-                InvestedCash += pokerGM.CurrentBet;
+                if (InvestedCash != pokerGM.CurrentBet)
+                {
+                    BettingCash -= pokerGM.CurrentBet;
+                    InvestedCash += pokerGM.CurrentBet;
+                }
             }
             else
             {
@@ -95,17 +98,16 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
 
                 if (int.TryParse(response, out raiseAmount))
                 {
-                    if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
+                    if (ValidateRaiseAmount(raiseAmount))
                     {
                         break;
                     }
                 }
             }
 
-            BettingCash -= raiseAmount;
-            InvestedCash += raiseAmount;
-            pokerGM.CurrentBet = raiseAmount;
+            Raise(raiseAmount);
         }
+
 
         /// <summary>
         /// <see cref="PokerPlayer"/> removes themselves from the current round. If they have no cash as a result of this
@@ -118,6 +120,37 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             if (BettingCash == 0)
             {
                 IsOut = true;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="PokerPlayer"/> raises the current bet to <paramref name="raiseAmount"/>.
+        /// Different from <see cref="Raise()"/> as it does not ask for user input from the console.
+        /// </summary>
+        /// <param name="raiseAmount">The amount to raise the current bet to.</param>
+        protected void Raise(int raiseAmount)
+        {
+            if (ValidateRaiseAmount(raiseAmount))
+            {
+                BettingCash -= raiseAmount - InvestedCash;
+                InvestedCash += raiseAmount - InvestedCash;
+                pokerGM.CurrentBet = raiseAmount;
+            }
+            else
+            {
+                throw new ArgumentException($"raiseAmount is not a valid raise with a value of {raiseAmount}");
+            }
+        }
+
+        private bool ValidateRaiseAmount(int raiseAmount)
+        {
+            if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

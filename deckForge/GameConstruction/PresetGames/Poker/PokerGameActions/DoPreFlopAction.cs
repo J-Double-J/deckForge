@@ -15,7 +15,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         public override string Execute(IPlayer player)
         {
             PokerPlayer? pokerPlayer = player as PokerPlayer;
-            if (player is null)
+            if (pokerPlayer is null)
             {
                 throw new ArgumentException("Poker Actions require Poker Players");
             }
