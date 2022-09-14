@@ -35,7 +35,8 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         public void PlayersBet()
         {
             int playersResponded = 0;
-            while (playersResponded != GetCurrentActivePlayers().Count)
+            int currentActivePlayers = GetCurrentActivePlayers().Count;
+            while (playersResponded != currentActivePlayers)
             {
                 List<PokerPlayer> activePlayers = GetCurrentActivePlayers();
                 foreach (PokerPlayer player in activePlayers)
@@ -46,9 +47,25 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
                     {
                         playersResponded = 1;
                     }
+                    else if (response == "FOLD")
+                    {
+                        currentActivePlayers--;
+                        if (currentActivePlayers == 1)
+                        {
+                            // TODO: End Round
+                        }
+                        else if (playersResponded == currentActivePlayers)
+                        {
+                            break;
+                        }
+                    }
                     else
                     {
                         playersResponded++;
+                        if (playersResponded == currentActivePlayers)
+                        {
+                            break;
+                        }
                     }
                 }
             }
@@ -63,6 +80,11 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
                 {
                     if (player.IsActive is true && player.IsOut is false)
                     {
+                        if (player is not PokerPlayer)
+                        {
+                            throw new InvalidCastException($"Player of type {player.GetType()} is not a PokerPlayer obj");
+                        }
+
                         activePlayers.Add((player as PokerPlayer)!);
                     }
                 }

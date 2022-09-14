@@ -68,13 +68,12 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// have enough betting cash to match the current bet.</exception>
         public void Call()
         {
-            // TODO: GetCurrentCallAmount
             if (BettingCash >= pokerGM.CurrentBet)
             {
                 if (InvestedCash != pokerGM.CurrentBet)
                 {
-                    BettingCash -= pokerGM.CurrentBet;
-                    InvestedCash += pokerGM.CurrentBet;
+                    BettingCash -= pokerGM.CurrentBet - InvestedCash;
+                    InvestedCash += pokerGM.CurrentBet - InvestedCash;
                 }
             }
             else
