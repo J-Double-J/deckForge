@@ -8,7 +8,6 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
         public BettingPhase(PokerGameMediator pGM, List<int> playerIDs)
         : base(pGM, playerIDs, "Betting Phase")
         {
-            Actions.Add(new DoPreFlopAction());
         }
     }
 }

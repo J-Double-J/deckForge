@@ -3,26 +3,24 @@ using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameConstruction.PresetGames.Poker
 {
-    public class DoPreFlopAction : PlayerGameAction
+    public class DoPreFlopAction : BaseGameAction
     {
+        private PokerGameMediator pGM;
+
         public DoPreFlopAction(
+            PokerGameMediator pGM,
             string name = "Pre Flop Action",
-            string description = "Lets the player choose an action before the flop."
-        ) : base(name, description)
+            string description = "Lets the player choose an action before the flop.")
+        : base(name, description)
         {
+            this.pGM = pGM;
         }
 
-        public override string Execute(IPlayer player)
+        /// <inheritdoc/>
+        public override object? Execute()
         {
-            PokerPlayer? pokerPlayer = player as PokerPlayer;
-            if (pokerPlayer is null)
-            {
-                throw new ArgumentException("Poker Actions require Poker Players");
-            }
-            else
-            {
-                return pokerPlayer!.GetPreFlopBettingAction();
-            }
+            pGM.PlayersBet();
+            return null;
         }
     }
 }

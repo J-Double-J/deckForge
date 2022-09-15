@@ -8,11 +8,12 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
     /// </summary>
     public class SetUpTablePokerPhase : BasePhase
     {
-        public SetUpTablePokerPhase(IGameMediator gm)
+        public SetUpTablePokerPhase(PokerGameMediator gm)
             : base(gm, "Set up table for next round of Poker")
         {
             Actions.Add(new ShuffleDeckOnTable(gm, 0));
             Actions.Add(new DealCardsFromTableDeckToPlayers(gm, 0, 2));
+            Actions.Add(new DoPreFlopAction(gm));
         }
     }
 }
