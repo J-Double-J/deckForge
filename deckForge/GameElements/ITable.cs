@@ -18,7 +18,12 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Gets the lists of played <see cref="PlayingCard"/>s in front of each <see cref="IPlayer"/>.
         /// </summary>
-        public List<List<PlayingCard>> PlayedCards { get; }
+        public List<List<PlayingCard>> PlayerPlayedCards { get; }
+
+        /// <summary>
+        /// Gets the lists of <see cref="PlayingCard"/>s in the different zones on the <see cref="Table"/>.
+        /// </summary>
+        public List<List<PlayingCard>> TableNeutralZones { get; }
 
         /// <summary>
         /// Prints the current <see cref="ITable"/> state.
@@ -115,5 +120,18 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="deckPosition">Index or position of the <see cref="DeckOfPlayingCards"/>.</param>
         public void ShuffleDeck(int deckPosition);
+
+        /// <summary>
+        /// Plays a number of <see cref="PlayingCard"/>s from a <see cref="DeckOfPlayingCards"/> to an area
+        /// designated on the <see cref="Table"/>.
+        /// </summary>
+        /// <param name="numCards">Number of <see cref="PlayingCard"/>s to attempt to draw.</param>
+        /// <param name="deckPos">ID of the <see cref="DeckOfPlayingCards"/> on the table to 
+        /// draw from.</param>
+        /// <param name="neutralZone">Area to play the <see cref="PlayingCard"/> to.</param>
+        /// <param name="isFaceup">Whether to play the <see cref="PlayingCard"/> faceup.</param>
+        /// <returns>A list of <see cref="PlayingCard"/>(s) that were placed on the <see cref="Table"/>.</returns>
+        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(int numCards, int deckPos,
+            int neutralZone, bool isFaceup = true);
     }
 }

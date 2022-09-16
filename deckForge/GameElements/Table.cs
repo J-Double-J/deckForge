@@ -15,16 +15,20 @@ namespace DeckForge.GameElements
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
-        public Table(IGameMediator mediator, int playerCount)
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// can be played.</param>
+        public Table(IGameMediator mediator, int playerCount, int tableNeutralZonesCount = 0)
         {
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new();
+            PlayerPlayedCards = new();
+            TableNeutralZones = new();
+
             for (var i = 0; i < playerCount; i++)
             {
                 List<PlayingCard> cards = new();
-                PlayedCards.Add(cards);
+                PlayerPlayedCards.Add(cards);
             }
 
             TableDecks = new();
@@ -37,16 +41,20 @@ namespace DeckForge.GameElements
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
         /// <param name="initDeck">Initial <see cref="DeckOfPlayingCards"/> that is on the <see cref="Table"/>.</param>
-        public Table(IGameMediator mediator, int playerCount, DeckOfPlayingCards initDeck)
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// can be played.</param>
+        public Table(IGameMediator mediator, int playerCount, DeckOfPlayingCards initDeck, int tableNeutralZonesCount = 0)
         {
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new();
+            PlayerPlayedCards = new();
+            TableNeutralZones = new();
+
             for (var i = 0; i < playerCount; i++)
             {
                 List<PlayingCard> cards = new();
-                PlayedCards.Add(cards);
+                PlayerPlayedCards.Add(cards);
             }
 
             TableDecks = new()
@@ -62,16 +70,21 @@ namespace DeckForge.GameElements
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
         /// <param name="initDecks">List of initial <see cref="DeckOfPlayingCards"/>s on the <see cref="Table"/>.</param>
-        public Table(IGameMediator mediator, int playerCount, List<DeckOfPlayingCards> initDecks)
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// can be played.</param>
+        public Table(IGameMediator mediator, int playerCount, List<DeckOfPlayingCards> initDecks,
+        int tableNeutralZonesCount = 0)
         {
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayedCards = new();
+            PlayerPlayedCards = new();
+            TableNeutralZones = new();
+
             for (var i = 0; i < playerCount; i++)
             {
                 List<PlayingCard> cards = new();
-                PlayedCards.Add(cards);
+                PlayerPlayedCards.Add(cards);
             }
 
             TableDecks = initDecks;
@@ -88,11 +101,17 @@ namespace DeckForge.GameElements
         /// </summary>
         public List<List<PlayingCard>> TableState
         {
-            get { return PlayedCards; }
+            get { return PlayerPlayedCards; }
         }
 
         /// <inheritdoc/>
-        public List<List<PlayingCard>> PlayedCards
+        public List<List<PlayingCard>> PlayerPlayedCards
+        {
+            get;
+        }
+
+        /// <inheritdoc/>
+        public List<List<PlayingCard>> TableNeutralZones
         {
             get;
         }
@@ -106,7 +125,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void PrintTableState()
         {
-            foreach (List<PlayingCard> player in PlayedCards)
+            foreach (List<PlayingCard> player in PlayerPlayedCards)
             {
                 foreach (PlayingCard c in player)
                 {
@@ -118,7 +137,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public List<PlayingCard> GetCardsForSpecificPlayer(int playerID)
         {
-            return PlayedCards[playerID];
+            return PlayerPlayedCards[playerID];
         }
 
         /// <inheritdoc/>
@@ -126,7 +145,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                PlayedCards[playerID].Add(c);
+                PlayerPlayedCards[playerID].Add(c);
             }
             catch
             {
@@ -139,7 +158,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (PlayingCard c in PlayedCards[playerID])
+                foreach (PlayingCard c in PlayerPlayedCards[playerID])
                 {
                     if (c.Facedown != facedown)
                     {
@@ -156,7 +175,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false)
         {
-            for (var i = 0; i < PlayedCards.Count; i++)
+            for (var i = 0; i < PlayerPlayedCards.Count; i++)
             {
                 Flip_AllCardsOneWay_SpecificPlayer(i, facedown);
             }
@@ -167,7 +186,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (PlayingCard c in PlayedCards[playerID])
+                foreach (PlayingCard c in PlayerPlayedCards[playerID])
                 {
                     c.Flip();
                 }
@@ -181,7 +200,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void Flip_AllCardsEitherWay_AllPlayers()
         {
-            for (var i = 0; i < PlayedCards.Count; i++)
+            for (var i = 0; i < PlayerPlayedCards.Count; i++)
             {
                 Flip_AllCardsEitherWay_SpecificPlayer(i);
             }
@@ -192,8 +211,8 @@ namespace DeckForge.GameElements
         {
             try
             {
-                PlayedCards[playerID][cardPos].Flip();
-                return PlayedCards[playerID][cardPos];
+                PlayerPlayedCards[playerID][cardPos].Flip();
+                return PlayerPlayedCards[playerID][cardPos];
             }
             catch
             {
@@ -204,14 +223,14 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public PlayingCard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
         {
-            if (PlayedCards[playerID][cardPos].Facedown != facedown)
+            if (PlayerPlayedCards[playerID][cardPos].Facedown != facedown)
             {
-                PlayedCards[playerID][cardPos].Flip();
-                return PlayedCards[playerID][cardPos];
+                PlayerPlayedCards[playerID][cardPos].Flip();
+                return PlayerPlayedCards[playerID][cardPos];
             }
             else
             {
-                return PlayedCards[playerID][cardPos];
+                return PlayerPlayedCards[playerID][cardPos];
             }
         }
 
@@ -220,8 +239,8 @@ namespace DeckForge.GameElements
         {
             try
             {
-                PlayingCard c = PlayedCards[playerID][cardPos];
-                PlayedCards[playerID].RemoveAt(cardPos);
+                PlayingCard c = PlayerPlayedCards[playerID][cardPos];
+                PlayerPlayedCards[playerID].RemoveAt(cardPos);
                 return c;
             }
             catch
@@ -236,7 +255,7 @@ namespace DeckForge.GameElements
             try
             {
                 List<PlayingCard> cards = new();
-                var numCardsToGrab = PlayedCards[playerID].Count;
+                var numCardsToGrab = PlayerPlayedCards[playerID].Count;
                 for (var i = 0; i < numCardsToGrab; i++)
                 {
                     cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: 0));
@@ -284,6 +303,7 @@ namespace DeckForge.GameElements
             }
         }
 
+        /// <inheritdoc/>
         public void ShuffleDeck(int deckPosition)
         {
             try
@@ -294,6 +314,25 @@ namespace DeckForge.GameElements
             {
                 throw;
             }
+        }
+
+        /// <inheritdoc/>
+        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(int numCards, int deckPos,
+            int neutralZone, bool isFaceup = true)
+        {
+            List<PlayingCard> retVal = new();
+            for (int i = 0; i < numCards; i++)
+            {
+                PlayingCard? drawnCard = TableDecks[deckPos].DrawCard();
+                if (drawnCard is not null)
+                {
+                    drawnCard.Facedown = isFaceup;
+                    TableNeutralZones[neutralZone].Add(drawnCard);
+                    retVal.Add(drawnCard);
+                }
+            }
+
+            return retVal;
         }
     }
 }
