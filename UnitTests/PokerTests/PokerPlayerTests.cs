@@ -109,5 +109,100 @@ namespace UnitTests.PokerTests
 
             player.InvestedCash.Should().Be(20, "the player raised to 20 and stayed at that amount even when erroneously calling instead of checking");
         }
+
+        [TestMethod]
+        public void PokerPlayerGetsCorrectPromptOnPreFlop()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
+            StringWriter output = new();
+            StringReader input = new("3");
+            Console.SetOut(output);
+            Console.SetIn(input);
+
+            gm.CurrentBet = 10;
+            player.ConsolePromptTest(true);
+
+            if (OperatingSystem.IsMacOS())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\n", "Player can do any of the preflop options");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\r\n", "Player can do any of the preflop options");
+            } // Unsure why there needs to be \r here but no where else, but I suspect it has to do with Console.WriteLine() on windows
+        }
+
+        [TestMethod]
+        public void PokerPlayerGetsCorrectPromptAfterFlop()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
+            StringWriter output = new();
+            StringReader input = new("3");
+            Console.SetOut(output);
+            Console.SetIn(input);
+
+            gm.CurrentBet = 10;
+            player.SetInvestedCash(10);
+            player.ConsolePromptTest(false);
+
+            if (OperatingSystem.IsMacOS())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\t5) Check\n\n", "Player can do most post flop options");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\t5) Check\n\r\n", "Player can do most post flop options");
+            }
+        }
+
+        [TestMethod]
+        public void PokerPlayerGetsCorrectPromptWhenNotMatchingBet()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 100);
+            StringWriter output = new();
+            StringReader input = new("3");
+            Console.SetOut(output);
+            Console.SetIn(input);
+
+            gm.CurrentBet = 20;
+            player.SetInvestedCash(10);
+            player.ConsolePromptTest(false);
+
+            if (OperatingSystem.IsMacOS())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\n", "Player cannot Check as they do not match the bet");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\r\n", "Player cannot Check as they do not match the bet");
+            }
+        }
+
+        [TestMethod]
+        public void PokerPlayerGetsCorrectPrompt_NeedsToMatchButCannotRaise()
+        {
+            PokerGameMediator gm = new(1);
+            PokerPlayerWithProgrammedActions player = new(gm, 0, 10);
+            StringWriter output = new();
+            StringReader input = new("3");
+            Console.SetOut(output);
+            Console.SetIn(input);
+
+            gm.CurrentBet = 20;
+            player.SetInvestedCash(10); // This does not count against Player's current cash
+            player.ConsolePromptTest(false);
+
+            if (OperatingSystem.IsMacOS())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t3) Fold\n\t4) All In!\n\n", "Player can go all in to match");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.ToString().Should().Be("Would you like to:\n\t3) Fold\n\t4) All In!\n\r\n", "Player can go all in to match");
+            }
+        }
     }
 }

@@ -36,6 +36,11 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         public int BettingCash { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the Player is All In.
+        /// </summary>
+        public bool IsAllIn { get; protected set; }
+
+        /// <summary>
         /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding.
         /// </summary>
         /// <returns>A string representing their choice of action.</returns>
@@ -121,6 +126,17 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         public void Check()
         {
         }
+
+        /// <summary>
+        /// <see cref="PokerPlayer"/> goes All In and puts all the money on the table.
+        /// </summary>
+        public void AllIn()
+        {
+            IsAllIn = true;
+            InvestedCash += BettingCash;
+            BettingCash = 0;
+        }
+
         /// <summary>
         /// <see cref="PokerPlayer"/> raises the current bet to <paramref name="raiseAmount"/>.
         /// Different from <see cref="Raise()"/> as it does not ask for user input from the console.
@@ -140,33 +156,23 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             }
         }
 
-        private bool ValidateRaiseAmount(int raiseAmount)
-        {
-            if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         /// <summary>
         /// Displays the valid choices to the <see cref="PokerPlayer"/>.
         /// <see cref="PokerPlayer"/> then chooses from the list of options.
         /// </summary>
-        private int GetValidChoice(bool isPreFlop = false)
+        /// <param name="isPreFlop">True if the prompt is during the PreFlop phase.</param>
+        /// <returns>Returns the integer repressenting the choice the <see cref="PokerPlayer"/> chose.</returns>
+        protected int GetValidChoice(bool isPreFlop = false)
         {
             string prompt = "Would you like to:\n";
             Dictionary<int, bool> validChoices = new();
 
-            for (int i = 1; i < 5; i++)
+            for (int i = 1; i < 6; i++)
             {
                 validChoices.Add(i, false);
             }
 
-            if (pokerGM.CurrentBet > InvestedCash)
+            if (pokerGM.CurrentBet > InvestedCash && (pokerGM.CurrentBet != (InvestedCash + BettingCash)))
             {
                 prompt += "\t1) Call\n";
                 validChoices[0] = true;
@@ -181,10 +187,13 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             prompt += "\t3) Fold\n";
             validChoices[2] = true;
 
+            prompt += "\t4) All In!\n";
+            validChoices[3] = true;
+
             if (pokerGM.CurrentBet == InvestedCash && isPreFlop == false)
             {
-                prompt += "\t4) Check";
-                validChoices[3] = true;
+                prompt += "\t5) Check\n";
+                validChoices[4] = true;
             }
 
             int responseVal;
@@ -194,11 +203,11 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
 
                 if (isPreFlop)
                 {
-                    preFlopPrompt = new(prompt, 3);
+                    preFlopPrompt = new(prompt, 4);
                 }
                 else
                 {
-                    preFlopPrompt = new(prompt, 4);
+                    preFlopPrompt = new(prompt, 5);
                 }
 
                 responseVal = preFlopPrompt.Prompt();
@@ -214,6 +223,18 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             }
 
             return responseVal;
+        }
+
+        private bool ValidateRaiseAmount(int raiseAmount)
+        {
+            if (raiseAmount <= BettingCash && raiseAmount > pokerGM.CurrentBet)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -238,6 +259,9 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
                     Fold();
                     return "FOLD";
                 case 4:
+                    AllIn();
+                    return "ALLIN";
+                case 5:
                     Check();
                     return "CHECK";
                 default:

@@ -41,30 +41,37 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
                 List<PokerPlayer> activePlayers = GetCurrentActivePlayers();
                 foreach (PokerPlayer player in activePlayers)
                 {
-                    string response = player.GetPreFlopBettingAction();
-
-                    if (response == "RAISE")
+                    if (player.IsAllIn is true)
                     {
-                        playersResponded = 1;
-                    }
-                    else if (response == "FOLD")
-                    {
-                        currentActivePlayers--;
-                        if (currentActivePlayers == 1)
-                        {
-                            // TODO: End Round
-                        }
-                        else if (playersResponded == currentActivePlayers)
-                        {
-                            break;
-                        }
+                        playersResponded++;
                     }
                     else
                     {
-                        playersResponded++;
-                        if (playersResponded == currentActivePlayers)
+                        string response = player.GetPreFlopBettingAction();
+
+                        if (response == "RAISE")
                         {
-                            break;
+                            playersResponded = 1;
+                        }
+                        else if (response == "FOLD")
+                        {
+                            currentActivePlayers--;
+                            if (currentActivePlayers == 1)
+                            {
+                                // TODO: End Round
+                            }
+                            else if (playersResponded == currentActivePlayers)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            playersResponded++;
+                            if (playersResponded == currentActivePlayers)
+                            {
+                                break;
+                            }
                         }
                     }
                 }

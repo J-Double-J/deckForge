@@ -68,5 +68,30 @@ namespace UnitTests.PokerTests.TestablePokerPlayer
             currentCommand++;
             return retVal;
         }
+
+        /// <summary>
+        /// Displays the choices given to the Player. Used for testing purposes.
+        /// </summary>
+        /// <param name="isPreFlop">Is true if testing for pre-flop actions.</param>
+        public void ConsolePromptTest(bool isPreFlop = false)
+        {
+            GetValidChoice(isPreFlop);
+        }
+
+        /// <summary>
+        /// Sets the current investment of cash on the table for this <see cref="PokerPlayer"/>. Used for testing purposes.
+        /// </summary>
+        /// <param name="investment">Amount of cash that the <see cref="PokerPlayer"/> has invested.</param>
+        public void SetInvestedCash(int investment)
+        {
+            if (investment >= 0)
+            {
+                InvestedCash = investment;
+            }
+            else
+            {
+                throw new ArgumentException("Cannot set a negative investment");
+            }
+        }
     }
 }
