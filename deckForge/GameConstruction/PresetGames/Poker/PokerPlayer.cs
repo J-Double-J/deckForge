@@ -36,29 +36,22 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         public int BettingCash { get; protected set; }
 
         /// <summary>
-        /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding and checking.
+        /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding.
         /// </summary>
         /// <returns>A string representing their choice of action.</returns>
         public virtual string GetPreFlopBettingAction()
         {
-            string preFlopPromptString = "Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) Check";
-            PlayerPrompter preFlopPrompt = new(preFlopPromptString, 4);
-            int responseVal = preFlopPrompt.Prompt();
+            return ExecuteActionFromChoice(GetValidChoice(isPreFlop: true));
+        }
 
-            switch (responseVal)
-            {
-                case 1:
-                    Call();
-                    return "CALL";
-                case 2:
-                    Raise();
-                    return "RAISE";
-                case 3:
-                    Fold();
-                    return "FOLD";
-                default:
-                    throw new Exception("'responseVal' was not between 1-4 in 'GetPreFlopBettingAction()'");
-            }
+        /// <summary>
+        /// <see cref="PokerPlayer"/> gets a choice of calling, raising, folding and checking.
+        /// Then the player executes it.
+        /// </summary>
+        /// <returns>A string representing their choice of action.</returns>
+        public virtual string GetBettingAction()
+        {
+            return ExecuteActionFromChoice(GetValidChoice());
         }
 
         /// <summary>
@@ -123,6 +116,12 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         }
 
         /// <summary>
+        /// Passes play.
+        /// </summary>
+        public void Check()
+        {
+        }
+        /// <summary>
         /// <see cref="PokerPlayer"/> raises the current bet to <paramref name="raiseAmount"/>.
         /// Different from <see cref="Raise()"/> as it does not ask for user input from the console.
         /// </summary>
@@ -150,6 +149,99 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Displays the valid choices to the <see cref="PokerPlayer"/>.
+        /// <see cref="PokerPlayer"/> then chooses from the list of options.
+        /// </summary>
+        private int GetValidChoice(bool isPreFlop = false)
+        {
+            string prompt = "Would you like to:\n";
+            Dictionary<int, bool> validChoices = new();
+
+            for (int i = 1; i < 5; i++)
+            {
+                validChoices.Add(i, false);
+            }
+
+            if (pokerGM.CurrentBet > InvestedCash)
+            {
+                prompt += "\t1) Call\n";
+                validChoices[0] = true;
+            }
+
+            if (BettingCash > pokerGM.CurrentBet)
+            {
+                prompt += "\t2) Raise\n";
+                validChoices[1] = true;
+            }
+
+            prompt += "\t3) Fold\n";
+            validChoices[2] = true;
+
+            if (pokerGM.CurrentBet == InvestedCash && isPreFlop == false)
+            {
+                prompt += "\t4) Check";
+                validChoices[3] = true;
+            }
+
+            int responseVal;
+            while (true)
+            {
+                PlayerPrompter preFlopPrompt;
+
+                if (isPreFlop)
+                {
+                    preFlopPrompt = new(prompt, 3);
+                }
+                else
+                {
+                    preFlopPrompt = new(prompt, 4);
+                }
+
+                responseVal = preFlopPrompt.Prompt();
+
+                if (validChoices[responseVal - 1] == true)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Choice");
+                }
+            }
+
+            return responseVal;
+        }
+
+        /// <summary>
+        /// Executes the chosen action.
+        /// </summary>
+        /// <param name="choice">
+        /// 1) Call    2) Raise    3) Fold    4) Check
+        /// </param>
+        /// <returns>String representing the action taken.</returns>
+        /// <exception cref="ArgumentException">Throws if choice is not between 1 and 4.</exception>
+        private string ExecuteActionFromChoice(int choice)
+        {
+            switch (choice)
+            {
+                case 1:
+                    Call();
+                    return "CALL";
+                case 2:
+                    Raise();
+                    return "RAISE";
+                case 3:
+                    Fold();
+                    return "FOLD";
+                case 4:
+                    Check();
+                    return "CHECK";
+                default:
+                    throw new ArgumentException("Invalid Choice, no action associated.");
             }
         }
     }
