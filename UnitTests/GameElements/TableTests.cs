@@ -10,24 +10,26 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-        static readonly List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+        private static readonly List<DeckOfPlayingCards> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
         private static IGameMediator gm = new BaseGameMediator(2);
-        private static Table table = new(gm, 2, decks);
+        private static Table table = new(gm, 2, Decks);
         private static StringWriter output = new();
 
-        [ClassInitialize()]
+        [ClassInitialize]
         public static void InitializeTableTestsClass(TestContext ctx)
         {
             gm = new BaseGameMediator(2);
         }
 
-        [TestInitialize()]
+        [TestInitialize]
         public void InitializeTableTests()
         {
-            table = new(gm, 2, decks);
+            table = new(gm, 2, Decks);
             output = new();
             for (var i = 0; i < 2; i++)
+            {
                 new BasePlayer(gm, i);
+            }
         }
 
         [TestMethod]
@@ -54,21 +56,27 @@ namespace UnitTests.GameElements
 
             table.PrintTableState();
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("8J\n9J\n10J\n8J\n9J\n10J\n", "these six cards were placed on the table");
+            }
             else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("8J\r\n9J\r\n10J\r\n8J\r\n9J\r\n10J\r\n", "these six cards were placed on the table");
+            }
         }
 
         [TestMethod]
         public void TableReturnsPlayersCards()
         {
-            string s = String.Empty;
+            string s = string.Empty;
             setUpTableForTests();
 
             List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0);
 
             foreach (PlayingCard c in cards)
+            {
                 s += c.PrintCard();
+            }
 
             s.Should().Be("8J9J", "these are the cards that Player 0 has in front of them");
         }
@@ -82,9 +90,13 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\nCOVERED\n", "all 4 cards should be flipped down");
+            }
             else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("COVERED\r\nCOVERED\r\nCOVERED\r\nCOVERED\r\n", "all 4 cards should be flipped down");
+            }
         }
 
         [TestMethod]
@@ -96,9 +108,13 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("COVERED\nCOVERED\nCOVERED\n2Q\n", "only the 2 Queen should be faceup as it was facedown originally");
-            if (OperatingSystem.IsWindows())
+            }
+            else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("COVERED\r\nCOVERED\r\nCOVERED\r\n2Q\r\n", "only the 2 Queen should be faceup as it was facedown originally");
+            }
         }
 
         [TestMethod]
@@ -110,9 +126,13 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("COVERED\nCOVERED\n1Q\nCOVERED\n", "Player 0 should have their cards hidden now");
-            if (OperatingSystem.IsWindows())
+            }
+            else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("COVERED\r\nCOVERED\r\n1Q\r\nCOVERED\r\n", "Player 0 should have their cards hidden now");
+            }
         }
 
         [TestMethod]
@@ -124,9 +144,13 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("8J\n9J\nCOVERED\n2Q\n", "Player 1's cards were flipped regardless of their original facing");
-            if (OperatingSystem.IsWindows())
+            }
+            else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("8J\r\n9J\r\nCOVERED\r\n2Q\r\n", "Player 1's cards were flipped regardless of their original facing");
+            }
         }
 
         [TestMethod]
@@ -138,9 +162,13 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("COVERED\n9J\n1Q\nCOVERED\n", "The 8J card should be flipped down while the other cards are untouched");
+            }
             else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("COVERED\r\n9J\r\n1Q\r\nCOVERED\r\n", "The 8J card should be flipped down while the other cards are untouched");
+            }
         }
 
         [TestMethod]
@@ -177,10 +205,12 @@ namespace UnitTests.GameElements
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
+            {
                 output.ToString().Should().Be("9J\n1Q\nCOVERED\n", "First player's first card was removed");
-            else if(OperatingSystem.IsWindows()) {
+            }
+            else if (OperatingSystem.IsWindows())
+            {
                 output.ToString().Should().Be("9J\r\n1Q\r\nCOVERED\r\n", "First player's first card was removed");
-
             }
         }
 
@@ -234,9 +264,9 @@ namespace UnitTests.GameElements
         [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
-        public void TableFlips_ACardForAPlayer_InSpecificWay(bool facedown) {
+        public void TableFlips_ACardForAPlayer_InSpecificWay(bool facedown)
+        {
             setUpTableForTests();
-            
             table.Flip_SpecificCard_SpecificPlayer_SpecificWay(0, 0, facedown);
             table.PrintTableState();
 
