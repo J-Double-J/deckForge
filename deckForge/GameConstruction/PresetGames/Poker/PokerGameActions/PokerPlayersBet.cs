@@ -3,11 +3,11 @@ using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameConstruction.PresetGames.Poker
 {
-    public class DoPreFlopAction : BaseGameAction
+    public class PokerPlayersBet : BaseGameAction
     {
         private PokerGameMediator pGM;
 
-        public DoPreFlopAction(
+        public PokerPlayersBet(
             PokerGameMediator pGM,
             string name = "Pre Flop Action",
             string description = "Lets the player choose an action before the flop.")

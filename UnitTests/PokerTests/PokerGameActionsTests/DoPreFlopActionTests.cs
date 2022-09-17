@@ -14,7 +14,7 @@ namespace UnitTests.PokerTests
         {
             PokerGameMediator pGM = new(1);
             PokerPlayerWithProgrammedActions player = new(pGM, 0, 100);
-            BaseGameAction action = new DoPreFlopAction(pGM);
+            BaseGameAction action = new PokerPlayersBet(pGM);
 
             pGM.CurrentBet = 10;
             player.Commands.Add("CALL");
@@ -29,7 +29,7 @@ namespace UnitTests.PokerTests
         {
             PokerGameMediator pGM = new(1);
             PokerPlayerWithProgrammedActions player = new(pGM, 0, 100);
-            BaseGameAction action = new DoPreFlopAction(pGM);
+            BaseGameAction action = new PokerPlayersBet(pGM);
 
             pGM.CurrentBet = 10;
             player.RaiseToAmount = 30;
@@ -47,7 +47,7 @@ namespace UnitTests.PokerTests
             Console.SetIn(stringReader);
             PokerGameMediator pGM = new(1);
             WarPlayer player = new(pGM, 0, new DeckForge.GameElements.Resources.DeckOfPlayingCards());
-            BaseGameAction action = new DoPreFlopAction(pGM);
+            BaseGameAction action = new PokerPlayersBet(pGM);
 
             pGM.CurrentBet = 10;
             Action attempt = () => action.Execute();
