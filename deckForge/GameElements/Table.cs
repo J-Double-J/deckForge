@@ -31,6 +31,12 @@ namespace DeckForge.GameElements
                 PlayerPlayedCards.Add(cards);
             }
 
+            for (var i = 0; i < tableNeutralZonesCount; i++)
+            {
+                List<PlayingCard> cards = new();
+                TableNeutralZones.Add(cards);
+            }
+
             TableDecks = new();
         }
 
@@ -57,6 +63,12 @@ namespace DeckForge.GameElements
                 PlayerPlayedCards.Add(cards);
             }
 
+            for (var i = 0; i < tableNeutralZonesCount; i++)
+            {
+                List<PlayingCard> cards = new();
+                TableNeutralZones.Add(cards);
+            }
+
             TableDecks = new()
             {
                 initDeck
@@ -72,8 +84,11 @@ namespace DeckForge.GameElements
         /// <param name="initDecks">List of initial <see cref="DeckOfPlayingCards"/>s on the <see cref="Table"/>.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
         /// can be played.</param>
-        public Table(IGameMediator mediator, int playerCount, List<DeckOfPlayingCards> initDecks,
-        int tableNeutralZonesCount = 0)
+        public Table(
+            IGameMediator mediator,
+            int playerCount,
+            List<DeckOfPlayingCards> initDecks,
+            int tableNeutralZonesCount = 0)
         {
             GM = mediator;
             GM.RegisterTable(this);
@@ -85,6 +100,12 @@ namespace DeckForge.GameElements
             {
                 List<PlayingCard> cards = new();
                 PlayerPlayedCards.Add(cards);
+            }
+
+            for (var i = 0; i < tableNeutralZonesCount; i++)
+            {
+                List<PlayingCard> cards = new();
+                TableNeutralZones.Add(cards);
             }
 
             TableDecks = initDecks;
@@ -138,6 +159,12 @@ namespace DeckForge.GameElements
         public List<PlayingCard> GetCardsForSpecificPlayer(int playerID)
         {
             return PlayerPlayedCards[playerID];
+        }
+
+        /// <inheritdoc/>
+        public List<PlayingCard> GetCardsForSpecificNeutralZone(int neutralZone)
+        {
+            return TableNeutralZones[neutralZone];
         }
 
         /// <inheritdoc/>
@@ -317,8 +344,11 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(int numCards, int deckPos,
-            int neutralZone, bool isFaceup = true)
+        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(
+            int numCards,
+            int deckPos,
+            int neutralZone,
+            bool isFaceup = true)
         {
             List<PlayingCard> retVal = new();
             for (int i = 0; i < numCards; i++)
@@ -333,6 +363,19 @@ namespace DeckForge.GameElements
             }
 
             return retVal;
+        }
+
+        /// <inheritdoc/>
+        public void AddCardTo_NeutralZone(PlayingCard card, int neutralZone)
+        {
+            TableNeutralZones[neutralZone].Add(card);
+        }
+
+        /// <inheritdoc/>
+        public void AddCardsTo_NeutralZone(List<PlayingCard> cards, int neutralZone)
+        {
+            var mergedLists = TableNeutralZones[neutralZone].Concat(cards).ToList();
+            TableNeutralZones[neutralZone] = mergedLists;
         }
     }
 }

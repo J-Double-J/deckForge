@@ -31,11 +31,18 @@ namespace DeckForge.GameElements
         public void PrintTableState();
 
         /// <summary>
-        /// Gets the list of <see cref="PlayingCard"/>s in front of a <see cref="IPlayer"/>.
+        /// Gets the list of <see cref="PlayingCard"/>s in front of a specified <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="PlayerConstruction.IPlayer"/>.</param>
         /// <returns>List of <see cref="PlayingCard"/>s that belong to the <see cref="IPlayer"/>.</returns>
         public List<PlayingCard> GetCardsForSpecificPlayer(int playerID);
+
+        /// <summary>
+        /// Gets the list of <see cref="PlayingCard"/>s in a specified neutral zone.
+        /// </summary>
+        /// <param name="neutalZone">ID of the neutral zone on the <see cref="ITable"/>.</param>
+        /// <returns>List of <see cref="PlayingCard"/>s that belong to the neutral zone.</returns>
+        public List<PlayingCard> GetCardsForSpecificNeutralZone(int neutalZone);
 
         /// <summary>
         /// Places the <paramref name="card"/> on the <see cref="ITable"/>.
@@ -131,7 +138,24 @@ namespace DeckForge.GameElements
         /// <param name="neutralZone">Area to play the <see cref="PlayingCard"/> to.</param>
         /// <param name="isFaceup">Whether to play the <see cref="PlayingCard"/> faceup.</param>
         /// <returns>A list of <see cref="PlayingCard"/>(s) that were placed on the <see cref="Table"/>.</returns>
-        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(int numCards, int deckPos,
-            int neutralZone, bool isFaceup = true);
+        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(
+            int numCards,
+            int deckPos,
+            int neutralZone,
+            bool isFaceup = true);
+
+        /// <summary>
+        /// Adds a <see cref="PlayingCard"/> to a neutral zone.
+        /// </summary>
+        /// <param name="card"><see cref="PlayingCard"/> to be added.</param>
+        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="PlayingCard"/> to.</param>
+        public void AddCardTo_NeutralZone(PlayingCard card, int neutralZone);
+
+        /// <summary>
+        /// Adds a list of <see cref="PlayingCard"/>s to a neutral zone.
+        /// </summary>
+        /// <param name="cards">List of <see cref="PlayingCard"/>s to add.</param>
+        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="PlayingCard"/>s to.</param>
+        public void AddCardsTo_NeutralZone(List<PlayingCard> cards, int neutralZone);
     }
 }
