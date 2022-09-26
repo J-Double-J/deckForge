@@ -50,11 +50,12 @@ namespace DeckForge.PlayerConstruction
         /// Gets or sets a value indicating whether <see cref="IPlayer"/> out of the game (<c>true</c>),
         /// or is in the game (<c>false</c>). Once <see cref="IsOut"/> is
         /// <c>true</c>, <c>IsOut</c> cannot be changed.
+        /// Once <c>true</c>, <see cref="IsActive"/> is set <c>false</c> by default.
         /// </summary>
         /// <remarks>
         /// This is used to remove an <see cref="IPlayer"/> from the game and turn order.
-        /// If the player is not to be considered in play temporarily, use <c>IsActive</c>.
-        /// <see cref="IPlayer"/>s on default are not removed from turn order until a round is over.
+        /// If the player is not to be considered in play temporarily, use <see cref="IsActive"/>.
+        /// <see cref="IPlayer"/>s by default are not removed from turn order until a round is over.
         /// </remarks>
         public bool IsOut { get; set; }
 
