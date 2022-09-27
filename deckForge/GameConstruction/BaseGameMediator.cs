@@ -55,7 +55,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public List<List<PlayingCard>> CurrentTableState
+        public List<List<ICard>> CurrentTableState
         {
             get { return GameTable!.TableState; }
         }
@@ -193,11 +193,11 @@ namespace DeckForge.GameConstruction
         }
 
         /// <summary>
-        /// Puts a <see cref="PlayingCard"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a <see cref="PlayingCard"/>.
+        /// Puts a <see cref="ICard"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a <see cref="ICard"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played a <see cref="PlayingCard"/>.</param>
-        /// <param name="card"><see cref="PlayingCard"/> that was played.</param>
-        public virtual void PlayerPlayedCard(int playerID, PlayingCard card)
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played a <see cref="ICard"/>.</param>
+        /// <param name="card"><see cref="ICard"/> that was played.</param>
+        public virtual void PlayerPlayedCard(int playerID, ICard card)
         {
             try
             {
@@ -231,11 +231,11 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? DrawCardFromDeck(int deckPosition)
+        public virtual ICard? DrawCardFromDeck(int deckPosition)
         {
             try
             {
-                PlayingCard? c = GameTable!.DrawCardFromDeck(deckPosition);
+                ICard? c = GameTable!.DrawCardFromDeck(deckPosition);
                 if (c != null)
                 {
                     return c;
@@ -273,7 +273,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual List<PlayingCard> GetPlayedCardsOfPlayer(int playerID)
+        public virtual List<ICard> GetPlayedCardsOfPlayer(int playerID)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard FlipSingleCard(int playerID, int cardPos, bool? facedown)
+        public virtual ICard FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
             try
             {
@@ -306,7 +306,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual List<PlayingCard> PickUpAllCards_FromTable_FromPlayer(int playerID)
+        public virtual List<ICard> PickUpAllCards_FromTable_FromPlayer(int playerID)
         {
             try
             {
@@ -423,7 +423,7 @@ namespace DeckForge.GameConstruction
             {
                 foreach (IPlayer player in Players!)
                 {
-                    PlayingCard? drawnCard = DrawCardFromDeck(deckPos);
+                    ICard? drawnCard = DrawCardFromDeck(deckPos);
                     if (drawnCard != null)
                     {
                         player.AddCardToHand(drawnCard);

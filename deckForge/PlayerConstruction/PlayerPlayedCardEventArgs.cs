@@ -4,11 +4,11 @@ namespace DeckForge.PlayerConstruction.PlayerEvents
 {
     public class PlayerPlayedCardEventArgs : EventArgs
     {
-        public PlayerPlayedCardEventArgs(PlayingCard c)
+        public PlayerPlayedCardEventArgs(ICard c)
         {
             CardPlayed = c;
         }
         
-        public PlayingCard CardPlayed { get; }
+        public ICard CardPlayed { get; }
     }
 }

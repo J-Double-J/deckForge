@@ -84,7 +84,7 @@ namespace UnitTests.GameElements
             string s = string.Empty;
             SetUpTableForTests();
 
-            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0);
+            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0).ConvertAll(c => (PlayingCard) c);
 
             foreach (PlayingCard c in cards)
             {
@@ -248,7 +248,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void PickUpAllCards_From_APlayerTableSpot()
         {
-            List<PlayingCard> cards;
+            List<ICard> cards;
 
             SetUpTableForTests();
 
@@ -312,7 +312,7 @@ namespace UnitTests.GameElements
         [DataRow(2)]
         public void TableCanDrawCard_FromSpecificDeck(int deckNum)
         {
-            PlayingCard? c = table.DrawCardFromDeck(0)!;
+            ICard? c = table.DrawCardFromDeck(0)!;
 
             c.Should().NotBeNull("because a new card is being drawn from this deck");
         }
@@ -320,13 +320,13 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCanDrawManyCards_FromSpecificDeck()
         {
-            List<PlayingCard?> cards  = new List<PlayingCard?>();
+            List<ICard?> cards  = new();
 
             cards = table.DrawMultipleCardsFromDeck(5);
 
             cards.Count.Should().Be(5, "5 cards was drawn from the first deck");
 
-            foreach (PlayingCard? c in cards)
+            foreach (ICard? c in cards)
             {
                 c.Should().NotBeNull("the deck is new and should not be empty");
             }
@@ -357,7 +357,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCanAddMultipleCards_ToNeutralZone()
         {
-            List<PlayingCard> cards = new() { new(10, "J"), new(5, "Q") };
+            List<ICard> cards = new() { new PlayingCard(10, "J"), new PlayingCard(5, "Q") };
             Table neutralTable = new(gm, 0, 2);
 
             neutralTable.AddCardsTo_NeutralZone(cards, 0);
@@ -372,7 +372,7 @@ namespace UnitTests.GameElements
             Table table = new(gm, 4, 3);
 
             table.AddCardsTo_NeutralZone(
-                new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
+                new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
             table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
             table.PlayerPlayedCards[0].Add(new PlayingCard(3, "J"));
             table.PlayerPlayedCards[1].Add(new PlayingCard(4, "J"));

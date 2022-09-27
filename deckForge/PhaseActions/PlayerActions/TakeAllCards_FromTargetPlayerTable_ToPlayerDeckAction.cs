@@ -22,12 +22,12 @@ namespace DeckForge.PhaseActions
         }
 
         /// <inheritdoc/>
-        public override List<PlayingCard> Execute(IPlayer playerExecutor, IPlayer playerTarget)
+        public override List<ICard> Execute(IPlayer playerExecutor, IPlayer playerTarget)
         {
             try
             {
                 int resourceCollectionID = playerExecutor.FindCorrectResourceCollectionID(typeof(PlayingCard));
-                List<PlayingCard> cards = playerTarget.TakeAllCardsFromTable();
+                List<ICard> cards = playerTarget.TakeAllCardsFromTable();
                 List<object> objectCards = cards.Cast<object>().ToList();
 
                 playerExecutor.AddMultipleResourcesToCollection(resourceCollectionID, objectCards);

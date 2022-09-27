@@ -62,7 +62,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
             List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!.ConvertAll(c => (PlayingCard)c!);
                 DeckOfPlayingCards deck = new (cards);
                 IPlayer player = new WarPlayer(gm, i, deck);
                 players.Add(player);

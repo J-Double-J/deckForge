@@ -5,7 +5,7 @@ using DeckForge.PlayerConstruction;
 namespace DeckForge.GameElements
 {
     /// <summary>
-    /// Responsible for tracking played <see cref="PlayingCard"/>s and where they are played.
+    /// Responsible for tracking played <see cref="ICard"/>s and where they are played.
     /// <see cref="ITable"/> is also in charge of managing <see cref="ITable"/> resources.
     /// </summary>
     public interface ITable
@@ -16,14 +16,14 @@ namespace DeckForge.GameElements
         public List<DeckOfPlayingCards> TableDecks { get; }
 
         /// <summary>
-        /// Gets the lists of played <see cref="PlayingCard"/>s in front of each <see cref="IPlayer"/>.
+        /// Gets the lists of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
         /// </summary>
-        public List<List<PlayingCard>> PlayerPlayedCards { get; }
+        public List<List<ICard>> PlayerPlayedCards { get; }
 
         /// <summary>
-        /// Gets the lists of <see cref="PlayingCard"/>s in the different zones on the <see cref="Table"/>.
+        /// Gets the lists of <see cref="ICard"/>s in the different zones on the <see cref="Table"/>.
         /// </summary>
-        public List<List<PlayingCard>> TableNeutralZones { get; }
+        public List<List<ICard>> TableNeutralZones { get; }
 
         /// <summary>
         /// Prints the current <see cref="ITable"/> state.
@@ -31,30 +31,30 @@ namespace DeckForge.GameElements
         public void PrintTableState();
 
         /// <summary>
-        /// Gets the list of <see cref="PlayingCard"/>s in front of a specified <see cref="IPlayer"/>.
+        /// Gets the list of <see cref="ICard"/>s in front of a specified <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="PlayerConstruction.IPlayer"/>.</param>
-        /// <returns>List of <see cref="PlayingCard"/>s that belong to the <see cref="IPlayer"/>.</returns>
-        public List<PlayingCard> GetCardsForSpecificPlayer(int playerID);
+        /// <returns>List of <see cref="ICard"/>s that belong to the <see cref="IPlayer"/>.</returns>
+        public List<ICard> GetCardsForSpecificPlayer(int playerID);
 
         /// <summary>
-        /// Gets the list of <see cref="PlayingCard"/>s in a specified neutral zone.
+        /// Gets the list of <see cref="ICard"/>s in a specified neutral zone.
         /// </summary>
         /// <param name="neutalZone">ID of the neutral zone on the <see cref="ITable"/>.</param>
-        /// <returns>List of <see cref="PlayingCard"/>s that belong to the neutral zone.</returns>
-        public List<PlayingCard> GetCardsForSpecificNeutralZone(int neutalZone);
+        /// <returns>List of <see cref="ICard"/>s that belong to the neutral zone.</returns>
+        public List<ICard> GetCardsForSpecificNeutralZone(int neutalZone);
 
         /// <summary>
         /// Places the <paramref name="card"/> on the <see cref="ITable"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played the <see cref="PlayingCard"/>.</param>
-        /// <param name="card"><see cref="PlayingCard"/> that is to be placed on the table.</param>
-        public void PlaceCardOnTable(int playerID, PlayingCard card);
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played the <see cref="ICard"/>.</param>
+        /// <param name="card"><see cref="ICard"/> that is to be placed on the table.</param>
+        public void PlaceCardOnTable(int playerID, ICard card);
 
         /// <summary>
-        /// Flips all the <see cref="PlayingCard"/>s in a specified direction for a specified <see cref="IPlayer"/>.
+        /// Flips all the <see cref="ICard"/>s in a specified direction for a specified <see cref="IPlayer"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> who owns the <see cref="PlayingCard"/>s.</param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> who owns the <see cref="ICard"/>s.</param>
         /// <param name="facedown">Indicates whether the cards are flipped facedown or faceup.</param>
         public void Flip_AllCardsOneWay_SpecificPlayer(int playerID, bool facedown = false);
 
@@ -65,62 +65,62 @@ namespace DeckForge.GameElements
         public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false);
 
         /// <summary>
-        /// Flips all the <see cref="PlayingCard"/>s for a specific <see cref="IPlayer"/>.
+        /// Flips all the <see cref="ICard"/>s for a specific <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
         public void Flip_AllCardsEitherWay_SpecificPlayer(int playerID);
 
         /// <summary>
-        /// Flips all <see cref="PlayingCard"/>s for all <see cref="IPlayer"/>s.
+        /// Flips all <see cref="ICard"/>s for all <see cref="IPlayer"/>s.
         /// </summary>
         public void Flip_AllCardsEitherWay_AllPlayers();
 
         /// <summary>
-        /// Flips a specific <see cref="PlayingCard"/> for a specific <see cref="IPlayer"/>.
+        /// Flips a specific <see cref="ICard"/> for a specific <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="PlayingCard"/> on the table.</param>
-        /// <returns>A reference to the flipped <see cref="PlayingCard"/>.</returns>
-        public PlayingCard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos);
+        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
+        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
+        public ICard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos);
 
         /// <summary>
-        /// Flips a specific <see cref="PlayingCard"/> for a specific <see cref="IPlayer"/> in a specific direction.
+        /// Flips a specific <see cref="ICard"/> for a specific <see cref="IPlayer"/> in a specific direction.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="PlayingCard"/> on the table.</param>
+        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
         /// <param name="facedown">Indicates whether the cards are flipped facedown or faceup.</param>
-        /// <returns>A reference to the flipped <see cref="PlayingCard"/>.</returns>
-        public PlayingCard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false);
+        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
+        public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false);
 
         /// <summary>
-        /// Removes a specific <see cref="PlayingCard"/> on the <see cref="ITable"/> from a <see cref="IPlayer"/>.
+        /// Removes a specific <see cref="ICard"/> on the <see cref="ITable"/> from a <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="PlayingCard"/> on the table.</param>
-        /// <returns>A reference to the flipped <see cref="PlayingCard"/>.</returns>
-        public PlayingCard RemoveSpecificCard_FromPlayer(int playerID, int cardPos);
+        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
+        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
+        public ICard RemoveSpecificCard_FromPlayer(int playerID, int cardPos);
 
         /// <summary>
-        /// Picks up all <see cref="PlayingCard"/>s from the table belonging to a <see cref="IPlayer"/>.
+        /// Picks up all <see cref="ICard"/>s from the table belonging to a <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <returns>List of <see cref="PlayingCard"/>s picked up from the <see cref="ITable"/>.</returns>
-        public List<PlayingCard> PickUpAllCards_FromPlayer(int playerID);
+        /// <returns>List of <see cref="ICard"/>s picked up from the <see cref="ITable"/>.</returns>
+        public List<ICard> PickUpAllCards_FromPlayer(int playerID);
 
         /// <summary>
-        /// Draws a <see cref="PlayingCard"/> from the specified <see cref="DeckOfPlayingCards"/>.
+        /// Draws a <see cref="ICard"/> from the specified <see cref="DeckOfPlayingCards"/>.
         /// </summary>
         /// <param name="deckNum">ID of the <see cref="DeckOfPlayingCards"/> of interest on the <see cref="ITable"/>.</param>
-        /// <returns>A nullable <see cref="PlayingCard"/> that was drawn.</returns>
-        public PlayingCard? DrawCardFromDeck(int deckNum);
+        /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
+        public ICard? DrawCardFromDeck(int deckNum);
 
         /// <summary>
-        /// Draws multiple <see cref="PlayingCard"/>s from the specified <see cref="DeckOfPlayingCards"/>.
+        /// Draws multiple <see cref="ICard"/>s from the specified <see cref="DeckOfPlayingCards"/>.
         /// </summary>
-        /// <param name="cardCount">Number of <see cref="PlayingCard"/>s to draw.</param>
+        /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
         /// <param name="deckNum">ID of the <see cref="DeckOfPlayingCards"/> of interest on the <see cref="ITable"/>.</param>
-        /// <returns>A list of nullable <see cref="PlayingCard"/>s that were drawn.</returns>
-        public List<PlayingCard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum);
+        /// <returns>A list of nullable <see cref="ICard"/>s that were drawn.</returns>
+        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum);
 
         /// <summary>
         /// Shuffles a <see cref="DeckOfPlayingCards"/> on the <see cref="ITable"/>.
@@ -129,39 +129,39 @@ namespace DeckForge.GameElements
         public void ShuffleDeck(int deckPosition);
 
         /// <summary>
-        /// Plays a number of <see cref="PlayingCard"/>s from a <see cref="DeckOfPlayingCards"/> to an area
+        /// Plays a number of <see cref="ICard"/>s from a <see cref="DeckOfPlayingCards"/> to an area
         /// designated on the <see cref="Table"/>.
         /// </summary>
-        /// <param name="numCards">Number of <see cref="PlayingCard"/>s to attempt to draw.</param>
+        /// <param name="numCards">Number of <see cref="ICard"/>s to attempt to draw.</param>
         /// <param name="deckPos">ID of the <see cref="DeckOfPlayingCards"/> on the table to 
         /// draw from.</param>
-        /// <param name="neutralZone">Area to play the <see cref="PlayingCard"/> to.</param>
-        /// <param name="isFaceup">Whether to play the <see cref="PlayingCard"/> faceup.</param>
-        /// <returns>A list of <see cref="PlayingCard"/>(s) that were placed on the <see cref="Table"/>.</returns>
-        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(
+        /// <param name="neutralZone">Area to play the <see cref="ICard"/> to.</param>
+        /// <param name="isFaceup">Whether to play the <see cref="ICard"/> faceup.</param>
+        /// <returns>A list of <see cref="ICard"/>(s) that were placed on the <see cref="Table"/>.</returns>
+        public List<ICard> PlayCards_FromTableDeck_ToNeutralZone(
             int numCards,
             int deckPos,
             int neutralZone,
             bool isFaceup = true);
 
         /// <summary>
-        /// Adds a <see cref="PlayingCard"/> to a neutral zone.
+        /// Adds a <see cref="ICard"/> to a neutral zone.
         /// </summary>
-        /// <param name="card"><see cref="PlayingCard"/> to be added.</param>
-        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="PlayingCard"/> to.</param>
-        public void AddCardTo_NeutralZone(PlayingCard card, int neutralZone);
+        /// <param name="card"><see cref="ICard"/> to be added.</param>
+        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="ICard"/> to.</param>
+        public void AddCardTo_NeutralZone(ICard card, int neutralZone);
 
         /// <summary>
-        /// Adds a list of <see cref="PlayingCard"/>s to a neutral zone.
+        /// Adds a list of <see cref="ICard"/>s to a neutral zone.
         /// </summary>
-        /// <param name="cards">List of <see cref="PlayingCard"/>s to add.</param>
-        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="PlayingCard"/>s to.</param>
-        public void AddCardsTo_NeutralZone(List<PlayingCard> cards, int neutralZone);
+        /// <param name="cards">List of <see cref="ICard"/>s to add.</param>
+        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="ICard"/>s to.</param>
+        public void AddCardsTo_NeutralZone(List<ICard> cards, int neutralZone);
 
         /// <summary>
         /// Picks up all cards from every spot on the <see cref="ITable"/>.
         /// </summary>
-        /// <returns>A list of all the <see cref="PlayingCard"/>s removed from the <see cref="ITable"/>.</returns>
-        public List<PlayingCard> PickUp_AllCardsFromTable();
+        /// <returns>A list of all the <see cref="ICard"/>s removed from the <see cref="ITable"/>.</returns>
+        public List<ICard> PickUp_AllCardsFromTable();
     }
 }

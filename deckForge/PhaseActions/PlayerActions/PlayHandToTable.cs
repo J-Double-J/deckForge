@@ -17,9 +17,9 @@ namespace DeckForge.PhaseActions.PlayerActions
         }
 
         /// <inheritdoc/>
-        public override List<PlayingCard>? Execute(IPlayer player)
+        public override List<ICard>? Execute(IPlayer player)
         {
-            List<PlayingCard> cardsPlayed = new();
+            List<ICard> cardsPlayed = new();
             for (int i = 0; i < player.HandSize; i++)
             {
                 cardsPlayed.Add(player.PlayCard()!);

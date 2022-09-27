@@ -15,7 +15,7 @@ namespace DeckForge.GameElements
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
         public Table(IGameMediator mediator, int playerCount, int tableNeutralZonesCount = 0)
         {
@@ -27,13 +27,13 @@ namespace DeckForge.GameElements
 
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 PlayerPlayedCards.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 TableNeutralZones.Add(cards);
             }
 
@@ -47,7 +47,7 @@ namespace DeckForge.GameElements
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
         /// <param name="initDeck">Initial <see cref="DeckOfPlayingCards"/> that is on the <see cref="Table"/>.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
         public Table(IGameMediator mediator, int playerCount, DeckOfPlayingCards initDeck, int tableNeutralZonesCount = 0)
         {
@@ -59,13 +59,13 @@ namespace DeckForge.GameElements
 
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 PlayerPlayedCards.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 TableNeutralZones.Add(cards);
             }
 
@@ -82,7 +82,7 @@ namespace DeckForge.GameElements
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
         /// <param name="initDecks">List of initial <see cref="DeckOfPlayingCards"/>s on the <see cref="Table"/>.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="PlayingCard"/>s
+        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
         public Table(
             IGameMediator mediator,
@@ -98,13 +98,13 @@ namespace DeckForge.GameElements
 
             for (var i = 0; i < playerCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 PlayerPlayedCards.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 TableNeutralZones.Add(cards);
             }
 
@@ -120,19 +120,19 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Gets the state of the <see cref="Table"/>.
         /// </summary>
-        public List<List<PlayingCard>> TableState
+        public List<List<ICard>> TableState
         {
             get { return PlayerPlayedCards; }
         }
 
         /// <inheritdoc/>
-        public List<List<PlayingCard>> PlayerPlayedCards
+        public List<List<ICard>> PlayerPlayedCards
         {
             get;
         }
 
         /// <inheritdoc/>
-        public List<List<PlayingCard>> TableNeutralZones
+        public List<List<ICard>> TableNeutralZones
         {
             get;
         }
@@ -146,9 +146,9 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void PrintTableState()
         {
-            foreach (List<PlayingCard> player in PlayerPlayedCards)
+            foreach (List<ICard> player in PlayerPlayedCards)
             {
-                foreach (PlayingCard c in player)
+                foreach (ICard c in player)
                 {
                     Console.WriteLine(c.PrintCard());
                 }
@@ -156,19 +156,19 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> GetCardsForSpecificPlayer(int playerID)
+        public List<ICard> GetCardsForSpecificPlayer(int playerID)
         {
             return PlayerPlayedCards[playerID];
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> GetCardsForSpecificNeutralZone(int neutralZone)
+        public List<ICard> GetCardsForSpecificNeutralZone(int neutralZone)
         {
             return TableNeutralZones[neutralZone];
         }
 
         /// <inheritdoc/>
-        public void PlaceCardOnTable(int playerID, PlayingCard c)
+        public void PlaceCardOnTable(int playerID, ICard c)
         {
             try
             {
@@ -185,7 +185,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (PlayingCard c in PlayerPlayedCards[playerID])
+                foreach (ICard c in PlayerPlayedCards[playerID])
                 {
                     if (c.Facedown != facedown)
                     {
@@ -213,7 +213,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (PlayingCard c in PlayerPlayedCards[playerID])
+                foreach (ICard c in PlayerPlayedCards[playerID])
                 {
                     c.Flip();
                 }
@@ -234,7 +234,7 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public PlayingCard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
+        public ICard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
         {
             try
             {
@@ -248,7 +248,7 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public PlayingCard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
+        public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
         {
             if (PlayerPlayedCards[playerID][cardPos].Facedown != facedown)
             {
@@ -262,11 +262,11 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public PlayingCard RemoveSpecificCard_FromPlayer(int playerID, int cardPos)
+        public ICard RemoveSpecificCard_FromPlayer(int playerID, int cardPos)
         {
             try
             {
-                PlayingCard c = PlayerPlayedCards[playerID][cardPos];
+                ICard c = PlayerPlayedCards[playerID][cardPos];
                 PlayerPlayedCards[playerID].RemoveAt(cardPos);
                 return c;
             }
@@ -277,11 +277,11 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PickUpAllCards_FromPlayer(int playerID)
+        public List<ICard> PickUpAllCards_FromPlayer(int playerID)
         {
             try
             {
-                List<PlayingCard> cards = new();
+                List<ICard> cards = new();
                 var numCardsToGrab = PlayerPlayedCards[playerID].Count;
                 for (var i = 0; i < numCardsToGrab; i++)
                 {
@@ -297,7 +297,7 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public PlayingCard? DrawCardFromDeck(int deckNum = 0)
+        public ICard? DrawCardFromDeck(int deckNum = 0)
         {
             try
             {
@@ -312,9 +312,9 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0)
+        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0)
         {
-            List<PlayingCard?> cards = new();
+            List<ICard?> cards = new();
             try
             {
                 for (var i = 0; i < cardCount; i++)
@@ -344,16 +344,16 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PlayCards_FromTableDeck_ToNeutralZone(
+        public List<ICard> PlayCards_FromTableDeck_ToNeutralZone(
             int numCards,
             int deckPos,
             int neutralZone,
             bool isFaceup = true)
         {
-            List<PlayingCard> retVal = new();
+            List<ICard> retVal = new();
             for (int i = 0; i < numCards; i++)
             {
-                PlayingCard? drawnCard = TableDecks[deckPos].DrawCard();
+                ICard? drawnCard = TableDecks[deckPos].DrawCard();
                 if (drawnCard is not null)
                 {
                     drawnCard.Facedown = isFaceup;
@@ -366,22 +366,22 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public void AddCardTo_NeutralZone(PlayingCard card, int neutralZone)
+        public void AddCardTo_NeutralZone(ICard card, int neutralZone)
         {
             TableNeutralZones[neutralZone].Add(card);
         }
 
         /// <inheritdoc/>
-        public void AddCardsTo_NeutralZone(List<PlayingCard> cards, int neutralZone)
+        public void AddCardsTo_NeutralZone(List<ICard> cards, int neutralZone)
         {
             var mergedLists = TableNeutralZones[neutralZone].Concat(cards).ToList();
             TableNeutralZones[neutralZone] = mergedLists;
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PickUp_AllCardsFromTable()
+        public List<ICard> PickUp_AllCardsFromTable()
         {
-            List<PlayingCard> cards = new();
+            List<ICard> cards = new();
 
             foreach (var neutralCards in TableNeutralZones)
             {

@@ -19,7 +19,7 @@ namespace UnitTests.PokerTests
             PlayerGameAction playCards = new PlayHandToTable();
 
             table.AddCardsTo_NeutralZone(
-                new List<PlayingCard>()
+                new List<ICard>()
                 {
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
@@ -28,8 +28,12 @@ namespace UnitTests.PokerTests
             table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
             table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(1, "J"), new PlayingCard(2, "J") });
 
-            hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0).Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList());
-            hands.Add(1, pGM.Table!.GetCardsForSpecificPlayer(1).Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList());
+            hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
+                .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                    .ConvertAll(c => (PlayingCard)c));
+            hands.Add(1, pGM.Table!.GetCardsForSpecificPlayer(1)
+                .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                    .ConvertAll(c => (PlayingCard)c));
 
             List<int> winner = SimplisitcPokerHandEvaluator.EvaluateHands(hands);
 
@@ -46,7 +50,7 @@ namespace UnitTests.PokerTests
             PlayerGameAction playCards = new PlayHandToTable();
 
             table.AddCardsTo_NeutralZone(
-                new List<PlayingCard>()
+                new List<ICard>()
                 {
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
@@ -55,8 +59,12 @@ namespace UnitTests.PokerTests
             table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
             table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
 
-            hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0).Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList());
-            hands.Add(1, pGM.Table!.GetCardsForSpecificPlayer(1).Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList());
+            hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
+                .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                    .ConvertAll(c => (PlayingCard)c));
+            hands.Add(1, pGM.Table!.GetCardsForSpecificPlayer(1)
+                .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                    .ConvertAll(c => (PlayingCard)c));
 
             List<int> winner = SimplisitcPokerHandEvaluator.EvaluateHands(hands);
 

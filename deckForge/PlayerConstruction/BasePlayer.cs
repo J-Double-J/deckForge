@@ -58,7 +58,7 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PlayedCards
+        public List<ICard> PlayedCards
         {
             get
             {
@@ -159,9 +159,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? DrawCard(int deckPosition = 0)
+        public virtual ICard? DrawCard(int deckPosition = 0)
         {
-            PlayingCard? c = GM.DrawCardFromDeck(deckPosition);
+            ICard? c = GM.DrawCardFromDeck(deckPosition);
             if (c != null)
             {
                 PlayerHand.AddResource(c);
@@ -174,13 +174,13 @@ namespace DeckForge.PlayerConstruction
             return c;
         }
 
-        public virtual void AddCardToHand(PlayingCard card)
+        public virtual void AddCardToHand(ICard card)
         {
             PlayerHand.AddResource(card);
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? PlayCard(bool facedown = false)
+        public virtual ICard? PlayCard(bool facedown = false)
         {
             string? input;
             int selectedVal;
@@ -197,7 +197,7 @@ namespace DeckForge.PlayerConstruction
             }
             while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-            PlayingCard c = PlayerHand.GetCardAt(selectedVal);
+            ICard c = PlayerHand.GetCardAt(selectedVal);
             PlayerHand.RemoveResource(c);
 
             if (facedown)
@@ -213,13 +213,13 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public PlayingCard FlipSingleCard(int cardNum, bool? facedown = null)
+        public ICard FlipSingleCard(int cardNum, bool? facedown = null)
         {
             return GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> TakeAllCardsFromTable()
+        public List<ICard> TakeAllCardsFromTable()
         {
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
@@ -568,7 +568,7 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <summary>
-        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="PlayingCard"/>.
+        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="ICard"/>.
         /// </summary>
         /// <param name="e">The arguments of the <see cref="PlayerPlayedCardEventArgs"/>.</param>
         protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)

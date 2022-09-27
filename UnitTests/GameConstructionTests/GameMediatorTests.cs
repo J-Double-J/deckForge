@@ -36,7 +36,7 @@ namespace UnitTests.GameConstructionTests
             List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
-            PlayingCard card = gm.DrawCardFromDeck(0)!;
+            ICard card = gm.DrawCardFromDeck(0)!;
 
             card.Should().NotBeNull("a new deck was created so it should have cards");
         }
@@ -48,17 +48,17 @@ namespace UnitTests.GameConstructionTests
             List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
-            PlayingCard? c;
+            ICard? card;
 
             for (var i = 0; i < 52; i++)
             {
-                c = gm.DrawCardFromDeck(0)!;
+                card = gm.DrawCardFromDeck(0)!;
             }
 
-            c = gm.DrawCardFromDeck(0);
+            card = gm.DrawCardFromDeck(0);
 
 
-            c.Should().BeNull("the deck was exhausted and there are no more cards to draw");
+            card.Should().BeNull("the deck was exhausted and there are no more cards to draw");
         }
 
         [TestMethod]

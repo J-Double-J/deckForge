@@ -15,16 +15,16 @@ namespace UnitTests.Mocks
         /// <summary>
         /// Mocks the PlayCard of <see cref="BasePlayer"/> but always plays the first card in collection.
         /// </summary>
-        /// <param name="facedown">If true, plays <see cref="PlayingCard"/> facedown.</param>
-        /// <returns>The <see cref="PlayingCard"/> that was played.</returns>
-        public override PlayingCard? PlayCard(bool facedown = false)
+        /// <param name="facedown">If true, plays <see cref="ICard"/> facedown.</param>
+        /// <returns>The <see cref="ICard"/> that was played.</returns>
+        public override ICard? PlayCard(bool facedown = false)
         {
             if (PlayerHand.Count == 0)
             {
                 return null;
             }
 
-            PlayingCard card = PlayerHand.Cards[0];
+            ICard card = PlayerHand.Cards[0];
             PlayerHand.RemoveResource(card);
 
             if (facedown)

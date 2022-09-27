@@ -178,7 +178,7 @@ namespace UnitTests.PokerTests
             playerTwo.SetInvestedCash(25);
 
             table.AddCardsTo_NeutralZone(
-                new List<PlayingCard>()
+                new List<ICard>()
                 {
                     new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
                 },
@@ -207,7 +207,7 @@ namespace UnitTests.PokerTests
             playerThree.SetInvestedCash(20);
 
             table.AddCardsTo_NeutralZone(
-                new List<PlayingCard>()
+                new List<ICard>()
                 {
                     new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
                 },

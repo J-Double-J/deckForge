@@ -30,7 +30,7 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
             players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!.ConvertAll(c => (PlayingCard)c!);
                 DeckOfPlayingCards deck = new(cards, defaultAddCardPos: "top");
                 players.Add(new WarPlayer(gm, i, deck));
             }
@@ -67,7 +67,7 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
             rr.StartRound();
 
             table.PrintTableState();
-            List<List<PlayingCard>> tableState = table.TableState;
+            List<List<ICard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
             
