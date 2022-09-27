@@ -1,4 +1,6 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Poker;
+using DeckForge.GameElements;
+using DeckForge.GameElements.Resources;
 using FluentAssertions;
 using UnitTests.PokerTests.TestablePokerPlayer;
 
@@ -162,6 +164,100 @@ namespace UnitTests.PokerTests
             playerTwo.InvestedCash.Should().Be(0, "the player folded through the betting phase");
             playerThree.InvestedCash.Should().Be(10, "the player called the bet");
             playerFour.InvestedCash.Should().Be(0, "the player folded through the betting phase");
+        }
+
+        [TestMethod]
+        public void MediatorAwardsPlayersForWinningRound()
+        {
+            PokerGameMediator pGM = new(2);
+            PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 0);
+            PokerPlayerWithProgrammedActions playerTwo = new(pGM, 1, 0);
+            Table table = new(pGM, 2, 1);
+
+            playerOne.SetInvestedCash(25);
+            playerTwo.SetInvestedCash(25);
+
+            table.AddCardsTo_NeutralZone(
+                new List<PlayingCard>()
+                {
+                    new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
+                },
+                0);
+
+            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
+            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+
+            pGM.EvaluateWinner();
+
+            playerOne.BettingCash.Should().Be(50, "first player won the pot");
+            playerTwo.BettingCash.Should().Be(0, "the player did not win");
+        }
+
+        [TestMethod]
+        public void MediatorAwardsPlayersCorrectlyDuringATie()
+        {
+            PokerGameMediator pGM = new(3);
+            PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 0);
+            PokerPlayerWithProgrammedActions playerTwo = new(pGM, 1, 0);
+            PokerPlayerWithProgrammedActions playerThree = new(pGM, 2, 0);
+            Table table = new(pGM, 3, 1);
+
+            playerOne.SetInvestedCash(20);
+            playerTwo.SetInvestedCash(20);
+            playerThree.SetInvestedCash(20);
+
+            table.AddCardsTo_NeutralZone(
+                new List<PlayingCard>()
+                {
+                    new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
+                },
+                0);
+
+            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
+            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
+            table.PlayerPlayedCards[2].AddRange(new List<PlayingCard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+
+            pGM.EvaluateWinner();
+
+            playerOne.BettingCash.Should().Be(30, "player won half the pot");
+            playerTwo.BettingCash.Should().Be(30, "player won half the pot");
+            playerThree.BettingCash.Should().Be(0, "player lost the round");
+        }
+
+        [TestMethod]
+        public void MediatorMarksPlayersThatAreBroke()
+        {
+            PokerGameMediator pGM = new(3);
+            PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 0);
+            PokerPlayerWithProgrammedActions playerTwo = new(pGM, 0, 100);
+            PokerPlayerWithProgrammedActions playerThree = new(pGM, 0, 100);
+
+            pGM.HandlePotentialBrokePlayers();
+
+            playerOne.IsOut.Should().Be(true, "player was broke and is out");
+            playerOne.IsActive.Should().Be(false, "player was broke and is out");
+        }
+
+        [TestMethod]
+        public void GameEndsWhenAllPlayersButOneIsBroke()
+        {
+            StringWriter output = new();
+            Console.SetOut(output);
+            PokerGameMediator pGM = new(3);
+            PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 100);
+            PokerPlayerWithProgrammedActions playerTwo = new(pGM, 0, 0);
+            PokerPlayerWithProgrammedActions playerThree = new(pGM, 0, 0);
+
+            pGM.HandlePotentialBrokePlayers();
+
+            if (OperatingSystem.IsMacOS())
+            {
+                output.ToString().Should().Be("Player 0 wins!\n");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                output.ToString().Should().Be("Player 0 wins!\r\n");
+            }
         }
     }
 }

@@ -138,6 +138,19 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         }
 
         /// <summary>
+        /// Sets invested cash to 0.
+        /// </summary>
+        public void ClearInvestedCash()
+        {
+            InvestedCash = 0;
+        }
+
+        public void GainBettingCash(int cash)
+        {
+            BettingCash += cash;
+        }
+
+        /// <summary>
         /// <see cref="PokerPlayer"/> raises the current bet to <paramref name="raiseAmount"/>.
         /// Different from <see cref="Raise()"/> as it does not ask for user input from the console.
         /// </summary>
