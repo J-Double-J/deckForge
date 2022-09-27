@@ -157,5 +157,11 @@ namespace DeckForge.GameElements
         /// <param name="cards">List of <see cref="PlayingCard"/>s to add.</param>
         /// <param name="neutralZone">ID of the neutral zone to add the <see cref="PlayingCard"/>s to.</param>
         public void AddCardsTo_NeutralZone(List<PlayingCard> cards, int neutralZone);
+
+        /// <summary>
+        /// Picks up all cards from every spot on the <see cref="ITable"/>.
+        /// </summary>
+        /// <returns>A list of all the <see cref="PlayingCard"/>s removed from the <see cref="ITable"/>.</returns>
+        public List<PlayingCard> PickUp_AllCardsFromTable();
     }
 }

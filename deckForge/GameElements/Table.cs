@@ -377,5 +377,25 @@ namespace DeckForge.GameElements
             var mergedLists = TableNeutralZones[neutralZone].Concat(cards).ToList();
             TableNeutralZones[neutralZone] = mergedLists;
         }
+
+        /// <inheritdoc/>
+        public List<PlayingCard> PickUp_AllCardsFromTable()
+        {
+            List<PlayingCard> cards = new();
+
+            foreach (var neutralCards in TableNeutralZones)
+            {
+                cards.AddRange(neutralCards);
+                neutralCards.Clear();
+            }
+
+            foreach (var playerCards in PlayerPlayedCards)
+            {
+                cards.AddRange(playerCards);
+                playerCards.Clear();
+            }
+
+            return cards;
+        }
     }
 }

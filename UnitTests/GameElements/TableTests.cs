@@ -364,5 +364,45 @@ namespace UnitTests.GameElements
             Console.SetOut(output);
             neutralTable.GetCardsForSpecificNeutralZone(0).Should().BeEquivalentTo(cards);
         }
+
+        [TestMethod]
+        public void AllCardsArePickedUp_FromAllZones()
+        {
+            IGameMediator gm = new BaseGameMediator(4);
+            Table table = new(gm, 4, 3);
+
+            table.AddCardsTo_NeutralZone(
+                new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
+            table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
+            table.PlayerPlayedCards[0].Add(new PlayingCard(3, "J"));
+            table.PlayerPlayedCards[1].Add(new PlayingCard(4, "J"));
+            table.PlayerPlayedCards[2].Add(new PlayingCard(5, "J"));
+            table.PlayerPlayedCards[3].Add(new PlayingCard(6, "J"));
+            table.PlayerPlayedCards[3].Add(new PlayingCard(7, "J"));
+
+            table.PickUp_AllCardsFromTable();
+
+            foreach (var cards in table.TableNeutralZones)
+            {
+                cards.Count.Should().Be(0, "no cards should be in the neutral zones");
+            }
+
+            foreach (var cards in table.PlayerPlayedCards)
+            {
+                cards.Count.Should().Be(0, "no cards should be left in player spots");
+            }
+        }
+
+        [TestMethod]
+        public void TablePlaysCardFromDeck_ToNeutralZone()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            Table table = new(gm, 0, new DeckOfPlayingCards(), 1);
+
+            table.PlayCards_FromTableDeck_ToNeutralZone(2, 0, 0);
+
+            table.TableDecks[0].Count.Should().Be(50, "two cards were taken from the deck");
+            table.TableNeutralZones[0].Count.Should().Be(2, "the two cards were placed in the neutral zone");
+        }
     }
 }
