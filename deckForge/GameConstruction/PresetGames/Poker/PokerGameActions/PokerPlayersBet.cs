@@ -5,7 +5,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
 {
     public class PokerPlayersBet : BaseGameAction
     {
-        private PokerGameMediator pGM;
+        private readonly PokerGameMediator pGM;
 
         public PokerPlayersBet(
             PokerGameMediator pGM,
