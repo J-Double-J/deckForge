@@ -167,6 +167,28 @@ namespace UnitTests.PokerTests
         }
 
         [TestMethod]
+        public void MediatorAwardsPlayer_IfAllOthersFold()
+        {
+            PokerGameMediator pGM = new(4);
+            PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 100);
+            PokerPlayerWithProgrammedActions playerTwo = new(pGM, 1, 100);
+            PokerPlayerWithProgrammedActions playerThree = new(pGM, 2, 100);
+            PokerPlayerWithProgrammedActions playerFour = new(pGM, 3, 100);
+
+            playerOne.SetInvestedCash(10);
+            playerTwo.SetInvestedCash(10);
+
+            playerOne.Commands.AddRange(new List<string> { "FOLD" });
+            playerTwo.Commands.AddRange(new List<string> { "FOLD" });
+            playerThree.Commands.AddRange(new List<string> { "CALL" });
+            playerFour.Commands.AddRange(new List<string> { "FOLD" });
+            pGM.CurrentBet = 10;
+            pGM.PlayersBet();
+
+            playerThree.BettingCash.Should().Be(120, "all the other players folded and won the pot by default");
+        }
+
+        [TestMethod]
         public void MediatorAwardsPlayersForWinningRound()
         {
             PokerGameMediator pGM = new(2);

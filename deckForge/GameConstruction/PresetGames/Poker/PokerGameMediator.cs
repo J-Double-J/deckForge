@@ -62,7 +62,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
                             currentActivePlayers--;
                             if (currentActivePlayers == 1)
                             {
-                                // TODO: End Round
+                                AwardRoundWinners(new List<int>() { GetCurrentActivePlayers()[0].PlayerID });
                             }
                             else if (playersResponded == currentActivePlayers)
                             {
