@@ -42,7 +42,13 @@ namespace DeckForge.GameRules.RoundConstruction.Rounds
         /// <summary>
         /// Starts the Round and begins iterating through its <see cref="IPhase"/>s.
         /// </summary>
-        public abstract void StartRound();
+        public virtual void StartRound()
+        {
+            foreach (var phase in Phases)
+            {
+                phase.StartPhase();
+            }
+        }
 
         /// <summary>
         /// Ends the round and sets the <c>CurPhase</c> to -1 and ends any <see cref="IGameAction{T}"/> ongoing

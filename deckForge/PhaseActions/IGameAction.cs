@@ -24,7 +24,9 @@ namespace DeckForge.PhaseActions
         /// </summary>
         /// <returns>A nullable object that references what the <see cref="IGameAction"/>
         /// may have interacted with. If object could reveal private
-        /// object information about another object (such as cards in a player's hand) return null.</returns>
+        /// object information about another object (such as cards in a player's hand) return null.
+        /// Also returns null if interacted with objects that don't make sense to return, such as
+        /// decks on a Table that are easily accessible through an <see cref="IGameMediator"/>.</returns>
         public object? Execute();
     }
 }
