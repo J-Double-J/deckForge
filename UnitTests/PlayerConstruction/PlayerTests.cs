@@ -157,7 +157,7 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerCanIncrement_ResourceCollection()
+        public void PlayerCannotIncrement_DeckResourceCollection()
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
