@@ -6,11 +6,11 @@ namespace DeckForge.GameElements.Resources
     // the list can already do.
 
     /// <summary>
-    /// Resource Collection that manages a group of <see cref="PlayingCard"/>s for a <see cref="IPlayer"/>.
+    /// Resource Collection that manages a group of <see cref="ICard"/>s for a <see cref="IPlayer"/>.
     /// </summary>
-    public class Hand : IResourceCollection<PlayingCard>
+    public class Hand : IResourceCollection<ICard>
     {
-        private List<PlayingCard> hand;
+        private List<ICard> hand;
         private int maxHandSize;
 
         /// <summary>
@@ -19,14 +19,14 @@ namespace DeckForge.GameElements.Resources
         /// <param name="maxHandSize">Maximum number of cards for the hand. -1 for no hand limit.</param>
         public Hand(int maxHandSize = -1)
         {
-            hand = new List<PlayingCard>();
+            hand = new List<ICard>();
             this.maxHandSize = maxHandSize;
         }
 
         /// <summary>
         /// Gets or sets the list of Cards in the hand.
         /// </summary>
-        public List<PlayingCard> Cards
+        public List<ICard> Cards
         {
             get { return hand; }
             protected set { hand = value; }
@@ -61,8 +61,8 @@ namespace DeckForge.GameElements.Resources
         /// Gets the card at an index in the hand.
         /// </summary>
         /// <param name="pos">Gets the position of a card in a hand.</param>
-        /// <returns>The <see cref="PlayingCard"/> at that position.</returns>
-        public PlayingCard GetCardAt(int pos)
+        /// <returns>The <see cref="ICard"/> at that position.</returns>
+        public ICard GetCardAt(int pos)
         {
             try
             {
@@ -79,25 +79,25 @@ namespace DeckForge.GameElements.Resources
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Near other ResourceCollection methods")]
         public Type ResourceType
         {
-            get { return typeof(PlayingCard); }
+            get { return typeof(ICard); }
         }
 
         // If already at hand limit, card is not added.
 
         /// <inheritdoc/>
-        public void AddResource(PlayingCard resource)
+        public void AddResource(ICard resource)
         {
             if (MaxHandSize < 0 || CurrentHandSize < MaxHandSize)
             {
-                hand.Add((PlayingCard)resource);
+                hand.Add((ICard)resource);
             }
         }
 
         /// <inheritdoc/>
-        public void RemoveResource(PlayingCard resource)
+        public void RemoveResource(ICard resource)
         {
             for (var i = 0; i < hand.Count; i++) {
-                if (hand[i] == (PlayingCard)resource)
+                if (hand[i] == (ICard)resource)
                 {
                     hand.RemoveAt(i);
                     i--;
@@ -112,7 +112,7 @@ namespace DeckForge.GameElements.Resources
             {
                 for (int i = 0; i < resources.Count; i++)
                 {
-                    AddResource((PlayingCard)Convert.ChangeType(resources[i], typeof(PlayingCard))!);
+                    AddResource((ICard)Convert.ChangeType(resources[i], typeof(ICard))!);
                 }
             }
             catch
@@ -128,7 +128,7 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public PlayingCard? GainResource()
+        public ICard? GainResource()
         {
             throw new NotImplementedException();
         }
@@ -140,9 +140,9 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard>? ClearCollection()
+        public List<ICard>? ClearCollection()
         {
-            List<PlayingCard> cardsRemoved = hand;
+            List<ICard> cardsRemoved = hand;
             hand.Clear();
 
             return cardsRemoved;

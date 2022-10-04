@@ -44,8 +44,6 @@ namespace UnitTests.PlayerRoundRulesTests
             }
         }
 
-        // TODO: DEBUG THIS. Trying to use the method of IsActive and IsOut, and this was partially done, but probably
-        // not properly.
         [TestMethod]
         public void PlayerPhaseLosesPlayerMidPhase()
         {
@@ -61,6 +59,7 @@ namespace UnitTests.PlayerRoundRulesTests
                 players.Add(new WarPlayer(gm, i, new DeckOfPlayingCards()));
                 playerIDs.Add(i);
             }
+
             List<int> targetPlayOrder = new List<int>() { 0, 2 };
 
             PlayerPhase playerPhase = new PlayerTwoLosesInPhase((TestGameMediator)gm, playerIDs, "Test Phase");

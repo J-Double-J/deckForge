@@ -19,12 +19,12 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void HandCanGiveCardAt_ValidPos()
         {
-            Hand h = new();
+            Hand hand = new();
 
-            h.AddResource(new PlayingCard(21, "W"));
-            PlayingCard c = h.GetCardAt(0);
+            hand.AddResource(new PlayingCard(21, "W"));
+            PlayingCard card = (PlayingCard)hand.GetCardAt(0);
 
-            c.Val.Should().Be(21, "the card at 0 pos in the hand was the card 21W");
+            card.Val.Should().Be(21, "the card at 0 pos in the hand was the card 21W");
         }
 
         [TestMethod]

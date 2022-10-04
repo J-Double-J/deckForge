@@ -58,7 +58,7 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <inheritdoc/>
-        public List<PlayingCard> PlayedCards
+        public List<ICard> PlayedCards
         {
             get
             {
@@ -159,9 +159,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? DrawCard(int deckPosition = 0)
+        public virtual ICard? DrawCard(int deckPosition = 0)
         {
-            PlayingCard? c = GM.DrawCardFromDeck(deckPosition);
+            ICard? c = GM.DrawCardFromDeck(deckPosition);
             if (c != null)
             {
                 PlayerHand.AddResource(c);
@@ -174,13 +174,14 @@ namespace DeckForge.PlayerConstruction
             return c;
         }
 
-        public virtual void AddCardToHand(PlayingCard card)
+        /// <inheritdoc/>
+        public virtual void AddCardToHand(ICard card)
         {
             PlayerHand.AddResource(card);
         }
 
         /// <inheritdoc/>
-        public virtual PlayingCard? PlayCard(bool facedown = false)
+        public virtual ICard? PlayCard(bool facedown = false)
         {
             string? input;
             int selectedVal;
@@ -197,7 +198,7 @@ namespace DeckForge.PlayerConstruction
             }
             while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-            PlayingCard c = PlayerHand.GetCardAt(selectedVal);
+            ICard c = PlayerHand.GetCardAt(selectedVal);
             PlayerHand.RemoveResource(c);
 
             if (facedown)
@@ -213,13 +214,13 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public PlayingCard FlipSingleCard(int cardNum, bool? facedown = null)
+        public ICard FlipSingleCard(int cardNum, bool? facedown = null)
         {
             return GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard> TakeAllCardsFromTable()
+        public List<ICard> TakeAllCardsFromTable()
         {
             return GM.PickUpAllCards_FromTable_FromPlayer(PlayerID);
         }
@@ -246,17 +247,10 @@ namespace DeckForge.PlayerConstruction
                     IResourceCollection resourceCollection = PlayerResourceCollections[i];
                     var instance = Activator.CreateInstance(resourceCollection.GetType());
 
-                    PropertyInfo[] propertyInfos = resourceCollection.GetType().GetProperties();
+                    PropertyInfo property = resourceCollection.GetType().GetProperty("ResourceType")!;
+                    collectionType = (Type)property.GetValue(instance, null)!;
 
-                    foreach (PropertyInfo property in propertyInfos)
-                    {
-                        if (property.Name == "ResourceType")
-                        {
-                            collectionType = (Type)property.GetValue(instance, null)!;
-                        }
-                    }
-
-                    if (collectionType != null && collectionType == resourceType)
+                    if (collectionType != null && (collectionType == resourceType || collectionType.IsAssignableFrom(resourceType)))
                     {
                         resourcePoolID = i;
                         break;
@@ -280,19 +274,10 @@ namespace DeckForge.PlayerConstruction
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
-
-                PropertyInfo[] propertyInfos = resourceCollection.GetType().GetProperties();
-
                 instance = resourceCollection;
-                foreach (PropertyInfo property in propertyInfos)
-                {
-                    if (property.Name == "Count")
-                    {
-                        return (int)property.GetValue(instance, null)!;
-                    }
-                }
 
-                return -1;
+                PropertyInfo property = resourceCollection.GetType().GetProperty("Count")!;
+                return (int)property.GetValue(instance, null)!;
             }
             catch (TargetInvocationException e)
             {
@@ -316,16 +301,9 @@ namespace DeckForge.PlayerConstruction
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
 
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "GainResource")
-                    {
-                        gainedResource = method.Invoke(instance, null);
-                        break;
-                    }
-                }
+                MethodInfo method = resourceCollection.GetType().GetMethod("GainResource")!;
+                gainedResource = method.Invoke(instance, null);
 
                 return gainedResource;
             }
@@ -349,22 +327,16 @@ namespace DeckForge.PlayerConstruction
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
 
-                if (resource.GetType() != resourceCollection.ResourceType)
+                if (resource.GetType() != resourceCollection.ResourceType && !resourceCollection.ResourceType.IsAssignableFrom(resource.GetType()))
                 {
                     throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
                 }
 
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "AddResource")
-                    {
-                        object[] args = { resource };
-                        method.Invoke(instance, args);
-                    }
-                }
+                MethodInfo method = resourceCollection.GetType().GetMethod("AddResource")!;
+                object[] args = { resource };
+                method.Invoke(instance, args);
             }
             catch (TargetInvocationException e)
             {
@@ -389,15 +361,10 @@ namespace DeckForge.PlayerConstruction
                 ThrowIf_InvalidResourceForCollection(resourceCollection, resource);
 
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "RemoveResource")
-                    {
-                        object[] args = { resource };
-                        method.Invoke(instance, args);
-                    }
-                }
+
+                MethodInfo method = resourceCollection.GetType().GetMethod("RemoveResource")!;
+                object[] args = { resource };
+                method.Invoke(instance, args);
             }
             catch (TargetInvocationException e)
             {
@@ -412,39 +379,36 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources)
         {
-            try
+            if (resources.Count != 0)
             {
-                ThrowIf_InvalidResourceID(resourceCollectionID);
-
-                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
-                var instance = Activator.CreateInstance(resourceCollection.GetType());
-
-                ThrowIf_InvalidResourceForCollection(resourceCollection, resources[0]);
-
-                instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
-
-                Type listType = typeof(List<>).MakeGenericType(resources[0].GetType());
-                IList listOfResources = (Activator.CreateInstance(listType) as IList)!;
-
-                listOfResources = resources;
-
-                foreach (MethodInfo method in methodInfos)
+                try
                 {
-                    if (method.Name == "AddMultipleResources")
-                    {
-                        object[] args = { listOfResources };
-                        method.Invoke(instance, args);
-                    }
+                    ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                    IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                    var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                    ThrowIf_InvalidResourceForCollection(resourceCollection, resources[0]);
+
+                    instance = resourceCollection;
+
+                    Type listType = typeof(List<>).MakeGenericType(resources[0].GetType());
+                    IList listOfResources = (Activator.CreateInstance(listType) as IList)!;
+
+                    listOfResources = resources;
+
+                    MethodInfo method = resourceCollection.GetType().GetMethod("AddMultipleResources")!;
+                    object[] args = { listOfResources };
+                    method.Invoke(instance, args);
                 }
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException ?? e;
-            }
-            catch
-            {
-                throw;
+                catch (TargetInvocationException e)
+                {
+                    throw e.InnerException ?? e;
+                }
+                catch
+                {
+                    throw;
+                }
             }
         }
 
@@ -457,17 +421,10 @@ namespace DeckForge.PlayerConstruction
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
-
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "IncrementResourceCollection")
-                    {
-                        method.Invoke(instance, null);
-                    }
-                }
+                MethodInfo method = resourceCollection.GetType().GetMethod("IncrementResourceCollection")!;
+                method.Invoke(instance, null);
             }
             catch (TargetInvocationException e)
             {
@@ -488,17 +445,10 @@ namespace DeckForge.PlayerConstruction
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
-
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "DecrementResourceCollection")
-                    {
-                        method.Invoke(instance, null);
-                    }
-                }
+                MethodInfo method = resourceCollection.GetType().GetMethod("DecrementResourceCollection")!;
+                method.Invoke(instance, null);
             }
             catch (TargetInvocationException e)
             {
@@ -519,17 +469,10 @@ namespace DeckForge.PlayerConstruction
 
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
-
                 instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
 
-                foreach (MethodInfo method in methodInfos)
-                {
-                    if (method.Name == "ClearCollection")
-                    {
-                        method.Invoke(instance, null);
-                    }
-                }
+                MethodInfo method = resourceCollection.GetType().GetMethod("ClearCollection")!;
+                method.Invoke(instance, null);
             }
             catch (TargetInvocationException e)
             {
@@ -568,7 +511,7 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <summary>
-        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="PlayingCard"/>.
+        /// Invokes <see cref="PlayerPlayedCard"/> whenever a <see cref="BasePlayer"/> plays a <see cref="ICard"/>.
         /// </summary>
         /// <param name="e">The arguments of the <see cref="PlayerPlayedCardEventArgs"/>.</param>
         protected void OnPlayerPlayedCard(PlayerPlayedCardEventArgs e)
@@ -587,7 +530,7 @@ namespace DeckForge.PlayerConstruction
 
         private static void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
         {
-            if (resource.GetType() != resourceCollection.ResourceType)
+            if (resource.GetType() != resourceCollection.ResourceType && !resourceCollection.ResourceType.IsAssignableFrom(resource.GetType()))
             {
                 throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
             }

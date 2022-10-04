@@ -12,23 +12,23 @@ namespace UnitTests.PhaseTests
     [TestClass]
     public class WarPhaseTests
     {
-
         #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private static IGameMediator gm;
         private static Table table;
-        List<IPlayer> players;
-        List<int> playerIDs;
+        private List<IPlayer> players;
+        private List<int> playerIDs;
         #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        [TestInitialize()]
-        public void InitializeTableTests() {
+        [TestInitialize]
+        public void InitializeTableTests()
+        {
             gm = new BaseGameMediator(2);
             table = new(gm, 2, new DeckOfPlayingCards());
 
             players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!.ConvertAll(c => (PlayingCard)c!);
                 DeckOfPlayingCards deck = new(cards);
                 players.Add(new WarPlayer(gm, i, deck));
             }
@@ -41,7 +41,8 @@ namespace UnitTests.PhaseTests
         }
 
         [TestMethod]
-        public void WarPlaysCardsPhase() {
+        public void WarPlaysCardsPhase()
+        {
 
             IPhase phase = new WarPlayCardsPhase(gm, playerIDs, "Play Cards Phase");
 
@@ -50,7 +51,7 @@ namespace UnitTests.PhaseTests
             table.PrintTableState();
 
             table.TableState.Count.Should().Be(2, "there are two players at the table");
-            foreach (List<PlayingCard> playedCardsInFrontOfPlayer in table.TableState) {
+            foreach (List<ICard> playedCardsInFrontOfPlayer in table.TableState) {
                 playedCardsInFrontOfPlayer.Count().Should().Be(1, "only one card was drawn and played in front of each player");
                 playedCardsInFrontOfPlayer[0].Facedown.Should().Be(false, "the players were told to flip their cards faceup");
             }
@@ -58,10 +59,11 @@ namespace UnitTests.PhaseTests
 
         [TestMethod]
         [DataRow(true)]
-        [DataRow(false)] //Player two wins
-        public void WarComparesCardsPhase_PlayerWins(bool playerZeroWins) {
-            PlayingCard cardOne = new PlayingCard(7, "C");
-            PlayingCard cardTwo = new PlayingCard(5, "H");
+        [DataRow(false)] // Player two wins
+        public void WarComparesCardsPhase_PlayerWins(bool playerZeroWins)
+        {
+            PlayingCard cardOne = new(7, "C");
+            PlayingCard cardTwo = new(5, "H");
 
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             if (playerZeroWins)
@@ -71,25 +73,31 @@ namespace UnitTests.PhaseTests
                 comparePhase.FlippedCards.Add(cardOne);
                 comparePhase.FlippedCards.Add(cardTwo);
             }
-            else {
+            else
+            {
                 table.PlaceCardOnTable(1, cardOne);
                 table.PlaceCardOnTable(0, cardTwo);
                 comparePhase.FlippedCards.Add(cardTwo);
                 comparePhase.FlippedCards.Add(cardOne);
             }
-            
+
             IPhase phase = comparePhase;
             phase.StartPhase();
 
-            //Note: Player doesn't play out of their deck in this test, so they have init hand size (26)+2 cards picked up
+            // Note: Player doesn't play out of their deck in this test, so they have init hand size (26)+2 cards picked up
             if (playerZeroWins)
+            {
                 players[0].CountOfResourceCollection(0).Should().Be(28, "IPlayer took their card and opponent's off the Table and put it in their deck.");
+            }
             else
+            {
                 players[1].CountOfResourceCollection(0).Should().Be(28, "IPlayer took their card and opponent's off the Table and put it in their deck.");
+            }
         }
 
         [TestMethod]
-        public void NoClearWinnerInComparePhase() {
+        public void NoClearWinnerInComparePhase()
+        {
             PlayingCard cardOne = new(5, "C");
             PlayingCard cardTwo = new(5, "H");
 
@@ -103,13 +111,14 @@ namespace UnitTests.PhaseTests
             IPhase phase = comparePhase;
             phase.StartPhase();
 
-            //Player did not play a card directly out of their deck, so they have init deck size (26)
+            // Player did not play a card directly out of their deck, so they have init deck size (26)
             players[0].CountOfResourceCollection(0).Should().Be(26, "their card is still on the table and they didn't pick up any other cards");
             players[1].CountOfResourceCollection(0).Should().Be(26, "their card is still on the table and they didn't pick up any other cards");
         }
 
         [TestMethod]
-        public void WarPhasePlacesMoreCardsOnTable() {
+        public void WarPhasePlacesMoreCardsOnTable()
+        {
             table.PlaceCardOnTable(0, new PlayingCard(1, "H"));
             table.PlaceCardOnTable(1, new PlayingCard(2, "H"));
 
@@ -117,10 +126,11 @@ namespace UnitTests.PhaseTests
             phase.StartPhase();
 
             table.PrintTableState();
-            List<List<PlayingCard>> tableState = table.TableState;
+            List<List<ICard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
-            foreach (List<PlayingCard> playedCardsInFrontOfPlayer in tableState) {
+            foreach (List<ICard> playedCardsInFrontOfPlayer in tableState)
+            {
                 playedCardsInFrontOfPlayer.Count.Should().Be(3, "player played 1 card before, then in War! phase played 2 more cards");
                 playedCardsInFrontOfPlayer[1].Facedown.Should().Be(true, "the 2nd card should be facedown");
                 playedCardsInFrontOfPlayer[2].Facedown.Should().Be(false, "the 3rd card was flipped faceup");

@@ -4,7 +4,7 @@ using DeckForge.PlayerConstruction;
 namespace DeckForge.PhaseActions
 {
     /// <summary>
-    /// Lets the <see cref="IPlayer"/> play a <see cref="PlayingCard"/>.
+    /// Lets the <see cref="IPlayer"/> play a <see cref="ICard"/>.
     /// </summary>
     public class PlayCardAction : PlayerGameAction
     {
@@ -20,7 +20,7 @@ namespace DeckForge.PhaseActions
         }
 
         /// <inheritdoc/>
-        public override PlayingCard? Execute(IPlayer player)
+        public override ICard? Execute(IPlayer player)
         {
             return player.PlayCard();
         }

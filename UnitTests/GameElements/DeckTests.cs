@@ -26,7 +26,7 @@ namespace UnitTests.GameElements
 
             deck.DrawMultipleCards(52);
 
-            PlayingCard? c = deck.DrawCard();
+            ICard? c = deck.DrawCard();
             c.Should().BeNull("there are no more cards left in the deck");
         }
 
@@ -35,7 +35,7 @@ namespace UnitTests.GameElements
         public void CardsWereDrawn_FromDeckXTimes(int count)
         {
             DeckOfPlayingCards deck = new();
-            List<PlayingCard?> cards = new();
+            List<ICard?> cards = new();
 
             cards = deck.DrawMultipleCards(count);
 
@@ -47,7 +47,7 @@ namespace UnitTests.GameElements
         public void CardsWereDrawn_FromNearEmptyDeckXTimes(int count)
         {
             DeckOfPlayingCards deck = new();
-            List<PlayingCard?> cards = new();
+            List<ICard?> cards = new();
 
             deck.DrawMultipleCards(49);
             int initDeckSize = deck.Count;
@@ -64,7 +64,7 @@ namespace UnitTests.GameElements
             PlayingCard c = new(99, "W");
 
             deck.AddCardToDeck(c, pos: "top");
-            PlayingCard drawn = deck.DrawCard()!;
+            PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
 
             drawn.Val.Should().Be(99, "the special card was added to the top of the deck");
         }
@@ -80,7 +80,8 @@ namespace UnitTests.GameElements
             {
                 deck.DrawCard();
             }
-            PlayingCard drawn = deck.DrawCard()!;
+
+            PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
 
             drawn.Val.Should().Be(99, "the special card was added to the bottom of the deck");
         }
@@ -96,7 +97,7 @@ namespace UnitTests.GameElements
             {
                 deck.DrawCard();
             }
-            PlayingCard drawn = deck.DrawCard()!;
+            PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
 
             drawn.Val.Should().Be(99, "the special card was added to the middle of the deck");
         }
@@ -112,7 +113,7 @@ namespace UnitTests.GameElements
             {
                 deck.DrawCard();
             }
-            PlayingCard drawn = deck.DrawCard()!;
+            PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
             drawn.Val.Should().Be(99, "the special card was put 2 cards from the top");
         }
 
@@ -120,14 +121,15 @@ namespace UnitTests.GameElements
         public void AddMultipleCardsToTopOfDeck()
         {
             DeckOfPlayingCards deck = new();
-            List<PlayingCard> cards = new List<PlayingCard> { new PlayingCard(100, "W"), new PlayingCard(101, "W"), new PlayingCard(102, "W") };
+            List<ICard> cards = new() { new PlayingCard(100, "W"), new PlayingCard(101, "W"), new PlayingCard(102, "W") };
             bool match = true;
 
             deck.AddMultipleCardsToDeck(cards, pos: "top");
             List<PlayingCard> drawnCards = new();
+
             for (var i = 0; i < 3; i++)
             {
-                drawnCards.Add(deck.DrawCard()!);
+                drawnCards.Add((PlayingCard)deck.DrawCard()!);
             }
 
             for (var i = 0; i < 3; i++)
@@ -141,13 +143,12 @@ namespace UnitTests.GameElements
             match.Should().Be(true, "all the cards should be drawn from the top in the reverse order they were placed");
         }
 
-        //Testing IResourceCollection Implementation
-
+        // Testing IResourceCollection Implementation
         [TestMethod]
         public void AddResouceToDeck()
         {
             PlayingCard c = new(21, "J");
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             d.AddResource(c);
             var cardDrawn = d.DrawCard();
@@ -159,7 +160,7 @@ namespace UnitTests.GameElements
         public void RemoveResourceFromDeck()
         {
             PlayingCard c = new(21, "J");
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             d.AddResource(c);
             d.RemoveResource(c);
@@ -170,7 +171,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void DeckCannotIncrementResourceCollection()
         {
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             Action a = () => { d.IncrementResourceCollection(); };
 
@@ -180,7 +181,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void DeckDecrementsDeckSize()
         {
-            DeckOfPlayingCards d = new DeckOfPlayingCards();
+            DeckOfPlayingCards d = new();
 
             d.DecrementResourceCollection();
 
@@ -193,7 +194,7 @@ namespace UnitTests.GameElements
             DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             d.AddResource(new PlayingCard(21, "W"));
-            PlayingCard? c = d.GainResource();
+            PlayingCard? c = (PlayingCard?)d.GainResource();
 
             c!.Val.Should().Be(21, "the card 21W was added to the top of the deck");
         }

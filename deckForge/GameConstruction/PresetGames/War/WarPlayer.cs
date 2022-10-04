@@ -28,7 +28,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         /// <inheritdoc/>
         public override PlayingCard? PlayCard(bool facedown = false)
         {
-            PlayingCard? c = personalDeck!.DrawCard(drawFacedown: true);
+            PlayingCard? c = (PlayingCard)personalDeck!.DrawCard(drawFacedown: true)!;
             if (c != null)
             {
                 GM.PlayerPlayedCard(PlayerID, c);

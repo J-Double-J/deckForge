@@ -36,7 +36,9 @@ namespace DeckForge.PhaseActions.NonPlayerActions
         {
             if (gm.Table is not null)
             {
-                gm.Table.TableDecks[targetDeck].AddMultipleCardsToDeck(gm.Table.PickUp_AllCardsFromTable().ToList(), shuffleAfter: shuffleAfter);
+                gm.Table.TableDecks[targetDeck].AddMultipleCardsToDeck(
+                    gm.Table.PickUp_AllCardsFromTable().ToList(),
+                    shuffleAfter: shuffleAfter);
             }
             else
             {

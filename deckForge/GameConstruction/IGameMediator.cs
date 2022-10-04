@@ -26,7 +26,7 @@ namespace DeckForge.GameConstruction
         /// <summary>
         /// Gets the current <see cref="Table"/> state of the game.
         /// </summary>
-        public List<List<PlayingCard>> CurrentTableState { get; }
+        public List<List<ICard>> CurrentTableState { get; }
 
         /// <summary>
         /// Gets the ITable registered to the <see cref="IGameMediator"/>.
@@ -95,18 +95,18 @@ namespace DeckForge.GameConstruction
         public void EndPlayerTurn();
 
         /// <summary>
-        /// Called everytime <see cref="IPlayer"/> notifies <see cref="IGameMediator"/> that it played a <see cref="PlayingCard"/>.
+        /// Called everytime <see cref="IPlayer"/> notifies <see cref="IGameMediator"/> that it played a <see cref="ICard"/>.
         /// </summary>
         /// <param name="playerID">Player's ID.</param>
         /// <param name="card">Card that is played.</param>
-        public void PlayerPlayedCard(int playerID, PlayingCard card);
+        public void PlayerPlayedCard(int playerID, ICard card);
 
         /// <summary>
-        /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="PlayingCard"/>.
+        /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="ICard"/>.
         /// </summary>
         /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="IDeck"/>.</param>
-        /// <returns>A nullable <see cref="PlayingCard"/> that was drawn from a <see cref="DeckOfPlayingCards"/>.</returns>
-        public PlayingCard? DrawCardFromDeck(int deckPosition);
+        /// <returns>A nullable <see cref="ICard"/> that was drawn from a <see cref="IDeck"/>.</returns>
+        public ICard? DrawCardFromDeck(int deckPosition);
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> by their ID.
@@ -119,11 +119,11 @@ namespace DeckForge.GameConstruction
         public IPlayer? GetPlayerByID(int playerID);
 
         /// <summary>
-        /// Gets the List of <see cref="PlayingCard"/>s the <see cref="IPlayer"/> has played.
+        /// Gets the List of <see cref="ICard"/>s the <see cref="IPlayer"/> has played.
         /// </summary>
         /// <param name="playerID">The ID of the <see cref="IPlayer"/> of interest.</param>
         /// <returns>The list of cards that was played by the <see cref="IPlayer"/>.</returns>
-        public List<PlayingCard> GetPlayedCardsOfPlayer(int playerID);
+        public List<ICard> GetPlayedCardsOfPlayer(int playerID);
 
         /// <summary>
         /// Flips a specified card on the <see cref="Table"/>, for a specific <see cref="IPlayer"/>, a specific way.
@@ -132,14 +132,14 @@ namespace DeckForge.GameConstruction
         /// <param name="cardPos">Specific card's position on the table for that player.</param>
         /// <param name="facedown">Flip it facedown if true, faceup if false, or flip it regardless if null.</param>
         /// <returns>A reference to the card that was flipped.</returns>
-        public PlayingCard FlipSingleCard(int playerID, int cardPos, bool? facedown);
+        public ICard FlipSingleCard(int playerID, int cardPos, bool? facedown);
 
         /// <summary>
-        /// Pick up all <see cref="PlayingCard"/>s belonging to an <see cref="IPlayer"/> on the <see cref="Table"/>.
+        /// Pick up all <see cref="ICard"/>s belonging to an <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
-        /// <param name="playerID">ID of IPlayer whose <see cref="PlayingCard"/>s are being picked up.</param>
-        /// <returns>A reference to the List of <see cref="PlayingCard"/>s picked up.</returns>
-        public List<PlayingCard> PickUpAllCards_FromTable_FromPlayer(int playerID);
+        /// <param name="playerID">ID of IPlayer whose <see cref="ICard"/>s are being picked up.</param>
+        /// <returns>A reference to the List of <see cref="ICard"/>s picked up.</returns>
+        public List<ICard> PickUpAllCards_FromTable_FromPlayer(int playerID);
 
         /// <summary>
         /// Tells an <see cref="IPlayer"/> to execute an <see cref="IGameAction{IPlayer}"/>.
@@ -193,14 +193,14 @@ namespace DeckForge.GameConstruction
         public void PlayerLost(int playerID);
 
         /// <summary>
-        /// Deal a number of <see cref="PlayingCard"/>s from the specified <see cref="IDeck"/> on the <see cref="ITable"/> to each
+        /// Deal a number of <see cref="ICard"/>s from the specified <see cref="IDeck"/> on the <see cref="ITable"/> to each
         /// <see cref="IPlayer"/>.
         /// </summary>
         /// <remarks>
-        /// By default, <see cref="IGameMediator"/> will keep dealing <see cref="PlayingCard"/>s equally until the correct
-        /// number of <see cref="PlayingCard"/>s are dealt or until the <see cref="IDeck"/> runs out of <see cref="PlayingCard"/>s.
-        /// This can mean an unequal number of <see cref="PlayingCard"/>s are dealt to each <see cref="IPlayer"/> if there are not
-        /// enough <see cref="PlayingCard"/>s to be divided evenly.
+        /// By default, <see cref="IGameMediator"/> will keep dealing <see cref="ICard"/>s equally until the correct
+        /// number of <see cref="ICard"/>s are dealt or until the <see cref="IDeck"/> runs out of <see cref="ICard"/>s.
+        /// This can mean an unequal number of <see cref="ICard"/>s are dealt to each <see cref="IPlayer"/> if there are not
+        /// enough <see cref="ICard"/>s to be divided evenly.
         /// </remarks>
         /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="ITable"/>.</param>
         /// <param name="numberOfCardsToDealToEachPlayer">Number of cards each <see cref="IPlayer"/> will be dealt.</param>

@@ -28,8 +28,8 @@ namespace DeckForge.GameConstruction.PresetGames.War
             gm = new WarGameMediator(PLAYER_COUNT);
             th = new TurnHandler(2, false);
             gm.RegisterTurnHandler(th);
-            spr = new (initHandSize: 26);
-            table = new (gm, PLAYER_COUNT, spr.Decks);
+            spr = new(initHandSize: 26);
+            table = new(gm, PLAYER_COUNT, spr.Decks);
             players = WarPlayerSetUp(gm, table);
 
             List<int> playerIDs = new();
@@ -62,8 +62,8 @@ namespace DeckForge.GameConstruction.PresetGames.War
             List<IPlayer> players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!;
-                DeckOfPlayingCards deck = new (cards);
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!.ConvertAll(c => (PlayingCard)c!);
+                DeckOfPlayingCards deck = new(cards);
                 IPlayer player = new WarPlayer(gm, i, deck);
                 players.Add(player);
             }

@@ -90,9 +90,14 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             Dictionary<int, List<PlayingCard>> hands = new();
             foreach (PokerPlayer player in GetCurrentActivePlayers())
             {
+                // We know all cards on table are PlayingCards
+                List<PlayingCard> cards =
+                Table!.GetCardsForSpecificPlayer(player.PlayerID)
+                    .Concat(Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                        .ConvertAll(c => (PlayingCard)c);
                 hands.Add(
                     player.PlayerID,
-                    Table!.GetCardsForSpecificPlayer(player.PlayerID).Concat(Table!.GetCardsForSpecificNeutralZone(0)).ToList());
+                    cards);
             }
 
             List<int> winnerIDs = SimplisitcPokerHandEvaluator.EvaluateHands(hands);

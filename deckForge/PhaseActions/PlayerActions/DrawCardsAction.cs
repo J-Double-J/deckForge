@@ -11,7 +11,7 @@ namespace DeckForge.PhaseActions
         /// <summary>
         /// Initializes a new instance of the <see cref="DrawCardsAction"/> class.
         /// </summary>
-        /// <param name="drawCount">Number of <see cref="PlayingCard"/>s to draw.</param>
+        /// <param name="drawCount">Number of <see cref="ICard"/>s to draw.</param>
         /// <param name="name">Name of the <see cref="DrawCardsAction"/>.</param>
         public DrawCardsAction(int drawCount = 1, string name = "Draw")
         : base(name: name)
@@ -28,9 +28,9 @@ namespace DeckForge.PhaseActions
 
         /// <inheritdoc/>
         /// <returns>The list of cards that was drawn into the player's hand.</returns>
-        public override List<PlayingCard?> Execute(IPlayer player)
+        public override List<ICard?> Execute(IPlayer player)
         {
-            List<PlayingCard?> cards = new();
+            List<ICard?> cards = new();
             for (int i = 0; i < DrawCount; i++)
             {
                 cards.Add(player.DrawCard());

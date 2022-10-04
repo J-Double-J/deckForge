@@ -16,7 +16,7 @@ namespace UnitTests.ActionTests.PlayerActionTests
         public void PlayersHandIsOnTable()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            IPlayer player = new TestPlayerMock(gm);
+            IPlayer player = new TestPlayerMock(gm, 0);
             Table table = new Table(gm, 1);
             PlayerGameAction action = new PlayHandToTable();
             List<PlayingCard> cards = new() { new PlayingCard(10, "J"), new PlayingCard(2, "J") };
@@ -34,7 +34,7 @@ namespace UnitTests.ActionTests.PlayerActionTests
         public void PlayerPlaysTheirEmptyHand()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            IPlayer player = new TestPlayerMock(gm);
+            IPlayer player = new TestPlayerMock(gm, 0);
             Table table = new Table(gm, 1);
             PlayerGameAction action = new PlayHandToTable();
             List<PlayingCard> cards = new();

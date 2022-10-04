@@ -4,6 +4,7 @@ using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
+using UnitTests.Mocks;
 
 namespace UnitTests.PlayerConstruction
 {
@@ -39,20 +40,18 @@ namespace UnitTests.PlayerConstruction
             a.Should().Throw<NotSupportedException>("the draw action cannot be targetted against another player");
         }
 
-        //TODO: Write a GM stub in order to command player
-        //[TestMethod]
+        [TestMethod]
         public void PlayerGetsTheirPlayedCards_FromTable()
         {
-            List<DeckOfPlayingCards> decks = new List<DeckOfPlayingCards> { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             IGameMediator gm = new BaseGameMediator(0);
-            BasePlayer p = new(gm, playerID: 0);
+            TestPlayerMock player = new(gm, playerID: 0);
             Table table = new(gm, playerCount: 1, decks);
-            var stringReader = new StringReader("0");
-            Console.SetIn(stringReader);
+            player.AddCardToHand(new PlayingCard(10, "J"));
 
-            p.PlayCard();
+            player.PlayCard();
 
-            p.PlayedCards.Count.Should().Be(1, "Player played a card");
+            player.PlayedCards.Count.Should().Be(1, "Player played a card");
         }
 
         [TestMethod]
@@ -87,7 +86,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
             p.AddResourceToCollection(0, new PlayingCard(21, "W"));
@@ -101,7 +100,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
             Action action = () => p.AddResourceToCollection(0, new BasePlayer(gm, playerID: 1));
@@ -156,7 +155,7 @@ namespace UnitTests.PlayerConstruction
         }
 
         [TestMethod]
-        public void PlayerCanIncrement_ResourceCollection()
+        public void PlayerCannotIncrement_DeckResourceCollection()
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
@@ -203,7 +202,7 @@ namespace UnitTests.PlayerConstruction
             IPlayer p = new BasePlayer(gm, 0);
             IDeck deck = new DeckOfPlayingCards();
 
-            PlayingCard? drawnCard = deck.DrawCard();
+            ICard? drawnCard = deck.DrawCard();
             p.AddCardToHand(drawnCard!);
 
             p.HandSize.Should().Be(1, "because a card was added to the player's hand");
