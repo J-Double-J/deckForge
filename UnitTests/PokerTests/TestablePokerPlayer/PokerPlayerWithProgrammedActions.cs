@@ -38,7 +38,6 @@ namespace UnitTests.PokerTests.TestablePokerPlayer
         /// instead of command line input for what choosing what actions to take.
         /// </summary>
         /// <returns>Name of the action executed.</returns>
-        /// <exception cref="NotImplementedException">At time of imp, Check() has not been made.</exception>
         /// <exception cref="ArgumentException">Throws if command not recognized.</exception>
         public override string GetPreFlopBettingAction()
         {
@@ -56,8 +55,7 @@ namespace UnitTests.PokerTests.TestablePokerPlayer
             }
             else if (Commands[currentCommand] == "CHECK")
             {
-                // TODO: IMPLEMENT
-                throw new NotImplementedException("PokerPlayerWithProgrammedActions does not have Check() implemented");
+                Check();
             }
             else
             {

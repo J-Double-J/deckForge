@@ -38,8 +38,8 @@ namespace UnitTests.ActionTests
             IPlayer p = new BasePlayer(gm);
             PlayerGameAction action = new DrawCardsAction(drawCount: 5);
 
-            // TODO: Player on init draws 5 cards, so this adds to 52, test might break when init changes
-            for (int i = 0; i < 47; i++)
+            int cardsToDraw = 52 - p.HandSize;
+            for (int i = 0; i < cardsToDraw; i++)
             {
                 p.DrawCard();
             }

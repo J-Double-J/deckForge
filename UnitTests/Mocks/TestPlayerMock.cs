@@ -7,8 +7,8 @@ namespace UnitTests.Mocks
 {
     public class TestPlayerMock : BasePlayer
     {
-        public TestPlayerMock(IGameMediator gm)
-            : base(gm)
+        public TestPlayerMock(IGameMediator gm, int playerID)
+            : base(gm, playerID: playerID)
         {
         }
 

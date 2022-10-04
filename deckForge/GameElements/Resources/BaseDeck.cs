@@ -210,9 +210,6 @@ namespace DeckForge.GameElements.Resources
                     {
                         throw new InvalidCastException("Cannot cast passed resources to correct type");
                     }
-
-                    //AddResource((ICard)Convert.ChangeType(resources[i], typeof(ICard))!);
-                    //AddResource((ICard)resources[i]);
                 }
             }
             catch

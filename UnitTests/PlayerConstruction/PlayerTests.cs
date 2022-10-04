@@ -4,6 +4,7 @@ using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
+using UnitTests.Mocks;
 
 namespace UnitTests.PlayerConstruction
 {
@@ -39,21 +40,18 @@ namespace UnitTests.PlayerConstruction
             a.Should().Throw<NotSupportedException>("the draw action cannot be targetted against another player");
         }
 
-        // TODO: Write a GM stub in order to command player
-
-        // [TestMethod]
+        [TestMethod]
         public void PlayerGetsTheirPlayedCards_FromTable()
         {
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
             IGameMediator gm = new BaseGameMediator(0);
-            BasePlayer p = new(gm, playerID: 0);
+            TestPlayerMock player = new(gm, playerID: 0);
             Table table = new(gm, playerCount: 1, decks);
-            var stringReader = new StringReader("0");
-            Console.SetIn(stringReader);
+            player.AddCardToHand(new PlayingCard(10, "J"));
 
-            p.PlayCard();
+            player.PlayCard();
 
-            p.PlayedCards.Count.Should().Be(1, "Player played a card");
+            player.PlayedCards.Count.Should().Be(1, "Player played a card");
         }
 
         [TestMethod]
