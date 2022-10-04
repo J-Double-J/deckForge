@@ -39,11 +39,12 @@ namespace UnitTests.PlayerConstruction
             a.Should().Throw<NotSupportedException>("the draw action cannot be targetted against another player");
         }
 
-        //TODO: Write a GM stub in order to command player
-        //[TestMethod]
+        // TODO: Write a GM stub in order to command player
+
+        // [TestMethod]
         public void PlayerGetsTheirPlayedCards_FromTable()
         {
-            List<DeckOfPlayingCards> decks = new List<DeckOfPlayingCards> { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
             Table table = new(gm, playerCount: 1, decks);
@@ -87,7 +88,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
             p.AddResourceToCollection(0, new PlayingCard(21, "W"));
@@ -101,7 +102,7 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             BasePlayer p = new(gm, playerID: 0);
-            DeckOfPlayingCards d = new DeckOfPlayingCards(defaultAddCardPos: "top");
+            DeckOfPlayingCards d = new(defaultAddCardPos: "top");
 
             p.AddResourceCollection(d);
             Action action = () => p.AddResourceToCollection(0, new BasePlayer(gm, playerID: 1));
@@ -203,7 +204,7 @@ namespace UnitTests.PlayerConstruction
             IPlayer p = new BasePlayer(gm, 0);
             IDeck deck = new DeckOfPlayingCards();
 
-            PlayingCard? drawnCard = deck.DrawCard();
+            ICard? drawnCard = deck.DrawCard();
             p.AddCardToHand(drawnCard!);
 
             p.HandSize.Should().Be(1, "because a card was added to the player's hand");

@@ -46,10 +46,10 @@ namespace DeckForge.GameElements
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
-        /// <param name="initDeck">Initial <see cref="DeckOfPlayingCards"/> that is on the <see cref="Table"/>.</param>
+        /// <param name="initDeck">Initial <see cref="IDeck"/> that is on the <see cref="Table"/>.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
-        public Table(IGameMediator mediator, int playerCount, DeckOfPlayingCards initDeck, int tableNeutralZonesCount = 0)
+        public Table(IGameMediator mediator, int playerCount, IDeck initDeck, int tableNeutralZonesCount = 0)
         {
             GM = mediator;
             GM.RegisterTable(this);
@@ -81,13 +81,13 @@ namespace DeckForge.GameElements
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
         /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
-        /// <param name="initDecks">List of initial <see cref="DeckOfPlayingCards"/>s on the <see cref="Table"/>.</param>
+        /// <param name="initDecks">List of initial <see cref="IDeck"/>s on the <see cref="Table"/>.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
         public Table(
             IGameMediator mediator,
             int playerCount,
-            List<DeckOfPlayingCards> initDecks,
+            List<IDeck> initDecks,
             int tableNeutralZonesCount = 0)
         {
             GM = mediator;
@@ -112,7 +112,7 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<DeckOfPlayingCards> TableDecks
+        public List<IDeck> TableDecks
         {
             get;
         }

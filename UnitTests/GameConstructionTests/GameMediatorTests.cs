@@ -1,12 +1,12 @@
 ﻿using DeckForge.GameConstruction;
-using FluentAssertions;
+using DeckForge.GameConstruction.PresetGames.War;
 using DeckForge.GameElements;
-using DeckForge.PlayerConstruction;
 using DeckForge.GameElements.Resources;
-using DeckForge.PhaseActions;
 using DeckForge.GameRules.RoundConstruction.Phases;
 using DeckForge.GameRules.RoundConstruction.Rounds;
-using DeckForge.GameConstruction.PresetGames.War;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
+using FluentAssertions;
 
 namespace UnitTests.GameConstructionTests
 {
@@ -19,7 +19,7 @@ namespace UnitTests.GameConstructionTests
         public void GetPlayerByID_ThrowsOnInvalidID()
         {
             IGameMediator gm = new BaseGameMediator(2);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
             new BasePlayer(gm, 0);
             new BasePlayer(gm, 1);
@@ -33,7 +33,7 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCanDrawCard()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
             ICard card = gm.DrawCardFromDeck(0)!;
@@ -45,7 +45,7 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCannotDrawFromEmptyDeck()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
 
             ICard? card;
@@ -56,7 +56,6 @@ namespace UnitTests.GameConstructionTests
             }
 
             card = gm.DrawCardFromDeck(0);
-
 
             card.Should().BeNull("the deck was exhausted and there are no more cards to draw");
         }
@@ -170,8 +169,7 @@ namespace UnitTests.GameConstructionTests
 
             gm.DealCardsFromDeckToAllPlayers(0, 20);
 
-            players[0].HandSize.Should().Be(18, "there were not enough"
-                + "cards to get to 20 and the last extra card was dealt to the first player");
+            players[0].HandSize.Should().Be(18, "there were not enough cards to get to 20 and the last extra card was dealt to the first player");
             players[1].HandSize.Should().Be(17, "there were not enough cards to get to 20");
             players[2].HandSize.Should().Be(17, "there were not enough cards to get to 20");
         }

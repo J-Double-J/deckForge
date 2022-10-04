@@ -29,7 +29,8 @@ namespace DeckForge.GameRules
                 throw;
             }
 
-            foreach (DeckOfPlayingCards d in Decks)
+            // TODO: Assess if needed.
+            foreach (IDeck d in Decks)
             {
                 d.Shuffle();
             }
@@ -38,7 +39,7 @@ namespace DeckForge.GameRules
         /// <summary>
         /// Gets the list of Decks that <see cref="BaseSetUpRules"/> has.
         /// </summary>
-        public List<DeckOfPlayingCards> Decks { get; }
+        public List<IDeck> Decks { get; }
 
         /// <summary>
         /// Gets the number of decks that are managed by <see cref="BaseSetUpRules"/>.

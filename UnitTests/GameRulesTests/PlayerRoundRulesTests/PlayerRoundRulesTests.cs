@@ -1,21 +1,26 @@
-﻿using FluentAssertions;
-using DeckForge.GameRules.RoundConstruction.Phases;
-using DeckForge.GameRules.RoundConstruction.Rounds;
-using DeckForge.GameRules.RoundConstruction.Interfaces;
-using DeckForge.PlayerConstruction;
-using DeckForge.GameConstruction;
+﻿using DeckForge.GameConstruction;
+using DeckForge.GameConstruction.PresetGames.War;
 using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.GameRules.RoundConstruction.Phases;
+using DeckForge.GameRules.RoundConstruction.Rounds;
 using DeckForge.PhaseActions;
-using DeckForge.GameConstruction.PresetGames.War;
+using DeckForge.PlayerConstruction;
+using FluentAssertions;
 
 namespace UnitTests.PlayerRoundRulesTests
 {
     public class TestPlayerRoundRules : PlayerRoundRules
     {
-        public IGameMediator gm = new BaseGameMediator(0);
-        public TestPlayerRoundRules(IGameMediator gm,
-            List<int> players, int handlimit = 64, int cardPlayLimit = 1, bool subscribeToAllPhaseEvents = true)
+        public IGameMediator GM = new BaseGameMediator(0);
+
+        public TestPlayerRoundRules(
+            IGameMediator gm,
+            List<int> players,
+            int handlimit = 64,
+            int cardPlayLimit = 1,
+            bool subscribeToAllPhaseEvents = true)
             : base(gm, players: players, handlimit: handlimit, cardPlayLimit: cardPlayLimit) { }
     }
 
@@ -27,7 +32,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetRoundHandLimit_SpecifiedLimit(int lim)
         {
             BaseGameMediator gm = new(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -39,7 +44,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetRoundHandLimit_UnSpecifiedLimit()
         {
             BaseGameMediator gm = new(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -51,7 +56,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void SetRoundHandLimitToInvalidValue()
         {
             BaseGameMediator gm = new(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -66,7 +71,7 @@ namespace UnitTests.PlayerRoundRulesTests
         {
 
             BaseGameMediator gm = new(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
@@ -78,7 +83,7 @@ namespace UnitTests.PlayerRoundRulesTests
         public void GetCardDrawonNewTurn_UnSpecifiedLimit()
         {
             BaseGameMediator gm = new(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };

@@ -10,7 +10,7 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-        private static readonly List<DeckOfPlayingCards> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+        private static readonly List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
         private static IGameMediator gm = new BaseGameMediator(2);
         private static Table table = new(gm, 2, Decks);
         private static StringWriter output = new();

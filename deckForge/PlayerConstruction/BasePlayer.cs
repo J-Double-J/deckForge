@@ -174,6 +174,7 @@ namespace DeckForge.PlayerConstruction
             return c;
         }
 
+        /// <inheritdoc/>
         public virtual void AddCardToHand(ICard card)
         {
             PlayerHand.AddResource(card);
@@ -256,7 +257,7 @@ namespace DeckForge.PlayerConstruction
                         }
                     }
 
-                    if (collectionType != null && collectionType == resourceType)
+                    if (collectionType != null && (collectionType == resourceType || collectionType.IsAssignableFrom(resourceType)))
                     {
                         resourcePoolID = i;
                         break;
@@ -349,7 +350,7 @@ namespace DeckForge.PlayerConstruction
                 IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
                 var instance = Activator.CreateInstance(resourceCollection.GetType());
 
-                if (resource.GetType() != resourceCollection.ResourceType)
+                if (resource.GetType() != resourceCollection.ResourceType && !resourceCollection.ResourceType.IsAssignableFrom(resource.GetType()))
                 {
                     throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of {resourceCollection.ResourceType}");
                 }
@@ -412,39 +413,43 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public void AddMultipleResourcesToCollection(int resourceCollectionID, List<object> resources)
         {
-            try
+            if (resources.Count != 0)
             {
-                ThrowIf_InvalidResourceID(resourceCollectionID);
-
-                IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
-                var instance = Activator.CreateInstance(resourceCollection.GetType());
-
-                ThrowIf_InvalidResourceForCollection(resourceCollection, resources[0]);
-
-                instance = resourceCollection;
-                MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
-
-                Type listType = typeof(List<>).MakeGenericType(resources[0].GetType());
-                IList listOfResources = (Activator.CreateInstance(listType) as IList)!;
-
-                listOfResources = resources;
-
-                foreach (MethodInfo method in methodInfos)
+                try
                 {
-                    if (method.Name == "AddMultipleResources")
+                    ThrowIf_InvalidResourceID(resourceCollectionID);
+
+                    IResourceCollection resourceCollection = PlayerResourceCollections[resourceCollectionID];
+                    var instance = Activator.CreateInstance(resourceCollection.GetType());
+
+                    ThrowIf_InvalidResourceForCollection(resourceCollection, resources[0]);
+
+                    instance = resourceCollection;
+                    MethodInfo[] methodInfos = resourceCollection.GetType().GetMethods();
+
+                    Type listType = typeof(List<>).MakeGenericType(resources[0].GetType());
+                    IList listOfResources = (Activator.CreateInstance(listType) as IList)!;
+
+                    listOfResources = resources;
+
+                    // TODO: .resourceCollection.GetType().GetMethod("AddMultipleResources");
+                    foreach (MethodInfo method in methodInfos)
                     {
-                        object[] args = { listOfResources };
-                        method.Invoke(instance, args);
+                        if (method.Name == "AddMultipleResources")
+                        {
+                            object[] args = { listOfResources };
+                            method.Invoke(instance, args);
+                        }
                     }
                 }
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException ?? e;
-            }
-            catch
-            {
-                throw;
+                catch (TargetInvocationException e)
+                {
+                    throw e.InnerException ?? e;
+                }
+                catch
+                {
+                    throw;
+                }
             }
         }
 
@@ -587,7 +592,7 @@ namespace DeckForge.PlayerConstruction
 
         private static void ThrowIf_InvalidResourceForCollection(IResourceCollection resourceCollection, object resource)
         {
-            if (resource.GetType() != resourceCollection.ResourceType)
+            if (resource.GetType() != resourceCollection.ResourceType && !resourceCollection.ResourceType.IsAssignableFrom(resource.GetType()))
             {
                 throw new ArgumentException($"Resource of type {resource.GetType()} cannot be added to a Resource Collection of type {resourceCollection.ResourceType}");
             }

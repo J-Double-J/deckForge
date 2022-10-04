@@ -13,7 +13,7 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Gets the decks on the <see cref="ITable"/>.
         /// </summary>
-        public List<DeckOfPlayingCards> TableDecks { get; }
+        public List<IDeck> TableDecks { get; }
 
         /// <summary>
         /// Gets the lists of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
@@ -108,32 +108,32 @@ namespace DeckForge.GameElements
         public List<ICard> PickUpAllCards_FromPlayer(int playerID);
 
         /// <summary>
-        /// Draws a <see cref="ICard"/> from the specified <see cref="DeckOfPlayingCards"/>.
+        /// Draws a <see cref="ICard"/> from the specified <see cref="IDeck"/>.
         /// </summary>
-        /// <param name="deckNum">ID of the <see cref="DeckOfPlayingCards"/> of interest on the <see cref="ITable"/>.</param>
+        /// <param name="deckNum">ID of the <see cref="IDeck"/> of interest on the <see cref="ITable"/>.</param>
         /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
         public ICard? DrawCardFromDeck(int deckNum);
 
         /// <summary>
-        /// Draws multiple <see cref="ICard"/>s from the specified <see cref="DeckOfPlayingCards"/>.
+        /// Draws multiple <see cref="ICard"/>s from the specified <see cref="IDeck"/>.
         /// </summary>
         /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
-        /// <param name="deckNum">ID of the <see cref="DeckOfPlayingCards"/> of interest on the <see cref="ITable"/>.</param>
+        /// <param name="deckNum">ID of the <see cref="IDeck"/> of interest on the <see cref="ITable"/>.</param>
         /// <returns>A list of nullable <see cref="ICard"/>s that were drawn.</returns>
         public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum);
 
         /// <summary>
-        /// Shuffles a <see cref="DeckOfPlayingCards"/> on the <see cref="ITable"/>.
+        /// Shuffles a <see cref="IDeck"/> on the <see cref="ITable"/>.
         /// </summary>
-        /// <param name="deckPosition">Index or position of the <see cref="DeckOfPlayingCards"/>.</param>
+        /// <param name="deckPosition">Index or position of the <see cref="IDeck"/>.</param>
         public void ShuffleDeck(int deckPosition);
 
         /// <summary>
-        /// Plays a number of <see cref="ICard"/>s from a <see cref="DeckOfPlayingCards"/> to an area
+        /// Plays a number of <see cref="ICard"/>s from a <see cref="IDeck"/> to an area
         /// designated on the <see cref="Table"/>.
         /// </summary>
         /// <param name="numCards">Number of <see cref="ICard"/>s to attempt to draw.</param>
-        /// <param name="deckPos">ID of the <see cref="DeckOfPlayingCards"/> on the table to 
+        /// <param name="deckPos">ID of the <see cref="IDeck"/> on the table to 
         /// draw from.</param>
         /// <param name="neutralZone">Area to play the <see cref="ICard"/> to.</param>
         /// <param name="isFaceup">Whether to play the <see cref="ICard"/> faceup.</param>

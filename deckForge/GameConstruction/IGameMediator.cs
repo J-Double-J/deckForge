@@ -105,7 +105,7 @@ namespace DeckForge.GameConstruction
         /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="ICard"/>.
         /// </summary>
         /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="IDeck"/>.</param>
-        /// <returns>A nullable <see cref="ICard"/> that was drawn from a <see cref="DeckOfPlayingCards"/>.</returns>
+        /// <returns>A nullable <see cref="ICard"/> that was drawn from a <see cref="IDeck"/>.</returns>
         public ICard? DrawCardFromDeck(int deckPosition);
 
         /// <summary>

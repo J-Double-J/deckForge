@@ -1,9 +1,9 @@
-﻿using DeckForge.PhaseActions;
-using FluentAssertions;
-using DeckForge.GameConstruction;
-using DeckForge.PlayerConstruction;
+﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
+using DeckForge.PhaseActions;
+using DeckForge.PlayerConstruction;
+using FluentAssertions;
 
 namespace UnitTests.ActionTests
 {
@@ -15,13 +15,13 @@ namespace UnitTests.ActionTests
         {
             bool eventRaised = false;
             IGameMediator gm = new BaseGameMediator(1);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 1, decks);
             IPlayer p = new BasePlayer(gm);
             p.DrawStartingHand();
             PlayerGameAction action = new PlayCardAction();
 
-            //StringWriter and Reader are for the console.
+            // StringWriter and Reader are for the console.
             var sr = new StringReader("0");
 
             Console.SetIn(sr);
@@ -37,7 +37,7 @@ namespace UnitTests.ActionTests
         public void UnsupportedExecutes_ThrowErrors()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<DeckOfPlayingCards> decks = new() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
             IPlayer p = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);

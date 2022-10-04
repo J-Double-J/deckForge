@@ -14,10 +14,10 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDeck"/> class.
         /// </summary>
-        /// <param name="defaultAddCardPos">Specifies where to place a <see cref="PlayingCard"/> by default. Options
+        /// <param name="defaultAddCardPos">Specifies where to place a <see cref="ICard"/> by default. Options
         /// are "top", "middle", or "bottom". Default can be overriden when needed.</param>
         /// <param name="defaultShuffleOnAddCard">If<c>true</c>, shuffles the <see cref="IDeck"/> after adding
-        /// any <see cref="PlayingCard"/> by default. Default can be overriden when needed.</param>
+        /// any <see cref="ICard"/> by default. Default can be overriden when needed.</param>
         public BaseDeck(string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             Deck = new();
@@ -30,12 +30,12 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDeck"/> class.
         /// </summary>
-        /// <param name="cards">List of <see cref="PlayingCard"/>s to use as the <see cref="IDeck"/>.</param>
-        /// <param name="defaultAddCardPos">Specifies where to place a <see cref="PlayingCard"/> by default. Options
+        /// <param name="cards">List of <see cref="ICard"/>s to use as the <see cref="IDeck"/>.</param>
+        /// <param name="defaultAddCardPos">Specifies where to place a <see cref="ICard"/> by default. Options
         /// are "top", "middle", or "bottom". Default can be overriden when needed.</param>
         /// <param name="defaultShuffleOnAddCard">If<c>true</c>, shuffles the <see cref="IDeck"/> after adding
-        /// any <see cref="PlayingCard"/> by default. Default can be overriden when needed.</param>
-        public BaseDeck(List<PlayingCard> cards, string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
+        /// any <see cref="ICard"/> by default. Default can be overriden when needed.</param>
+        public BaseDeck(List<ICard> cards, string defaultAddCardPos = "bottom", bool defaultShuffleOnAddCard = false)
         {
             Deck = cards;
             this.defaultAddCardPos = defaultAddCardPos;
@@ -53,20 +53,20 @@ namespace DeckForge.GameElements.Resources
         /// <inheritdoc/>
         public Type ResourceType
         {
-            get { return typeof(PlayingCard); }
+            get { return typeof(ICard); }
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IDeck"/> (or list) of <see cref="PlayingCard"/>s.
+        /// Gets or sets the <see cref="IDeck"/> (or list) of <see cref="ICard"/>s.
         /// </summary>
-        protected List<PlayingCard> Deck { get; set; }
+        protected List<ICard> Deck { get; set; }
 
         /// <inheritdoc/>
-        public PlayingCard? DrawCard(bool drawFacedown = false)
+        public ICard? DrawCard(bool drawFacedown = false)
         {
             if (Deck.Count != 0)
             {
-                PlayingCard c = Deck[Deck.Count - 1];
+                ICard c = Deck[Deck.Count - 1];
                 Deck.RemoveAt(Deck.Count - 1);
 
                 if (c.Facedown != drawFacedown)
@@ -83,12 +83,12 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard?> DrawMultipleCards(int count)
+        public List<ICard?> DrawMultipleCards(int count)
         {
-            List<PlayingCard?> cards = new();
+            List<ICard?> cards = new();
             for (int i = 0; i < count; i++)
             {
-                PlayingCard? c = DrawCard();
+                ICard? c = DrawCard();
                 if (c != null)
                 {
                     cards.Add(c);
@@ -115,7 +115,7 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public void AddCardToDeck(PlayingCard card, string pos = "bottom", bool shuffleAfter = false)
+        public void AddCardToDeck(ICard card, string pos = "bottom", bool shuffleAfter = false)
         {
             if (pos == "bottom")
             {
@@ -156,11 +156,11 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public void AddMultipleCardsToDeck(List<PlayingCard> cards, string pos = "bottom", bool shuffleAfter = false)
+        public void AddMultipleCardsToDeck(List<ICard> cards, string pos = "bottom", bool shuffleAfter = false)
         {
             try
             {
-                foreach (PlayingCard c in cards)
+                foreach (ICard c in cards)
                 {
                     AddCardToDeck(c, pos: pos);
                 }
@@ -177,13 +177,13 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public void AddResource(PlayingCard resource)
+        public void AddResource(ICard resource)
         {
             AddCardToDeck(resource, pos: defaultAddCardPos, shuffleAfter: defaultShuffleOnAddCard);
         }
 
         /// <inheritdoc/>
-        public void RemoveResource(PlayingCard resource)
+        public void RemoveResource(ICard resource)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -202,7 +202,17 @@ namespace DeckForge.GameElements.Resources
             {
                 for (int i = 0; i < resources.Count; i++)
                 {
-                    AddResource((PlayingCard)Convert.ChangeType(resources[i], typeof(PlayingCard))!);
+                    if (resources[i] as ICard is not null)
+                    {
+                        AddResource((ICard)resources[i]!);
+                    }
+                    else
+                    {
+                        throw new InvalidCastException("Cannot cast passed resources to correct type");
+                    }
+
+                    //AddResource((ICard)Convert.ChangeType(resources[i], typeof(ICard))!);
+                    //AddResource((ICard)resources[i]);
                 }
             }
             catch
@@ -224,15 +234,15 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public PlayingCard? GainResource()
+        public ICard? GainResource()
         {
             return DrawCard();
         }
 
         /// <inheritdoc/>
-        public List<PlayingCard>? ClearCollection()
+        public List<ICard>? ClearCollection()
         {
-            List<PlayingCard> cardsRemoved = Deck;
+            List<ICard> cardsRemoved = Deck;
             Deck.Clear();
 
             return cardsRemoved;

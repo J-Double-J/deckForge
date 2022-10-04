@@ -33,7 +33,7 @@ namespace UnitTests.GameRulesTests
         public void PlayerShouldHave_CorrectInitHandSize()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<DeckOfPlayingCards> decks = new List<DeckOfPlayingCards>() { new DeckOfPlayingCards() };
+            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             Table table = new(gm, 0, decks);
             BaseSetUpRules spr = new BaseSetUpRules(initHandSize: 8);
             IPlayer p = new BasePlayer(gm, initHandSize: spr.InitHandSize);

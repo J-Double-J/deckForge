@@ -3,23 +3,23 @@ using DeckForge.GameConstruction;
 namespace DeckForge.PhaseActions
 {
     /// <summary>
-    /// Deals a certain number of <see cref="PlayingCard"/>s to the <see cref="Table"/>.
+    /// Deals a certain number of <see cref="ICard"/>s to the <see cref="Table"/>.
     /// </summary>
     public class DealCardsFromTableDeckToTable : BaseGameAction
     {
         private readonly IGameMediator gm;
 
         /// <summary>
-        /// Creates a new instance of DealCardsFromTableDeckToTable.
+        /// Initializes a new instance of the <see cref="DealCardsFromTableDeckToTable"/> class.
         /// </summary>
         /// <param name="gm">The <see cref="IGameMediator"/> that the action will 
         /// communicate with.</param>
-        /// <param name="deckPos">Position of the <see cref="DeckOfPlayingCards"/>
-        /// on the <see cref="Table"/> to draw <see cref="PlayingCard"/>s from.</param>
-        /// <param name="numberOfCardsToDealToTable">Number of <see cref="PlayingCard"/>s to draw.</param>
+        /// <param name="deckPos">Position of the <see cref="IDeck"/>
+        /// on the <see cref="Table"/> to draw <see cref="ICard"/>s from.</param>
+        /// <param name="numberOfCardsToDealToTable">Number of <see cref="ICard"/>s to draw.</param>
         /// <param name="tableNeutralZone">Neutral zone on the <see cref="Table"/> to
-        /// play the <see cref="PlayingCard"/>s to.</param>
-        /// <param name="faceup">Whether to play the <see cref="PlayingCard"/>s face up.</param>
+        /// play the <see cref="ICard"/>s to.</param>
+        /// <param name="faceup">Whether to play the <see cref="ICard"/>s face up.</param>
         /// <param name="name">Name of the action.</param>
         /// <param name="description">Description of the action.</param>
         public DealCardsFromTableDeckToTable(
