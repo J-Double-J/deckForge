@@ -3,7 +3,7 @@ namespace DeckForge.GameElements.Resources
     /// <summary>
     /// Base class for all cards.
     /// </summary>
-    abstract public class Card : ICard
+    public abstract class Card : ICard
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Card"/> class.

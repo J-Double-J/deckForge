@@ -4,7 +4,7 @@ using FluentAssertions;
 namespace UnitTests.GameElements
 {
     [TestClass]
-    public class CardTests
+    public class PlayingCardTests
     {
         [TestMethod]
         public void FlipCardNumerousTimes()
@@ -32,6 +32,5 @@ namespace UnitTests.GameElements
 
             c.PrintCard().Should().Be("COVERED", "the card is facedown right now, so it should not be clear what the card's value is");
         }
-
     }
 }

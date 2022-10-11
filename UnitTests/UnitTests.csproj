@@ -24,4 +24,10 @@
     <ProjectReference Include="..\deckForge\deckForge.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="GameElements\Card Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GameElements\Card Tests\" />
+  </ItemGroup>
 </Project>

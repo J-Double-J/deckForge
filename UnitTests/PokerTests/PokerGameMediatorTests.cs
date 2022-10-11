@@ -162,7 +162,7 @@ namespace UnitTests.PokerTests
 
             playerOne.InvestedCash.Should().Be(0, "the player folded through the betting phase");
             playerTwo.InvestedCash.Should().Be(0, "the player folded through the betting phase");
-            playerThree.InvestedCash.Should().Be(10, "the player called the bet");
+            playerThree.InvestedCash.Should().Be(0, "the player called the bet, and won back their money");
             playerFour.InvestedCash.Should().Be(0, "the player folded through the betting phase");
         }
 
