@@ -1,9 +1,16 @@
+using DeckForge.GameElements.Resources.Cards.CardEvents;
+
 namespace DeckForge.GameElements.Resources
 {
-    public interface ICard 
+    /// <summary>
+    /// Interface shared among all <see cref="ICard"/>s.
+    /// </summary>
+    public interface ICard
     {
+        event EventHandler<CardIsRemovedFromTableEventArgs> CardIsRemovedFromTable;
+
         /// <summary>
-        /// Gets or sets whether the <see cref="ICard"/> is facedown or not. If true,
+        /// Gets or sets a value indicating whether the <see cref="ICard"/> is facedown or not. If true,
         /// <see cref="ICard"/> is facedown.
         /// </summary>
         public bool Facedown { get; set; }

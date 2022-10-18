@@ -1,5 +1,5 @@
-﻿using System;
-using DeckForge.GameConstruction;
+﻿using DeckForge.GameConstruction;
+using DeckForge.GameElements.Resources.Cards.CardEvents;
 
 namespace DeckForge.GameElements.Resources
 {
@@ -64,7 +64,7 @@ namespace DeckForge.GameElements.Resources
             set
             {
                 healthVal = value;
-                if (healthVal == 0)
+                if (healthVal <= 0)
                 {
                     Die();
                 }
@@ -94,11 +94,10 @@ namespace DeckForge.GameElements.Resources
             }
         }
 
-        // TODO: Raise event that this card died. Should card really delete itself?
-
         /// <inheritdoc/>
         public virtual void Die()
         {
+            OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs());
         }
     }
 }

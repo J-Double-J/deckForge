@@ -404,5 +404,58 @@ namespace UnitTests.GameElements
             table.TableDecks[0].Count.Should().Be(50, "two cards were taken from the deck");
             table.TableNeutralZones[0].Count.Should().Be(2, "the two cards were placed in the neutral zone");
         }
+
+        [TestMethod]
+        public void CardCanBeRemovedFromTable_ViaLookup()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            Table table = new(gm, 1);
+            List<ICard> cardsToAdd = new()
+            {
+                new PlayingCard(10, "J"),
+                new PlayingCard(11, "J"),
+                new PlayingCard(12, "J")
+            };
+
+            table.AddCardsTo_PlayerZone(cardsToAdd, 0);
+
+            table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
+
+            table.PlayerPlayedCards[0].Count.Should().Be(2, "one of the cards were removed");
+        }
+
+        [TestMethod]
+        public void SimilarCardsAreCorrectlyDistinguished_AndRemoved_ViaLookup()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            Table table = new(gm, 1);
+            BaseCharacterCard attackingCard = new(gm, 2, 7, "Aggressor");
+            List<ICard> cardsToAdd = new()
+            {
+                new BaseCharacterCard(gm, 5, 5, "Surveyor"),
+                new BaseCharacterCard(gm, 5, 5, "Surveyor")
+            };
+
+            table.AddCardsTo_PlayerZone(cardsToAdd, 0);
+            attackingCard.Attack((ICharacterCard)table.PlayerPlayedCards[0][1]);
+            table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
+
+            BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerPlayedCards[0][0];
+            remainingCard.HealthVal.Should().Be(5, "the unattacked card should be the remaining card");
+        }
+
+        [TestMethod]
+        public void CardIsRemovedWhenItDies()
+        {
+            IGameMediator gm = new BaseGameMediator(0);
+            Table table = new(gm, 1);
+            BaseCharacterCard attackingCard = new(gm, 2, 7, "Aggressor");
+            BaseCharacterCard poorVictim = new(gm, 0, 1, "Villager");
+
+            table.AddCardTo_PlayerZone(poorVictim, 0);
+            attackingCard.Attack(poorVictim);
+
+            table.PlayerPlayedCards[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
+        }
     }
 }

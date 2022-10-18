@@ -1,3 +1,5 @@
+using DeckForge.GameElements.Resources.Cards.CardEvents;
+
 namespace DeckForge.GameElements.Resources
 {
     /// <summary>
@@ -13,6 +15,12 @@ namespace DeckForge.GameElements.Resources
         {
             Facedown = facedown;
         }
+
+        /// <summary>
+        /// Event is raised whenever this card is about to be removed from the <see cref="ITable"/>.
+        /// Used to infrom the <see cref="ITable"/> to remove this <see cref="Card"/>.
+        /// </summary>
+        public event EventHandler<CardIsRemovedFromTableEventArgs>? CardIsRemovedFromTable;
 
         /// <inheritdoc/>
         public bool Facedown
@@ -35,5 +43,14 @@ namespace DeckForge.GameElements.Resources
 
         /// <inheritdoc/>
         public abstract string PrintCard();
+
+        /// <summary>
+        /// Invokes the CardIsRemovedFromTableEventHandler. Default informs Table to remove <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="e">Args for <see cref="CardIsRemovedFromTableEventArgs"/>.</param>
+        protected virtual void OnCardIsRemovedFromTable(CardIsRemovedFromTableEventArgs e)
+        {
+            CardIsRemovedFromTable?.Invoke(this, e);
+        }
     }
 }

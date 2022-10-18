@@ -15,6 +15,7 @@
 
         /// <summary>
         /// This <see cref="ICharacterCard"/> dies and does any on-death effects.
+        /// Raises CardIsRemovedFromTableEventArgs after effects to be removed.
         /// </summary>
         public void Die();
     }

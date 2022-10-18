@@ -145,6 +145,20 @@ namespace DeckForge.GameElements
             bool isFaceup = true);
 
         /// <summary>
+        /// Adds a card to the player zone and registers the table to any events of interest.
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to add to the table.</param>
+        /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
+        public void AddCardTo_PlayerZone(ICard card, int playerZone);
+
+        /// <summary>
+        /// Adds a list of <see cref="ICard"/>s to the player zone and registers the table to any events of interest.
+        /// </summary>
+        /// <param name="cards"><see cref="ICard"/>s to add to the table.</param>
+        /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
+        public void AddCardsTo_PlayerZone(List<ICard> cards, int playerZone);
+
+        /// <summary>
         /// Adds a <see cref="ICard"/> to a neutral zone.
         /// </summary>
         /// <param name="card"><see cref="ICard"/> to be added.</param>
@@ -157,6 +171,13 @@ namespace DeckForge.GameElements
         /// <param name="cards">List of <see cref="ICard"/>s to add.</param>
         /// <param name="neutralZone">ID of the neutral zone to add the <see cref="ICard"/>s to.</param>
         public void AddCardsTo_NeutralZone(List<ICard> cards, int neutralZone);
+
+        /// <summary>
+        /// Removes a <see cref="ICard"/> from the table in a specific player zone
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to remove from the table.</param>
+        /// <param name="playerZone">Player zone to remove the <see cref="ICard"/>.</param>
+        public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone);
 
         /// <summary>
         /// Picks up all cards from every spot on the <see cref="ITable"/>.

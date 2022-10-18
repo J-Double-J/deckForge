@@ -1,5 +1,6 @@
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Resources.Cards.CardEvents;
 
 namespace DeckForge.GameElements
 {
@@ -366,6 +367,25 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
+        public void AddCardTo_PlayerZone(ICard card, int playerZone)
+        {
+            card.CardIsRemovedFromTable += (sender, e) =>
+            {
+                RemoveCardFromTable_FromPlayerZone((ICard)sender!, playerZone);
+            };
+            PlayerPlayedCards[playerZone].Add(card);
+        }
+
+        /// <inheritdoc/>
+        public void AddCardsTo_PlayerZone(List<ICard> cards, int playerZone)
+        {
+            foreach (ICard card in cards)
+            {
+                AddCardTo_PlayerZone(card, playerZone);
+            }
+        }
+
+        /// <inheritdoc/>
         public void AddCardTo_NeutralZone(ICard card, int neutralZone)
         {
             TableNeutralZones[neutralZone].Add(card);
@@ -376,6 +396,12 @@ namespace DeckForge.GameElements
         {
             var mergedLists = TableNeutralZones[neutralZone].Concat(cards).ToList();
             TableNeutralZones[neutralZone] = mergedLists;
+        }
+
+        /// <inheritdoc/>
+        public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
+        {
+            PlayerPlayedCards[playerZone].Remove(card);
         }
 
         /// <inheritdoc/>
