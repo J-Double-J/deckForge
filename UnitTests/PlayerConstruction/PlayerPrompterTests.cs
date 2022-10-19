@@ -10,11 +10,15 @@ namespace UnitTests.PlayerConstruction
         public void PlayerCanChooseFromPrompt_WithValidChoice() {
             var stringReader = new StringReader("1");
             Console.SetIn(stringReader);
-            string prompt = "What number is your favorite?\n" +
-                "1) 1!\n" +
-                "2) 2!\n" +
-                "3) Neither of these.";
-            PlayerPrompter pp = new(prompt, 3);
+            Dictionary<int, string> prompt = new()
+            {
+                { 0, "Which number is your favorite?" },
+                { 1, "1" },
+                { 2, "2" },
+                { 3, "Neither of these." }
+            };
+
+            PlayerPrompter pp = new(prompt);
 
             pp.Prompt().Should().Be(1, "the Player chose option 1.");
         }

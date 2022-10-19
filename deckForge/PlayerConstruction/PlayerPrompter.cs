@@ -2,19 +2,17 @@
 {
     public class PlayerPrompter
     {
-        private string prompt;
-        private int optionCount;
+        private Dictionary<int, string> prompt;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerPrompter"/> class.
         /// </summary>
         /// <param name="prompt">The prompt the player will be shown when they need to make a choice. First option
-        /// starts at 1.</param>
+        /// starts at 1. For any headers in the prompt set it to key 0.</param>
         /// <param name="optionCount">The number of valid options for the <see cref="IPlayer"/> to choose from.</param>
-        public PlayerPrompter(string prompt, int optionCount)
+        public PlayerPrompter(Dictionary<int, string> prompt)
         {
             this.prompt = prompt;
-            this.optionCount = optionCount;
         }
 
         /// <summary>
@@ -26,7 +24,19 @@
             string? response;
             do
             {
-                Console.WriteLine(prompt);
+
+                foreach (var entry in prompt)
+                {
+                    if (entry.Key != 0)
+                    {
+                        Console.WriteLine($"\t{entry.Key}) {entry.Value}");
+                    }
+                    else
+                    {
+                        Console.WriteLine(entry.Value);
+                    }
+                }
+
                 response = Console.ReadLine();
             }
             while (!IsValidResponse(response));
@@ -38,7 +48,7 @@
         {
             if (int.TryParse(response, out int numericResponse))
             {
-                if (numericResponse > 0 && numericResponse <= optionCount)
+                if (numericResponse > 0 && prompt.ContainsKey(numericResponse))
                 {
                     return true;
                 }

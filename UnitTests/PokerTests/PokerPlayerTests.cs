@@ -129,7 +129,7 @@ namespace UnitTests.PokerTests
             }
             else if (OperatingSystem.IsWindows())
             {
-                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\r\n", "Player can do any of the preflop options");
+                output.ToString().Should().Be("Would you like to:\r\n\t1) Call\r\n\t2) Raise\r\n\t3) Fold\r\n\t4) All In!\r\n", "Player can do any of the preflop options");
             } // Unsure why there needs to be \r here but no where else, but I suspect it has to do with Console.WriteLine() on windows
         }
 
@@ -153,8 +153,18 @@ namespace UnitTests.PokerTests
             }
             else if (OperatingSystem.IsWindows())
             {
-                output.ToString().Should().Be("Would you like to:\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\t5) Check\n\r\n", "Player can do most post flop options");
+                output.ToString().Should().Be("Would you like to:\r\n\t2) Raise\r\n\t3) Fold\r\n\t4) All In!\r\n\t5) Check\r\n", "Player can do most post flop options");
             }
+        }
+
+        [TestMethod]
+        public void testingPurposes()
+        {
+            StringWriter output = new();
+            Console.SetOut(output);
+            Console.WriteLine("\tHello World!");
+
+            output.ToString().TrimEnd().Should().Be("\tHello World!");
         }
 
         [TestMethod]
@@ -173,11 +183,11 @@ namespace UnitTests.PokerTests
 
             if (OperatingSystem.IsMacOS())
             {
-                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\n", "Player cannot Check as they do not match the bet");
+                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n", "Player cannot Check as they do not match the bet");
             }
             else if (OperatingSystem.IsWindows())
             {
-                output.ToString().Should().Be("Would you like to:\n\t1) Call\n\t2) Raise\n\t3) Fold\n\t4) All In!\n\r\n", "Player cannot Check as they do not match the bet");
+                output.ToString().Should().Be("Would you like to:\r\n\t1) Call\r\n\t2) Raise\r\n\t3) Fold\r\n\t4) All In!\r\n", "Player cannot Check as they do not match the bet");
             }
         }
 
@@ -201,7 +211,7 @@ namespace UnitTests.PokerTests
             }
             else if (OperatingSystem.IsWindows())
             {
-                output.ToString().Should().Be("Would you like to:\n\t3) Fold\n\t4) All In!\n\r\n", "Player can go all in to match");
+                output.ToString().Should().Be("Would you like to:\r\n\t3) Fold\r\n\t4) All In!\r\n", "Player can go all in to match");
             }
         }
     }

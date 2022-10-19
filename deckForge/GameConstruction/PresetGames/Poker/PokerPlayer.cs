@@ -177,63 +177,29 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
         /// <returns>Returns the integer repressenting the choice the <see cref="PokerPlayer"/> chose.</returns>
         protected int GetValidChoice(bool isPreFlop = false)
         {
-            string prompt = "Would you like to:\n";
-            Dictionary<int, bool> validChoices = new();
-
-            for (int i = 1; i < 6; i++)
-            {
-                validChoices.Add(i, false);
-            }
+            Dictionary<int, string> prompt = new() { { 0, "Would you like to:" } };
 
             if (pokerGM.CurrentBet > InvestedCash && (pokerGM.CurrentBet != (InvestedCash + BettingCash)))
             {
-                prompt += "\t1) Call\n";
-                validChoices[0] = true;
+                prompt.Add(1, "Call");
             }
 
             if (BettingCash > pokerGM.CurrentBet)
             {
-                prompt += "\t2) Raise\n";
-                validChoices[1] = true;
+                prompt.Add(2, "Raise");
             }
 
-            prompt += "\t3) Fold\n";
-            validChoices[2] = true;
-
-            prompt += "\t4) All In!\n";
-            validChoices[3] = true;
+            prompt.Add(3, "Fold");
+            prompt.Add(4, "All In!");
 
             if (pokerGM.CurrentBet == InvestedCash && isPreFlop == false)
             {
-                prompt += "\t5) Check\n";
-                validChoices[4] = true;
+                prompt.Add(5, "Check");
             }
 
             int responseVal;
-            while (true)
-            {
-                PlayerPrompter preFlopPrompt;
-
-                if (isPreFlop)
-                {
-                    preFlopPrompt = new(prompt, 4);
-                }
-                else
-                {
-                    preFlopPrompt = new(prompt, 5);
-                }
-
-                responseVal = preFlopPrompt.Prompt();
-
-                if (validChoices[responseVal - 1] == true)
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid Choice");
-                }
-            }
+            PlayerPrompter playerPrompter = new(prompt);
+            responseVal = playerPrompter.Prompt();
 
             return responseVal;
         }
