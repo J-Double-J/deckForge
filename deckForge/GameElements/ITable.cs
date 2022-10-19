@@ -21,9 +21,9 @@ namespace DeckForge.GameElements
         public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones { get; }
 
         /// <summary>
-        /// Gets the lists of <see cref="ICard"/>s in the different zones on the <see cref="Table"/>.
+        /// Gets a readonly list of <see cref="ICard"/>s in the different non-player owned zones on the <see cref="Table"/>.
         /// </summary>
-        public List<List<ICard>> TableNeutralZones { get; }
+        public IReadOnlyList<IReadOnlyList<ICard>> TableNeutralZones { get; }
 
         /// <summary>
         /// Prints the current <see cref="ITable"/> state.

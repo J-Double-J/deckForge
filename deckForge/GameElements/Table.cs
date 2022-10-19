@@ -11,6 +11,7 @@ namespace DeckForge.GameElements
     public class Table : ITable
     {
         private List<List<ICard>> playerZones;
+        private List<List<ICard>> neutralZones;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -26,7 +27,7 @@ namespace DeckForge.GameElements
             GM.RegisterTable(this);
 
             playerZones = new();
-            TableNeutralZones = new();
+            neutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
@@ -37,7 +38,7 @@ namespace DeckForge.GameElements
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
                 List<ICard> cards = new();
-                TableNeutralZones.Add(cards);
+                neutralZones.Add(cards);
             }
 
             TableDecks = new();
@@ -58,7 +59,7 @@ namespace DeckForge.GameElements
             GM.RegisterTable(this);
 
             playerZones = new();
-            TableNeutralZones = new();
+            neutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
@@ -69,7 +70,7 @@ namespace DeckForge.GameElements
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
                 List<ICard> cards = new();
-                TableNeutralZones.Add(cards);
+                neutralZones.Add(cards);
             }
 
             TableDecks = new()
@@ -97,7 +98,7 @@ namespace DeckForge.GameElements
             GM.RegisterTable(this);
 
             playerZones = new();
-            TableNeutralZones = new();
+            neutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
@@ -108,7 +109,7 @@ namespace DeckForge.GameElements
             for (var i = 0; i < tableNeutralZonesCount; i++)
             {
                 List<ICard> cards = new();
-                TableNeutralZones.Add(cards);
+                neutralZones.Add(cards);
             }
 
             TableDecks = initDecks;
@@ -135,9 +136,9 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public List<List<ICard>> TableNeutralZones
+        public IReadOnlyList<IReadOnlyList<ICard>> TableNeutralZones
         {
-            get;
+            get { return neutralZones; }
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public List<ICard> GetCardsForSpecificNeutralZone(int neutralZone)
         {
-            return TableNeutralZones[neutralZone];
+            return neutralZones[neutralZone];
         }
 
         /// <inheritdoc/>
@@ -360,7 +361,7 @@ namespace DeckForge.GameElements
                 if (drawnCard is not null)
                 {
                     drawnCard.Facedown = isFaceup;
-                    TableNeutralZones[neutralZone].Add(drawnCard);
+                    neutralZones[neutralZone].Add(drawnCard);
                     retVal.Add(drawnCard);
                 }
             }
@@ -390,14 +391,14 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void AddCardTo_NeutralZone(ICard card, int neutralZone)
         {
-            TableNeutralZones[neutralZone].Add(card);
+            neutralZones[neutralZone].Add(card);
         }
 
         /// <inheritdoc/>
         public void AddCardsTo_NeutralZone(List<ICard> cards, int neutralZone)
         {
             var mergedLists = TableNeutralZones[neutralZone].Concat(cards).ToList();
-            TableNeutralZones[neutralZone] = mergedLists;
+            neutralZones[neutralZone] = mergedLists;
         }
 
         /// <inheritdoc/>
@@ -411,7 +412,7 @@ namespace DeckForge.GameElements
         {
             List<ICard> cards = new();
 
-            foreach (var neutralCards in TableNeutralZones)
+            foreach (var neutralCards in neutralZones)
             {
                 cards.AddRange(neutralCards);
                 neutralCards.Clear();
