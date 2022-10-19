@@ -1,4 +1,5 @@
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
 {
@@ -14,6 +15,11 @@ namespace DeckForge.GameElements.Resources
         /// <see cref="ICard"/> is facedown.
         /// </summary>
         public bool Facedown { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IPlayer"/> who owns this <see cref="ICard"/>.
+        /// </summary>
+        public IPlayer? OwnedBy { get; set; }
 
         /// <summary>
         /// Gets the string representing the card.

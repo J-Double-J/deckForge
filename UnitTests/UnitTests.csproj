@@ -27,7 +27,4 @@
   <ItemGroup>
     <None Remove="GameElements\Card Tests\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GameElements\Card Tests\" />
-  </ItemGroup>
 </Project>

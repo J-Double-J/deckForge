@@ -1,4 +1,5 @@
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
 {
@@ -23,10 +24,10 @@ namespace DeckForge.GameElements.Resources
         public event EventHandler<CardIsRemovedFromTableEventArgs>? CardIsRemovedFromTable;
 
         /// <inheritdoc/>
-        public bool Facedown
-        {
-            get; set;
-        }
+        public bool Facedown { get; set; }
+
+        /// <inheritdoc/>
+        public virtual IPlayer? OwnedBy { get; set; }
 
         /// <inheritdoc/>
         public void Flip()

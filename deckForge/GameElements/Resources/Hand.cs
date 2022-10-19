@@ -89,7 +89,7 @@ namespace DeckForge.GameElements.Resources
         {
             if (MaxHandSize < 0 || CurrentHandSize < MaxHandSize)
             {
-                hand.Add((ICard)resource);
+                hand.Add(resource);
             }
         }
 

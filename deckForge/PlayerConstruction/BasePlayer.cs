@@ -161,22 +161,24 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public virtual ICard? DrawCard(int deckPosition = 0)
         {
-            ICard? c = GM.DrawCardFromDeck(deckPosition);
-            if (c != null)
+            ICard? card = GM.DrawCardFromDeck(deckPosition);
+            if (card != null)
             {
-                PlayerHand.AddResource(c);
+                card.OwnedBy = this;
+                PlayerHand.AddResource(card);
             }
             else
             {
                 Console.WriteLine("Deck is Empty.");
             }
 
-            return c;
+            return card;
         }
 
         /// <inheritdoc/>
         public virtual void AddCardToHand(ICard card)
         {
+            card.OwnedBy = this;
             PlayerHand.AddResource(card);
         }
 
@@ -198,19 +200,19 @@ namespace DeckForge.PlayerConstruction
             }
             while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
-            ICard c = PlayerHand.GetCardAt(selectedVal);
-            PlayerHand.RemoveResource(c);
+            ICard card = PlayerHand.GetCardAt(selectedVal);
+            PlayerHand.RemoveResource(card);
 
             if (facedown)
             {
-                c.Flip();
+                card.Flip();
             }
 
             // TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
-            GM.PlayerPlayedCard(PlayerID, c);
-            OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(c));
+            GM.PlayerPlayedCard(PlayerID, card);
+            OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(card));
 
-            return c;
+            return card;
         }
 
         /// <inheritdoc/>

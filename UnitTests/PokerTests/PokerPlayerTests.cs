@@ -158,16 +158,6 @@ namespace UnitTests.PokerTests
         }
 
         [TestMethod]
-        public void testingPurposes()
-        {
-            StringWriter output = new();
-            Console.SetOut(output);
-            Console.WriteLine("\tHello World!");
-
-            output.ToString().TrimEnd().Should().Be("\tHello World!");
-        }
-
-        [TestMethod]
         public void PokerPlayerGetsCorrectPromptWhenNotMatchingBet()
         {
             PokerGameMediator gm = new(1);
