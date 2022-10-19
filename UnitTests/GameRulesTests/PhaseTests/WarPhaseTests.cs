@@ -126,7 +126,7 @@ namespace UnitTests.PhaseTests
             phase.StartPhase();
 
             table.PrintTableState();
-            List<List<ICard>> tableState = table.TableState;
+            IReadOnlyList<IReadOnlyList<ICard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
             foreach (List<ICard> playedCardsInFrontOfPlayer in tableState)

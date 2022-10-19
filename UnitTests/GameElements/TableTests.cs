@@ -374,11 +374,11 @@ namespace UnitTests.GameElements
             table.AddCardsTo_NeutralZone(
                 new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
             table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
-            table.PlayerPlayedCards[0].Add(new PlayingCard(3, "J"));
-            table.PlayerPlayedCards[1].Add(new PlayingCard(4, "J"));
-            table.PlayerPlayedCards[2].Add(new PlayingCard(5, "J"));
-            table.PlayerPlayedCards[3].Add(new PlayingCard(6, "J"));
-            table.PlayerPlayedCards[3].Add(new PlayingCard(7, "J"));
+            table.AddCardTo_PlayerZone(new PlayingCard(3, "J"), 0);
+            table.AddCardTo_PlayerZone(new PlayingCard(4, "J"), 1);
+            table.AddCardTo_PlayerZone(new PlayingCard(5, "J"), 2);
+            table.AddCardTo_PlayerZone(new PlayingCard(6, "J"), 3);
+            table.AddCardTo_PlayerZone(new PlayingCard(7, "J"), 3);
 
             table.PickUp_AllCardsFromTable();
 
@@ -387,7 +387,7 @@ namespace UnitTests.GameElements
                 cards.Count.Should().Be(0, "no cards should be in the neutral zones");
             }
 
-            foreach (var cards in table.PlayerPlayedCards)
+            foreach (var cards in table.PlayerZones)
             {
                 cards.Count.Should().Be(0, "no cards should be left in player spots");
             }
@@ -421,7 +421,7 @@ namespace UnitTests.GameElements
 
             table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
 
-            table.PlayerPlayedCards[0].Count.Should().Be(2, "one of the cards were removed");
+            table.PlayerZones[0].Count.Should().Be(2, "one of the cards were removed");
         }
 
         [TestMethod]
@@ -437,10 +437,10 @@ namespace UnitTests.GameElements
             };
 
             table.AddCardsTo_PlayerZone(cardsToAdd, 0);
-            attackingCard.Attack((ICharacterCard)table.PlayerPlayedCards[0][1]);
+            attackingCard.Attack((ICharacterCard)table.PlayerZones[0][1]);
             table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
 
-            BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerPlayedCards[0][0];
+            BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerZones[0][0];
             remainingCard.HealthVal.Should().Be(5, "the unattacked card should be the remaining card");
         }
 
@@ -455,7 +455,7 @@ namespace UnitTests.GameElements
             table.AddCardTo_PlayerZone(poorVictim, 0);
             attackingCard.Attack(poorVictim);
 
-            table.PlayerPlayedCards[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
+            table.PlayerZones[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
         }
     }
 }

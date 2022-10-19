@@ -55,7 +55,7 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public List<List<ICard>> CurrentTableState
+        public IReadOnlyList<IReadOnlyList<ICard>> CurrentTableState
         {
             get { return GameTable!.TableState; }
         }

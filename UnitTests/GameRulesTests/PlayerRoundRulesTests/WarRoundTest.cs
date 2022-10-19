@@ -61,19 +61,19 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
 
             resourcesToAdd = riggedCardsForPlayerOne.Cast<object>().ToList();
             players[1].AddMultipleResourcesToCollection(0, resourcesToAdd);
-            
+
             IRoundRules rr = new WarRoundRules(gm, playerIDs);
 
             rr.StartRound();
 
             table.PrintTableState();
-            List<List<ICard>> tableState = table.TableState;
+            IReadOnlyList<IReadOnlyList<ICard>> tableState = table.TableState;
 
             tableState.Count.Should().Be(2, "there are two players at the table");
-            
-            //Since players never played directly from their starting deck, 26 starting cards + 3 Player 0 cards + 3 Player 1 cards
+
+            // Since players never played directly from their starting deck, 26 starting cards + 3 Player 0 cards + 3 Player 1 cards
             players[0].CountOfResourceCollection(0).Should().Be(32, "they added 6 cards to their deck");
             players[1].CountOfResourceCollection(0).Should().Be(26, "player 1 lost 3 of their cards");
-        }        
+        }
     }
 }

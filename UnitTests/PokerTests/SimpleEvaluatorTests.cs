@@ -25,8 +25,8 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
-            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(1, "J"), new PlayingCard(2, "J") });
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, 0);
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(1, "J"), new PlayingCard(2, "J") }, 1);
 
             hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
                 .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
@@ -55,9 +55,8 @@ namespace UnitTests.PokerTests
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
                 0);
-
-            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
-            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, 0);
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, 1);
 
             hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
                 .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()

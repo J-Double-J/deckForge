@@ -10,6 +10,8 @@ namespace DeckForge.GameElements
     /// </summary>
     public class Table : ITable
     {
+        private List<List<ICard>> playerZones;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
@@ -23,13 +25,13 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayerPlayedCards = new();
+            playerZones = new();
             TableNeutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
                 List<ICard> cards = new();
-                PlayerPlayedCards.Add(cards);
+                playerZones.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
@@ -55,13 +57,13 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayerPlayedCards = new();
+            playerZones = new();
             TableNeutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
                 List<ICard> cards = new();
-                PlayerPlayedCards.Add(cards);
+                playerZones.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
@@ -94,13 +96,13 @@ namespace DeckForge.GameElements
             GM = mediator;
             GM.RegisterTable(this);
 
-            PlayerPlayedCards = new();
+            playerZones = new();
             TableNeutralZones = new();
 
             for (var i = 0; i < playerCount; i++)
             {
                 List<ICard> cards = new();
-                PlayerPlayedCards.Add(cards);
+                playerZones.Add(cards);
             }
 
             for (var i = 0; i < tableNeutralZonesCount; i++)
@@ -121,15 +123,15 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Gets the state of the <see cref="Table"/>.
         /// </summary>
-        public List<List<ICard>> TableState
+        public IReadOnlyList<IReadOnlyList<ICard>> TableState
         {
-            get { return PlayerPlayedCards; }
+            get { return PlayerZones; }
         }
 
         /// <inheritdoc/>
-        public List<List<ICard>> PlayerPlayedCards
+        public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones
         {
-            get;
+            get { return playerZones; }
         }
 
         /// <inheritdoc/>
@@ -147,7 +149,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void PrintTableState()
         {
-            foreach (List<ICard> player in PlayerPlayedCards)
+            foreach (IReadOnlyList<ICard> player in PlayerZones)
             {
                 foreach (ICard c in player)
                 {
@@ -159,7 +161,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public List<ICard> GetCardsForSpecificPlayer(int playerID)
         {
-            return PlayerPlayedCards[playerID];
+            return playerZones[playerID];
         }
 
         /// <inheritdoc/>
@@ -173,7 +175,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                PlayerPlayedCards[playerID].Add(c);
+                playerZones[playerID].Add(c);
             }
             catch
             {
@@ -186,7 +188,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (ICard c in PlayerPlayedCards[playerID])
+                foreach (ICard c in PlayerZones[playerID])
                 {
                     if (c.Facedown != facedown)
                     {
@@ -203,7 +205,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false)
         {
-            for (var i = 0; i < PlayerPlayedCards.Count; i++)
+            for (var i = 0; i < PlayerZones.Count; i++)
             {
                 Flip_AllCardsOneWay_SpecificPlayer(i, facedown);
             }
@@ -214,7 +216,7 @@ namespace DeckForge.GameElements
         {
             try
             {
-                foreach (ICard c in PlayerPlayedCards[playerID])
+                foreach (ICard c in PlayerZones[playerID])
                 {
                     c.Flip();
                 }
@@ -228,7 +230,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void Flip_AllCardsEitherWay_AllPlayers()
         {
-            for (var i = 0; i < PlayerPlayedCards.Count; i++)
+            for (var i = 0; i < PlayerZones.Count; i++)
             {
                 Flip_AllCardsEitherWay_SpecificPlayer(i);
             }
@@ -239,8 +241,8 @@ namespace DeckForge.GameElements
         {
             try
             {
-                PlayerPlayedCards[playerID][cardPos].Flip();
-                return PlayerPlayedCards[playerID][cardPos];
+                PlayerZones[playerID][cardPos].Flip();
+                return PlayerZones[playerID][cardPos];
             }
             catch
             {
@@ -251,14 +253,14 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
         {
-            if (PlayerPlayedCards[playerID][cardPos].Facedown != facedown)
+            if (PlayerZones[playerID][cardPos].Facedown != facedown)
             {
-                PlayerPlayedCards[playerID][cardPos].Flip();
-                return PlayerPlayedCards[playerID][cardPos];
+                PlayerZones[playerID][cardPos].Flip();
+                return PlayerZones[playerID][cardPos];
             }
             else
             {
-                return PlayerPlayedCards[playerID][cardPos];
+                return PlayerZones[playerID][cardPos];
             }
         }
 
@@ -267,8 +269,8 @@ namespace DeckForge.GameElements
         {
             try
             {
-                ICard c = PlayerPlayedCards[playerID][cardPos];
-                PlayerPlayedCards[playerID].RemoveAt(cardPos);
+                ICard c = PlayerZones[playerID][cardPos];
+                playerZones[playerID].RemoveAt(cardPos);
                 return c;
             }
             catch
@@ -283,7 +285,7 @@ namespace DeckForge.GameElements
             try
             {
                 List<ICard> cards = new();
-                var numCardsToGrab = PlayerPlayedCards[playerID].Count;
+                var numCardsToGrab = PlayerZones[playerID].Count;
                 for (var i = 0; i < numCardsToGrab; i++)
                 {
                     cards.Add(RemoveSpecificCard_FromPlayer(playerID: playerID, cardPos: 0));
@@ -373,7 +375,7 @@ namespace DeckForge.GameElements
             {
                 RemoveCardFromTable_FromPlayerZone((ICard)sender!, playerZone);
             };
-            PlayerPlayedCards[playerZone].Add(card);
+            playerZones[playerZone].Add(card);
         }
 
         /// <inheritdoc/>
@@ -401,7 +403,7 @@ namespace DeckForge.GameElements
         /// <inheritdoc/>
         public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
         {
-            PlayerPlayedCards[playerZone].Remove(card);
+            playerZones[playerZone].Remove(card);
         }
 
         /// <inheritdoc/>
@@ -415,7 +417,7 @@ namespace DeckForge.GameElements
                 neutralCards.Clear();
             }
 
-            foreach (var playerCards in PlayerPlayedCards)
+            foreach (var playerCards in playerZones)
             {
                 cards.AddRange(playerCards);
                 playerCards.Clear();

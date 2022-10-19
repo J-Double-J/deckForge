@@ -26,7 +26,7 @@ namespace DeckForge.GameConstruction
         /// <summary>
         /// Gets the current <see cref="Table"/> state of the game.
         /// </summary>
-        public List<List<ICard>> CurrentTableState { get; }
+        public IReadOnlyList<IReadOnlyList<ICard>> CurrentTableState { get; }
 
         /// <summary>
         /// Gets the ITable registered to the <see cref="IGameMediator"/>.

@@ -206,8 +206,8 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
-            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, 0);
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") }, 1);
 
             pGM.EvaluateWinner();
 
@@ -235,9 +235,9 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayerPlayedCards[0].AddRange(new List<PlayingCard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
-            table.PlayerPlayedCards[1].AddRange(new List<PlayingCard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
-            table.PlayerPlayedCards[2].AddRange(new List<PlayingCard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, 0);
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, 1);
+            table.AddCardsTo_PlayerZone(new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") }, 2);
 
             pGM.EvaluateWinner();
 

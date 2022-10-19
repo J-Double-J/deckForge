@@ -16,9 +16,9 @@ namespace DeckForge.GameElements
         public List<IDeck> TableDecks { get; }
 
         /// <summary>
-        /// Gets the lists of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
+        /// Gets a readonly list of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
         /// </summary>
-        public List<List<ICard>> PlayerPlayedCards { get; }
+        public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones { get; }
 
         /// <summary>
         /// Gets the lists of <see cref="ICard"/>s in the different zones on the <see cref="Table"/>.
