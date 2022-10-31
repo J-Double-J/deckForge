@@ -194,18 +194,5 @@ namespace UnitTests.PlayerConstruction
 
             p.CountOfResourceCollection(0).Should().Be(49, "3 cards were drawn from the standard deck");
         }
-
-        [TestMethod]
-        public void PlayerCanAddCardToHand()
-        {
-            IGameMediator gm = new BaseGameMediator(1);
-            IPlayer p = new BasePlayer(gm, 0);
-            IDeck deck = new DeckOfPlayingCards();
-
-            ICard? drawnCard = deck.DrawCard();
-            p.AddCardToHand(drawnCard!);
-
-            p.HandSize.Should().Be(1, "because a card was added to the player's hand");
-        }
     }
 }

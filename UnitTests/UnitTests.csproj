@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\deckForge\deckForge.csproj" />
+    <ProjectReference Include="..\deckForge\DeckForge.csproj" />
   </ItemGroup>
 
   <ItemGroup>
