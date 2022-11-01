@@ -2,6 +2,7 @@
 using DeckForge.GameElements.Resources;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
 using DeckForge.GameRules.RoundConstruction.Rounds;
+using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
@@ -14,6 +15,8 @@ namespace DeckForge.GameConstruction
     /// </summary>
     public class BaseGameMediator : IGameMediator
     {
+        private DictionaryWithKeyEvents<CardModifiers, int> currentCardModifiers = new();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseGameMediator"/> class.
         /// </summary>
@@ -40,6 +43,7 @@ namespace DeckForge.GameConstruction
 
             GameOver = false;
             CurRound = 0;
+            DefaultCardModifierValue = 0;
         }
 
         /// <inheritdoc/>
@@ -98,6 +102,11 @@ namespace DeckForge.GameConstruction
         /// Gets or sets the <see cref="Table"/> that the game is played on.
         /// </summary>
         protected Table? GameTable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default card modifier value for any new key generated in CardModifer dictionary.
+        /// </summary>
+        protected int DefaultCardModifierValue { get; set; }
 
         /// <inheritdoc/>
         public void RegisterPlayer(IPlayer player)
@@ -202,6 +211,7 @@ namespace DeckForge.GameConstruction
             try
             {
                 GameTable!.PlaceCardOnTable(playerID, card);
+                ChangeCardModifierValueBy(CardModifiers.CardsPlayed, 1);
             }
             catch
             {
@@ -440,6 +450,38 @@ namespace DeckForge.GameConstruction
                     }
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public virtual void SetCardModifierValueTo(CardModifiers interestedModifier, int value)
+        {
+            currentCardModifiers[interestedModifier] = value;
+        }
+
+        /// <inheritdoc/>
+        public virtual void ChangeCardModifierValueBy(CardModifiers interestedModifier, int changeBy)
+        {
+            if (currentCardModifiers.ContainsKey(interestedModifier))
+            {
+                currentCardModifiers[interestedModifier] += changeBy;
+            }
+            else
+            {
+                currentCardModifiers[interestedModifier] = DefaultCardModifierValue + changeBy;
+            }
+        }
+
+        /// <inheritdoc/>
+        public int GetCurrentCardModifierValue(CardModifiers interestedModifier)
+        {
+            return currentCardModifiers.ContainsKey(interestedModifier) ? currentCardModifiers[interestedModifier]
+                : DefaultCardModifierValue;
+        }
+
+        /// <inheritdoc/>
+        public IKeyValueNotifier<CardModifiers, int> GetCardModifierKeyEvent(CardModifiers interestedModifier)
+        {
+            return currentCardModifiers.CreateOrGetKeyEventDictionaryEntry(interestedModifier);
         }
 
         /// <summary>

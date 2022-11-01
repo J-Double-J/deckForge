@@ -1,6 +1,7 @@
 using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
+using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
@@ -205,5 +206,35 @@ namespace DeckForge.GameConstruction
         /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="ITable"/>.</param>
         /// <param name="numberOfCardsToDealToEachPlayer">Number of cards each <see cref="IPlayer"/> will be dealt.</param>
         public void DealCardsFromDeckToAllPlayers(int deckPosition, int numberOfCardsToDealToEachPlayer);
+
+        /// <summary>
+        /// Sets the CardModifiers value.
+        /// </summary>
+        /// <param name="interestedModifier">The CardModifier value to change.</param>
+        /// <param name="value">Value to set the CardModifier value to.</param>
+        public void SetCardModifierValueTo(CardModifiers interestedModifier, int value);
+
+        /// <summary>
+        /// Change the CardModifiers value by a set amount. If no key is found, then
+        /// it creates a new key with a starting default value and then changes the value
+        /// by <paramref name="changeBy"/>.
+        /// </summary>
+        /// <param name="interestedModifier">The CardModifier value to change.</param>
+        /// <param name="changeBy">Value to change the CardModifier value by.</param>
+        public void ChangeCardModifierValueBy(CardModifiers interestedModifier, int changeBy);
+
+        /// <summary>
+        /// Gets or creates the <see cref="IKeyValueNotifier{CardModifiers, int}"/> for the specified key.
+        /// </summary>
+        /// <returns>The <see cref="IKeyValueNotifier{CardModifiers, int}"/> for the specified key.</returns>
+        /// <param name="interestedModifier">The CardModifier for the <see cref="IKeyValueNotifier{CardModifiers, int}"/>.</param>
+        public IKeyValueNotifier<CardModifiers, int> GetCardModifierKeyEvent(CardModifiers interestedModifier);
+
+        /// <summary>
+        /// Gets the current CardModifier value for the current CardModifier.
+        /// </summary>
+        /// <param name="interestedModifier">CardModifier value that is of interest.</param>
+        /// <returns>Value of the current modifier.</returns>
+        public int GetCurrentCardModifierValue(CardModifiers interestedModifier);
     }
 }

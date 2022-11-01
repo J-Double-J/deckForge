@@ -88,6 +88,12 @@ namespace DeckForge.PlayerConstruction
         public void AddCardToHand(ICard card);
 
         /// <summary>
+        /// Adds a List of <see cref="ICard"/>s to the <see cref="IPlayer"/>'s hand.
+        /// </summary>
+        /// <param name="cards"><see cref="ICard"/>s to add to the <see cref="IPlayer"/>'s hand.</param>
+        public void AddCardsToHand(List<ICard> cards);
+
+        /// <summary>
         /// Plays a card.
         /// </summary>
         /// <param name="facedown">Plays card facedown if <c>true</c>, otherwise faceup.</param>

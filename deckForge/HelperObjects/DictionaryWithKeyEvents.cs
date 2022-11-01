@@ -4,12 +4,27 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DeckForge.HelperObjects
 {
+
+
+    /// <summary>
+    /// Interface for an object that has an <see cref="DictionaryValueChangedEventArgs{TKey, TValue}"/> <see cref="EventHandler"/>.
+    /// </summary>
+    /// <typeparam name="TKey">Key value for <see cref="DictionaryValueChangedEventArgs{TKey, TValue}"/>.</typeparam>
+    /// <typeparam name="TValue">Value for a key in <see cref="DictionaryValueChangedEventArgs{TKey, TValue}"/>.</typeparam>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "File primarily used for Dictionary")]
+    public interface IKeyValueNotifier<TKey, TValue>
+    {
+        /// <summary>
+        /// Event associated with the given key in the dictionary.
+        /// </summary>
+        public event EventHandler<DictionaryValueChangedEventArgs<TKey, TValue>>? KeyEvent;
+    }
+
     /// <summary>
     /// EventArgs for whenever <see cref="DictionaryWithKeyEvents{TKey, TValue}"/> has a value changed in the dictionary.
     /// </summary>
     /// <typeparam name="TKey">Key associated with  the <see cref="DictionaryWithKeyEvents{TKey, TVal}"/>.</typeparam>
     /// <typeparam name="TValue">Value associated with the  the <see cref="DictionaryWithKeyEvents{TKey, TVal}"/>.</typeparam>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "File primarily used for Dictionary")]
     public class DictionaryValueChangedEventArgs<TKey, TValue> : EventArgs
     {
         /// <summary>
@@ -56,17 +71,6 @@ namespace DeckForge.HelperObjects
         {
             innerDict = new Dictionary<TKey, TValue>();
             eventDictionary = new Dictionary<TKey, KeyValueNotifier>();
-        }
-
-        /// <summary>
-        /// Interface for an object that has an <see cref="DictionaryValueChangedEventArgs{TKey, TValue}"/> <see cref="EventHandler"/>.
-        /// </summary>
-        public interface IKeyValueNotifier
-        {
-            /// <summary>
-            /// Event associated with the given key in the dictionary.
-            /// </summary>
-            public event EventHandler<DictionaryValueChangedEventArgs<TKey, TValue>>? KeyEvent;
         }
 
         /// <inheritdoc/>
@@ -213,7 +217,7 @@ namespace DeckForge.HelperObjects
         /// </summary>
         /// <param name="key">Key value to search for.</param>
         /// <returns>The key's associated <see cref="IKeyValueNotifier"/> if it exists, otherwise null.</returns>
-        public IKeyValueNotifier? GetKeyEventHandler(TKey key)
+        public IKeyValueNotifier<TKey, TValue>? GetKeyEventHandler(TKey key)
         {
             return eventDictionary.ContainsKey(key) ? eventDictionary[key] : null;
         }
@@ -245,7 +249,7 @@ namespace DeckForge.HelperObjects
         /// <param name="key">Key value to search for.</param>
         /// <returns>The key's associated <see cref="KeyValueNotifier"/> which can be used to subscribe to it's
         /// <see cref="KeyValueNotifier.KeyEvent"/>.</returns>
-        public IKeyValueNotifier CreateOrGetKeyEventDictionaryEntry(TKey key)
+        public IKeyValueNotifier<TKey, TValue> CreateOrGetKeyEventDictionaryEntry(TKey key)
         {
             if (!eventDictionary.ContainsKey(key))
             {
@@ -274,7 +278,7 @@ namespace DeckForge.HelperObjects
         /// <summary>
         /// Helper object that raises an event when prompted to.
         /// </summary>
-        private class KeyValueNotifier : IKeyValueNotifier
+        private class KeyValueNotifier : IKeyValueNotifier<TKey, TValue>
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="KeyValueNotifier"/> class.

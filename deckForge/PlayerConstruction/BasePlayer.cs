@@ -183,6 +183,15 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
+        public virtual void AddCardsToHand(List<ICard> cards)
+        {
+            foreach (ICard card in cards)
+            {
+                AddCardToHand(card);
+            }
+        }
+
+        /// <inheritdoc/>
         public virtual ICard? PlayCard(bool facedown = false)
         {
             string? input;
