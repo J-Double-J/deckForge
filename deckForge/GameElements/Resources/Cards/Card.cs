@@ -15,6 +15,7 @@ namespace DeckForge.GameElements.Resources
         public Card(bool facedown = true)
         {
             Facedown = facedown;
+            CardActive = false;
         }
 
         /// <summary>
@@ -28,6 +29,9 @@ namespace DeckForge.GameElements.Resources
 
         /// <inheritdoc/>
         public virtual IPlayer? OwnedBy { get; set; }
+
+        /// <inheritdoc/>
+        public bool CardActive { get; set; }
 
         /// <inheritdoc/>
         public void Flip()
@@ -44,6 +48,11 @@ namespace DeckForge.GameElements.Resources
 
         /// <inheritdoc/>
         public abstract string PrintCard();
+
+        /// <inheritdoc/>
+        public virtual void OnPlay(CardPlacedOnTableDetails placementDetails)
+        {
+        }
 
         /// <summary>
         /// Invokes the CardIsRemovedFromTableEventHandler. Default informs Table to remove <see cref="ICard"/>.

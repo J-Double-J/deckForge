@@ -210,6 +210,7 @@ namespace DeckForge.GameConstruction
         {
             try
             {
+                card.CardActive = true;
                 GameTable!.PlaceCardOnTable(playerID, card);
                 ChangeCardModifierValueBy(CardModifiers.CardsPlayed, 1);
             }

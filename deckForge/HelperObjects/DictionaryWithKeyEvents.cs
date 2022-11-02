@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DeckForge.HelperObjects
 {
-
-
     /// <summary>
     /// Interface for an object that has an <see cref="DictionaryValueChangedEventArgs{TKey, TValue}"/> <see cref="EventHandler"/>.
     /// </summary>

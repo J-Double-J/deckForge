@@ -6,7 +6,7 @@ namespace DeckForge.GameElements.Resources.Cards.Example_Cards
     /// <summary>
     /// A character card that increases in strength as <see cref="ICard"/>s are played.
     /// </summary>
-    public class MobPileCharacterCard : BaseCharacterCard
+    public class MobPileCharacterCard : CharacterCardWithEffect
     {
         private bool firstEventRecieved = false;
 
@@ -31,16 +31,19 @@ namespace DeckForge.GameElements.Resources.Cards.Example_Cards
         /// <param name="e">Arguments for the DictionaryValueChangedEventArgs.</param>
         private void IncreaseBy1_1(object? sender, DictionaryValueChangedEventArgs<CardModifiers, int> e)
         {
-            // Card ignores the first time this event is raised because it's itself being played and
-            // is increasing the number.
-            if (firstEventRecieved)
+            if (CardActive)
             {
-                HealthVal += 1;
-                AttackVal += 1;
-            }
-            else
-            {
-                firstEventRecieved = true;
+                // Card ignores the first time this event is raised because it's itself being played and
+                // is increasing the number.
+                if (firstEventRecieved)
+                {
+                    HealthVal += 1;
+                    AttackVal += 1;
+                }
+                else
+                {
+                    firstEventRecieved = true;
+                }
             }
         }
     }

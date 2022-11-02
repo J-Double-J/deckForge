@@ -1,5 +1,6 @@
 ﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
 {
@@ -8,7 +9,6 @@ namespace DeckForge.GameElements.Resources
     /// </summary>
     public class BaseCharacterCard : Card, ICharacterCard
     {
-        private readonly IGameMediator gm;
         private readonly string name;
         private int attackVal;
         private int healthVal;
@@ -22,10 +22,12 @@ namespace DeckForge.GameElements.Resources
         /// <param name="name">Name of the <see cref="ICharacterCard"/>.</param>
         public BaseCharacterCard(IGameMediator gm, int attack, int health, string name = "Placeholder")
         {
-            this.gm = gm;
+            GM = gm;
             this.name = name;
             attackVal = attack;
             healthVal = health;
+            BaseAttack = attack;
+            BaseHealth = health;
         }
 
         /// <summary>
@@ -71,6 +73,21 @@ namespace DeckForge.GameElements.Resources
             }
         }
 
+        /// <summary>
+        /// Gets the base attack value of the <see cref="ICharacterCard"/>.
+        /// </summary>
+        public int BaseAttack { get; }
+
+        /// <summary>
+        /// Gets the base health value of the <see cref="ICharacterCard"/>.
+        /// </summary>
+        public int BaseHealth { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IGameMediator"/> that is used to interact with other game elements.
+        /// </summary>
+        protected IGameMediator GM { get; }
+
         /// <inheritdoc/>
         public override string PrintCard()
         {
@@ -90,7 +107,7 @@ namespace DeckForge.GameElements.Resources
             }
             else
             {
-                throw new ArgumentException($"{this.GetType()} does not handle attacking a non-BaseCharacterCard");
+                throw new ArgumentException($"{GetType()} does not handle attacking a non-BaseCharacterCard");
             }
         }
 
@@ -98,6 +115,16 @@ namespace DeckForge.GameElements.Resources
         public virtual void Die()
         {
             OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs());
+            GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
+        }
+
+        /// <inheritdoc/>
+        public override void OnPlay(CardPlacedOnTableDetails placementDetails)
+        {
+            if (placementDetails.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
+            }
         }
     }
 }

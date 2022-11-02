@@ -1,6 +1,8 @@
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.HelperObjects;
+using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements
 {
@@ -171,12 +173,18 @@ namespace DeckForge.GameElements
             return neutralZones[neutralZone];
         }
 
+        // TODO: Deprecated?
+
         /// <inheritdoc/>
-        public void PlaceCardOnTable(int playerID, ICard c)
+        public void PlaceCardOnTable(int playerID, ICard card)
         {
             try
             {
-                playerZones[playerID].Add(c);
+                playerZones[playerID].Add(card);
+                card.OnPlay(
+                    new CardPlacedOnTableDetails(
+                        TablePlacementZones.PlayerZone,
+                        playerZones.Count - 1));
             }
             catch
             {
@@ -377,6 +385,10 @@ namespace DeckForge.GameElements
                 RemoveCardFromTable_FromPlayerZone((ICard)sender!, playerZone);
             };
             playerZones[playerZone].Add(card);
+            card.OnPlay(
+                    new CardPlacedOnTableDetails(
+                        TablePlacementZones.PlayerZone,
+                        playerZones.Count - 1));
         }
 
         /// <inheritdoc/>
@@ -405,6 +417,11 @@ namespace DeckForge.GameElements
         public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
         {
             playerZones[playerZone].Remove(card);
+
+            if (card is ICharacterCard)
+            {
+                GM.ChangeCardModifierValueBy(CardModifiers.CharacterCardsInPlayerZones, -1);
+            }
         }
 
         /// <inheritdoc/>
