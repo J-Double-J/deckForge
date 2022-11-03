@@ -12,7 +12,7 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Event for if the card is removed from the <see cref="Table"/>.
         /// </summary>
-        event EventHandler<CardIsRemovedFromTableEventArgs> CardIsRemovedFromTable;
+        event EventHandler<CardIsRemovedFromTableEventArgs>? CardIsRemovedFromTable;
 
         /// <summary>
         /// Gets or sets a value indicating whether the <see cref="ICard"/> is facedown or not. If true,
@@ -37,7 +37,7 @@ namespace DeckForge.GameElements.Resources
         /// Gets the details of the where the <see cref="ICard"/> is on the <see cref="ITable"/>.
         /// Returns <c>Null</c> if <see cref="ICard"/> is not on a <see cref="ITable"/>.
         /// </summary>
-        public CardPlacedOnTableDetails? TablePlacemenetDetails { get; }
+        public CardPlacedOnTableDetails? TablePlacementDetails { get; }
 
         /// <summary>
         /// Gets a readonly list of the <see cref="BaseCardTrait"/>s this card has.

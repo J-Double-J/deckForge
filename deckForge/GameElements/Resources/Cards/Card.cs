@@ -17,6 +17,7 @@ namespace DeckForge.GameElements.Resources
         {
             Facedown = facedown;
             CardActive = false;
+            Traits = new();
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace DeckForge.GameElements.Resources
         public bool CardActive { get; set; }
 
         /// <inheritdoc/>
-        public CardPlacedOnTableDetails? TablePlacemenetDetails { get; protected set; }
+        public CardPlacedOnTableDetails? TablePlacementDetails { get; protected set; }
 
         /// <inheritdoc/>
         public IReadOnlyList<BaseCardTrait> CardTraits
@@ -67,7 +68,7 @@ namespace DeckForge.GameElements.Resources
         /// <inheritdoc/>
         public virtual void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
-            TablePlacemenetDetails = placementDetails;
+            TablePlacementDetails = placementDetails;
 
             TriggerAllTraitsOnPlay();
         }

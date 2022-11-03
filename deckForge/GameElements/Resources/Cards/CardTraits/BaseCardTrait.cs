@@ -11,11 +11,13 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// Initializes a new instance of the <see cref="BaseCardTrait"/> class.
         /// </summary>
         /// <param name="gm"><see cref="IGameMediator"/> used to interact with other game elements.</param>
-        public BaseCardTrait(IGameMediator gm)
+        /// <param name="attachedToCard"><see cref="ICard"/> this trait is attached to.</param>
+        public BaseCardTrait(IGameMediator gm, ICard attachedToCard)
         {
             TraitName = string.Empty;
             Description = string.Empty;
             GM = gm;
+            AttachedToCard = attachedToCard;
         }
 
         /// <summary>
@@ -29,6 +31,11 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         public string Description { get; }
 
         /// <summary>
+        /// Gets the <see cref="ICard"/> that this trait is attached to.
+        /// </summary>
+        public ICard AttachedToCard { get; }
+
+        /// <summary>
         /// Gets the <see cref="IGameMediator"/> used to interact with other game elements.
         /// </summary>
         protected IGameMediator GM { get;  }
@@ -36,21 +43,28 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <summary>
         /// Executes when the <see cref="ICard"/> this trait is attached to is played.
         /// </summary>
-        public void OnPlay()
+        public virtual void OnPlay()
         {
         }
 
         /// <summary>
         /// Executes when the <see cref="ICard"/> this trait is attached to is placed.
         /// </summary>
-        public void OnPlace()
+        public virtual void OnPlace()
         {
         }
 
         /// <summary>
         /// Executes when the <see cref="ICard"/> this trait is attached to is removed.
         /// </summary>
-        public void OnRemoval()
+        public virtual void OnCardRemoval()
+        {
+        }
+
+        /// <summary>
+        /// Executes when the trait is removed from the <see cref="ICard"/> it is attached to.
+        /// </summary>
+        public virtual void OnTraitRemoved()
         {
         }
     }
