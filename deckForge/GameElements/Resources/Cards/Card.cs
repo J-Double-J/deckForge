@@ -1,4 +1,5 @@
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.GameElements.Resources.Cards.CardTraits;
 using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
@@ -34,6 +35,20 @@ namespace DeckForge.GameElements.Resources
         public bool CardActive { get; set; }
 
         /// <inheritdoc/>
+        public CardPlacedOnTableDetails? TablePlacemenetDetails { get; protected set; }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<BaseCardTrait> CardTraits
+        {
+            get { return Traits; }
+        }
+
+        /// <summary>
+        /// Gets a mutable list of <see cref="BaseCardTrait"/>s on this card.
+        /// </summary>
+        protected List<BaseCardTrait> Traits { get; }
+
+        /// <inheritdoc/>
         public void Flip()
         {
             if (Facedown)
@@ -52,11 +67,15 @@ namespace DeckForge.GameElements.Resources
         /// <inheritdoc/>
         public virtual void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
+            TablePlacemenetDetails = placementDetails;
+
+            TriggerAllTraitsOnPlay();
         }
 
         /// <inheritdoc/>
         public virtual void OnRemoval()
         {
+            TriggerAllTraitsOnCardRemoved();
         }
 
         /// <summary>
@@ -66,6 +85,50 @@ namespace DeckForge.GameElements.Resources
         protected virtual void OnCardIsRemovedFromTable(CardIsRemovedFromTableEventArgs e)
         {
             CardIsRemovedFromTable?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Triggers all card traits OnPlay() methods.
+        /// </summary>
+        protected virtual void TriggerAllTraitsOnPlay()
+        {
+            foreach (BaseCardTrait trait in Traits)
+            {
+                trait.OnPlay();
+            }
+        }
+
+        /// <summary>
+        /// Triggers all card traits OnPlace() methods.
+        /// </summary>
+        protected virtual void TriggerAllTraitsOnPlace()
+        {
+            foreach (BaseCardTrait trait in Traits)
+            {
+                trait.OnPlace();
+            }
+        }
+
+        /// <summary>
+        /// Triggers all card traits OnCardRemoval() methods.
+        /// </summary>
+        protected virtual void TriggerAllTraitsOnCardRemoved()
+        {
+            foreach (BaseCardTrait trait in Traits)
+            {
+                trait.OnCardRemoval();
+            }
+        }
+
+        /// <summary>
+        /// Triggers all card traits OnTraitRemoved() methods.
+        /// </summary>
+        protected virtual void TriggerAllTraitsOnTraitRemoved()
+        {
+            foreach (BaseCardTrait trait in Traits)
+            {
+                trait.OnTraitRemoved();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using DeckForge.GameElements.Resources.Cards.CardEvents;
+using DeckForge.GameElements.Resources.Cards.CardTraits;
 using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
@@ -31,6 +32,17 @@ namespace DeckForge.GameElements.Resources
         /// functionality based on the rules (such as being in a <see cref="IPlayer"/>'s hand).
         /// </summary>
         public bool CardActive { get; set; }
+
+        /// <summary>
+        /// Gets the details of the where the <see cref="ICard"/> is on the <see cref="ITable"/>.
+        /// Returns <c>Null</c> if <see cref="ICard"/> is not on a <see cref="ITable"/>.
+        /// </summary>
+        public CardPlacedOnTableDetails? TablePlacemenetDetails { get; }
+
+        /// <summary>
+        /// Gets a readonly list of the <see cref="BaseCardTrait"/>s this card has.
+        /// </summary>
+        public IReadOnlyList<BaseCardTrait> CardTraits { get;  }
 
         /// <summary>
         /// Gets the string representing the card.

@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <None Remove="GameElements\Resources\Cards\" />
+    <None Remove="GameElements\Resources\Cards\CardTraits\" />
+    <None Remove="GameElements\Resources\Cards\CardTraits\ExampleCardTraits\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
@@ -19,5 +21,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GameElements\Resources\Cards\CardTraits\" />
+    <Folder Include="GameElements\Resources\Cards\CardTraits\ExampleCardTraits\" />
   </ItemGroup>
 </Project>
