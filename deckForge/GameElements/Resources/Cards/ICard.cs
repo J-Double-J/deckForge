@@ -48,5 +48,10 @@ namespace DeckForge.GameElements.Resources
         /// </summary>
         /// <param name="placementDetails">Details of where the <see cref="ICard"/> was played.</param>
         public void OnPlay(CardPlacedOnTableDetails placementDetails);
+
+        /// <summary>
+        /// Executes after this card is removed from the <see cref="Table"/>.
+        /// </summary>
+        public void OnRemoval();
     }
 }

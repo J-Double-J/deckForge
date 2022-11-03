@@ -28,6 +28,7 @@ namespace DeckForge.GameElements.Resources
             healthVal = health;
             BaseAttack = attack;
             BaseHealth = health;
+            PlacementDetails = null;
         }
 
         /// <summary>
@@ -84,6 +85,12 @@ namespace DeckForge.GameElements.Resources
         public int BaseHealth { get; }
 
         /// <summary>
+        /// Gets or sets the card's placement details.
+        /// Can only be set by classes that implement <see cref="BaseCharacterCard"/>.
+        /// </summary>
+        public CardPlacedOnTableDetails? PlacementDetails { get; protected set; }
+
+        /// <summary>
         /// Gets the <see cref="IGameMediator"/> that is used to interact with other game elements.
         /// </summary>
         protected IGameMediator GM { get; }
@@ -115,15 +122,25 @@ namespace DeckForge.GameElements.Resources
         public virtual void Die()
         {
             OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs());
-            GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
         }
 
         /// <inheritdoc/>
         public override void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
-            if (placementDetails.TablePlacementZone == TablePlacementZones.PlayerZone)
+            PlacementDetails = placementDetails;
+
+            if (PlacementDetails.TablePlacementZone == TablePlacementZones.PlayerZone)
             {
                 GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override void OnRemoval()
+        {
+            if (PlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
             }
         }
     }

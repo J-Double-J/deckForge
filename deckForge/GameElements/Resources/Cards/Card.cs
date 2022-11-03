@@ -54,6 +54,11 @@ namespace DeckForge.GameElements.Resources
         {
         }
 
+        /// <inheritdoc/>
+        public virtual void OnRemoval()
+        {
+        }
+
         /// <summary>
         /// Invokes the CardIsRemovedFromTableEventHandler. Default informs Table to remove <see cref="ICard"/>.
         /// </summary>

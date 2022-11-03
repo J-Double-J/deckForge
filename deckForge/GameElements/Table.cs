@@ -417,6 +417,7 @@ namespace DeckForge.GameElements
         public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
         {
             playerZones[playerZone].Remove(card);
+            card.OnRemoval();
         }
 
         /// <inheritdoc/>
