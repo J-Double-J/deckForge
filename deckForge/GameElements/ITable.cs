@@ -49,7 +49,7 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> who played the <see cref="ICard"/>.</param>
         /// <param name="card"><see cref="ICard"/> that is to be placed on the table.</param>
-        public void PlaceCardOnTable(int playerID, ICard card);
+        // public void PlaceCardOnTable(int playerID, ICard card);
 
         /// <summary>
         /// Flips all the <see cref="ICard"/>s in a specified direction for a specified <see cref="IPlayer"/>.
@@ -149,14 +149,14 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="card"><see cref="ICard"/> to add to the table.</param>
         /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        public void AddCardTo_PlayerZone(ICard card, int playerZone);
+        public void AddCardTo_PlayerZone(int playerZone, ICard card);
 
         /// <summary>
         /// Adds a list of <see cref="ICard"/>s to the player zone and registers the table to any events of interest.
         /// </summary>
         /// <param name="cards"><see cref="ICard"/>s to add to the table.</param>
         /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        public void AddCardsTo_PlayerZone(List<ICard> cards, int playerZone);
+        public void AddCardsTo_PlayerZone(int playerZone, List<ICard> cards);
 
         /// <summary>
         /// Adds a <see cref="ICard"/> to a neutral zone.

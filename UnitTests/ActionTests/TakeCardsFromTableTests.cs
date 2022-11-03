@@ -22,9 +22,9 @@ namespace UnitTests.ActionTests
             player.AddResourceCollection(deckOne);
             opponent.AddResourceCollection(deckTwo);
 
-            table.PlaceCardOnTable(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
-            table.PlaceCardOnTable(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
-            table.PlaceCardOnTable(1, (PlayingCard)opponent.TakeResourceFromCollection(0)!);
+            table.AddCardTo_PlayerZone(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
+            table.AddCardTo_PlayerZone(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
+            table.AddCardTo_PlayerZone(1, (PlayingCard)opponent.TakeResourceFromCollection(0)!);
 
             IGameAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction();
             gameAction.Execute(player, opponent);

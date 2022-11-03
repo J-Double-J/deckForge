@@ -211,7 +211,7 @@ namespace DeckForge.GameConstruction
             try
             {
                 card.CardActive = true;
-                GameTable!.PlaceCardOnTable(playerID, card);
+                GameTable!.AddCardTo_PlayerZone(playerID, card);
                 ChangeCardModifierValueBy(CardModifiers.CardsPlayed, 1);
             }
             catch

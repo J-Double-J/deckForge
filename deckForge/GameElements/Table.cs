@@ -176,6 +176,7 @@ namespace DeckForge.GameElements
         // TODO: Deprecated?
 
         /// <inheritdoc/>
+        /*
         public void PlaceCardOnTable(int playerID, ICard card)
         {
             try
@@ -190,7 +191,7 @@ namespace DeckForge.GameElements
             {
                 throw;
             }
-        }
+        }*/
 
         /// <inheritdoc/>
         public void Flip_AllCardsOneWay_SpecificPlayer(int playerID, bool facedown = false)
@@ -377,8 +378,7 @@ namespace DeckForge.GameElements
             return retVal;
         }
 
-        /// <inheritdoc/>
-        public void AddCardTo_PlayerZone(ICard card, int playerZone)
+        public void AddCardTo_PlayerZone(int playerZone, ICard card)
         {
             card.CardIsRemovedFromTable += (sender, e) =>
             {
@@ -392,11 +392,11 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public void AddCardsTo_PlayerZone(List<ICard> cards, int playerZone)
+        public void AddCardsTo_PlayerZone(int playerZone, List<ICard> cards)
         {
             foreach (ICard card in cards)
             {
-                AddCardTo_PlayerZone(card, playerZone);
+                AddCardTo_PlayerZone(playerZone, card);
             }
         }
 
@@ -417,11 +417,6 @@ namespace DeckForge.GameElements
         public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
         {
             playerZones[playerZone].Remove(card);
-
-            if (card is ICharacterCard)
-            {
-                GM.ChangeCardModifierValueBy(CardModifiers.CharacterCardsInPlayerZones, -1);
-            }
         }
 
         /// <inheritdoc/>
