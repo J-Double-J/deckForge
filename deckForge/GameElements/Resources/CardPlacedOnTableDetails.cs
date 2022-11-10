@@ -12,14 +12,17 @@ namespace DeckForge.GameElements.Resources
         /// Initializes a new instance of the <see cref="CardPlacedOnTableDetails"/> class.
         /// </summary>
         /// <param name="playedBy">The <see cref="IPlayer"/> that played the <see cref="ICard"/>.</param>
-        /// <param name="tablePlacementZone">Zone on table where the <see cref="ICard"/> was placed.</param>
+        /// <param name="tablePlacementZone">Type of zone on table where the <see cref="ICard"/> was placed.</param>
+        /// <param name="area">Area in zone that the <see cref="ICard"/> was placed.</param>
         /// <param name="specificPlaceInZone">Specific spot in zone where the <see cref="ICard"/> was placed.</param>
         public CardPlacedOnTableDetails(
             TablePlacementZones tablePlacementZone,
-            int specificPlaceInZone)
+            int area,
+            int specificPlaceInArea)
         {
             TablePlacementZone = tablePlacementZone;
-            SpecificPlaceInZone = specificPlaceInZone;
+            Area = area;
+            SpecificPlaceInArea = specificPlaceInArea;
         }
 
         /// <summary>
@@ -28,8 +31,13 @@ namespace DeckForge.GameElements.Resources
         public TablePlacementZones TablePlacementZone { get; }
 
         /// <summary>
+        /// Gets the area in the zone that the <see cref="ICard"/> was placed in.
+        /// </summary>
+        public int Area { get; }
+
+        /// <summary>
         /// Gets the value of where in the zone the <see cref="ICard"/> was placed.
         /// </summary>
-        public int SpecificPlaceInZone { get; }
+        public int SpecificPlaceInArea { get; }
     }
 }

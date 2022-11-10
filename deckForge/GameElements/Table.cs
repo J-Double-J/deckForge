@@ -394,7 +394,8 @@ namespace DeckForge.GameElements
             card.OnPlay(
                     new CardPlacedOnTableDetails(
                         TablePlacementZones.PlayerZone,
-                        playerZones.Count - 1));
+                        playerZones.Count - 1,
+                        playerZones[playerZone].Count - 1));
         }
 
         /// <inheritdoc/>

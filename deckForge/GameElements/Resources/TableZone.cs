@@ -146,7 +146,7 @@ namespace DeckForge.GameElements.Resources
                     zone[area][placementInArea] = card;
 
                     // TODO: THIS IS WRONG. MUST UPDATE CLASS TO USE AREA AND PLACE
-                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area));
+                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
                 }
                 else
                 {
@@ -176,7 +176,7 @@ namespace DeckForge.GameElements.Resources
                     zone[area].Add(card);
 
                     // TODO: THIS IS WRONG. MUST UPDATE CLASS TO USE AREA AND PLACE
-                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area));
+                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, zone[area].Count - 1));
                 }
                 else
                 {
@@ -187,7 +187,7 @@ namespace DeckForge.GameElements.Resources
                         if (zone[area][i] is NullCard)
                         {
                             zone[area][i] = card;
-                            card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area));
+                            card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, i));
                             playedCard = true;
                             break;
                         }
@@ -432,6 +432,17 @@ namespace DeckForge.GameElements.Resources
             catch
             {
                 throw;
+            }
+        }
+
+        private void CardPlacementCallCorrectTrigger(ICard card, int area, int placementInArea, bool played)
+        {
+            if (played)
+            {
+                card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
+            }
+            else
+            {
             }
         }
     }
