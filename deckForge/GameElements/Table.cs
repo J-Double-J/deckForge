@@ -378,11 +378,17 @@ namespace DeckForge.GameElements
             return retVal;
         }
 
-        public void AddCardTo_PlayerZone(int playerZone, ICard card)
+        public void PlayCardToZone(ICard card, TablePlacementZones placementZone,  int areaInZone = 0, int spotInArea = -1)
+        {
+            
+        }
+
+        /// <inheritdoc/>
+        public void PlayCardTo_PlayerZone(int playerZone, ICard card)
         {
             card.CardIsRemovedFromTable += (sender, e) =>
             {
-                RemoveCardFromTable_FromPlayerZone((ICard)sender!, playerZone);
+                RemoveCard_FromPlayerZone((ICard)sender!, playerZone);
             };
             playerZones[playerZone].Add(card);
             card.OnPlay(
@@ -392,11 +398,11 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public void AddCardsTo_PlayerZone(int playerZone, List<ICard> cards)
+        public void PlayCardsTo_PlayerZone(int playerZone, List<ICard> cards)
         {
             foreach (ICard card in cards)
             {
-                AddCardTo_PlayerZone(playerZone, card);
+                PlayCardTo_PlayerZone(playerZone, card);
             }
         }
 
@@ -414,26 +420,38 @@ namespace DeckForge.GameElements
         }
 
         /// <inheritdoc/>
-        public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone)
+        public void RemoveCard_FromPlayerZone(ICard card, int playerZone)
         {
             playerZones[playerZone].Remove(card);
             card.OnRemoval();
         }
 
         /// <inheritdoc/>
-        public List<ICard> PickUp_AllCardsFromTable()
+        public List<ICard> Remove_AllCardsFromTable()
         {
             List<ICard> cards = new();
 
             foreach (var neutralCards in neutralZones)
             {
                 cards.AddRange(neutralCards);
+
+                foreach (ICard card in neutralCards)
+                {
+                    card.OnRemoval();
+                }
+
                 neutralCards.Clear();
             }
 
             foreach (var playerCards in playerZones)
             {
                 cards.AddRange(playerCards);
+
+                foreach (ICard card in playerCards)
+                {
+                    card.OnRemoval();
+                }
+
                 playerCards.Clear();
             }
 

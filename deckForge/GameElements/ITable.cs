@@ -133,7 +133,7 @@ namespace DeckForge.GameElements
         /// designated on the <see cref="Table"/>.
         /// </summary>
         /// <param name="numCards">Number of <see cref="ICard"/>s to attempt to draw.</param>
-        /// <param name="deckPos">ID of the <see cref="IDeck"/> on the table to 
+        /// <param name="deckPos">ID of the <see cref="IDeck"/> on the table to
         /// draw from.</param>
         /// <param name="neutralZone">Area to play the <see cref="ICard"/> to.</param>
         /// <param name="isFaceup">Whether to play the <see cref="ICard"/> faceup.</param>
@@ -147,16 +147,16 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Adds a card to the player zone and registers the table to any events of interest.
         /// </summary>
-        /// <param name="card"><see cref="ICard"/> to add to the table.</param>
         /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        public void AddCardTo_PlayerZone(int playerZone, ICard card);
+        /// <param name="card"><see cref="ICard"/> to add to the table.</param>
+        public void PlayCardTo_PlayerZone(int playerZone, ICard card);
 
         /// <summary>
         /// Adds a list of <see cref="ICard"/>s to the player zone and registers the table to any events of interest.
         /// </summary>
-        /// <param name="cards"><see cref="ICard"/>s to add to the table.</param>
         /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        public void AddCardsTo_PlayerZone(int playerZone, List<ICard> cards);
+        /// <param name="cards"><see cref="ICard"/>s to add to the table.</param>
+        public void PlayCardsTo_PlayerZone(int playerZone, List<ICard> cards);
 
         /// <summary>
         /// Adds a <see cref="ICard"/> to a neutral zone.
@@ -177,12 +177,12 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="card"><see cref="ICard"/> to remove from the table.</param>
         /// <param name="playerZone">Player zone to remove the <see cref="ICard"/>.</param>
-        public void RemoveCardFromTable_FromPlayerZone(ICard card, int playerZone);
+        public void RemoveCard_FromPlayerZone(ICard card, int playerZone);
 
         /// <summary>
         /// Picks up all cards from every spot on the <see cref="ITable"/>.
         /// </summary>
         /// <returns>A list of all the <see cref="ICard"/>s removed from the <see cref="ITable"/>.</returns>
-        public List<ICard> PickUp_AllCardsFromTable();
+        public List<ICard> Remove_AllCardsFromTable();
     }
 }

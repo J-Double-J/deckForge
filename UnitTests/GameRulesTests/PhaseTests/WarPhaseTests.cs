@@ -68,15 +68,15 @@ namespace UnitTests.PhaseTests
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             if (playerZeroWins)
             {
-                table.AddCardTo_PlayerZone(0, cardOne);
-                table.AddCardTo_PlayerZone(1, cardTwo);
+                table.PlayCardTo_PlayerZone(0, cardOne);
+                table.PlayCardTo_PlayerZone(1, cardTwo);
                 comparePhase.FlippedCards.Add(cardOne);
                 comparePhase.FlippedCards.Add(cardTwo);
             }
             else
             {
-                table.AddCardTo_PlayerZone(1, cardOne);
-                table.AddCardTo_PlayerZone(0, cardTwo);
+                table.PlayCardTo_PlayerZone(1, cardOne);
+                table.PlayCardTo_PlayerZone(0, cardTwo);
                 comparePhase.FlippedCards.Add(cardTwo);
                 comparePhase.FlippedCards.Add(cardOne);
             }
@@ -101,8 +101,8 @@ namespace UnitTests.PhaseTests
             PlayingCard cardOne = new(5, "C");
             PlayingCard cardTwo = new(5, "H");
 
-            table.AddCardTo_PlayerZone(0, cardOne);
-            table.AddCardTo_PlayerZone(1, cardTwo);
+            table.PlayCardTo_PlayerZone(0, cardOne);
+            table.PlayCardTo_PlayerZone(1, cardTwo);
 
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             comparePhase.FlippedCards.Add(cardOne);
@@ -119,8 +119,8 @@ namespace UnitTests.PhaseTests
         [TestMethod]
         public void WarPhasePlacesMoreCardsOnTable()
         {
-            table.AddCardTo_PlayerZone(0, new PlayingCard(1, "H"));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(2, "H"));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(1, "H"));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(2, "H"));
 
             IPhase phase = new WarPhase(gm, playerIDs, "War!");
             phase.StartPhase();

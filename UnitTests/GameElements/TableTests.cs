@@ -22,10 +22,10 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.AddCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
-            table.AddCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(1, "Q", facedown: false));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(2, "Q", facedown: true));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(1, "Q", facedown: false));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(2, "Q", facedown: true));
         }
 
         [ClassInitialize]
@@ -50,7 +50,7 @@ namespace UnitTests.GameElements
         [DataRow(7)]
         public void PlaceCardOnTableInFrontOfNonexistantPlayer(int fakePlayerID)
         {
-            Action a = () => table.AddCardTo_PlayerZone(fakePlayerID, new PlayingCard(8, "J"));
+            Action a = () => table.PlayCardTo_PlayerZone(fakePlayerID, new PlayingCard(8, "J"));
 
             a.Should().Throw<ArgumentException>($"there is no player with the id of {fakePlayerID}");
         }
@@ -60,12 +60,12 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.AddCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
-            table.AddCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
-            table.AddCardTo_PlayerZone(0, new PlayingCard(10, "J", facedown: false));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(8, "J", facedown: false));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(9, "J", facedown: false));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(10, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(10, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(8, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(9, "J", facedown: false));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(10, "J", facedown: false));
 
             table.PrintTableState();
             if (OperatingSystem.IsMacOS())
@@ -84,7 +84,7 @@ namespace UnitTests.GameElements
             string s = string.Empty;
             SetUpTableForTests();
 
-            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0).ConvertAll(c => (PlayingCard) c);
+            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0).ConvertAll(c => (PlayingCard)c);
 
             foreach (PlayingCard c in cards)
             {
@@ -374,13 +374,13 @@ namespace UnitTests.GameElements
             table.AddCardsTo_NeutralZone(
                 new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
             table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
-            table.AddCardTo_PlayerZone(0, new PlayingCard(3, "J"));
-            table.AddCardTo_PlayerZone(1, new PlayingCard(4, "J"));
-            table.AddCardTo_PlayerZone(2, new PlayingCard(5, "J"));
-            table.AddCardTo_PlayerZone(3, new PlayingCard(6, "J"));
-            table.AddCardTo_PlayerZone(3, new PlayingCard(7, "J"));
+            table.PlayCardTo_PlayerZone(0, new PlayingCard(3, "J"));
+            table.PlayCardTo_PlayerZone(1, new PlayingCard(4, "J"));
+            table.PlayCardTo_PlayerZone(2, new PlayingCard(5, "J"));
+            table.PlayCardTo_PlayerZone(3, new PlayingCard(6, "J"));
+            table.PlayCardTo_PlayerZone(3, new PlayingCard(7, "J"));
 
-            table.PickUp_AllCardsFromTable();
+            table.Remove_AllCardsFromTable();
 
             foreach (var cards in table.TableNeutralZones)
             {
@@ -417,9 +417,9 @@ namespace UnitTests.GameElements
                 new PlayingCard(12, "J")
             };
 
-            table.AddCardsTo_PlayerZone(0, cardsToAdd);
+            table.PlayCardsTo_PlayerZone(0, cardsToAdd);
 
-            table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
+            table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
 
             table.PlayerZones[0].Count.Should().Be(2, "one of the cards were removed");
         }
@@ -436,9 +436,9 @@ namespace UnitTests.GameElements
                 new BaseCharacterCard(gm, 5, 5, "Surveyor")
             };
 
-            table.AddCardsTo_PlayerZone(0, cardsToAdd);
+            table.PlayCardsTo_PlayerZone(0, cardsToAdd);
             attackingCard.Attack((ICharacterCard)table.PlayerZones[0][1]);
-            table.RemoveCardFromTable_FromPlayerZone(cardsToAdd[1], 0);
+            table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
 
             BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerZones[0][0];
             remainingCard.HealthVal.Should().Be(5, "the unattacked card should be the remaining card");
@@ -452,7 +452,7 @@ namespace UnitTests.GameElements
             BaseCharacterCard attackingCard = new(gm, 2, 7, "Aggressor");
             BaseCharacterCard poorVictim = new(gm, 0, 1, "Villager");
 
-            table.AddCardTo_PlayerZone(0, poorVictim);
+            table.PlayCardTo_PlayerZone(0, poorVictim);
             attackingCard.Attack(poorVictim);
 
             table.PlayerZones[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
