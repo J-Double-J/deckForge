@@ -69,7 +69,7 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void CanAddMultipleCardsToZone()
+        public void CanPlayMultipleCardsToZone()
         {
             List<ICard> cards = new() { new PlayingCard(1, "S"), new PlayingCard(2, "S") };
             TableZone tableZone = new(TablePlacementZones.PlayerZone, 1);
@@ -78,6 +78,28 @@ namespace UnitTests.GameElements
 
             tableZone.GetCardsInArea(0)[0].Should().BeSameAs(cards[0], "the card was added to the area");
             tableZone.GetCardsInArea(0)[1].Should().BeSameAs(cards[1], "the card was added to the area");
+        }
+
+        [TestMethod]
+        public void CanPlaceCardToZone()
+        {
+            ICard card = new PlayingCard(1, "S");
+            TableZone tableZone = new TableZone(TablePlacementZones.PlayerZone, 1);
+
+            tableZone.PlaceCardToArea(card, 0);
+
+            tableZone.GetCardsInArea(0)[0].Should().BeSameAs(card, "this card was placed to the area");
+        }
+
+        [TestMethod]
+        public void CanPlaceCardToZone_ToSpecificPlaceInArea()
+        {
+            ICard card = new PlayingCard(1, "S");
+            TableZone tableZone = new TableZone(TablePlacementZones.PlayerZone, 1, 2);
+
+            tableZone.PlaceCardToArea(card, 0, 1);
+
+            tableZone.GetCardsInArea(0)[1].Should().BeSameAs(card, "this card was placed to the area");
         }
 
         [TestMethod]
@@ -136,6 +158,18 @@ namespace UnitTests.GameElements
             TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
+
+            gm.GetCurrentCardModifierValue(CardModifiers.CharacterCardsInPlayerZones).Should().Be(1);
+        }
+
+        [TestMethod]
+        public void PlayingCardToZone_TriggersOnPlaceEffect()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            ICard card = new BaseCharacterCard(gm, 1, 1);
+            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+
+            tableZone.PlaceCardToArea(card, 1);
 
             gm.GetCurrentCardModifierValue(CardModifiers.CharacterCardsInPlayerZones).Should().Be(1);
         }

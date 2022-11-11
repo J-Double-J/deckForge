@@ -134,25 +134,14 @@ namespace DeckForge.GameElements.Table
         /// </summary>
         /// <param name="card">Card to play.</param>
         /// <param name="area">Area in the zone to play to.</param>
-        /// <param name="placementInArea">Where to play in the area. -1 places the card in the first free space.</param>
+        /// <param name="placementInArea">Where to play in the area. Places the card in the first free space.</param>
         /// <exception cref="InvalidOperationException">Throws if trying to specify where to place a card in an area
         /// without a defined limit, or placing a card on another card.</exception>
         public void PlayCardToArea(ICard card, int area, int placementInArea)
         {
             try
             {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-                if (zone[area][placementInArea] is NullCard)
-                {
-                    zone[area][placementInArea] = card;
-
-                    // TODO: THIS IS WRONG. MUST UPDATE CLASS TO USE AREA AND PLACE
-                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
-                }
-                else
-                {
-                    throw new InvalidOperationException($"A card already exists in Area {area} at Placement {placementInArea}");
-                }
+                CardPlacementRulesExecutioner(card, true, area, placementInArea);
             }
             catch
             {
@@ -170,35 +159,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidateAreaArgument(area);
-
-                if (AreaCardLimit == -1)
-                {
-                    zone[area].Add(card);
-
-                    // TODO: THIS IS WRONG. MUST UPDATE CLASS TO USE AREA AND PLACE
-                    card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, zone[area].Count - 1));
-                }
-                else
-                {
-                    bool playedCard = false;
-
-                    for (int i = 0; i < zone[area].Count; i++)
-                    {
-                        if (zone[area][i] is NullCard)
-                        {
-                            zone[area][i] = card;
-                            card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, i));
-                            playedCard = true;
-                            break;
-                        }
-                    }
-
-                    if (!playedCard)
-                    {
-                        throw new InvalidOperationException("No open space for card to be played.");
-                    }
-                }
+                CardPlacementRulesExecutioner(card, true, area);
             }
             catch
             {
@@ -218,6 +179,64 @@ namespace DeckForge.GameElements.Table
                 foreach (ICard card in cards)
                 {
                     PlayCardToArea(card, area);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Plays a card to a specific place in an area in the zone. Cannot replace a card if spot is filled.
+        /// </summary>
+        /// <param name="card">Card to place.</param>
+        /// <param name="area">Area in the zone to place to.</param>
+        /// <param name="placementInArea">Where to place in the area. Places the card in the first free space.</param>
+        /// <exception cref="InvalidOperationException">Throws if trying to specify where to place a card in an area
+        /// without a defined limit, or placing a card on another card.</exception>
+        public void PlaceCardToArea(ICard card, int area, int placementInArea)
+        {
+            try
+            {
+                CardPlacementRulesExecutioner(card, false, area, placementInArea);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Plays a card to an area in the zone, finding the first empty spot. Cannot place a card if area is filled.
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to place.</param>
+        /// <param name="area">Area Identifier for area to place to.</param>
+        /// <exception cref="InvalidOperationException">Throws if all spots in area are filled with non-<see cref="NullCard"/>s.</exception>
+        public void PlaceCardToArea(ICard card, int area)
+        {
+            try
+            {
+                CardPlacementRulesExecutioner(card, false, area);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Places a list of <see cref="ICard"/>s to an area.
+        /// </summary>
+        /// <param name="cards"><see cref="ICard"/>s to place.</param>
+        /// <param name="area">Area Identifier for area to place to.</param>
+        public void PlaceMultipleCardsToArea(List<ICard> cards, int area)
+        {
+            try
+            {
+                foreach (ICard card in cards)
+                {
+                    PlaceCardToArea(card, area);
                 }
             }
             catch
@@ -401,6 +420,86 @@ namespace DeckForge.GameElements.Table
                     List<ICard> nullCards = Enumerable.Repeat(new NullCard(), areaCardLimit).Cast<ICard>().ToList();
                     zone.Add(nullCards);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Helper function that follows rules for placing card to a spot in the zone.
+        /// </summary>
+        /// <param name="played">If <c>true</c>, triggers <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> if placed, else triggers
+        /// <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/> if placed.</param>
+        private void CardPlacementRulesExecutioner(ICard card, bool played, int area)
+        {
+            try
+            {
+                ValidateAreaArgument(area);
+
+                if (AreaCardLimit == -1)
+                {
+                    zone[area].Add(card);
+                    ExecuteCardOnPlayOrOnPlace(card, played, area, zone[area].Count - 1);
+                }
+                else
+                {
+                    bool placementFound = false;
+
+                    for (int i = 0; i < zone[area].Count; i++)
+                    {
+                        if (zone[area][i] is NullCard)
+                        {
+                            zone[area][i] = card;
+                            ExecuteCardOnPlayOrOnPlace(card, played, area, i);
+                            placementFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!placementFound)
+                    {
+                        throw new InvalidOperationException("No open space for card to be played.");
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        private void CardPlacementRulesExecutioner(ICard card, bool played, int area, int placementInArea)
+        {
+            try
+            {
+                ValidatePlaceInAreaArgument(area, placementInArea);
+                if (zone[area][placementInArea] is NullCard)
+                {
+                    zone[area][placementInArea] = card;
+                    ExecuteCardOnPlayOrOnPlace(card, played, area, placementInArea);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"A card already exists in Area {area} at Placement {placementInArea}");
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// If <paramref name="played"/> is <c>true</c>, executes <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> else executes <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/>.
+        /// </summary>
+        /// <param name="played">Determines which function to call.</param>
+        private void ExecuteCardOnPlayOrOnPlace(ICard card, bool played, int area, int placementInArea)
+        {
+            if (played)
+            {
+                card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
+            }
+            else
+            {
+                card.OnPlace(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
             }
         }
 
