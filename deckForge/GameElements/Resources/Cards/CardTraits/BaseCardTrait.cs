@@ -5,7 +5,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
     /// <summary>
     /// The base outline for any trait that a <see cref="ICard"/> may possess.
     /// </summary>
-    public class BaseCardTrait
+    public abstract class BaseCardTrait
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseCardTrait"/> class.

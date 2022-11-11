@@ -29,7 +29,7 @@ namespace DeckForge.GameElements.Resources
         /// Gets or sets a value indicating whether the <see cref="ICard"/> is currently active.
         /// Starts inactive on creation. Being active usually means the card will execute effects, listen to events, and
         /// follow standard rules for when a card is "in play". An inactive card will have limited
-        /// functionality based on the rules (such as being in a <see cref="IPlayer"/>'s hand).
+        /// functionality based on the rules (such as when it is in a <see cref="IPlayer"/>'s hand).
         /// </summary>
         public bool CardActive { get; set; }
 
@@ -56,10 +56,18 @@ namespace DeckForge.GameElements.Resources
         public void Flip();
 
         /// <summary>
-        /// Executes whenever this card is played.
+        /// Executes whenever this card is played. Card is activated when played.
         /// </summary>
         /// <param name="placementDetails">Details of where the <see cref="ICard"/> was played.</param>
         public void OnPlay(CardPlacedOnTableDetails placementDetails);
+
+        /// <summary>
+        /// Executes whenever this card is placed on the <see cref="ITable"/>. Card's activation status is not changed.
+        /// </summary>
+        /// <remarks>This function should be used for limited instances as the <see cref="ICard"/>'s <see cref="CardActive"/>
+        /// should not matter for any execution on placement.</remarks>
+        /// <param name="placementDetails">Details of where the <see cref="ICard"/> was placed.</param>
+        public void OnPlace(CardPlacedOnTableDetails placementDetails);
 
         /// <summary>
         /// Executes after this card is removed from the <see cref="Table"/>.

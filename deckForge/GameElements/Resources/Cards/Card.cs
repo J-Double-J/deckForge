@@ -69,8 +69,17 @@ namespace DeckForge.GameElements.Resources
         public virtual void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
             TablePlacementDetails = placementDetails;
+            CardActive = true;
 
             TriggerAllTraitsOnPlay();
+        }
+
+        /// <inheritdoc/>
+        public virtual void OnPlace(CardPlacedOnTableDetails placementDetails)
+        {
+            TablePlacementDetails = placementDetails;
+
+            TriggerAllTraitsOnPlace();
         }
 
         /// <inheritdoc/>

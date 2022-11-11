@@ -1,6 +1,6 @@
 ﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources.Cards.CardEvents;
-using DeckForge.PlayerConstruction;
+using DeckForge.GameElements.Resources.Cards.CardTraits;
 
 namespace DeckForge.GameElements.Resources
 {
@@ -29,6 +29,7 @@ namespace DeckForge.GameElements.Resources
             BaseAttack = attack;
             BaseHealth = health;
             PlacementDetails = null;
+            Traits.Add(new CharacterCardTrait(gm, this));
         }
 
         /// <summary>
@@ -122,26 +123,6 @@ namespace DeckForge.GameElements.Resources
         public virtual void Die()
         {
             OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs());
-        }
-
-        /// <inheritdoc/>
-        public override void OnPlay(CardPlacedOnTableDetails placementDetails)
-        {
-            PlacementDetails = placementDetails;
-
-            if (PlacementDetails.TablePlacementZone == TablePlacementZones.PlayerZone)
-            {
-                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
-            }
-        }
-
-        /// <inheritdoc/>
-        public override void OnRemoval()
-        {
-            if (PlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
-            {
-                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
-            }
         }
     }
 }

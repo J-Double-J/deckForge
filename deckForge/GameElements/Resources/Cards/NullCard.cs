@@ -1,7 +1,6 @@
 ﻿using DeckForge.GameElements.Resources.Cards.CardEvents;
 using DeckForge.GameElements.Resources.Cards.CardTraits;
 using DeckForge.PlayerConstruction;
-using System.Reflection.Metadata.Ecma335;
 
 namespace DeckForge.GameElements.Resources.Cards
 {
@@ -48,6 +47,11 @@ namespace DeckForge.GameElements.Resources.Cards
 
         /// <inheritdoc/>
         public void OnPlay(CardPlacedOnTableDetails placementDetails)
+        {
+        }
+
+        /// <inheritdoc/>
+        public void OnPlace(CardPlacedOnTableDetails placementDetails)
         {
         }
 

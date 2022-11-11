@@ -16,7 +16,6 @@ namespace DeckForge.GameElements.Resources.Cards.Example_Cards
         public BarBrawlerCharacterCard(IGameMediator gm)
             : base(gm, 2, 2, "Bar Brawler")
         {
-            // gm.GetCardModifierKeyEvent(CardModifiers.CharacterCardsInPlayerZones).KeyEvent += ModifyStrength;
             gm.GetCardModifierKeyEvent(CardModifiers.CharacterCardsInPlayerZones).KeyEvent += OnEventTrigger;
         }
 

@@ -3,7 +3,7 @@
 namespace DeckForge.GameElements.Resources.Cards.CardTraits
 {
     /// <summary>
-    /// A <see cref="ICard"/> trait that requires the attached card to be a <see cref="BaseCharacterCard"/>.
+    /// A <see cref="BaseCardTrait"/> trait for any <see cref="BaseCharacterCard"/>.
     /// </summary>
     public class CharacterCardTrait : BaseCardTrait
     {
@@ -15,6 +15,42 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         public CharacterCardTrait(IGameMediator gm, BaseCharacterCard attachedCard)
             : base(gm, attachedCard)
         {
+        }
+
+        /// <inheritdoc/>
+        public override void OnPlay()
+        {
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override void OnPlace()
+        {
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override void OnCardRemoval()
+        {
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override void OnTraitRemoved()
+        {
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            {
+                GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
+            }
         }
     }
 }
