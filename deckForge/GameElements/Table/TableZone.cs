@@ -1,6 +1,7 @@
-﻿using DeckForge.GameElements.Resources.Cards;
+﻿using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Resources.Cards;
 
-namespace DeckForge.GameElements.Resources
+namespace DeckForge.GameElements.Table
 {
     /// <summary>
     /// Creates rules for zones that can be on a <see cref="ITable"/>.

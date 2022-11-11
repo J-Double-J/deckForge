@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction;
+using DeckForge.GameElements.Table;
 
 namespace DeckForge.GameElements.Resources.Cards.CardTraits
 {

@@ -4,7 +4,7 @@ using DeckForge.PhaseActions;
 namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
 {
     /// <summary>
-    /// Sets up the <see cref="GameElements.Table"/> for the next round of Poker.
+    /// Sets up the <see cref="GameElements.Table.Table"/> for the next round of Poker.
     /// </summary>
     public class SetUpTablePokerPhase : BasePhase
     {

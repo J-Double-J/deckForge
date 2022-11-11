@@ -4,7 +4,7 @@ using DeckForge.PlayerConstruction;
 namespace DeckForge.PhaseActions
 {
     /// <summary>
-    /// Takes all the cards from a target <see cref="IPlayer"/>'s spot on the <see cref="GameElements.Table"/> and
+    /// Takes all the cards from a target <see cref="IPlayer"/>'s spot on the <see cref="GameElements.Table.Table"/> and
     /// puts its in the <see cref="IDeck"/> managed by the <see cref="IPlayer"/>.
     /// </summary>
     public class TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction : PlayerGameAction

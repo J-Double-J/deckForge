@@ -1,4 +1,4 @@
-﻿namespace DeckForge.GameElements.Resources
+﻿namespace DeckForge.GameElements.Table
 {
     /// <summary>
     /// Enumeration for areas on the <see cref="Table"/>.

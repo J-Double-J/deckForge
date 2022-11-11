@@ -1,4 +1,5 @@
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 
 namespace DeckForge.PhaseActions
@@ -13,7 +14,7 @@ namespace DeckForge.PhaseActions
         /// <summary>
         /// Initializes a new instance of the <see cref="FlipOneCard_OneWayAction"/> class.
         /// </summary>
-        /// <param name="specificCardTablePos">The specific position of the card on the <see cref="GameElements.ITable"/>
+        /// <param name="specificCardTablePos">The specific position of the card on the <see cref="Table.ITable"/>
         /// to flip.</param>
         /// <param name="facedown">Indicates whether the card should be flipped up, down, or regardless of current
         /// orientation.</param>

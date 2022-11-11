@@ -1,10 +1,11 @@
 ﻿using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 
 namespace DeckForge.PhaseActions
 {
     /// <summary>
-    /// Picks up all the <see cref="ICard"/>s from the <see cref="GameElements.ITable"/> that the <see cref="IPlayer"/> owns.
+    /// Picks up all the <see cref="ICard"/>s from the <see cref="Table.ITable"/> that the <see cref="IPlayer"/> owns.
     /// </summary>
     public class PickUpOwnCardsFromTableAction : PlayerGameAction
     {

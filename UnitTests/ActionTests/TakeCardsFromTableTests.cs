@@ -1,9 +1,9 @@
 ﻿using DeckForge.PhaseActions;
-using DeckForge.GameElements;
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
+using DeckForge.GameElements.Table;
 
 namespace UnitTests.ActionTests
 {

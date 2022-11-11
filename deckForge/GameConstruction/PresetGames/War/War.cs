@@ -1,5 +1,5 @@
-﻿using DeckForge.GameElements;
-using DeckForge.GameElements.Resources;
+﻿using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.GameRules;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
 using DeckForge.PlayerConstruction;

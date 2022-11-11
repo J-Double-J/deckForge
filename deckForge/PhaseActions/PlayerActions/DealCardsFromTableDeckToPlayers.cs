@@ -23,7 +23,7 @@ namespace DeckForge.PhaseActions
         }
 
         /// <summary>
-        /// Gets or sets the position or index of the <see cref="GameElements.Resources.IDeck"/> on the <see cref="GameElements.Table"/>
+        /// Gets or sets the position or index of the <see cref="GameElements.Resources.IDeck"/> on the <see cref="GameElements.Table.Table"/>
         /// that the <see cref="IGameAction"/> will interact with.
         /// </summary>
         public int DeckPos { get; set; }

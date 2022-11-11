@@ -1,7 +1,7 @@
 ﻿using DeckForge.GameConstruction;
-using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
+using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
 using UnitTests.Mocks;

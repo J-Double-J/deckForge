@@ -1,4 +1,5 @@
-﻿using DeckForge.PlayerConstruction;
+﻿using DeckForge.GameElements.Table;
+using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameElements.Resources
 {

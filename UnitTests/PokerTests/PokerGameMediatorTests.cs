@@ -1,6 +1,6 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Poker;
-using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using FluentAssertions;
 using UnitTests.PokerTests.TestablePokerPlayer;
 

@@ -2,7 +2,7 @@ using DeckForge.GameElements.Resources;
 using DeckForge.PlayerConstruction;
 
 // TODO: Do these functions need to return void or cards?
-namespace DeckForge.GameElements
+namespace DeckForge.GameElements.Table
 {
     /// <summary>
     /// Responsible for tracking played <see cref="ICard"/>s and where they are played.
@@ -33,7 +33,7 @@ namespace DeckForge.GameElements
         /// <summary>
         /// Gets the list of <see cref="ICard"/>s in front of a specified <see cref="IPlayer"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="PlayerConstruction.IPlayer"/>.</param>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
         /// <returns>List of <see cref="ICard"/>s that belong to the <see cref="IPlayer"/>.</returns>
         public List<ICard> GetCardsForSpecificPlayer(int playerID);
 

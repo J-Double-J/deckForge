@@ -1,7 +1,7 @@
 ﻿using DeckForge.GameConstruction;
 using DeckForge.GameConstruction.PresetGames.War;
-using DeckForge.GameElements;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.GameRules.RoundConstruction.Interfaces;
 using DeckForge.GameRules.RoundConstruction.Phases;
 using DeckForge.PhaseActions;

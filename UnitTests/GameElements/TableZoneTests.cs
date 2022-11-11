@@ -1,6 +1,7 @@
 ﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
+using DeckForge.GameElements.Table;
 using DeckForge.HelperObjects;
 using FluentAssertions;
 

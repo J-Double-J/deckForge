@@ -4,7 +4,7 @@ using DeckForge.GameElements.Resources.Cards.CardEvents;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;
 
-namespace DeckForge.GameElements
+namespace DeckForge.GameElements.Table
 {
     /// <summary>
     /// Responsible for tracking the state of the game that takes place on the <see cref="Table"/> and where
@@ -20,7 +20,7 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
+        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
         public Table(IGameMediator mediator, int playerCount, int tableNeutralZonesCount = 0)
@@ -51,7 +51,7 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
+        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
         /// <param name="initDeck">Initial <see cref="IDeck"/> that is on the <see cref="Table"/>.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
@@ -86,7 +86,7 @@ namespace DeckForge.GameElements
         /// </summary>
         /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
         /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="PlayerConstruction.IPlayer"/>s in the game.</param>
+        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
         /// <param name="initDecks">List of initial <see cref="IDeck"/>s on the <see cref="Table"/>.</param>
         /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
         /// can be played.</param>
@@ -378,9 +378,9 @@ namespace DeckForge.GameElements
             return retVal;
         }
 
-        public void PlayCardToZone(ICard card, TablePlacementZones placementZone,  int areaInZone = 0, int spotInArea = -1)
+        public void PlayCardToZone(ICard card, TablePlacementZones placementZone, int areaInZone = 0, int spotInArea = -1)
         {
-            
+
         }
 
         /// <inheritdoc/>
