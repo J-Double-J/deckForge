@@ -52,7 +52,6 @@ namespace UnitTests.PlayerRoundRulesTests
             IGameMediator gm = new TestGameMediator(3);
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
-            //Table table = new(gm, 3, new DeckOfPlayingCards());
             TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
             Table table = new(gm, new List<TableZone>() { zone });
 
@@ -64,7 +63,7 @@ namespace UnitTests.PlayerRoundRulesTests
                 playerIDs.Add(i);
             }
 
-            List<int> targetPlayOrder = new List<int>() { 0, 2 };
+            List<int> targetPlayOrder = new() { 0, 2 };
 
             PlayerPhase playerPhase = new PlayerTwoLosesInPhase((TestGameMediator)gm, playerIDs, "Test Phase");
 

@@ -148,29 +148,26 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         /// <param name="actionNum">Index of the <see cref="IGameAction{T}"/> in the list managed by the <see cref="PlayerPhase"/>.</param>
         protected virtual void DoPhaseActionsWithMultiplePlayers(List<int> playerIDs, int actionNum)
         {
-            foreach (int player in playerIDs)
+            for (int i = actionNum; i < ActionCount; i++)
             {
-                CurrentPlayerTurn = player;
-
-                if (!PhaseActionLogic(player, actionNum))
+                CurrentAction = i;
+                foreach (int player in playerIDs)
                 {
-                    GM.TellPlayerToDoAction(player, Actions[actionNum]);
+                    CurrentPlayerTurn = player;
+
+                    if (!PhaseActionLogic(player, i))
+                    {
+                        GM.TellPlayerToDoAction(player, Actions[i]);
+                    }
+                }
+
+                if (CurrentAction < 0)
+                {
+                    break;
                 }
             }
 
-            if (CurrentAction >= 0)
-            {
-                CurrentAction++;
-            }
-
-            if (!(CurrentAction > ActionCount - 1) && !(CurrentAction < 0))
-            {
-                DoPhaseActionsWithMultiplePlayers(playerIDs, CurrentAction);
-            }
-            else
-            {
-                EndPhase();
-            }
+            EndPhase();
         }
 
         /// <summary>
