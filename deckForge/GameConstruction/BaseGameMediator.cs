@@ -414,40 +414,17 @@ namespace DeckForge.GameConstruction
             }
         }
 
-        ///// <inheritdoc/>
-        //public virtual void DealCardsFromDeckToAllPlayers(int deckPos, int numberOfCardsToDealToEachPlayer)
-        //{
-        //    bool nullCardDrawn = false;
-
-        //    for (var i = 0; i < numberOfCardsToDealToEachPlayer; i++)
-        //    {
-        //        foreach (IPlayer player in Players!)
-        //        {
-        //            ICard? drawnCard = DrawCardFromDeck(deckPos);
-        //            if (drawnCard != null)
-        //            {
-        //                player.AddCardToHand(drawnCard);
-        //            }
-        //            else
-        //            {
-        //                nullCardDrawn = true;
-        //                break;
-        //            }
-
-        //            if (nullCardDrawn)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-
         public virtual void DealCardsFromDeckToAllPlayers(int numberOfCardsToDeal, TablePlacementZoneType zoneType, int area = 0)
         {
             bool nullCardDrawn = false;
 
             for (var i = 0; i < numberOfCardsToDeal; i++)
             {
+                if (nullCardDrawn)
+                {
+                    break;
+                }
+
                 foreach (IPlayer player in Players!)
                 {
                     ICard? drawnCard = DrawCardFromDeck(zoneType, area);
@@ -458,11 +435,6 @@ namespace DeckForge.GameConstruction
                     else
                     {
                         nullCardDrawn = true;
-                        break;
-                    }
-
-                    if (nullCardDrawn)
-                    {
                         break;
                     }
                 }

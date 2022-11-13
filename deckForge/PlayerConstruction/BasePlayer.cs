@@ -160,6 +160,18 @@ namespace DeckForge.PlayerConstruction
             return card;
         }
 
+        public virtual List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0)
+        {
+            List<ICard?> cards = new();
+
+            for (int i = 0; i < numCards; i++)
+            {
+                cards.Add(DrawCard(zoneType, area));
+            }
+
+            return cards;
+        }
+
         /// <inheritdoc/>
         public virtual void AddCardToHand(ICard card)
         {

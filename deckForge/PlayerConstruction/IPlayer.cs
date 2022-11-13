@@ -72,12 +72,21 @@ namespace DeckForge.PlayerConstruction
         public void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
-        /// Draws a card.
+        /// Draws a <see cref="ICard"/> from a <see cref="IDeck"/>.
         /// </summary>
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
         /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
         /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
         public ICard? DrawCard(TablePlacementZoneType zoneType, int area = 0);
+
+        /// <summary>
+        /// Draws numerous <see cref="ICard"/>s from a <see cref="IDeck"/>.
+        /// </summary>
+        /// <param name="numCards">Number of <see cref="ICard"/>s to draw from an <see cref="IDeck"/>.</param>
+        /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
+        /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
+        /// <returns>A list of nullable <see cref="ICard"/>s.</returns>
+        public List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0)
 
         /// <summary>
         /// Adds a <see cref="ICard"/> to the <see cref="IPlayer"/>'s hand.
