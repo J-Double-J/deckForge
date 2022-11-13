@@ -10,8 +10,6 @@ namespace DeckForge.GameElements.Resources.Cards
     /// </summary>
     public abstract class InstantEffectCard : EffectCard
     {
-        private IPlayer? ownedBy;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InstantEffectCard"/> class.
         /// </summary>
@@ -31,23 +29,7 @@ namespace DeckForge.GameElements.Resources.Cards
         }
 
         /// <inheritdoc/>
-        public override IPlayer? OwnedBy
-        {
-            get
-            {
-                return ownedBy;
-            }
-
-            set
-            {
-                ownedBy = value;
-
-                if (ownedBy is not null)
-                {
-                    ownedBy.PlayerPlayedCard += OnCardPlayed;
-                }
-            }
-        }
+        public override IPlayer? OwnedBy { get; set; }
 
         /// <summary>
         /// Gets the name of the <see cref="ICard"/>.
@@ -66,13 +48,12 @@ namespace DeckForge.GameElements.Resources.Cards
             return $"{Name}: {Description}";
         }
 
-        private void OnCardPlayed(object? sender, PlayerPlayedCardEventArgs e)
+        /// <inheritdoc/>
+        public override void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
-            if (e.CardPlayed == this)
-            {
-                ExecuteEffect();
-            }
-        }
+            base.OnPlay(placementDetails);
 
+            ExecuteEffect();
+        }
     }
 }

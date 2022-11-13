@@ -14,7 +14,7 @@ namespace UnitTests.GameElements
         public void CanPlayCardToZone()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1);
 
             tableZone.PlayCardToArea(card, 0);
 
@@ -25,7 +25,7 @@ namespace UnitTests.GameElements
         public void CanPlayCardToSpecificPlaceInArea()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1, 5);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1, 5);
 
             tableZone.PlayCardToArea(card, 0, 3);
 
@@ -36,7 +36,7 @@ namespace UnitTests.GameElements
         public void CannotPlayCardToSpecificPlaceInArea_WithoutSpecifiedAreaSize()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1);
 
             Action a = () => tableZone.PlayCardToArea(card, 0, 3);
 
@@ -46,7 +46,7 @@ namespace UnitTests.GameElements
         public void CannotPlayCardToArea_IfAllSpotsFilled()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1, 2);
 
             tableZone.PlayCardToArea(new PlayingCard(2, "S"), 0);
             tableZone.PlayCardToArea(new PlayingCard(3, "S"), 0);
@@ -59,7 +59,7 @@ namespace UnitTests.GameElements
         public void CannotPlayCardToArea_WithPlacementSpecified_IfAllSpotsAreFilled()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1, 2);
 
             tableZone.PlayCardToArea(new PlayingCard(2, "S"), 0);
             tableZone.PlayCardToArea(new PlayingCard(3, "S"), 0);
@@ -72,7 +72,7 @@ namespace UnitTests.GameElements
         public void CanPlayMultipleCardsToZone()
         {
             List<ICard> cards = new() { new PlayingCard(1, "S"), new PlayingCard(2, "S") };
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1);
 
             tableZone.PlayCardsToArea(cards, 0);
 
@@ -84,7 +84,7 @@ namespace UnitTests.GameElements
         public void CanPlaceCardToZone()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new TableZone(TablePlacementZones.PlayerZone, 1);
+            TableZone tableZone = new TableZone(TablePlacementZoneType.PlayerZone, 1);
 
             tableZone.PlaceCardToArea(card, 0);
 
@@ -95,7 +95,7 @@ namespace UnitTests.GameElements
         public void CanPlaceCardToZone_ToSpecificPlaceInArea()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new TableZone(TablePlacementZones.PlayerZone, 1, 2);
+            TableZone tableZone = new TableZone(TablePlacementZoneType.PlayerZone, 1, 2);
 
             tableZone.PlaceCardToArea(card, 0, 1);
 
@@ -106,7 +106,7 @@ namespace UnitTests.GameElements
         public void CanRemoveCardFromZone()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1);
 
             tableZone.PlayCardToArea(card, 0);
 
@@ -117,7 +117,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void AreaIsFilledWithNullCards_IfAreaLimitSpecified()
         {
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1, 4);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1, 4);
 
             tableZone.GetCardsInArea(0).Count.Should().Be(4, "there are 4 NullCards");
 
@@ -131,7 +131,7 @@ namespace UnitTests.GameElements
         public void CanDrawFromDeck_InZone()
         {
             IDeck deck = new DeckOfPlayingCards();
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 1, deck);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 1, deck);
 
             tableZone.DrawCardFromZone();
 
@@ -142,7 +142,7 @@ namespace UnitTests.GameElements
         public void CanDrawFromDeck_InArea()
         {
             List<IDeck> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 3, decks);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 3, decks);
 
             tableZone.DrawCardFromZone(2);
 
@@ -155,7 +155,7 @@ namespace UnitTests.GameElements
         {
             IGameMediator gm = new BaseGameMediator(1);
             ICard card = new BaseCharacterCard(gm, 1, 1);
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
 
@@ -167,7 +167,7 @@ namespace UnitTests.GameElements
         {
             IGameMediator gm = new BaseGameMediator(1);
             ICard card = new BaseCharacterCard(gm, 1, 1);
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlaceCardToArea(card, 1);
 
@@ -179,7 +179,7 @@ namespace UnitTests.GameElements
         {
             IGameMediator gm = new BaseGameMediator(1);
             ICard card = new BaseCharacterCard(gm, 1, 1);
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
             tableZone.RemoveCard(1, 0);
@@ -192,7 +192,7 @@ namespace UnitTests.GameElements
         {
             IGameMediator gm = new BaseGameMediator(1);
             ICard card = new BaseCharacterCard(gm, 1, 1);
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
             tableZone.RemoveCard(card, 1);
@@ -205,7 +205,7 @@ namespace UnitTests.GameElements
         {
             IGameMediator gm = new BaseGameMediator(1);
             ICard card = new BaseCharacterCard(gm, 1, 1);
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
             tableZone.RemoveCard(card, 1, 0);
@@ -217,7 +217,7 @@ namespace UnitTests.GameElements
         public void InvalidAreaPassedTo_RemoveCard()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
             Action a = () => tableZone.RemoveCard(card, 2, 0);
@@ -231,7 +231,7 @@ namespace UnitTests.GameElements
         public void InvalidPlacementPassedTo_RemoveCard()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2);
 
             tableZone.PlayCardToArea(card, 1);
             Action a = () => tableZone.RemoveCard(card, 1, 4);
@@ -245,7 +245,7 @@ namespace UnitTests.GameElements
         public void RemoveCard_WhereOnlyNullCardsExist()
         {
             ICard card = new PlayingCard(1, "S");
-            TableZone tableZone = new(TablePlacementZones.PlayerZone, 2, 4);
+            TableZone tableZone = new(TablePlacementZoneType.PlayerZone, 2, 4);
 
             tableZone.RemoveCard(1, 3).Should().Be(false, "no card was removed because only NullCards are there");
         }

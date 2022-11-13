@@ -33,11 +33,11 @@ namespace UnitTests.GameRulesTests
         public void PlayerShouldHave_CorrectInitHandSize()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 0, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             BaseSetUpRules spr = new BaseSetUpRules(initHandSize: 8);
             IPlayer p = new BasePlayer(gm, initHandSize: spr.InitHandSize);
-            p.DrawStartingHand();
+            p.DrawStartingHand(TablePlacementZoneType.PlayerZone);
 
             p.HandSize.Should().Be(8, "SetUpRules set the initial hand size to 8");
         }

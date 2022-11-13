@@ -14,7 +14,7 @@ namespace DeckForge.GameElements.Table
     {
         private List<List<ICard>> playerZones;
         private List<List<ICard>> neutralZones;
-
+        private List<TableZone> zones = new();
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
@@ -115,6 +115,39 @@ namespace DeckForge.GameElements.Table
             }
 
             TableDecks = initDecks;
+        }
+
+        public Table(IGameMediator gm, List<TableZone> zones)
+        {
+            GM = gm;
+            GM.RegisterTable(this);
+
+            this.zones = zones;
+
+            // TODO: Temp patch.
+            playerZones = new();
+            neutralZones = new();
+
+            for (var i = 0; i < FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.AreaCount; i++)
+            {
+                List<ICard> cards = new();
+                playerZones.Add(cards);
+            }
+
+            for (var i = 0; i < 2; i++)
+            {
+                List<ICard> cards = new();
+                neutralZones.Add(cards);
+            }
+
+            TableDecks = new();
+            foreach (TableZone zone in zones)
+            {
+                foreach (var deck in zone.Decks)
+                {
+                    TableDecks.Add(deck);
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -309,30 +342,62 @@ namespace DeckForge.GameElements.Table
             }
         }
 
-        /// <inheritdoc/>
-        public ICard? DrawCardFromDeck(int deckNum = 0)
+        public ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0)
         {
             try
             {
-                return TableDecks[deckNum].DrawCard();
+                return FindZoneBasedOnType(zoneType)!.DrawCardFromZone(area);
             }
             catch
             {
-                throw new ArgumentOutOfRangeException(
-                    paramName: nameof(deckNum),
-                    message: "Index was out of range. Did you give a deck to the table?");
+                throw;
             }
         }
 
         /// <inheritdoc/>
-        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0)
+        //public ICard? DrawCardFromDeck(int deckNum = 0)
+        //{
+        //    try
+        //    {
+        //        return TableDecks[deckNum].DrawCard();
+        //    }
+        //    catch
+        //    {
+        //        throw new ArgumentOutOfRangeException(
+        //            paramName: nameof(deckNum),
+        //            message: "Index was out of range. Did you give a deck to the table?");
+        //    }
+        //}
+
+        /// <inheritdoc/>
+        //public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum = 0)
+        //{
+        //    List<ICard?> cards = new();
+        //    try
+        //    {
+        //        for (var i = 0; i < cardCount; i++)
+        //        {
+        //            cards.Add(DrawCardFromDeck(deckNum));
+        //        }
+
+        //        return cards;
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0)
         {
-            List<ICard?> cards = new();
             try
             {
-                for (var i = 0; i < cardCount; i++)
+                TableZone zone = FindZoneBasedOnType(zoneType)!;
+                List<ICard?> cards = new();
+
+                for (int i = 0; i < cardCount; i++)
                 {
-                    cards.Add(DrawCardFromDeck(deckNum));
+                    cards.Add(zone.DrawCardFromZone(area));
                 }
 
                 return cards;
@@ -378,7 +443,7 @@ namespace DeckForge.GameElements.Table
             return retVal;
         }
 
-        public void PlayCardToZone(ICard card, TablePlacementZones placementZone, int areaInZone = 0, int spotInArea = -1)
+        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int areaInZone = 0, int spotInArea = -1)
         {
 
         }
@@ -393,7 +458,7 @@ namespace DeckForge.GameElements.Table
             playerZones[playerZone].Add(card);
             card.OnPlay(
                     new CardPlacedOnTableDetails(
-                        TablePlacementZones.PlayerZone,
+                        TablePlacementZoneType.PlayerZone,
                         playerZones.Count - 1,
                         playerZones[playerZone].Count - 1));
         }
@@ -457,6 +522,28 @@ namespace DeckForge.GameElements.Table
             }
 
             return cards;
+        }
+
+        /// <summary>
+        /// Finds a zone on the <see cref="Table"/> based on the <see cref="TablePlacementZoneType"/>.
+        /// </summary>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> to search for.</param>
+        /// <param name="throwIfNotFound">If <c>true</c>, throws an <see cref="ArgumentException"/> if the
+        /// <see cref="TablePlacementZoneType"/> is not found. Default <c>true</c>.</param>
+        /// <returns><see cref="TableZone"/> on <see cref="Table"/> that is the correct type.</returns>
+        /// <exception cref="ArgumentException">Throws if <see cref="TablePlacementZoneType"/> is not found
+        /// and <paramref name="throwIfNotFound"/> is true.</exception>
+        protected TableZone? FindZoneBasedOnType(TablePlacementZoneType zoneType, bool throwIfNotFound = true)
+        {
+            var result = zones.Find(zone => zone.PlacementZoneType == zoneType);
+            if (result is not null || !throwIfNotFound)
+            {
+                return result;
+            }
+            else
+            {
+                throw new ArgumentException($"There is no zone of type {zoneType} on this table.");
+            }
         }
     }
 }

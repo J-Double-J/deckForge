@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction;
+using DeckForge.GameElements.Table;
 
 namespace DeckForge.PhaseActions
 {
@@ -11,22 +12,18 @@ namespace DeckForge.PhaseActions
 
         public DealCardsFromTableDeckToPlayers(
             IGameMediator gm,
-            int deckPos,
             int numberOfCardsToDealToEachPlayer,
+            TablePlacementZoneType zoneType,
+            int area = 0,
             string name = "Deal Cards",
             string description = "Deal a number of cards to each player")
             : base(name: name, description: description)
         {
             this.gm = gm;
-            DeckPos = deckPos;
             NumberOfCardsToDealToEachPlayer = numberOfCardsToDealToEachPlayer;
+            ZoneType = zoneType;
+            Area = area;
         }
-
-        /// <summary>
-        /// Gets or sets the position or index of the <see cref="GameElements.Resources.IDeck"/> on the <see cref="GameElements.Table.Table"/>
-        /// that the <see cref="IGameAction"/> will interact with.
-        /// </summary>
-        public int DeckPos { get; set; }
 
         /// <summary>
         /// Gets or sets the number of <see cref="GameElements.Resources.PlayingCard"/>s to deal
@@ -34,9 +31,19 @@ namespace DeckForge.PhaseActions
         /// </summary>
         public int NumberOfCardsToDealToEachPlayer { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of zone to search for <see cref="IDeck"/> on the <see cref="Table"/>.
+        /// </summary>
+        public TablePlacementZoneType ZoneType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the optional parameter of which area to search for a <see cref="IDeck"/> in the zone.
+        /// </summary>
+        public int Area { get; set; }
+
         public override object? Execute()
         {
-            gm.DealCardsFromDeckToAllPlayers(DeckPos, NumberOfCardsToDealToEachPlayer);
+            gm.DealCardsFromDeckToAllPlayers(NumberOfCardsToDealToEachPlayer, ZoneType, Area);
             return null;
         }
     }

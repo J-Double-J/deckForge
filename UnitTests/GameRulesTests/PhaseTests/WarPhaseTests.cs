@@ -23,12 +23,13 @@ namespace UnitTests.PhaseTests
         public void InitializeTableTests()
         {
             gm = new BaseGameMediator(2);
-            table = new(gm, 2, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            table = new(gm, new List<TableZone>() { zone });
 
             players = new();
             for (var i = 0; i < 2; i++)
             {
-                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26)!.ConvertAll(c => (PlayingCard)c!);
+                List<PlayingCard> cards = table.DrawMultipleCardsFromDeck(26, TablePlacementZoneType.PlayerZone)!.ConvertAll(c => (PlayingCard)c!);
                 DeckOfPlayingCards deck = new(cards);
                 players.Add(new WarPlayer(gm, i, deck));
             }

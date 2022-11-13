@@ -21,7 +21,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <inheritdoc/>
         public override void OnPlay()
         {
-            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZoneType.PlayerZone)
             {
                 GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
             }
@@ -30,7 +30,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <inheritdoc/>
         public override void OnPlace()
         {
-            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZoneType.PlayerZone)
             {
                 GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, 1);
             }
@@ -39,7 +39,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <inheritdoc/>
         public override void OnCardRemoval()
         {
-            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZoneType.PlayerZone)
             {
                 GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
             }
@@ -48,7 +48,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <inheritdoc/>
         public override void OnTraitRemoved()
         {
-            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZones.PlayerZone)
+            if (AttachedToCard.TablePlacementDetails?.TablePlacementZone == TablePlacementZoneType.PlayerZone)
             {
                 GM.ChangeCardModifierValueBy(HelperObjects.CardModifiers.CharacterCardsInPlayerZones, -1);
             }

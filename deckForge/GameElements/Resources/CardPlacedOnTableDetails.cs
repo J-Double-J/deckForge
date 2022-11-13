@@ -17,7 +17,7 @@ namespace DeckForge.GameElements.Resources
         /// <param name="area">Area in zone that the <see cref="ICard"/> was placed.</param>
         /// <param name="specificPlaceInZone">Specific spot in zone where the <see cref="ICard"/> was placed.</param>
         public CardPlacedOnTableDetails(
-            TablePlacementZones tablePlacementZone,
+            TablePlacementZoneType tablePlacementZone,
             int area,
             int specificPlaceInArea)
         {
@@ -29,7 +29,7 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Gets the enum value of where the <see cref="ICard"/> is placed.
         /// </summary>
-        public TablePlacementZones TablePlacementZone { get; }
+        public TablePlacementZoneType TablePlacementZone { get; }
 
         /// <summary>
         /// Gets the area in the zone that the <see cref="ICard"/> was placed in.

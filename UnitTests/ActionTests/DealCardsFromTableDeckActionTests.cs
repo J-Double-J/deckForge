@@ -14,7 +14,8 @@ namespace UnitTests.ActionTests
         public void CardsAreDealtFromTableDeckToEachPlayer()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            ITable table = new Table(gm, 3, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             List<IPlayer> players = new()
             {
                 new BasePlayer(gm, 0),
@@ -22,7 +23,7 @@ namespace UnitTests.ActionTests
                 new BasePlayer(gm, 2)
             };
 
-            IGameAction action = new DealCardsFromTableDeckToPlayers(gm, 0, 2, "Test Deal", "Test");
+            IGameAction action = new DealCardsFromTableDeckToPlayers(gm, 2, TablePlacementZoneType.PlayerZone);
             action.Execute();
 
             foreach (IPlayer player in players)

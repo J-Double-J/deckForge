@@ -19,7 +19,9 @@ namespace UnitTests.PlayerRoundRulesTests
             IGameMediator gm = new TestGameMediator(3);
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 3, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
@@ -50,7 +52,9 @@ namespace UnitTests.PlayerRoundRulesTests
             IGameMediator gm = new TestGameMediator(3);
             ITurnHandler th = new TurnHandler(3, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 3, new DeckOfPlayingCards());
+            //Table table = new(gm, 3, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
@@ -73,33 +77,35 @@ namespace UnitTests.PlayerRoundRulesTests
         }
     }
 
-    //Test Objects
+    // Test Objects
     internal class TestPhase : PlayerPhase
     {
         public TestPhase(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name)
         {
-            Actions.Add(new DrawCardsAction());
-            Actions.Add(new DrawCardsAction());
-            Actions.Add(new DrawCardsAction());
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
             gm.RegisterPhase(this);
         }
     }
 
     internal class PlayerTwoLosesInPhase : PlayerPhase
     {
-        public PlayerTwoLosesInPhase(TestGameMediator gm, List<int> playerIDs, string name) : base(gm, playerIDs, name)
+        public PlayerTwoLosesInPhase(TestGameMediator gm, List<int> playerIDs, string name)
+            : base(gm, playerIDs, name)
         {
-            Actions.Add(new DrawCardsAction());
-            Actions.Add(new DrawCardsAction());
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
             Actions.Add(new TestActionPlayerTwoLoses(gm));
-            Actions.Add(new DrawCardsAction());
+            Actions.Add(new DrawCardsAction(TablePlacementZoneType.PlayerZone));
             gm.RegisterPhase(this);
         }
     }
 
     internal class TestGameMediator : BaseGameMediator
     {
-        public TestGameMediator(int playerCount) : base(playerCount)
+        public TestGameMediator(int playerCount)
+            : base(playerCount)
         {
         }
 
@@ -125,6 +131,7 @@ namespace UnitTests.PlayerRoundRulesTests
     internal class TestActionPlayerTwoLoses : PlayerGameAction
     {
         IGameMediator gm;
+
         public TestActionPlayerTwoLoses(IGameMediator gm)
         {
             this.gm = gm;
@@ -136,6 +143,7 @@ namespace UnitTests.PlayerRoundRulesTests
             {
                 player.LoseGame();
             }
+
             return null;
         }
     }

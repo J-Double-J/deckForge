@@ -14,11 +14,12 @@ namespace UnitTests.ActionTests.NonPlayerActionTests
         public void CardsAreAddedToTheDeck()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            Table table = new(gm, 1, new DeckOfPlayingCards(), 2);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             BaseGameAction action = new MoveAllCardsFromTableToTableDeckAction(gm, 0);
 
-            table.AddCardsTo_NeutralZone(table.DrawMultipleCardsFromDeck(2)!, 0);
-            table.AddCardsTo_NeutralZone(table.DrawMultipleCardsFromDeck(2)!, 1);
+            table.AddCardsTo_NeutralZone(table.DrawMultipleCardsFromDeck(2, TablePlacementZoneType.PlayerZone)!, 0);
+            table.AddCardsTo_NeutralZone(table.DrawMultipleCardsFromDeck(2, TablePlacementZoneType.PlayerZone)!, 1);
 
             action.Execute();
 

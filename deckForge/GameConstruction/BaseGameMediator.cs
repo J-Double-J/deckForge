@@ -192,16 +192,6 @@ namespace DeckForge.GameConstruction
         }
 
         /// <summary>
-        /// Starts an <see cref="IPlayer"/>'s turn based on <paramref name="turn"/>.
-        /// </summary>
-        /// <param name="turn">Turn number in the round used to tell that player in the List to
-        /// start their turn.</param>
-        public virtual void StartPlayerTurn(int turn)
-        {
-            Players![turn].StartTurn();
-        }
-
-        /// <summary>
         /// Puts a <see cref="ICard"/> on the <see cref="Table"/> everytime <see cref="IPlayer"/> plays a <see cref="ICard"/>.
         /// </summary>
         /// <param name="playerID">ID of the <see cref="IPlayer"/> who played a <see cref="ICard"/>.</param>
@@ -241,12 +231,11 @@ namespace DeckForge.GameConstruction
             }
         }
 
-        /// <inheritdoc/>
-        public virtual ICard? DrawCardFromDeck(int deckPosition)
+        public virtual ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0)
         {
             try
             {
-                ICard? c = GameTable!.DrawCardFromDeck(deckPosition);
+                ICard? c = GameTable!.DrawCardFromDeck(zoneType, area);
                 if (c != null)
                 {
                     return c;
@@ -398,7 +387,7 @@ namespace DeckForge.GameConstruction
         {
             Players!.Remove(GetPlayerByID(playerID)!);
 
-            // Could use LINQ most likely here7
+            // Could use LINQ most likely here
             List<int> remaingPlayerIDs = new();
             foreach (IPlayer player in Players)
             {
@@ -425,16 +414,43 @@ namespace DeckForge.GameConstruction
             }
         }
 
-        /// <inheritdoc/>
-        public virtual void DealCardsFromDeckToAllPlayers(int deckPos, int numberOfCardsToDealToEachPlayer)
+        ///// <inheritdoc/>
+        //public virtual void DealCardsFromDeckToAllPlayers(int deckPos, int numberOfCardsToDealToEachPlayer)
+        //{
+        //    bool nullCardDrawn = false;
+
+        //    for (var i = 0; i < numberOfCardsToDealToEachPlayer; i++)
+        //    {
+        //        foreach (IPlayer player in Players!)
+        //        {
+        //            ICard? drawnCard = DrawCardFromDeck(deckPos);
+        //            if (drawnCard != null)
+        //            {
+        //                player.AddCardToHand(drawnCard);
+        //            }
+        //            else
+        //            {
+        //                nullCardDrawn = true;
+        //                break;
+        //            }
+
+        //            if (nullCardDrawn)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
+
+        public virtual void DealCardsFromDeckToAllPlayers(int numberOfCardsToDeal, TablePlacementZoneType zoneType, int area = 0)
         {
             bool nullCardDrawn = false;
 
-            for (var i = 0; i < numberOfCardsToDealToEachPlayer; i++)
+            for (var i = 0; i < numberOfCardsToDeal; i++)
             {
                 foreach (IPlayer player in Players!)
                 {
-                    ICard? drawnCard = DrawCardFromDeck(deckPos);
+                    ICard? drawnCard = DrawCardFromDeck(zoneType, area);
                     if (drawnCard != null)
                     {
                         player.AddCardToHand(drawnCard);

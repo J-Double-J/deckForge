@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction.PlayerEvents;
 
@@ -128,28 +129,12 @@ namespace DeckForge.PlayerConstruction
         protected IGameMediator GM { get; }
 
         /// <inheritdoc/>
-        public virtual void DrawStartingHand()
+        public virtual void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0)
         {
             for (var i = 0; i < initHandSize; i++)
             {
-                DrawCard();
+                DrawCard(zoneType, area);
             }
-        }
-
-        /// <inheritdoc/>
-        public virtual void StartTurn() // TODO: Remove outdated function.
-        {
-            for (var i = 0; i < CardDraws; i++)
-            {
-                DrawCard();
-            }
-
-            for (var j = 0; j < CardPlays; j++)
-            {
-                PlayCard();
-            }
-
-            GM.EndPlayerTurn();
         }
 
         /// <inheritdoc/>
@@ -159,9 +144,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public virtual ICard? DrawCard(int deckPosition = 0)
+        public virtual ICard? DrawCard(TablePlacementZoneType zoneType, int area = 0)
         {
-            ICard? card = GM.DrawCardFromDeck(deckPosition);
+            ICard? card = GM.DrawCardFromDeck(zoneType, area);
             if (card != null)
             {
                 card.OwnedBy = this;

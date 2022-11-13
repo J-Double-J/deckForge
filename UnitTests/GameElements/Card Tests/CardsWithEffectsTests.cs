@@ -16,8 +16,9 @@ namespace UnitTests.GameElements.Card_Tests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new TestPlayerMock(gm, 0);
-            Table table = new(gm, 1, new DeckOfPlayingCards());
-            ICard card = new DrawCardEffectCard(gm);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            ICard card = new DrawCardEffectCard(gm, TablePlacementZoneType.PlayerZone);
 
             player.AddCardToHand(card);
             player.PlayCard();
@@ -30,8 +31,9 @@ namespace UnitTests.GameElements.Card_Tests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new TestPlayerMock(gm, 0);
-            Table table = new(gm, 1, new DeckOfPlayingCards());
-            ICard card = new DrawCardEffectCard(gm);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            ICard card = new DrawCardEffectCard(gm, TablePlacementZoneType.PlayerZone);
 
             player.AddCardToHand(card);
             ((DrawCardEffectCard)card).DrawCount = 3;

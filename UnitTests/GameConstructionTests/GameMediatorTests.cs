@@ -34,9 +34,10 @@ namespace UnitTests.GameConstructionTests
         {
             IGameMediator gm = new BaseGameMediator(0);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 0, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
 
-            ICard card = gm.DrawCardFromDeck(0)!;
+            ICard card = gm.DrawCardFromDeck(TablePlacementZoneType.PlayerZone)!;
 
             card.Should().NotBeNull("a new deck was created so it should have cards");
         }
@@ -46,16 +47,17 @@ namespace UnitTests.GameConstructionTests
         {
             IGameMediator gm = new BaseGameMediator(0);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 0, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
 
             ICard? card;
 
             for (var i = 0; i < 52; i++)
             {
-                card = gm.DrawCardFromDeck(0)!;
+                card = gm.DrawCardFromDeck(TablePlacementZoneType.PlayerZone)!;
             }
 
-            card = gm.DrawCardFromDeck(0);
+            card = gm.DrawCardFromDeck(TablePlacementZoneType.PlayerZone);
 
             card.Should().BeNull("the deck was exhausted and there are no more cards to draw");
         }
@@ -81,8 +83,9 @@ namespace UnitTests.GameConstructionTests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new BasePlayer(gm);
-            Table table = new Table(gm, 1, new DeckOfPlayingCards());
-            PlayerGameAction action = new DrawCardsAction();
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            PlayerGameAction action = new DrawCardsAction(TablePlacementZoneType.PlayerZone);
 
             gm.TellPlayerToDoAction(0, action);
 
@@ -95,8 +98,9 @@ namespace UnitTests.GameConstructionTests
             IGameMediator gm = new BaseGameMediator(2);
             IPlayer player = new BasePlayer(gm, 0);
             IPlayer target = new BasePlayer(gm, 1);
-            Table table = new Table(gm, 2, new DeckOfPlayingCards());
-            PlayerGameAction action = new DrawCardsAction();
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            PlayerGameAction action = new DrawCardsAction(TablePlacementZoneType.PlayerZone);
 
             Action a = () => gm.TellPlayerToDoActionAgainstAnotherPlayer(0, 1, action);
 
@@ -139,7 +143,8 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorCanDealCardsToPlayers()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            ITable table = new Table(gm, 3, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             List<IPlayer> players = new()
             {
                 new BasePlayer(gm, 0),
@@ -147,7 +152,7 @@ namespace UnitTests.GameConstructionTests
                 new BasePlayer(gm, 2)
             };
 
-            gm.DealCardsFromDeckToAllPlayers(0, 2);
+            gm.DealCardsFromDeckToAllPlayers(2, TablePlacementZoneType.PlayerZone);
 
             foreach (IPlayer player in players)
             {
@@ -159,7 +164,8 @@ namespace UnitTests.GameConstructionTests
         public void GameMediatorDealsAsManyCardsAsItCanToPlayers()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            ITable table = new Table(gm, 3, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 3, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             List<IPlayer> players = new()
             {
                 new BasePlayer(gm, 0),
@@ -167,7 +173,7 @@ namespace UnitTests.GameConstructionTests
                 new BasePlayer(gm, 2)
             };
 
-            gm.DealCardsFromDeckToAllPlayers(0, 20);
+            gm.DealCardsFromDeckToAllPlayers(20, TablePlacementZoneType.PlayerZone);
 
             players[0].HandSize.Should().Be(18, "there were not enough cards to get to 20 and the last extra card was dealt to the first player");
             players[1].HandSize.Should().Be(17, "there were not enough cards to get to 20");

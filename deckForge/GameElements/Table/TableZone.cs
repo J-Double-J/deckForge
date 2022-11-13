@@ -9,7 +9,7 @@ namespace DeckForge.GameElements.Table
     public class TableZone
     {
         protected List<List<ICard>> zone = new();
-        protected List<IDeck>? decks;
+        protected List<IDeck> decks = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TableZone"/> class.
@@ -18,7 +18,7 @@ namespace DeckForge.GameElements.Table
         /// <param name="areaCount">Number of areas in this zone.</param>
         /// <param name="areaCardLimit">Optional parameter that specifies how large each area can be. If set
         /// it fills all positions in area with <see cref="NullCard"/>s.</param>
-        public TableZone(TablePlacementZones placementZoneType, int areaCount, int areaCardLimit = -1)
+        public TableZone(TablePlacementZoneType placementZoneType, int areaCount, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
             AreaCount = areaCount;
@@ -36,7 +36,7 @@ namespace DeckForge.GameElements.Table
         /// <param name="deck"><see cref="IDeck"/> that is managed by this zone.</param>
         /// <param name="areaCardLimit">Optional parameter that specifies how large each area can be. If set
         /// it fills all positions in area with <see cref="NullCard"/>s.</param>
-        public TableZone(TablePlacementZones placementZoneType, int areaCount, IDeck deck, int areaCardLimit = -1)
+        public TableZone(TablePlacementZoneType placementZoneType, int areaCount, IDeck deck, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
             AreaCount = areaCount;
@@ -59,7 +59,7 @@ namespace DeckForge.GameElements.Table
         /// it fills all positions in area with <see cref="NullCard"/>s.</param>
         /// <exception cref="ArgumentException">Throws if the number of <paramref name="decks"/> is not equal
         /// to the number of areas in this zone.</exception>
-        public TableZone(TablePlacementZones placementZoneType, int areaCount, List<IDeck> decks, int areaCardLimit = -1)
+        public TableZone(TablePlacementZoneType placementZoneType, int areaCount, List<IDeck> decks, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
             AreaCount = areaCount;
@@ -80,7 +80,7 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Gets the type of zone.
         /// </summary>
-        public TablePlacementZones PlacementZoneType { get; }
+        public TablePlacementZoneType PlacementZoneType { get; }
 
         /// <summary>
         /// Gets how many different card areas are managed by this zone.
@@ -96,7 +96,7 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Gets the list of <see cref="IDeck"/>s in the <see cref="TableZone"/>.
         /// </summary>
-        public IReadOnlyList<IDeck>? Decks
+        public IReadOnlyList<IDeck> Decks
         {
             get { return decks; }
         }
@@ -402,7 +402,7 @@ namespace DeckForge.GameElements.Table
         }
 
         // Shared among all creation of TableZones
-        private void StandardConstruction(TablePlacementZones placementZoneType, int areaCount, int areaCardLimit = -1)
+        private void StandardConstruction(TablePlacementZoneType placementZoneType, int areaCount, int areaCardLimit = -1)
         {
             if (areaCount < 1)
             {

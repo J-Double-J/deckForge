@@ -1,5 +1,6 @@
 using DeckForge.GameElements.Resources;
 using DeckForge.PlayerConstruction;
+using System.Runtime.Intrinsics.X86;
 
 // TODO: Do these functions need to return void or cards?
 namespace DeckForge.GameElements.Table
@@ -108,19 +109,23 @@ namespace DeckForge.GameElements.Table
         public List<ICard> PickUpAllCards_FromPlayer(int playerID);
 
         /// <summary>
-        /// Draws a <see cref="ICard"/> from the specified <see cref="IDeck"/>.
+        /// Draws a <see cref="ICard"/> from a <see cref="TableZone"/>, and optionally, a specific area in the zone.
         /// </summary>
-        /// <param name="deckNum">ID of the <see cref="IDeck"/> of interest on the <see cref="ITable"/>.</param>
+        /// <param name="zoneType">Type of <see cref="TableZone"/> to target on the <see cref="ITable"/>.</param>
+        /// <param name="area">Area in the <see cref="TableZone"/> to pick which <see cref="IDeck"/> in the <see cref="TableZone"/>
+        /// to draw from. Default picks the first <see cref="IDeck"/>.</param>
         /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
-        public ICard? DrawCardFromDeck(int deckNum);
+        public ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
-        /// Draws multiple <see cref="ICard"/>s from the specified <see cref="IDeck"/>.
+        /// Draws multiple <see cref="ICard"/>s from a <see cref="TableZone"/>, and optionally, a specific area in the zone.
         /// </summary>
         /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
-        /// <param name="deckNum">ID of the <see cref="IDeck"/> of interest on the <see cref="ITable"/>.</param>
-        /// <returns>A list of nullable <see cref="ICard"/>s that were drawn.</returns>
-        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, int deckNum);
+        /// <param name="zoneType">Type of <see cref="TableZone"/> to target on the <see cref="ITable"/>.</param>
+        /// <param name = "area" > Area in the<see cref="TableZone"/> to pick which<see cref= "IDeck" /> in the<see cref="TableZone"/>
+        /// to draw from. Default picks the first <see cref="IDeck"/>.</param>
+        /// <returns>A list of nullable <see cref="ICard"/>s that were drawn from the specified <see cref="IDeck"/>.</returns>
+        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
         /// Shuffles a <see cref="IDeck"/> on the <see cref="ITable"/>.

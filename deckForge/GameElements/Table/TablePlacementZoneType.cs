@@ -1,9 +1,9 @@
 ﻿namespace DeckForge.GameElements.Table
 {
     /// <summary>
-    /// Enumeration for areas on the <see cref="Table"/>.
+    /// Enumeration for type of zone on the <see cref="Table"/>.
     /// </summary>
-    public enum TablePlacementZones
+    public enum TablePlacementZoneType
     {
         PlayerZone,
         NeutralZone

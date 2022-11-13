@@ -15,11 +15,11 @@ namespace UnitTests.ActionTests
         {
             bool eventRaised = false;
             IGameMediator gm = new BaseGameMediator(1);
-            List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer p = new BasePlayer(gm);
-            p.DrawStartingHand();
             PlayerGameAction action = new PlayCardAction();
+            p.DrawStartingHand(TablePlacementZoneType.PlayerZone);
 
             // StringWriter and Reader are for the console.
             var sr = new StringReader("0");

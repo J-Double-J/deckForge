@@ -16,10 +16,11 @@ namespace UnitTests.PlayerConstruction
         {
             IGameMediator gm = new BaseGameMediator(0);
             IPlayer p1 = new BasePlayer(gm);
-            PlayerGameAction action = new DrawCardsAction();
-            Table table = new(gm, 1, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            PlayerGameAction action = new DrawCardsAction(TablePlacementZoneType.PlayerZone);
 
-            p1.DrawStartingHand();
+            p1.DrawStartingHand(TablePlacementZoneType.PlayerZone);
             p1.ExecuteGameAction(action);
 
             p1.HandSize.Should().Be(6, "Player was passed a command to draw a card");
@@ -31,10 +32,11 @@ namespace UnitTests.PlayerConstruction
             IGameMediator gm = new BaseGameMediator(0);
             IPlayer p1 = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
-            PlayerGameAction action = new DrawCardsAction();
-            Table table = new(gm, 1, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            PlayerGameAction action = new DrawCardsAction(TablePlacementZoneType.PlayerZone);
 
-            p1.DrawStartingHand();
+            p1.DrawStartingHand(TablePlacementZoneType.PlayerZone);
             Action a = () => p1.ExecuteGameActionAgainstPlayer(action, p2);
 
             a.Should().Throw<NotSupportedException>("the draw action cannot be targetted against another player");

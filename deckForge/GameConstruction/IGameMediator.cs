@@ -85,12 +85,6 @@ namespace DeckForge.GameConstruction
         public void EndGameWithWinner(IPlayer winner);
 
         /// <summary>
-        /// Starts a specific <see cref="IPlayer"/>'s turn based on their <paramref name="playerID"/>.
-        /// </summary>
-        /// <param name="playerID">Player's ID.</param>
-        public void StartPlayerTurn(int playerID);
-
-        /// <summary>
         /// Called at the end of every <see cref="IPlayer"/>'s turn.
         /// </summary>
         public void EndPlayerTurn();
@@ -105,9 +99,10 @@ namespace DeckForge.GameConstruction
         /// <summary>
         /// Called whenever an <see cref="IPlayer"/> tries to draw a <see cref="ICard"/>.
         /// </summary>
-        /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="IDeck"/>.</param>
+        /// <param name="zoneType">Zone type that the <see cref="IDeck"/> resides in.</param>
+        /// <param name="area">Optional specifier for which area the <see cref="IDeck"/> resides in.</param>
         /// <returns>A nullable <see cref="ICard"/> that was drawn from a <see cref="IDeck"/>.</returns>
-        public ICard? DrawCardFromDeck(int deckPosition);
+        public ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
         /// Gets the <see cref="IPlayer"/> by their ID.
@@ -203,9 +198,10 @@ namespace DeckForge.GameConstruction
         /// This can mean an unequal number of <see cref="ICard"/>s are dealt to each <see cref="IPlayer"/> if there are not
         /// enough <see cref="ICard"/>s to be divided evenly.
         /// </remarks>
-        /// <param name="deckPosition">Position or index of the <see cref="IDeck"/> on the <see cref="ITable"/>.</param>
-        /// <param name="numberOfCardsToDealToEachPlayer">Number of cards each <see cref="IPlayer"/> will be dealt.</param>
-        public void DealCardsFromDeckToAllPlayers(int deckPosition, int numberOfCardsToDealToEachPlayer);
+        /// <param name="numberOfCardsToDeal">Number of cards each <see cref="IPlayer"/> will be dealt.</param>
+        /// <param name="zoneType">Zone type that the <see cref="IDeck"/> resides in.</param>
+        /// <param name="area">Optional specifier for which area the <see cref="IDeck"/> resides in.</param>
+        public void DealCardsFromDeckToAllPlayers(int numberOfCardsToDeal, TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
         /// Sets the CardModifiers value.

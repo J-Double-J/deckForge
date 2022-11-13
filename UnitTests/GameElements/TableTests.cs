@@ -1,18 +1,19 @@
 ﻿using DeckForge.GameConstruction;
-using FluentAssertions;
-using DeckForge.PlayerConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
+using DeckForge.PlayerConstruction;
+using FluentAssertions;
 
 namespace UnitTests.GameElements
 {
-
     [TestClass]
     public class TableTests
     {
         private static readonly List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
         private static IGameMediator gm = new BaseGameMediator(2);
-        private static Table table = new(gm, 2, Decks);
+        private static TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+        private static TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+        private static Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
         private static StringWriter output = new();
 
         /// <summary>
@@ -312,6 +313,10 @@ namespace UnitTests.GameElements
         [DataRow(2)]
         public void TableCanDrawCard_FromSpecificDeck(int deckNum)
         {
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
+
             ICard? c = table.DrawCardFromDeck(0)!;
 
             c.Should().NotBeNull("because a new card is being drawn from this deck");
@@ -320,9 +325,10 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCanDrawManyCards_FromSpecificDeck()
         {
-            List<ICard?> cards  = new();
-
-            cards = table.DrawMultipleCardsFromDeck(5);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
+            var cards = table.DrawMultipleCardsFromDeck(5, TablePlacementZoneType.PlayerZone, 0);
 
             cards.Count.Should().Be(5, "5 cards was drawn from the first deck");
 
@@ -335,11 +341,15 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCannotDraw_FromNonexistantDeck()
         {
-            Action a = () => table.DrawCardFromDeck(10);
-            Action b = () => table.DrawMultipleCardsFromDeck(5, 4);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
 
-            a.Should().Throw<ArgumentOutOfRangeException>("there is no 11th deck");
-            b.Should().Throw<ArgumentOutOfRangeException>("there is no 5th deck");
+            Action a = () => table.DrawCardFromDeck(TablePlacementZoneType.PlayerZone, 10);
+            Action b = () => table.DrawMultipleCardsFromDeck(5, TablePlacementZoneType.PlayerZone, 4);
+
+            a.Should().Throw<ArgumentException>("there is no 11th deck");
+            b.Should().Throw<ArgumentException>("there is no 5th deck");
         }
 
         [TestMethod]
