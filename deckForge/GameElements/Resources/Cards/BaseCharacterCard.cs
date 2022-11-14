@@ -122,7 +122,7 @@ namespace DeckForge.GameElements.Resources
         /// <inheritdoc/>
         public virtual void Die()
         {
-            OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs());
+            OnCardIsRemovedFromTable(new CardIsRemovedFromTableEventArgs(TablePlacementDetails!));
         }
     }
 }

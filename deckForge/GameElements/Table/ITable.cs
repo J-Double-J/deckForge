@@ -93,19 +93,37 @@ namespace DeckForge.GameElements.Table
         public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false);
 
         /// <summary>
-        /// Removes a specific <see cref="ICard"/> on the <see cref="ITable"/> from a <see cref="IPlayer"/>.
+        /// Removes a <see cref="ICard"/> from the specified area in a <see cref="TableZone"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
-        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
-        public ICard RemoveSpecificCard_FromPlayer(int playerID, int cardPos);
+        /// <param name="card"><see cref="ICard"/> to remove.</param>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> that the <see cref="ICard"/> resides in.</param>
+        /// <param name="area">Area identifier in the <see cref="TableZone"/>.</param>
+        public void RemoveCardFromTable(ICard card, TablePlacementZoneType zoneType, int area);
+
+        /// <summary>
+        /// Removes a <see cref="ICard"/> from a designated place in the specified area in a <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to remove.</param>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> that the <see cref="ICard"/> resides in.</param>
+        /// <param name="area">Area identifier in the <see cref="TableZone"/>.</param>
+        /// <param name="placementInArea">Specific spot in area to remove the <see cref="ICard"/> from.</param>
+        public void RemoveCardFromTable(ICard card, TablePlacementZoneType zoneType, int area, int placementInArea);
+
+        /// <summary>
+        /// Removes a <see cref="ICard"/> from the specified area in a <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> that the <see cref="ICard"/> resides in.</param>
+        /// <param name="area">Area identifier in the <see cref="TableZone"/>.</param>
+        /// <param name="placementInArea">Specific spot in area to remove the <see cref="ICard"/> from.</param>
+        public void RemoveCardFromTable(TablePlacementZoneType zoneType, int area, int placementInArea);
 
         /// <summary>
         /// Picks up all <see cref="ICard"/>s from the table belonging to a <see cref="IPlayer"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> </param>
+        /// <param name="area">Area identifier in the <see cref="TableZone"/>.</param>
         /// <returns>List of <see cref="ICard"/>s picked up from the <see cref="ITable"/>.</returns>
-        public List<ICard> PickUpAllCards_FromPlayer(int playerID);
+        public List<ICard> PickUpAllCards_FromArea(TablePlacementZoneType zoneType, int area);
 
         /// <summary>
         /// Draws a <see cref="ICard"/> from a <see cref="TableZone"/>, and optionally, a specific area in the zone.
@@ -173,12 +191,12 @@ namespace DeckForge.GameElements.Table
         /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/>s to.</param>
         public void PlayCardsToZone(List<ICard> cards, TablePlacementZoneType placementZone, int area);
 
-        /// <summary>
-        /// Removes a <see cref="ICard"/> from the table in a specific player zone
-        /// </summary>
-        /// <param name="card"><see cref="ICard"/> to remove from the table.</param>
-        /// <param name="playerZone">Player zone to remove the <see cref="ICard"/>.</param>
-        public void RemoveCard_FromPlayerZone(ICard card, int playerZone);
+        ///// <summary>
+        ///// Removes a <see cref="ICard"/> from the table in a specific player zone
+        ///// </summary>
+        ///// <param name="card"><see cref="ICard"/> to remove from the table.</param>
+        ///// <param name="playerZone">Player zone to remove the <see cref="ICard"/>.</param>
+        //public void RemoveCard_FromPlayerZone(ICard card, int playerZone);
 
         /// <summary>
         /// Picks up all cards from every spot on the <see cref="ITable"/>.

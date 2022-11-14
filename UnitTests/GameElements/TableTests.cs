@@ -3,6 +3,8 @@ using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
+using FluentAssertions.Specialized;
+using System.Xml.Linq;
 
 namespace UnitTests.GameElements
 {
@@ -227,7 +229,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.RemoveSpecificCard_FromPlayer(0, 0);
+            table.RemoveCardFromTable(TablePlacementZoneType.PlayerZone, 0, 0);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -245,8 +247,8 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            Action a = () => table.RemoveSpecificCard_FromPlayer(0, 5);
-            a.Should().Throw<ArgumentOutOfRangeException>("there is no sixth player");
+            Action a = () => table.RemoveCardFromTable(TablePlacementZoneType.PlayerZone, 5, 0);
+            a.Should().Throw<ArgumentException>("there is no sixth player");
         }
 
         [TestMethod]
@@ -254,8 +256,8 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            Action a = () => table.RemoveSpecificCard_FromPlayer(4, 0);
-            a.Should().Throw<ArgumentOutOfRangeException>("Player 0 has no fifth card");
+            Action a = () => table.RemoveCardFromTable(TablePlacementZoneType.PlayerZone, 0, 4);
+            a.Should().Throw<ArgumentException>("Player 0 has no fifth card");
         }
 
         [TestMethod]
@@ -265,7 +267,7 @@ namespace UnitTests.GameElements
 
             SetUpTableForTests();
 
-            cards = table.PickUpAllCards_FromPlayer(0);
+            cards = table.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
             cards.Count.Should().Be(2, "all of Player 0's cards were picked up");
         }
 
@@ -274,7 +276,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.PickUpAllCards_FromPlayer(0);
+            table.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
             table.PrintTableState();
 
             if (OperatingSystem.IsIOS())
@@ -427,7 +429,6 @@ namespace UnitTests.GameElements
             IGameMediator gm = new BaseGameMediator(0);
             TableZone zone = new(TablePlacementZoneType.NeutralZone, 1, new DeckOfPlayingCards());
             Table table = new(gm, new List<TableZone>() { zone });
-            //Table table = new(gm, 0, new DeckOfPlayingCards(), 1);
 
             table.PlayCards_FromTableDeck_ToNeutralZone(2, 0, 0);
 
@@ -449,7 +450,7 @@ namespace UnitTests.GameElements
             };
 
             table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
-            table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
+            table.RemoveCardFromTable(cardsToAdd[1], TablePlacementZoneType.PlayerZone, 0);
 
             table.PlayerZones[0].Count.Should().Be(2, "one of the cards were removed");
         }
@@ -469,7 +470,7 @@ namespace UnitTests.GameElements
 
             table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
             attackingCard.Attack((ICharacterCard)table.PlayerZones[0][1]);
-            table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
+            table.RemoveCardFromTable(cardsToAdd[1], TablePlacementZoneType.PlayerZone, 0);
 
             BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerZones[0][0];
             remainingCard.HealthVal.Should().Be(5, "the unattacked card should be the remaining card");
