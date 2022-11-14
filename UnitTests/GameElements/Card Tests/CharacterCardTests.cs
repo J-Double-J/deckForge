@@ -29,7 +29,8 @@ namespace UnitTests.GameElements.CardTests
         public void CharacterCardsIncreaseStatsBasedOnEvent()
         {
             BaseGameMediator gm = new(1);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
             List<ICard> cards = new List<ICard>()
             {
@@ -56,7 +57,8 @@ namespace UnitTests.GameElements.CardTests
         public void CharacterCardDoesNotIncreaseStatsInHand()
         {
             BaseGameMediator gm = new(1);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
             List<ICard> cards = new List<ICard>()
             {
@@ -79,7 +81,8 @@ namespace UnitTests.GameElements.CardTests
         public void CharacterCardIncreasesWhenPlayedBeforeAndAfterOtherCards()
         {
             BaseGameMediator gm = new(1);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
             List<ICard> cards = new List<ICard>()
             {
@@ -104,7 +107,8 @@ namespace UnitTests.GameElements.CardTests
         public void BrawlerCardIncreasesInStrengthWithOtherCharacterCards()
         {
             BaseGameMediator gm = new(1);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
             List<ICard> cards = new()
             {
@@ -128,7 +132,8 @@ namespace UnitTests.GameElements.CardTests
         public void BrawlerCardDecreasesInStrengthWhenCharacterCardsDie()
         {
             BaseGameMediator gm = new(1);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
             List<ICard> cards = new()
             {

@@ -3,6 +3,7 @@ using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards.CardEvents;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;
+using System.Xml.Linq;
 
 namespace DeckForge.GameElements.Table
 {
@@ -167,7 +168,7 @@ namespace DeckForge.GameElements.Table
         /// <inheritdoc/>
         public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones
         {
-            get { return playerZones; }
+            get { return FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.CardsInTableZone; }
         }
 
         /// <inheritdoc/>
@@ -314,6 +315,7 @@ namespace DeckForge.GameElements.Table
             {
                 ICard c = PlayerZones[playerID][cardPos];
                 playerZones[playerID].RemoveAt(cardPos);
+                FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.RemoveCard(playerID, cardPos); // TODO: REMOVE REFACTOR COMMENT (This is temp.)
                 return c;
             }
             catch
@@ -443,32 +445,90 @@ namespace DeckForge.GameElements.Table
             return retVal;
         }
 
-        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int areaInZone = 0, int spotInArea = -1)
-        {
+        ///// <inheritdoc/>
+        //public void PlayCardTo_PlayerZone(int playerZone, ICard card)
+        //{
+        //    card.CardIsRemovedFromTable += (sender, e) =>
+        //    {
+        //        RemoveCard_FromPlayerZone((ICard)sender!, playerZone);
+        //    };
+        //    playerZones[playerZone].Add(card);
+        //    card.OnPlay(
+        //            new CardPlacedOnTableDetails(
+        //                TablePlacementZoneType.PlayerZone,
+        //                playerZones.Count - 1,
+        //                playerZones[playerZone].Count - 1));
+        //}
 
+        ///// <inheritdoc/>
+        //public void PlayCardsTo_PlayerZone(int playerZone, List<ICard> cards)
+        //{
+        //    foreach (ICard card in cards)
+        //    {
+        //        PlayCardTo_PlayerZone(playerZone, card);
+        //    }
+        //}
+
+        /// <inheritdoc/>
+        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int area)
+        {
+            try
+            {
+                FindZoneBasedOnType(placementZone)!.PlayCardToArea(card, area);
+
+                // TODO: REMOVE REFACTOR COMMENT
+                playerZones[area].Add(card);
+                card.CardIsRemovedFromTable += (sender, e) =>
+                {
+                    RemoveCard_FromPlayerZone((ICard)sender!, area);
+                };
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <inheritdoc/>
-        public void PlayCardTo_PlayerZone(int playerZone, ICard card)
+        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int area, int placementInArea)
         {
-            card.CardIsRemovedFromTable += (sender, e) =>
+            try
             {
-                RemoveCard_FromPlayerZone((ICard)sender!, playerZone);
-            };
-            playerZones[playerZone].Add(card);
-            card.OnPlay(
-                    new CardPlacedOnTableDetails(
-                        TablePlacementZoneType.PlayerZone,
-                        playerZones.Count - 1,
-                        playerZones[playerZone].Count - 1));
+                FindZoneBasedOnType(placementZone)!.PlayCardToArea(card, area, placementInArea);
+
+                // TODO: REMOVE REFACTOR COMMENT
+                playerZones[area].Add(card);
+                card.CardIsRemovedFromTable += (sender, e) =>
+                {
+                    RemoveCard_FromPlayerZone((ICard)sender!, area);
+                };
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         /// <inheritdoc/>
-        public void PlayCardsTo_PlayerZone(int playerZone, List<ICard> cards)
+        public void PlayCardsToZone(List<ICard> cards, TablePlacementZoneType placementZone, int area)
         {
-            foreach (ICard card in cards)
+            try
             {
-                PlayCardTo_PlayerZone(playerZone, card);
+                FindZoneBasedOnType(placementZone)!.PlayCardsToArea(cards, area);
+
+                // TODO: REMOVE REFACTOR COMMENT
+                playerZones[area].AddRange(cards);
+                foreach (ICard card in cards)
+                {
+                    card.CardIsRemovedFromTable += (sender, e) =>
+                    {
+                        RemoveCard_FromPlayerZone((ICard)sender!, area);
+                    };
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -489,7 +549,7 @@ namespace DeckForge.GameElements.Table
         public void RemoveCard_FromPlayerZone(ICard card, int playerZone)
         {
             playerZones[playerZone].Remove(card);
-            card.OnRemoval();
+            FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.RemoveCard(card, playerZone); // TODO: REMOVE REFACTOR COMMENT
         }
 
         /// <inheritdoc/>
@@ -509,13 +569,16 @@ namespace DeckForge.GameElements.Table
                 neutralCards.Clear();
             }
 
-            foreach (var playerCards in playerZones)
+            for (int i = 0; i < playerZones.Count; i++)
             {
+                var playerCards = playerZones[i];
+
                 cards.AddRange(playerCards);
 
                 foreach (ICard card in playerCards)
                 {
-                    card.OnRemoval();
+                    FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.RemoveCard(card, i);
+
                 }
 
                 playerCards.Clear();

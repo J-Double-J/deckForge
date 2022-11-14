@@ -150,18 +150,29 @@ namespace DeckForge.GameElements.Table
             bool isFaceup = true);
 
         /// <summary>
-        /// Adds a card to the player zone and registers the table to any events of interest.
+        /// Plays a <see cref="ICard"/> to a <see cref="TableZone"/>.
         /// </summary>
-        /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        /// <param name="card"><see cref="ICard"/> to add to the table.</param>
-        public void PlayCardTo_PlayerZone(int playerZone, ICard card);
+        /// <param name="card"><see cref="ICard"/> to play to the <see cref="TableZone"/>.</param>
+        /// <param name="placementZone"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> to play to.</param>
+        /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/> to.</param>
+        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int area);
 
         /// <summary>
-        /// Adds a list of <see cref="ICard"/>s to the player zone and registers the table to any events of interest.
+        /// Plays a <see cref="ICard"/> to a <see cref="TableZone"/>.
         /// </summary>
-        /// <param name="playerZone">Player zone to add <see cref="ICard"/>.</param>
-        /// <param name="cards"><see cref="ICard"/>s to add to the table.</param>
-        public void PlayCardsTo_PlayerZone(int playerZone, List<ICard> cards);
+        /// <param name="card"><see cref="ICard"/> to play to the <see cref="TableZone"/>.</param>
+        /// <param name="placementZone"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> to play to.</param>
+        /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/> to.</param>
+        /// <param name="placementInArea">Specific place in area to play the <see cref="ICard"/>.</param>
+        public void PlayCardToZone(ICard card, TablePlacementZoneType placementZone, int area, int placementInArea);
+
+        /// <summary>
+        /// Plays a list of <see cref="ICard"/>s to a <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="cards"><see cref="ICard"/>s to play to the <see cref="TableZone"/>.</param>
+        /// <param name="placementZone"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> to play to.</param>
+        /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/>s to.</param>
+        public void PlayCardsToZone(List<ICard> cards, TablePlacementZoneType placementZone, int area);
 
         /// <summary>
         /// Adds a <see cref="ICard"/> to a neutral zone.

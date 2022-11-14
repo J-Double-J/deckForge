@@ -194,7 +194,9 @@ namespace UnitTests.PokerTests
             PokerGameMediator pGM = new(2);
             PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 0);
             PokerPlayerWithProgrammedActions playerTwo = new(pGM, 1, 0);
-            Table table = new(pGM, 2, 1);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 2);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(pGM, new List<TableZone>() { playerZone, neutralZone });
 
             playerOne.SetInvestedCash(25);
             playerTwo.SetInvestedCash(25);
@@ -206,8 +208,8 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayCardsTo_PlayerZone(0, new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
-            table.PlayCardsTo_PlayerZone(1, new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") }, TablePlacementZoneType.PlayerZone, 1);
 
             pGM.EvaluateWinner();
 
@@ -222,7 +224,9 @@ namespace UnitTests.PokerTests
             PokerPlayerWithProgrammedActions playerOne = new(pGM, 0, 0);
             PokerPlayerWithProgrammedActions playerTwo = new(pGM, 1, 0);
             PokerPlayerWithProgrammedActions playerThree = new(pGM, 2, 0);
-            Table table = new(pGM, 3, 1);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(pGM, new List<TableZone>() { playerZone, neutralZone });
 
             playerOne.SetInvestedCash(20);
             playerTwo.SetInvestedCash(20);
@@ -235,9 +239,9 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayCardsTo_PlayerZone(0, new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") });
-            table.PlayCardsTo_PlayerZone(1, new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
-            table.PlayCardsTo_PlayerZone(2, new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") });
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, TablePlacementZoneType.PlayerZone, 1);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(1, "S"), new PlayingCard(2, "S") }, TablePlacementZoneType.PlayerZone, 2);
 
             pGM.EvaluateWinner();
 

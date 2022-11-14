@@ -45,10 +45,10 @@ namespace UnitTests.PlayerConstruction
         [TestMethod]
         public void PlayerGetsTheirPlayedCards_FromTable()
         {
-            List<IDeck> decks = new() { new DeckOfPlayingCards() };
             IGameMediator gm = new BaseGameMediator(0);
             TestPlayerMock player = new(gm, playerID: 0);
-            Table table = new(gm, playerCount: 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
             player.AddCardToHand(new PlayingCard(10, "J"));
 
             player.PlayCard();

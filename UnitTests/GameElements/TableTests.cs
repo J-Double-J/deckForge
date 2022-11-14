@@ -9,11 +9,10 @@ namespace UnitTests.GameElements
     [TestClass]
     public class TableTests
     {
-        private static readonly List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
-        private static IGameMediator gm = new BaseGameMediator(2);
-        private static TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
-        private static TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
-        private static Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
+        private static IGameMediator gm;
+
+        //private static Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
+        private static Table table;
         private static StringWriter output = new();
 
         /// <summary>
@@ -23,10 +22,16 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(1, "Q", facedown: false));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(2, "Q", facedown: true));
+            table.PlayCardsToZone(
+                new List<ICard>()
+                { new PlayingCard(8, "J", facedown: false), new PlayingCard(9, "J", facedown: false) },
+                TablePlacementZoneType.PlayerZone,
+                0);
+            table.PlayCardsToZone(
+                new List<ICard>()
+                { new PlayingCard(1, "Q", facedown: false), new PlayingCard(2, "Q", facedown: true) },
+                TablePlacementZoneType.PlayerZone,
+                1);
         }
 
         [ClassInitialize]
@@ -38,7 +43,10 @@ namespace UnitTests.GameElements
         [TestInitialize]
         public void InitializeTableTests()
         {
-            table = new(gm, 2, Decks);
+            List<IDeck> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, decks);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            table = new(gm, new List<TableZone>() { playerZone, neutralZone });
             output = new();
             for (var i = 0; i < 2; i++)
             {
@@ -51,7 +59,7 @@ namespace UnitTests.GameElements
         [DataRow(7)]
         public void PlaceCardOnTableInFrontOfNonexistantPlayer(int fakePlayerID)
         {
-            Action a = () => table.PlayCardTo_PlayerZone(fakePlayerID, new PlayingCard(8, "J"));
+            Action a = () => table.PlayCardToZone(new PlayingCard(8, "J"), TablePlacementZoneType.PlayerZone, fakePlayerID);
 
             a.Should().Throw<ArgumentException>($"there is no player with the id of {fakePlayerID}");
         }
@@ -61,12 +69,16 @@ namespace UnitTests.GameElements
         {
             Console.SetOut(output);
 
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(8, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(9, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(10, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(8, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(9, "J", facedown: false));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(10, "J", facedown: false));
+            table.PlayCardsToZone(
+                new List<ICard>()
+                { new PlayingCard(8, "J", facedown: false), new PlayingCard(9, "J", facedown: false), new PlayingCard(10, "J", facedown: false) },
+                TablePlacementZoneType.PlayerZone,
+                0);
+            table.PlayCardsToZone(
+                new List<ICard>()
+                { new PlayingCard(8, "J", facedown: false), new PlayingCard(9, "J", facedown: false), new PlayingCard(10, "J", facedown: false) },
+                TablePlacementZoneType.PlayerZone,
+                1);
 
             table.PrintTableState();
             if (OperatingSystem.IsMacOS())
@@ -313,6 +325,7 @@ namespace UnitTests.GameElements
         [DataRow(2)]
         public void TableCanDrawCard_FromSpecificDeck(int deckNum)
         {
+            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
@@ -325,6 +338,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCanDrawManyCards_FromSpecificDeck()
         {
+            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
@@ -341,6 +355,7 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCannotDraw_FromNonexistantDeck()
         {
+            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
@@ -379,17 +394,20 @@ namespace UnitTests.GameElements
         public void AllCardsArePickedUp_FromAllZones()
         {
             IGameMediator gm = new BaseGameMediator(4);
-            Table table = new(gm, 4, 3);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 4);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 3);
+            Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
+            //Table table = new(gm, 4, 3); Likely will need to implement AddCardTo_NeutralZone
 
             table.AddCardsTo_NeutralZone(
                 new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
             table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(3, "J"));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(4, "J"));
-            table.PlayCardTo_PlayerZone(2, new PlayingCard(5, "J"));
-            table.PlayCardTo_PlayerZone(3, new PlayingCard(6, "J"));
-            table.PlayCardTo_PlayerZone(3, new PlayingCard(7, "J"));
 
+            table.PlayCardToZone(new PlayingCard(3, "J"), TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardToZone(new PlayingCard(4, "J"), TablePlacementZoneType.PlayerZone, 1);
+            table.PlayCardToZone(new PlayingCard(5, "J"), TablePlacementZoneType.PlayerZone, 2);
+            table.PlayCardToZone(new PlayingCard(6, "J"), TablePlacementZoneType.PlayerZone, 3);
+            table.PlayCardToZone(new PlayingCard(7, "J"), TablePlacementZoneType.PlayerZone, 3);
             table.Remove_AllCardsFromTable();
 
             foreach (var cards in table.TableNeutralZones)
@@ -419,7 +437,8 @@ namespace UnitTests.GameElements
         public void CardCanBeRemovedFromTable_ViaLookup()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             List<ICard> cardsToAdd = new()
             {
                 new PlayingCard(10, "J"),
@@ -427,8 +446,7 @@ namespace UnitTests.GameElements
                 new PlayingCard(12, "J")
             };
 
-            table.PlayCardsTo_PlayerZone(0, cardsToAdd);
-
+            table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
             table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
 
             table.PlayerZones[0].Count.Should().Be(2, "one of the cards were removed");
@@ -438,7 +456,8 @@ namespace UnitTests.GameElements
         public void SimilarCardsAreCorrectlyDistinguished_AndRemoved_ViaLookup()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             BaseCharacterCard attackingCard = new(gm, 2, 7, "Aggressor");
             List<ICard> cardsToAdd = new()
             {
@@ -446,7 +465,7 @@ namespace UnitTests.GameElements
                 new BaseCharacterCard(gm, 5, 5, "Surveyor")
             };
 
-            table.PlayCardsTo_PlayerZone(0, cardsToAdd);
+            table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
             attackingCard.Attack((ICharacterCard)table.PlayerZones[0][1]);
             table.RemoveCard_FromPlayerZone(cardsToAdd[1], 0);
 
@@ -458,11 +477,12 @@ namespace UnitTests.GameElements
         public void CardIsRemovedWhenItDies()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Table table = new(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             BaseCharacterCard attackingCard = new(gm, 2, 7, "Aggressor");
             BaseCharacterCard poorVictim = new(gm, 0, 1, "Villager");
 
-            table.PlayCardTo_PlayerZone(0, poorVictim);
+            table.PlayCardToZone(poorVictim, TablePlacementZoneType.PlayerZone, 0);
             attackingCard.Attack(poorVictim);
 
             table.PlayerZones[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");

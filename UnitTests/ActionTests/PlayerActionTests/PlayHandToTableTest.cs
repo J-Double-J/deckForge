@@ -17,7 +17,8 @@ namespace UnitTests.ActionTests.PlayerActionTests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new TestPlayerMock(gm, 0);
-            Table table = new Table(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             PlayerGameAction action = new PlayHandToTable();
             List<PlayingCard> cards = new() { new PlayingCard(10, "J"), new PlayingCard(2, "J") };
 
@@ -35,7 +36,8 @@ namespace UnitTests.ActionTests.PlayerActionTests
         {
             IGameMediator gm = new BaseGameMediator(1);
             IPlayer player = new TestPlayerMock(gm, 0);
-            Table table = new Table(gm, 1);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
+            Table table = new(gm, new List<TableZone>() { zone });
             PlayerGameAction action = new PlayHandToTable();
             List<PlayingCard> cards = new();
 

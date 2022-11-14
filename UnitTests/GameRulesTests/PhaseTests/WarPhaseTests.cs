@@ -69,15 +69,15 @@ namespace UnitTests.PhaseTests
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             if (playerZeroWins)
             {
-                table.PlayCardTo_PlayerZone(0, cardOne);
-                table.PlayCardTo_PlayerZone(1, cardTwo);
+                table.PlayCardToZone(cardOne, TablePlacementZoneType.PlayerZone, 0);
+                table.PlayCardToZone(cardTwo, TablePlacementZoneType.PlayerZone, 1);
                 comparePhase.FlippedCards.Add(cardOne);
                 comparePhase.FlippedCards.Add(cardTwo);
             }
             else
             {
-                table.PlayCardTo_PlayerZone(1, cardOne);
-                table.PlayCardTo_PlayerZone(0, cardTwo);
+                table.PlayCardToZone(cardOne, TablePlacementZoneType.PlayerZone, 1);
+                table.PlayCardToZone(cardTwo, TablePlacementZoneType.PlayerZone, 0);
                 comparePhase.FlippedCards.Add(cardTwo);
                 comparePhase.FlippedCards.Add(cardOne);
             }
@@ -102,8 +102,8 @@ namespace UnitTests.PhaseTests
             PlayingCard cardOne = new(5, "C");
             PlayingCard cardTwo = new(5, "H");
 
-            table.PlayCardTo_PlayerZone(0, cardOne);
-            table.PlayCardTo_PlayerZone(1, cardTwo);
+            table.PlayCardToZone(cardOne, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardToZone(cardTwo, TablePlacementZoneType.PlayerZone, 1);
 
             WarComparePhase comparePhase = new(gm, playerIDs, "Compare Phase");
             comparePhase.FlippedCards.Add(cardOne);
@@ -120,8 +120,8 @@ namespace UnitTests.PhaseTests
         [TestMethod]
         public void WarPhasePlacesMoreCardsOnTable()
         {
-            table.PlayCardTo_PlayerZone(0, new PlayingCard(1, "H"));
-            table.PlayCardTo_PlayerZone(1, new PlayingCard(2, "H"));
+            table.PlayCardToZone(new PlayingCard(1, "H"), TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardToZone(new PlayingCard(2, "H"), TablePlacementZoneType.PlayerZone, 1);
 
             IPhase phase = new WarPhase(gm, playerIDs, "War!");
             phase.StartPhase();

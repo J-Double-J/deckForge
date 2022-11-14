@@ -1,9 +1,9 @@
-﻿using DeckForge.PhaseActions;
-using DeckForge.GameConstruction;
+﻿using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
+using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
-using DeckForge.GameElements.Table;
 
 namespace UnitTests.ActionTests
 {
@@ -15,16 +15,17 @@ namespace UnitTests.ActionTests
             IGameMediator gm = new BaseGameMediator(2);
             IPlayer player = new BasePlayer(gm);
             IPlayer opponent = new BasePlayer(gm, 1);
-            Table table = new (gm, 2);
-            DeckOfPlayingCards deckOne = new DeckOfPlayingCards();
-            DeckOfPlayingCards deckTwo = new DeckOfPlayingCards();
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2);
+            Table table = new(gm, new List<TableZone>() { zone });
+            DeckOfPlayingCards deckOne = new();
+            DeckOfPlayingCards deckTwo = new();
 
             player.AddResourceCollection(deckOne);
             opponent.AddResourceCollection(deckTwo);
 
-            table.PlayCardTo_PlayerZone(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
-            table.PlayCardTo_PlayerZone(0, (PlayingCard)player.TakeResourceFromCollection(0)!);
-            table.PlayCardTo_PlayerZone(1, (PlayingCard)opponent.TakeResourceFromCollection(0)!);
+            table.PlayCardToZone((ICard)player.TakeResourceFromCollection(0)!, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardToZone((ICard)player.TakeResourceFromCollection(0)!, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardToZone((ICard)opponent.TakeResourceFromCollection(0)!, TablePlacementZoneType.PlayerZone, 1);
 
             IGameAction<IPlayer> gameAction = new TakeAllCards_FromTargetPlayerTable_ToPlayerDeckAction();
             gameAction.Execute(player, opponent);

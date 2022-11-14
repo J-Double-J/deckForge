@@ -86,7 +86,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
         /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
         /// <returns>A list of nullable <see cref="ICard"/>s.</returns>
-        public List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0)
+        public List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
         /// Adds a <see cref="ICard"/> to the <see cref="IPlayer"/>'s hand.

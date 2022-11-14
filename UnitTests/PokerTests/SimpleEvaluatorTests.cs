@@ -13,8 +13,10 @@ namespace UnitTests.PokerTests
         [TestMethod]
         public void EvaluatorGetsExpectedValues()
         {
-            PokerGameMediator pGM = new PokerGameMediator(2);
-            Table table = new Table(pGM, 2, 1);
+            PokerGameMediator pGM = new(2);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 2);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(pGM, new List<TableZone>() { playerZone });
             Dictionary<int, List<PlayingCard>> hands = new();
             PlayerGameAction playCards = new PlayHandToTable();
 
@@ -25,8 +27,8 @@ namespace UnitTests.PokerTests
                 },
                 0);
 
-            table.PlayCardsTo_PlayerZone(0, new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
-            table.PlayCardsTo_PlayerZone(1, new List<ICard>() { new PlayingCard(1, "J"), new PlayingCard(2, "J") });
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(1, "J"), new PlayingCard(2, "J") }, TablePlacementZoneType.PlayerZone, 1);
 
             hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
                 .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()
@@ -45,7 +47,9 @@ namespace UnitTests.PokerTests
         public void EvaluatorHandlesTiesCorrectly()
         {
             PokerGameMediator pGM = new PokerGameMediator(2);
-            Table table = new Table(pGM, 2, 1);
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 2);
+            TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
+            Table table = new(pGM, new List<TableZone>() { playerZone, neutralZone });
             Dictionary<int, List<PlayingCard>> hands = new();
             PlayerGameAction playCards = new PlayHandToTable();
 
@@ -55,8 +59,8 @@ namespace UnitTests.PokerTests
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
                 0);
-            table.PlayCardsTo_PlayerZone(0, new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") });
-            table.PlayCardsTo_PlayerZone(1, new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") });
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, TablePlacementZoneType.PlayerZone, 0);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, TablePlacementZoneType.PlayerZone, 1);
 
             hands.Add(0, pGM.Table!.GetCardsForSpecificPlayer(0)
                 .Concat(pGM.Table!.GetCardsForSpecificNeutralZone(0)).ToList()

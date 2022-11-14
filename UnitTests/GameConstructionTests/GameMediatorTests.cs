@@ -114,7 +114,8 @@ namespace UnitTests.GameConstructionTests
             IGameMediator gm = new BaseGameMediator(2);
             ITurnHandler th = new TurnHandler(2, false);
             gm.RegisterTurnHandler(th);
-            Table table = new(gm, 2, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 2, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
 
             List<int> playerIDs = new();
             List<IPlayer> players = new();
