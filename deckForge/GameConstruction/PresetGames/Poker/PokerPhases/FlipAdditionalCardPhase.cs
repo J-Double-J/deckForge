@@ -15,7 +15,13 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
         public FlipAdditionalCardPhase(PokerGameMediator pGM)
         : base(pGM, "Flip Another Card Phase")
         {
-            Actions.Add(new DealCardsFromTableDeckToTable(pGM, 0, 1, 0, true));
+            Actions.Add(new DealCardsFromTableDeckToTable(
+                pGM,
+                1,
+                GameElements.Table.TablePlacementZoneType.NeutralZone,
+                GameElements.Table.TablePlacementZoneType.NeutralZone,
+                faceup: true));
+            //Actions.Add(new DealCardsFromTableDeckToTable(pGM, 0, 1, 0, true));TODO: REMOVE REFACTOR COMMENT
             Actions.Add(new PokerPlayersBet(pGM));
         }
     }

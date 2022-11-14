@@ -11,11 +11,6 @@ namespace DeckForge.GameElements.Table
     public interface ITable
     {
         /// <summary>
-        /// Gets the decks on the <see cref="ITable"/>.
-        /// </summary>
-        public List<IDeck> TableDecks { get; }
-
-        /// <summary>
         /// Gets a readonly list of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
         /// </summary>
         public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones { get; }
@@ -142,29 +137,14 @@ namespace DeckForge.GameElements.Table
         /// <param name = "area" > Area in the<see cref="TableZone"/> to pick which<see cref= "IDeck" /> in the<see cref="TableZone"/>
         /// to draw from. Default picks the first <see cref="IDeck"/>.</param>
         /// <returns>A list of nullable <see cref="ICard"/>s that were drawn from the specified <see cref="IDeck"/>.</returns>
-        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0);
+        public List<ICard> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
-        /// Shuffles a <see cref="IDeck"/> on the <see cref="ITable"/>.
+        /// Shuffles a <see cref="IDeck"/> on the <see cref="ITable"/>/
         /// </summary>
-        /// <param name="deckPosition">Index or position of the <see cref="IDeck"/>.</param>
-        public void ShuffleDeck(int deckPosition);
-
-        /// <summary>
-        /// Plays a number of <see cref="ICard"/>s from a <see cref="IDeck"/> to an area
-        /// designated on the <see cref="Table"/>.
-        /// </summary>
-        /// <param name="numCards">Number of <see cref="ICard"/>s to attempt to draw.</param>
-        /// <param name="deckPos">ID of the <see cref="IDeck"/> on the table to
-        /// draw from.</param>
-        /// <param name="neutralZone">Area to play the <see cref="ICard"/> to.</param>
-        /// <param name="isFaceup">Whether to play the <see cref="ICard"/> faceup.</param>
-        /// <returns>A list of <see cref="ICard"/>(s) that were placed on the <see cref="Table"/>.</returns>
-        public List<ICard> PlayCards_FromTableDeck_ToNeutralZone(
-            int numCards,
-            int deckPos,
-            int neutralZone,
-            bool isFaceup = true);
+        /// <param name="tablePlacementZoneType">Type of <see cref="TableZone"/> to that owns the <see cref="IDeck"/>.</param>
+        /// <param name="area">Optional parameter for which area in the <see cref="TableZone"/> owns the <see cref="IDeck"/>.</param>
+        public void ShuffleDeck(TablePlacementZoneType tablePlacementZoneType, int area = 0);
 
         /// <summary>
         /// Plays a <see cref="ICard"/> to a <see cref="TableZone"/>.
@@ -191,17 +171,27 @@ namespace DeckForge.GameElements.Table
         /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/>s to.</param>
         public void PlayCardsToZone(List<ICard> cards, TablePlacementZoneType placementZone, int area);
 
-        ///// <summary>
-        ///// Removes a <see cref="ICard"/> from the table in a specific player zone
-        ///// </summary>
-        ///// <param name="card"><see cref="ICard"/> to remove from the table.</param>
-        ///// <param name="playerZone">Player zone to remove the <see cref="ICard"/>.</param>
-        //public void RemoveCard_FromPlayerZone(ICard card, int playerZone);
-
         /// <summary>
         /// Picks up all cards from every spot on the <see cref="ITable"/>.
         /// </summary>
         /// <returns>A list of all the <see cref="ICard"/>s removed from the <see cref="ITable"/>.</returns>
         public List<ICard> Remove_AllCardsFromTable();
+
+        /// <summary>
+        /// Gets a read-only list of <see cref="IDeck"/>s managed by a <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of interested <see cref="TableZone"/>.</param>
+        /// <returns>A read-only list <see cref="IDeck"/>s in the <see cref="TableZone"/>. If there are no
+        /// <see cref="IDeck"/>s found in the <see cref="TableZone"/> or the <see cref="TableZone"/> doesn't exist,
+        /// it returns an empty list.</returns>
+        public IReadOnlyList<IDeck> GetDecksFromZone(TablePlacementZoneType zoneType);
+
+        /// <summary>
+        /// Gets a <see cref="IDeck"/> from an area in the <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of interested <see cref="TableZone"/>.</param>
+        /// <param name="area">The area that owns the <see cref="IDeck"/> in the <see cref="TableZone"/>.</param>
+        /// <returns>A <see cref="IDeck"/> if found. Otherwise returns null.</returns>
+        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area);
     }
 }

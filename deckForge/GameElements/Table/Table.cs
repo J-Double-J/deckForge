@@ -44,8 +44,6 @@ namespace DeckForge.GameElements.Table
                 List<ICard> cards = new();
                 neutralZones.Add(cards);
             }
-
-            TableDecks = new();
         }
 
         /// <summary>
@@ -76,11 +74,6 @@ namespace DeckForge.GameElements.Table
                 List<ICard> cards = new();
                 neutralZones.Add(cards);
             }
-
-            TableDecks = new()
-            {
-                initDeck
-            };
         }
 
         /// <summary>
@@ -115,8 +108,6 @@ namespace DeckForge.GameElements.Table
                 List<ICard> cards = new();
                 neutralZones.Add(cards);
             }
-
-            TableDecks = initDecks;
         }
 
         public Table(IGameMediator gm, List<TableZone> zones)
@@ -126,7 +117,7 @@ namespace DeckForge.GameElements.Table
 
             this.zones = zones;
 
-            // TODO: Temp patch.
+            // TODO: Temp patch. TODO: REMOVE REFACTOR COMMENT
             playerZones = new();
             neutralZones = new();
 
@@ -141,21 +132,6 @@ namespace DeckForge.GameElements.Table
                 List<ICard> cards = new();
                 neutralZones.Add(cards);
             }
-
-            TableDecks = new();
-            foreach (TableZone zone in zones)
-            {
-                foreach (var deck in zone.Decks)
-                {
-                    TableDecks.Add(deck);
-                }
-            }
-        }
-
-        /// <inheritdoc/>
-        public List<IDeck> TableDecks
-        {
-            get;
         }
 
         /// <summary>
@@ -364,16 +340,24 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <inheritdoc/>
-        public List<ICard?> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0)
+        public List<ICard> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0)
         {
             try
             {
                 TableZone zone = FindZoneBasedOnType(zoneType)!;
-                List<ICard?> cards = new();
+                List<ICard> cards = new();
 
                 for (int i = 0; i < cardCount; i++)
                 {
-                    cards.Add(zone.DrawCardFromZone(area));
+                    ICard? card = zone.DrawCardFromZone(area);
+                    if (card is not null)
+                    {
+                        cards.Add(card);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 return cards;
@@ -385,39 +369,16 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <inheritdoc/>
-        public void ShuffleDeck(int deckPosition)
+        public void ShuffleDeck(TablePlacementZoneType tablePlacementZoneType, int area = 0)
         {
             try
             {
-                TableDecks[deckPosition].Shuffle();
+                FindZoneBasedOnType(tablePlacementZoneType)?.ShuffleDeck(area);
             }
             catch
             {
                 throw;
             }
-        }
-
-        /// <inheritdoc/>
-        public List<ICard> PlayCards_FromTableDeck_ToNeutralZone(
-            int numCards,
-            int deckPos,
-            int neutralZone,
-            bool isFaceup = true)
-        {
-            List<ICard> retVal = new();
-            for (int i = 0; i < numCards; i++)
-            {
-                ICard? drawnCard = TableDecks[deckPos].DrawCard();
-                if (drawnCard is not null)
-                {
-                    drawnCard.Facedown = isFaceup;
-                    FindZoneBasedOnType(TablePlacementZoneType.NeutralZone)!.PlayCardToArea(drawnCard, neutralZone); // TODO: REMOVE REFACTOR COMMENT
-                    neutralZones[neutralZone].Add(drawnCard);
-                    retVal.Add(drawnCard);
-                }
-            }
-
-            return retVal;
         }
 
         /// <inheritdoc/>
@@ -530,6 +491,26 @@ namespace DeckForge.GameElements.Table
 
             return cards;
         }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<IDeck> GetDecksFromZone(TablePlacementZoneType zoneType)
+        {
+            return FindZoneBasedOnType(zoneType, false)?.Decks ?? new List<IDeck>();
+        }
+
+        /// <inheritdoc/>
+        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area)
+        {
+            try
+            {
+                return FindZoneBasedOnType(zoneType)?.Decks[area];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// Finds a zone on the <see cref="Table"/> based on the <see cref="TablePlacementZoneType"/>.

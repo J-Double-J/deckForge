@@ -16,7 +16,7 @@ namespace UnitTests.ActionTests.NonPlayerActionTests
             IGameMediator gm = new BaseGameMediator(1);
             TableZone zone = new(TablePlacementZoneType.NeutralZone, 2, new DeckOfPlayingCards());
             Table table = new(gm, new List<TableZone>() { zone });
-            BaseGameAction action = new MoveAllCardsFromTableToTableDeckAction(gm, 0);
+            BaseGameAction action = new MoveAllCardsFromTableToTableDeckAction(gm, TablePlacementZoneType.NeutralZone);
             var neutral = TablePlacementZoneType.NeutralZone;
 
             table.PlayCardsToZone(table.DrawMultipleCardsFromDeck(2, neutral)!, neutral, 0);
@@ -24,7 +24,8 @@ namespace UnitTests.ActionTests.NonPlayerActionTests
 
             action.Execute();
 
-            table.TableDecks[0].Count.Should().Be(52, "all the cards were readded to the deck");
+            table.GetDeckFromAreaInZone(TablePlacementZoneType.NeutralZone, 0).Count.Should().Be(52, "all the cards were readded to the deck");
+            //table.TableDecks[0].Count.Should().Be(52, "all the cards were readded to the deck"); TODO: REMOVE REFACTOR COMMENT
         }
     }
 }

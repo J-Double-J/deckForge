@@ -424,19 +424,6 @@ namespace UnitTests.GameElements
         }
 
         [TestMethod]
-        public void TablePlaysCardFromDeck_ToNeutralZone()
-        {
-            IGameMediator gm = new BaseGameMediator(0);
-            TableZone zone = new(TablePlacementZoneType.NeutralZone, 1, new DeckOfPlayingCards());
-            Table table = new(gm, new List<TableZone>() { zone });
-
-            table.PlayCards_FromTableDeck_ToNeutralZone(2, 0, 0);
-
-            table.TableDecks[0].Count.Should().Be(50, "two cards were taken from the deck");
-            table.TableNeutralZones[0].Count.Should().Be(2, "the two cards were placed in the neutral zone");
-        }
-
-        [TestMethod]
         public void CardCanBeRemovedFromTable_ViaLookup()
         {
             IGameMediator gm = new BaseGameMediator(0);

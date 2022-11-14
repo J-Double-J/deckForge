@@ -8,7 +8,13 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
         public FlopPhase(PokerGameMediator pGM)
         : base(pGM, "Flop Phase")
         {
-            Actions.Add(new DealCardsFromTableDeckToTable(pGM, 0, 3, 0, true));
+            Actions.Add(new DealCardsFromTableDeckToTable(
+                pGM,
+                3,
+                GameElements.Table.TablePlacementZoneType.NeutralZone,
+                GameElements.Table.TablePlacementZoneType.NeutralZone,
+                faceup: true));
+            //Actions.Add(new DealCardsFromTableDeckToTable(pGM, 0, 3, 0, true)); TODO: REMOVE REFACTOR COMMENT
         }
     }
 }
