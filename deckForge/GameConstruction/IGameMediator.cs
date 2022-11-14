@@ -118,8 +118,8 @@ namespace DeckForge.GameConstruction
         /// Gets the List of <see cref="ICard"/>s the <see cref="IPlayer"/> has played.
         /// </summary>
         /// <param name="playerID">The ID of the <see cref="IPlayer"/> of interest.</param>
-        /// <returns>The list of cards that was played by the <see cref="IPlayer"/>.</returns>
-        public List<ICard> GetPlayedCardsOfPlayer(int playerID);
+        /// <returns>A readonly list of <see cref="ICard"/>s that was played by the <see cref="IPlayer"/>.</returns>
+        public IReadOnlyList<ICard> GetPlayedCardsOfPlayer(int playerID);
 
         /// <summary>
         /// Flips a specified card on the <see cref="Table"/>, for a specific <see cref="IPlayer"/>, a specific way.

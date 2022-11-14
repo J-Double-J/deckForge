@@ -32,9 +32,9 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <summary>
-        /// Gets the list of <see cref="ICard"/>s that <see cref="IPlayer"/>'s has played.
+        /// Gets a readonly list of <see cref="ICard"/>s that <see cref="IPlayer"/>'s has played.
         /// </summary>
-        public List<ICard> PlayedCards { get; }
+        public IReadOnlyList<ICard> PlayedCards { get; }
 
         /// <summary>
         /// Gets or sets a value indicating

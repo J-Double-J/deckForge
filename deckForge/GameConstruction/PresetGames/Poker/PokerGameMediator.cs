@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameConstruction.PresetGames.Poker
@@ -90,10 +91,9 @@ namespace DeckForge.GameConstruction.PresetGames.Poker
             Dictionary<int, List<PlayingCard>> hands = new();
             foreach (PokerPlayer player in GetCurrentActivePlayers())
             {
-                // We know all cards on table are PlayingCards
                 List<PlayingCard> cards =
-                Table!.GetCardsForSpecificPlayer(player.PlayerID)
-                    .Concat(Table!.GetCardsForSpecificNeutralZone(0)).ToList()
+                Table!.GetCardsInZone(TablePlacementZoneType.PlayerZone)[player.PlayerID]
+                    .Concat(Table!.GetCardsInZone(TablePlacementZoneType.NeutralZone)[0]).ToList()
                         .ConvertAll(c => (PlayingCard)c);
                 hands.Add(
                     player.PlayerID,

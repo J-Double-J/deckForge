@@ -6,7 +6,6 @@ using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
-using System.Xml.Linq;
 
 namespace DeckForge.GameConstruction
 {
@@ -274,11 +273,12 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual List<ICard> GetPlayedCardsOfPlayer(int playerID)
+        public virtual IReadOnlyList<ICard> GetPlayedCardsOfPlayer(int playerID)
         {
             try
             {
-                return GameTable!.GetCardsForSpecificPlayer(playerID);
+                return GameTable!.GetCardsInZone(TablePlacementZoneType.PlayerZone)[playerID];
+                //return GameTable!.GetCardsForSpecificPlayer(playerID);  TODO: REMOVE REFACTOR COMMENT Made this return a readonly
             }
             catch
             {

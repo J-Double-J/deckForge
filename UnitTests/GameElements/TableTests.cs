@@ -4,6 +4,7 @@ using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
 using FluentAssertions.Specialized;
+using System.Numerics;
 
 namespace UnitTests.GameElements
 {
@@ -98,9 +99,9 @@ namespace UnitTests.GameElements
             string s = string.Empty;
             SetUpTableForTests();
 
-            List<PlayingCard> cards = table.GetCardsForSpecificPlayer(0).ConvertAll(c => (PlayingCard)c);
+            var cards = table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0];
 
-            foreach (PlayingCard c in cards)
+            foreach (ICard c in cards)
             {
                 s += c.PrintCard();
             }
@@ -378,7 +379,7 @@ namespace UnitTests.GameElements
             neutralTable.PlayCardToZone(card, TablePlacementZoneType.NeutralZone, 1);
             Console.SetOut(output);
 
-            neutralTable.GetCardsForSpecificNeutralZone(1)[0].Should().BeEquivalentTo(card);
+            neutralTable.GetCardsInZone(TablePlacementZoneType.NeutralZone)[1][0].Should().BeEquivalentTo(card);
         }
 
         [TestMethod]
@@ -390,7 +391,7 @@ namespace UnitTests.GameElements
 
             neutralTable.PlayCardsToZone(cards, TablePlacementZoneType.NeutralZone, 0);
             Console.SetOut(output);
-            neutralTable.GetCardsForSpecificNeutralZone(0).Should().BeEquivalentTo(cards);
+            neutralTable.GetCardsInZone(TablePlacementZoneType.NeutralZone)[0].Should().BeEquivalentTo(cards);
         }
 
         [TestMethod]

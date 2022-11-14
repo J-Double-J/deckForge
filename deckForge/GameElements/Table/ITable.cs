@@ -31,20 +31,6 @@ namespace DeckForge.GameElements.Table
         public void PrintTableState();
 
         /// <summary>
-        /// Gets the list of <see cref="ICard"/>s in front of a specified <see cref="IPlayer"/>.
-        /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <returns>List of <see cref="ICard"/>s that belong to the <see cref="IPlayer"/>.</returns>
-        public List<ICard> GetCardsForSpecificPlayer(int playerID);
-
-        /// <summary>
-        /// Gets the list of <see cref="ICard"/>s in a specified neutral zone.
-        /// </summary>
-        /// <param name="neutalZone">ID of the neutral zone on the <see cref="ITable"/>.</param>
-        /// <returns>List of <see cref="ICard"/>s that belong to the neutral zone.</returns>
-        public List<ICard> GetCardsForSpecificNeutralZone(int neutalZone);
-
-        /// <summary>
         /// Flips a <see cref="ICard"/> in the selected <see cref="TableZone"/>.
         /// </summary>
         /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>.</param>

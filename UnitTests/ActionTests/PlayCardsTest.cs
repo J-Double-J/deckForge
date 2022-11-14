@@ -40,7 +40,6 @@ namespace UnitTests.ActionTests
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
             TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
             Table table = new(gm, new List<TableZone>() { zone });
-            //Table table = new(gm, 0, decks); TODO: REMOVE REFACTOR COMMENT
             IPlayer p = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
             IPlayer p3 = new BasePlayer(gm);

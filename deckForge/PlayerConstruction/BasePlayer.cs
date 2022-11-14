@@ -59,7 +59,7 @@ namespace DeckForge.PlayerConstruction
         public int PlayerID { get; }
 
         /// <inheritdoc/>
-        public List<ICard> PlayedCards
+        public IReadOnlyList<ICard> PlayedCards
         {
             get
             {
