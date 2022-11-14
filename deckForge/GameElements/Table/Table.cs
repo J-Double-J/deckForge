@@ -19,96 +19,9 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
-        /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
-        /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
-        /// can be played.</param>
-        public Table(IGameMediator mediator, int playerCount, int tableNeutralZonesCount = 0)
-        {
-            GM = mediator;
-            GM.RegisterTable(this);
-
-            playerZones = new();
-            neutralZones = new();
-
-            for (var i = 0; i < playerCount; i++)
-            {
-                List<ICard> cards = new();
-                playerZones.Add(cards);
-            }
-
-            for (var i = 0; i < tableNeutralZonesCount; i++)
-            {
-                List<ICard> cards = new();
-                neutralZones.Add(cards);
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Table"/> class.
-        /// </summary>
-        /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
-        /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
-        /// <param name="initDeck">Initial <see cref="IDeck"/> that is on the <see cref="Table"/>.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
-        /// can be played.</param>
-        public Table(IGameMediator mediator, int playerCount, IDeck initDeck, int tableNeutralZonesCount = 0)
-        {
-            GM = mediator;
-            GM.RegisterTable(this);
-
-            playerZones = new();
-            neutralZones = new();
-
-            for (var i = 0; i < playerCount; i++)
-            {
-                List<ICard> cards = new();
-                playerZones.Add(cards);
-            }
-
-            for (var i = 0; i < tableNeutralZonesCount; i++)
-            {
-                List<ICard> cards = new();
-                neutralZones.Add(cards);
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Table"/> class.
-        /// </summary>
-        /// <param name="mediator"><see cref="IGameMediator"/> that is used by the <see cref="Table"/> to
-        /// communicate to other game elements.</param>
-        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
-        /// <param name="initDecks">List of initial <see cref="IDeck"/>s on the <see cref="Table"/>.</param>
-        /// <param name="tableNeutralZonesCount">Number of nonplayer controlled areas where <see cref="ICard"/>s
-        /// can be played.</param>
-        public Table(
-            IGameMediator mediator,
-            int playerCount,
-            List<IDeck> initDecks,
-            int tableNeutralZonesCount = 0)
-        {
-            GM = mediator;
-            GM.RegisterTable(this);
-
-            playerZones = new();
-            neutralZones = new();
-
-            for (var i = 0; i < playerCount; i++)
-            {
-                List<ICard> cards = new();
-                playerZones.Add(cards);
-            }
-
-            for (var i = 0; i < tableNeutralZonesCount; i++)
-            {
-                List<ICard> cards = new();
-                neutralZones.Add(cards);
-            }
-        }
-
+        /// <param name="gm"><see cref="IGameMediator"/> used to communicate with other elements in the game.</param>
+        /// <param name="zones">List of <see cref="TableZone"/>s that are on this <see cref="Table"/> and be interacted
+        /// with.</param>
         public Table(IGameMediator gm, List<TableZone> zones)
         {
             GM = gm;

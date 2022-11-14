@@ -33,7 +33,8 @@ namespace UnitTests.PlayerRoundRulesTests
         {
             BaseGameMediator gm = new(1);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
             PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs, handlimit: lim);
@@ -45,7 +46,8 @@ namespace UnitTests.PlayerRoundRulesTests
         {
             BaseGameMediator gm = new(1);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
             PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs);
@@ -57,7 +59,8 @@ namespace UnitTests.PlayerRoundRulesTests
         {
             BaseGameMediator gm = new(1);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
             Action init = () => new TestPlayerRoundRules(gm, playerIDs, handlimit: -2);
@@ -72,7 +75,8 @@ namespace UnitTests.PlayerRoundRulesTests
 
             BaseGameMediator gm = new(1);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
             PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs, cardPlayLimit: lim);
@@ -84,7 +88,8 @@ namespace UnitTests.PlayerRoundRulesTests
         {
             BaseGameMediator gm = new(1);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 1, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             IPlayer player = new BasePlayer(gm);
             List<int> playerIDs = new() { 0 };
             PlayerRoundRules rr = new TestPlayerRoundRules(gm, playerIDs);

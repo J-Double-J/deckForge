@@ -20,7 +20,8 @@ namespace UnitTests.GameConstructionTests
         {
             IGameMediator gm = new BaseGameMediator(2);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 0, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
             new BasePlayer(gm, 0);
             new BasePlayer(gm, 1);
 

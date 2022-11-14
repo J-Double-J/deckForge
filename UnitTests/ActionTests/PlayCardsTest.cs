@@ -38,11 +38,14 @@ namespace UnitTests.ActionTests
         {
             IGameMediator gm = new BaseGameMediator(0);
             List<IDeck> decks = new() { new DeckOfPlayingCards() };
-            Table table = new(gm, 0, decks);
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, 1, decks);
+            Table table = new(gm, new List<TableZone>() { zone });
+            //Table table = new(gm, 0, decks); TODO: REMOVE REFACTOR COMMENT
             IPlayer p = new BasePlayer(gm);
             IPlayer p2 = new BasePlayer(gm);
             IPlayer p3 = new BasePlayer(gm);
-            List<IPlayer> targetPlayers = new List<IPlayer>{
+            List<IPlayer> targetPlayers = new List<IPlayer>
+            {
                 p2, p3
             };
 
