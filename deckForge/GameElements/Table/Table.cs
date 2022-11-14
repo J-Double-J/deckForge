@@ -138,19 +138,14 @@ namespace DeckForge.GameElements.Table
         /// </summary>
         public IReadOnlyList<IReadOnlyList<ICard>> TableState
         {
-            get { return PlayerZones; }
-        }
-
-        /// <inheritdoc/>
-        public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones
-        {
+            // TODO: REMOVE REFACTOR COMMENT Why the hell is this returning only players???
             get { return FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)?.CardsInTableZone ?? new List<List<ICard>>(); }
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IReadOnlyList<ICard>> TableNeutralZones
+        public IReadOnlyList<TableZone> TableZones
         {
-            get { return FindZoneBasedOnType(TablePlacementZoneType.NeutralZone)?.CardsInTableZone ?? new List<List<ICard>>(); }
+            get { return zones; }
         }
 
         /// <summary>
@@ -162,13 +157,20 @@ namespace DeckForge.GameElements.Table
         /// <inheritdoc/>
         public void PrintTableState()
         {
-            foreach (IReadOnlyList<ICard> player in PlayerZones)
+            // TODO: REMOVE REFACTOR COMMENT This too? Why only print the player zones??
+            foreach (IReadOnlyList<ICard> player in FindZoneBasedOnType(TablePlacementZoneType.PlayerZone)!.CardsInTableZone)
             {
                 foreach (ICard c in player)
                 {
                     Console.WriteLine(c.PrintCard());
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<IReadOnlyList<ICard>> GetCardsInZone(TablePlacementZoneType zoneType)
+        {
+            return FindZoneBasedOnType(zoneType)!.CardsInTableZone;
         }
 
         /// <inheritdoc/>
@@ -183,31 +185,37 @@ namespace DeckForge.GameElements.Table
             return neutralZones[neutralZone];
         }
 
+        /// <inheritdoc/>
         public void FlipCardInZone(TablePlacementZoneType zoneType, int area, int placementInArea)
         {
             FindZoneBasedOnType(zoneType)!.FlipCard(area, placementInArea);
         }
 
+        /// <inheritdoc/>
         public void FlipCardInZoneCertainWay(TablePlacementZoneType zoneType, int area, int placementInArea, bool facedown)
         {
             FindZoneBasedOnType(zoneType)!.FlipCardCertainWay(area, placementInArea, facedown);
         }
 
+        /// <inheritdoc/>
         public void FlipAllCardsInAreaInZone(TablePlacementZoneType zoneType, int area)
         {
             FindZoneBasedOnType(zoneType)!.FlipAllCardsInArea(area);
         }
 
+        /// <inheritdoc/>
         public void FlipAllCardsInAreaInZoneCertainWay(TablePlacementZoneType zoneType, int area, bool facedown)
         {
             FindZoneBasedOnType(zoneType)!.FlipAllCardsInAreaCertainWay(area, facedown);
         }
 
+        /// <inheritdoc/>
         public void FlipAllCardsInZone(TablePlacementZoneType zoneType)
         {
             FindZoneBasedOnType(zoneType)!.FlipAllCardsInZone();
         }
 
+        /// <inheritdoc/>
         public void FlipAllCardsInZoneCertainWay(TablePlacementZoneType zoneType, bool facedown)
         {
             FindZoneBasedOnType(zoneType)!.FlipAllCardsInZoneCertainWay(facedown);

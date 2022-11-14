@@ -5,6 +5,7 @@ using DeckForge.GameElements.Resources.Cards.Example_Cards;
 using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
+using System.Xml.Linq;
 using UnitTests.Mocks;
 
 namespace UnitTests.GameElements.CardTests
@@ -32,7 +33,7 @@ namespace UnitTests.GameElements.CardTests
             TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
             Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
-            List<ICard> cards = new List<ICard>()
+            List<ICard> cards = new()
             {
                 new MobPileCharacterCard(gm, 1, 1),
                 new BaseCharacterCard(gm, 1, 1, "Poor Villager"),
@@ -50,7 +51,7 @@ namespace UnitTests.GameElements.CardTests
 
             string reasoning = "four other cards were played and the card automatically increases in strength as other" +
                 "cards are played";
-            ((BaseCharacterCard)table.PlayerZones[0][0]).AttackVal.Should().Be(5, reasoning);
+            ((BaseCharacterCard)table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0][0]).AttackVal.Should().Be(5, reasoning);
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace UnitTests.GameElements.CardTests
             TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
             Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
-            List<ICard> cards = new List<ICard>()
+            List<ICard> cards = new()
             {
                 new BaseCharacterCard(gm, 1, 1, "Poor Villager"),
                 new BaseCharacterCard(gm, 1, 1, "Poor Villager"),
@@ -84,7 +85,7 @@ namespace UnitTests.GameElements.CardTests
             TableZone zone = new(TablePlacementZoneType.PlayerZone, 1);
             Table table = new(gm, new List<TableZone>() { zone });
             TestPlayerMock player = new(gm, 0);
-            List<ICard> cards = new List<ICard>()
+            List<ICard> cards = new()
             {
                 new BaseCharacterCard(gm, 1, 1, "Poor Villager"),
                 new BaseCharacterCard(gm, 1, 1, "Poor Villager"),
@@ -124,7 +125,7 @@ namespace UnitTests.GameElements.CardTests
                 player.PlayCard();
             }
 
-            ((CharacterCardWithEffect)table.PlayerZones[0][0]).AttackVal.Should()
+            ((CharacterCardWithEffect)table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0][0]).AttackVal.Should()
                 .Be(4, "there are two other character cards in play");
         }
 
@@ -151,7 +152,7 @@ namespace UnitTests.GameElements.CardTests
 
             ((BaseCharacterCard)cards[1]).Attack((BaseCharacterCard)cards[2]);
 
-            ((CharacterCardWithEffect)table.PlayerZones[0][0]).AttackVal.Should()
+            ((CharacterCardWithEffect)table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0][0]).AttackVal.Should()
                 .Be(2, "the two other cards killed themselves and the brawler no longer benefits from them");
         }
     }

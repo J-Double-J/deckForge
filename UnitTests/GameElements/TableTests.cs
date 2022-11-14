@@ -411,12 +411,12 @@ namespace UnitTests.GameElements
             table.PlayCardToZone(new PlayingCard(7, "J"), TablePlacementZoneType.PlayerZone, 3);
             table.Remove_AllCardsFromTable();
 
-            foreach (var cards in table.TableNeutralZones)
+            foreach (var cards in table.GetCardsInZone(TablePlacementZoneType.NeutralZone))
             {
                 cards.Count.Should().Be(0, "no cards should be in the neutral zones");
             }
 
-            foreach (var cards in table.PlayerZones)
+            foreach (var cards in table.GetCardsInZone(TablePlacementZoneType.PlayerZone))
             {
                 cards.Count.Should().Be(0, "no cards should be left in player spots");
             }
@@ -438,7 +438,7 @@ namespace UnitTests.GameElements
             table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
             table.RemoveCardFromTable(cardsToAdd[1], TablePlacementZoneType.PlayerZone, 0);
 
-            table.PlayerZones[0].Count.Should().Be(2, "one of the cards were removed");
+            table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0].Count.Should().Be(2, "one of the cards were removed");
         }
 
         [TestMethod]
@@ -455,10 +455,11 @@ namespace UnitTests.GameElements
             };
 
             table.PlayCardsToZone(cardsToAdd, TablePlacementZoneType.PlayerZone, 0);
-            attackingCard.Attack((ICharacterCard)table.PlayerZones[0][1]);
+            attackingCard.Attack((ICharacterCard)table
+                .GetCardsInZone(TablePlacementZoneType.PlayerZone)[0][1]);
             table.RemoveCardFromTable(cardsToAdd[1], TablePlacementZoneType.PlayerZone, 0);
 
-            BaseCharacterCard remainingCard = (BaseCharacterCard)table.PlayerZones[0][0];
+            BaseCharacterCard remainingCard = (BaseCharacterCard)table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0][0];
             remainingCard.HealthVal.Should().Be(5, "the unattacked card should be the remaining card");
         }
 
@@ -474,7 +475,7 @@ namespace UnitTests.GameElements
             table.PlayCardToZone(poorVictim, TablePlacementZoneType.PlayerZone, 0);
             attackingCard.Attack(poorVictim);
 
-            table.PlayerZones[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
+            table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0].Count.Should().Be(0, "the Villager card was killed and removed from the table.");
         }
     }
 }

@@ -2,6 +2,7 @@ using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
+using System.Xml.Linq;
 
 namespace DeckForge.PhaseActions
 {
@@ -48,7 +49,7 @@ namespace DeckForge.PhaseActions
         public override ICard Execute(IPlayer player)
         {
             player.FlipSingleCard(SpecificCardTablePos, facedown);
-            return gm.Table!.PlayerZones[player.PlayerID][SpecificCardTablePos];
+            return gm.Table!.GetCardsInZone(TablePlacementZoneType.PlayerZone)[player.PlayerID][SpecificCardTablePos];
         }
     }
 }

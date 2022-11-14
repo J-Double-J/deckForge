@@ -28,7 +28,7 @@ namespace UnitTests.ActionTests.PlayerActionTests
             action.Execute(player);
             action.Execute(player);
 
-            table.PlayerZones[0].Should().BeEquivalentTo(cards, "the player played these cards from their hand");
+            table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0].Should().BeEquivalentTo(cards, "the player played these cards from their hand");
         }
 
         [TestMethod]
@@ -44,8 +44,8 @@ namespace UnitTests.ActionTests.PlayerActionTests
             action.Execute(player);
             action.Execute(player);
 
-            table.PlayerZones[0].Should().BeEquivalentTo(cards, "the player didn't have any cards to play");
-            table.PlayerZones[0].Count.Should().Be(0, "no cards were added to the table");
+            table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0].Should().BeEquivalentTo(cards, "the player didn't have any cards to play");
+            table.GetCardsInZone(TablePlacementZoneType.PlayerZone)[0].Count.Should().Be(0, "no cards were added to the table");
         }
     }
 }

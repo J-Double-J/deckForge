@@ -11,14 +11,19 @@ namespace DeckForge.GameElements.Table
     public interface ITable
     {
         /// <summary>
-        /// Gets a readonly list of played <see cref="ICard"/>s in front of each <see cref="IPlayer"/>.
+        /// Gets a readonly list of <see cref="TableZone"/>s in on the <see cref="Table"/>.
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<ICard>> PlayerZones { get; }
+        public IReadOnlyList<TableZone> TableZones { get; }
 
         /// <summary>
-        /// Gets a readonly list of <see cref="ICard"/>s in the different non-player owned zones on the <see cref="Table"/>.
+        /// Gets the <see cref="ICard"/>s in a <see cref="TableZone"/> with the matching <see cref="TablePlacementZoneType"/>.
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<ICard>> TableNeutralZones { get; }
+        /// <param name="zoneType">Type of <see cref="TableZone"/> to get the <see cref="ICard"/>s from.</param>
+        /// <returns>The list of list of <see cref="ICard"/>s from the matching <see cref="TableZone"/> type.
+        /// Indexes of first list are for each area in zone.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="zoneType"/>
+        /// does not match a <see cref="TableZone"/> on the <see cref="ITable"/>.</exception>
+        public IReadOnlyList<IReadOnlyList<ICard>> GetCardsInZone(TablePlacementZoneType zoneType);
 
         /// <summary>
         /// Prints the current <see cref="ITable"/> state.
