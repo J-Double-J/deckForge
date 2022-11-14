@@ -4,7 +4,6 @@ using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
 using FluentAssertions.Specialized;
-using System.Xml.Linq;
 
 namespace UnitTests.GameElements
 {
@@ -13,7 +12,6 @@ namespace UnitTests.GameElements
     {
         private static IGameMediator gm;
 
-        //private static Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
         private static Table table;
         private static StringWriter output = new();
 
@@ -52,6 +50,7 @@ namespace UnitTests.GameElements
             output = new();
             for (var i = 0; i < 2; i++)
             {
+                // Registers player with GameMediator
                 new BasePlayer(gm, i);
             }
         }
@@ -114,7 +113,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.Flip_AllCardsOneWay_AllPLayers(facedown: true);
+            table.FlipAllCardsInZoneCertainWay(TablePlacementZoneType.PlayerZone, true);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -132,7 +131,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.Flip_AllCardsEitherWay_AllPlayers();
+            table.FlipAllCardsInZone(TablePlacementZoneType.PlayerZone);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -150,7 +149,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.Flip_AllCardsOneWay_SpecificPlayer(0, facedown: true);
+            table.FlipAllCardsInAreaInZone(TablePlacementZoneType.PlayerZone, 0);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -168,7 +167,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.Flip_AllCardsEitherWay_SpecificPlayer(1);
+            table.FlipAllCardsInAreaInZone(TablePlacementZoneType.PlayerZone, 1);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -186,7 +185,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.Flip_SpecificCard_SpecificPlayer(0, 0);
+            table.FlipCardInZone(TablePlacementZoneType.PlayerZone, 0, 0);
             table.PrintTableState();
 
             if (OperatingSystem.IsMacOS())
@@ -202,9 +201,9 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableShouldThrowError_OnAllFlippinActions_OnBadPlayerID()
         {
-            Action a = () => table.Flip_AllCardsEitherWay_SpecificPlayer(3);
-            Action b = () => table.Flip_AllCardsOneWay_SpecificPlayer(3);
-            Action c = () => table.Flip_SpecificCard_SpecificPlayer(3, 0);
+            Action a = () => table.FlipAllCardsInAreaInZone(TablePlacementZoneType.PlayerZone, 3);
+            Action b = () => table.FlipAllCardsInAreaInZoneCertainWay(TablePlacementZoneType.PlayerZone, 3, false);
+            Action c = () => table.FlipCardInZone(TablePlacementZoneType.PlayerZone, 3, 0);
             string because = "there is no player 3 on the table";
 
             SetUpTableForTests();
@@ -217,9 +216,9 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableShouldThrowError_OnFlippingNonexistantCard()
         {
-            Action a = () => table.Flip_SpecificCard_SpecificPlayer(0, 3);
-
             SetUpTableForTests();
+
+            Action a = () => table.FlipCardInZone(TablePlacementZoneType.PlayerZone, 0, 3);
 
             a.Should().Throw<ArgumentOutOfRangeException>("Player 0 doesn't have a 4th card on the board");
         }
@@ -295,7 +294,7 @@ namespace UnitTests.GameElements
         public void TableFlips_ACardForAPlayer_InSpecificWay(bool facedown)
         {
             SetUpTableForTests();
-            table.Flip_SpecificCard_SpecificPlayer_SpecificWay(0, 0, facedown);
+            table.FlipCardInZoneCertainWay(TablePlacementZoneType.PlayerZone, 0, 0, facedown);
             table.PrintTableState();
 
             if (facedown)
@@ -327,8 +326,8 @@ namespace UnitTests.GameElements
         [DataRow(2)]
         public void TableCanDrawCard_FromSpecificDeck(int deckNum)
         {
-            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
-            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            List<IDeck> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
 
@@ -340,8 +339,8 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCanDrawManyCards_FromSpecificDeck()
         {
-            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
-            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            List<IDeck> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
             var cards = table.DrawMultipleCardsFromDeck(5, TablePlacementZoneType.PlayerZone, 0);
@@ -357,8 +356,8 @@ namespace UnitTests.GameElements
         [TestMethod]
         public void TableCannotDraw_FromNonexistantDeck()
         {
-            List<IDeck> Decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
-            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, Decks);
+            List<IDeck> decks = new() { new DeckOfPlayingCards(), new DeckOfPlayingCards(), new DeckOfPlayingCards() };
+            TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 3, decks);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
 

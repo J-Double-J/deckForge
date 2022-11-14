@@ -3,7 +3,6 @@ using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards.CardEvents;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;
-using System.Xml.Linq;
 
 namespace DeckForge.GameElements.Table
 {
@@ -184,85 +183,34 @@ namespace DeckForge.GameElements.Table
             return neutralZones[neutralZone];
         }
 
-        /// <inheritdoc/>
-        public void Flip_AllCardsOneWay_SpecificPlayer(int playerID, bool facedown = false)
+        public void FlipCardInZone(TablePlacementZoneType zoneType, int area, int placementInArea)
         {
-            try
-            {
-                foreach (ICard c in PlayerZones[playerID])
-                {
-                    if (c.Facedown != facedown)
-                    {
-                        c.Flip();
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
+            FindZoneBasedOnType(zoneType)!.FlipCard(area, placementInArea);
         }
 
-        /// <inheritdoc/>
-        public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false)
+        public void FlipCardInZoneCertainWay(TablePlacementZoneType zoneType, int area, int placementInArea, bool facedown)
         {
-            for (var i = 0; i < PlayerZones.Count; i++)
-            {
-                Flip_AllCardsOneWay_SpecificPlayer(i, facedown);
-            }
+            FindZoneBasedOnType(zoneType)!.FlipCardCertainWay(area, placementInArea, facedown);
         }
 
-        /// <inheritdoc/>
-        public void Flip_AllCardsEitherWay_SpecificPlayer(int playerID)
+        public void FlipAllCardsInAreaInZone(TablePlacementZoneType zoneType, int area)
         {
-            try
-            {
-                foreach (ICard c in PlayerZones[playerID])
-                {
-                    c.Flip();
-                }
-            }
-            catch
-            {
-                throw;
-            }
+            FindZoneBasedOnType(zoneType)!.FlipAllCardsInArea(area);
         }
 
-        /// <inheritdoc/>
-        public void Flip_AllCardsEitherWay_AllPlayers()
+        public void FlipAllCardsInAreaInZoneCertainWay(TablePlacementZoneType zoneType, int area, bool facedown)
         {
-            for (var i = 0; i < PlayerZones.Count; i++)
-            {
-                Flip_AllCardsEitherWay_SpecificPlayer(i);
-            }
+            FindZoneBasedOnType(zoneType)!.FlipAllCardsInAreaCertainWay(area, facedown);
         }
 
-        /// <inheritdoc/>
-        public ICard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos)
+        public void FlipAllCardsInZone(TablePlacementZoneType zoneType)
         {
-            try
-            {
-                PlayerZones[playerID][cardPos].Flip();
-                return PlayerZones[playerID][cardPos];
-            }
-            catch
-            {
-                throw;
-            }
+            FindZoneBasedOnType(zoneType)!.FlipAllCardsInZone();
         }
 
-        /// <inheritdoc/>
-        public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false)
+        public void FlipAllCardsInZoneCertainWay(TablePlacementZoneType zoneType, bool facedown)
         {
-            if (PlayerZones[playerID][cardPos].Facedown != facedown)
-            {
-                PlayerZones[playerID][cardPos].Flip();
-                return PlayerZones[playerID][cardPos];
-            }
-            else
-            {
-                return PlayerZones[playerID][cardPos];
-            }
+            FindZoneBasedOnType(zoneType)!.FlipAllCardsInZoneCertainWay(facedown);
         }
 
         /// <inheritdoc/>

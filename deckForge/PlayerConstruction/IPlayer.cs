@@ -114,7 +114,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>,
         /// otherwise flipped regardless of current orientation.</param>
         /// <returns>Reference to <see cref="ICard"/> that was flipped.</returns>
-        public ICard FlipSingleCard(int cardPos, bool? facedown = null);
+        public void FlipSingleCard(int cardPos, bool? facedown = null);
 
         /// <summary>
         /// Takes all cards that the <see cref="IPlayer"/> owns off the table.

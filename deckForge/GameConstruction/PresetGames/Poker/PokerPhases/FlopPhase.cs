@@ -14,7 +14,6 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
                 GameElements.Table.TablePlacementZoneType.NeutralZone,
                 GameElements.Table.TablePlacementZoneType.NeutralZone,
                 faceup: true));
-            //Actions.Add(new DealCardsFromTableDeckToTable(pGM, 0, 3, 0, true)); TODO: REMOVE REFACTOR COMMENT
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         : base(gm, playerIDs, phaseName)
         {
             Actions.Add(new PlayCardAction());
-            Actions.Add(new FlipOneCard_OneWayAction(0, facedown: false));
+            Actions.Add(new FlipOneCard_OneWayAction(gm, 0, facedown: false));
         }
 
         /// <summary>

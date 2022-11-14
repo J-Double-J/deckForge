@@ -25,7 +25,6 @@ namespace UnitTests.ActionTests.NonPlayerActionTests
             action.Execute();
 
             table.GetDeckFromAreaInZone(TablePlacementZoneType.NeutralZone, 0).Count.Should().Be(52, "all the cards were readded to the deck");
-            //table.TableDecks[0].Count.Should().Be(52, "all the cards were readded to the deck"); TODO: REMOVE REFACTOR COMMENT
         }
     }
 }

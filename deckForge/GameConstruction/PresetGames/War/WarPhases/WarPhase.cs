@@ -26,7 +26,7 @@ namespace DeckForge.GameConstruction.PresetGames.War
         : base(gm, playerIDs, phaseName)
         {
             Actions.Add(new PlayMultipleCardsAction(playCount: 2));
-            Actions.Add(new FlipOneCard_OneWayAction(2 * iteration));
+            Actions.Add(new FlipOneCard_OneWayAction(gm, 2 * iteration));
         }
 
         /// <inheritdoc/>

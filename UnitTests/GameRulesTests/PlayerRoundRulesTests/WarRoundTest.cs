@@ -46,7 +46,8 @@ namespace UnitTests.GameRulesTests.PlayerRoundRulesTests
         [TestMethod]
         public void WarRoundGoesThroughAllPhasesCorrectly()
         {
-            List<PlayingCard> riggedCardsForPlayerZero = new List<PlayingCard>() {
+            List<PlayingCard> riggedCardsForPlayerZero = new List<PlayingCard>()
+            {
                 new PlayingCard(10, "H"), // Win in 2nd comparison phase
                 new PlayingCard(2, "H"),
                 new PlayingCard(3, "H") // Tie in 1st comparison phase

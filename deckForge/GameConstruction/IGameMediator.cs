@@ -127,8 +127,7 @@ namespace DeckForge.GameConstruction
         /// <param name="playerID">ID of <see cref="IPlayer"/> whose card is getting flipped.</param>
         /// <param name="cardPos">Specific card's position on the table for that player.</param>
         /// <param name="facedown">Flip it facedown if true, faceup if false, or flip it regardless if null.</param>
-        /// <returns>A reference to the card that was flipped.</returns>
-        public ICard FlipSingleCard(int playerID, int cardPos, bool? facedown);
+        public void FlipSingleCard(int playerID, int cardPos, bool? facedown);
 
         /// <summary>
         /// Pick up all <see cref="ICard"/>s belonging to an <see cref="IPlayer"/> on the <see cref="Table"/>.

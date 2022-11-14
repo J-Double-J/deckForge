@@ -6,6 +6,7 @@ using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
+using System.Xml.Linq;
 
 namespace DeckForge.GameConstruction
 {
@@ -286,17 +287,17 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual ICard FlipSingleCard(int playerID, int cardPos, bool? facedown)
+        public virtual void FlipSingleCard(int playerID, int cardPos, bool? facedown)
         {
             try
             {
                 if (facedown is null)
                 {
-                    return GameTable!.Flip_SpecificCard_SpecificPlayer(playerID, cardPos);
+                    GameTable!.FlipCardInZone(TablePlacementZoneType.PlayerZone, playerID, cardPos);
                 }
                 else
                 {
-                    return GameTable!.Flip_SpecificCard_SpecificPlayer_SpecificWay(playerID, cardPos, (bool)facedown);
+                    GameTable!.FlipCardInZoneCertainWay(TablePlacementZoneType.PlayerZone, playerID, cardPos, (bool)facedown);
                 }
             }
             catch

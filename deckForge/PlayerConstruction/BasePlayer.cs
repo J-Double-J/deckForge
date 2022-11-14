@@ -222,9 +222,9 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
-        public ICard FlipSingleCard(int cardNum, bool? facedown = null)
+        public void FlipSingleCard(int cardNum, bool? facedown = null)
         {
-            return GM.FlipSingleCard(PlayerID, cardNum, facedown);
+            GM.FlipSingleCard(PlayerID, cardNum, facedown);
         }
 
         /// <inheritdoc/>

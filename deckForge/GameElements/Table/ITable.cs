@@ -40,52 +40,50 @@ namespace DeckForge.GameElements.Table
         public List<ICard> GetCardsForSpecificNeutralZone(int neutalZone);
 
         /// <summary>
-        /// Places the <paramref name="card"/> on the <see cref="ITable"/>.
+        /// Flips a <see cref="ICard"/> in the selected <see cref="TableZone"/>.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> who played the <see cref="ICard"/>.</param>
-        /// <param name="card"><see cref="ICard"/> that is to be placed on the table.</param>
-        // public void PlaceCardOnTable(int playerID, ICard card);
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>.</param>
+        /// <param name="area">Area in the <see cref="TableZone"/> the <see cref="ICard"/> resides in.</param>
+        /// <param name="placementInArea">Specific place in area the <see cref="ICard"/> is.</param>
+        public void FlipCardInZone(TablePlacementZoneType zoneType, int area, int placementInArea);
 
         /// <summary>
-        /// Flips all the <see cref="ICard"/>s in a specified direction for a specified <see cref="IPlayer"/>.
+        /// Flips a <see cref="ICard"/> to a certain direction if it's not already that orientation.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/> who owns the <see cref="ICard"/>s.</param>
-        /// <param name="facedown">Indicates whether the cards are flipped facedown or faceup.</param>
-        public void Flip_AllCardsOneWay_SpecificPlayer(int playerID, bool facedown = false);
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>.</param>
+        /// <param name="area">Area in the <see cref="TableZone"/> the <see cref="ICard"/> resides in.</param>
+        /// <param name="placementInArea">Specific place in area the <see cref="ICard"/> is.</param>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/> facedown, otherwise faceup.</param>
+        public void FlipCardInZoneCertainWay(TablePlacementZoneType zoneType, int area, int placementInArea, bool facedown);
 
         /// <summary>
-        /// Flips all cards one way for all <see cref="IPlayer"/>s at the <see cref="ITable"/>.
+        /// Flips all <see cref="ICard"/>s in an area in the <see cref="TableZone"/>.
         /// </summary>
-        /// <param name="facedown">Indicates whether the cards are flipped facedown or faceup.</param>
-        public void Flip_AllCardsOneWay_AllPLayers(bool facedown = false);
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>s.</param>
+        /// <param name="area">Area in the <see cref="TableZone"/> holding the <see cref="ICard"/>s to flip.</param>
+        public void FlipAllCardsInAreaInZone(TablePlacementZoneType zoneType, int area);
 
         /// <summary>
-        /// Flips all the <see cref="ICard"/>s for a specific <see cref="IPlayer"/>.
+        /// Flips all <see cref="ICard"/>s in an area a certain direction if it's not already that orientation.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        public void Flip_AllCardsEitherWay_SpecificPlayer(int playerID);
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>s.</param>
+        /// <param name="area">Area in the <see cref="TableZone"/> holding the <see cref="ICard"/>s to flip.</param>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/>s facedown, otherwise faceup.</param>
+        public void FlipAllCardsInAreaInZoneCertainWay(TablePlacementZoneType zoneType, int area, bool facedown);
 
         /// <summary>
-        /// Flips all <see cref="ICard"/>s for all <see cref="IPlayer"/>s.
+        /// Flips all <see cref="ICard"/>s in the <see cref="TableZone"/>.
         /// </summary>
-        public void Flip_AllCardsEitherWay_AllPlayers();
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>s.</param>
+        public void FlipAllCardsInZone(TablePlacementZoneType zoneType);
 
         /// <summary>
-        /// Flips a specific <see cref="ICard"/> for a specific <see cref="IPlayer"/>.
+        /// Flips all <see cref="ICard"/>s in the <see cref="TableZone"/> a certain way.
         /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
-        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
-        public ICard Flip_SpecificCard_SpecificPlayer(int playerID, int cardPos);
+        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of the <see cref="TableZone"/> managing the <see cref="ICard"/>s.</param>
 
-        /// <summary>
-        /// Flips a specific <see cref="ICard"/> for a specific <see cref="IPlayer"/> in a specific direction.
-        /// </summary>
-        /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        /// <param name="cardPos">The position or index of the <see cref="ICard"/> on the table.</param>
-        /// <param name="facedown">Indicates whether the cards are flipped facedown or faceup.</param>
-        /// <returns>A reference to the flipped <see cref="ICard"/>.</returns>
-        public ICard Flip_SpecificCard_SpecificPlayer_SpecificWay(int playerID, int cardPos, bool facedown = false);
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/>s facedown, otherwise faceup.</param>
+        public void FlipAllCardsInZoneCertainWay(TablePlacementZoneType zoneType, bool facedown);
 
         /// <summary>
         /// Removes a <see cref="ICard"/> from the specified area in a <see cref="TableZone"/>.

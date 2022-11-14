@@ -1,5 +1,6 @@
 ﻿using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
+using System.Formats.Asn1;
 
 namespace DeckForge.GameElements.Table
 {
@@ -398,6 +399,113 @@ namespace DeckForge.GameElements.Table
             catch
             {
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Flips a <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="area">Area in the <see cref="TableZone"/> the <see cref="ICard"/> resides in.</param>
+        /// <param name="placementInArea">Specific place in area the <see cref="ICard"/> is.</param>
+        public void FlipCard(int area, int placementInArea)
+        {
+            try
+            {
+                ValidatePlaceInAreaArgument(area, placementInArea);
+                zone[area][placementInArea].Flip();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Flips a <see cref="ICard"/> to a certain direction if it's not already that orientation.
+        /// </summary>
+        /// <param name="area">Area in the <see cref="TableZone"/> the <see cref="ICard"/> resides in.</param>
+        /// <param name="placementInArea">Specific place in area the <see cref="ICard"/> is.</param>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/> facedown, otherwise faceup.</param>
+        public void FlipCardCertainWay(int area, int placementInArea, bool facedown)
+        {
+            try
+            {
+                ValidatePlaceInAreaArgument(area, placementInArea);
+                zone[area][placementInArea].Facedown = facedown;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Flips all <see cref="ICard"/>s in an area in the <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="area">Area in the <see cref="TableZone"/> holding the <see cref="ICard"/>s to flip.</param>
+        public void FlipAllCardsInArea(int area)
+        {
+            try
+            {
+                ValidateAreaArgument(area);
+                foreach (ICard card in zone[area])
+                {
+                    card.Flip();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Flips all <see cref="ICard"/>s in an area a certain direction if it's not already that orientation.
+        /// </summary>
+        /// <param name="area">Area in the <see cref="TableZone"/> holding the <see cref="ICard"/>s to flip.</param>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/>s facedown, otherwise faceup.</param>
+        public void FlipAllCardsInAreaCertainWay(int area, bool facedown)
+        {
+            try
+            {
+                ValidateAreaArgument(area);
+                foreach (ICard card in zone[area])
+                {
+                    card.Facedown = facedown;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Flips all <see cref="ICard"/>s in the <see cref="TableZone"/>.
+        /// </summary>
+        public void FlipAllCardsInZone()
+        {
+            foreach (var area in zone)
+            {
+                foreach (ICard card in area)
+                {
+                    card.Flip();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Flips all <see cref="ICard"/>s in the <see cref="TableZone"/> a certain way.
+        /// </summary>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/>s facedown, otherwise faceup.</param>
+        public void FlipAllCardsInZoneCertainWay(bool facedown)
+        {
+            foreach (var area in zone)
+            {
+                foreach (ICard card in area)
+                {
+                    card.Facedown = facedown;
+                }
             }
         }
 
