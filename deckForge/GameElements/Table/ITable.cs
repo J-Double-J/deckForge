@@ -1,6 +1,5 @@
 using DeckForge.GameElements.Resources;
 using DeckForge.PlayerConstruction;
-using System.Runtime.Intrinsics.X86;
 
 // TODO: Do these functions need to return void or cards?
 namespace DeckForge.GameElements.Table
@@ -173,20 +172,6 @@ namespace DeckForge.GameElements.Table
         /// <param name="placementZone"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> to play to.</param>
         /// <param name="area">Which area in the <see cref="TableZone"/> to play the <see cref="ICard"/>s to.</param>
         public void PlayCardsToZone(List<ICard> cards, TablePlacementZoneType placementZone, int area);
-
-        /// <summary>
-        /// Adds a <see cref="ICard"/> to a neutral zone.
-        /// </summary>
-        /// <param name="card"><see cref="ICard"/> to be added.</param>
-        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="ICard"/> to.</param>
-        public void AddCardTo_NeutralZone(ICard card, int neutralZone);
-
-        /// <summary>
-        /// Adds a list of <see cref="ICard"/>s to a neutral zone.
-        /// </summary>
-        /// <param name="cards">List of <see cref="ICard"/>s to add.</param>
-        /// <param name="neutralZone">ID of the neutral zone to add the <see cref="ICard"/>s to.</param>
-        public void AddCardsTo_NeutralZone(List<ICard> cards, int neutralZone);
 
         /// <summary>
         /// Removes a <see cref="ICard"/> from the table in a specific player zone

@@ -16,15 +16,16 @@ namespace UnitTests.PokerTests
             PokerGameMediator pGM = new(2);
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 2);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
-            Table table = new(pGM, new List<TableZone>() { playerZone });
+            Table table = new(pGM, new List<TableZone>() { playerZone, neutralZone });
             Dictionary<int, List<PlayingCard>> hands = new();
             PlayerGameAction playCards = new PlayHandToTable();
 
-            table.AddCardsTo_NeutralZone(
+            table.PlayCardsToZone(
                 new List<ICard>()
                 {
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
+                TablePlacementZoneType.NeutralZone,
                 0);
 
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, TablePlacementZoneType.PlayerZone, 0);
@@ -46,19 +47,21 @@ namespace UnitTests.PokerTests
         [TestMethod]
         public void EvaluatorHandlesTiesCorrectly()
         {
-            PokerGameMediator pGM = new PokerGameMediator(2);
+            PokerGameMediator pGM = new(2);
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 2);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 1);
             Table table = new(pGM, new List<TableZone>() { playerZone, neutralZone });
             Dictionary<int, List<PlayingCard>> hands = new();
             PlayerGameAction playCards = new PlayHandToTable();
 
-            table.AddCardsTo_NeutralZone(
+            table.PlayCardsToZone(
                 new List<ICard>()
                 {
                     new PlayingCard(2, "Q"), new PlayingCard(3, "Q"), new PlayingCard(4, "Q")
                 },
+                TablePlacementZoneType.NeutralZone,
                 0);
+
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(5, "J") }, TablePlacementZoneType.PlayerZone, 0);
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, TablePlacementZoneType.PlayerZone, 1);
 

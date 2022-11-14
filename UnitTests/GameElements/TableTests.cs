@@ -371,9 +371,10 @@ namespace UnitTests.GameElements
         public void TableCanAddCard_ToNeutralZone()
         {
             PlayingCard card = new(10, "J");
-            Table neutralTable = new(gm, 0, 2);
+            TableZone zone = new(TablePlacementZoneType.NeutralZone, 2);
+            Table neutralTable = new(gm, new List<TableZone>() { zone });
 
-            neutralTable.AddCardTo_NeutralZone(card, 1);
+            neutralTable.PlayCardToZone(card, TablePlacementZoneType.NeutralZone, 1);
             Console.SetOut(output);
 
             neutralTable.GetCardsForSpecificNeutralZone(1)[0].Should().BeEquivalentTo(card);
@@ -383,9 +384,10 @@ namespace UnitTests.GameElements
         public void TableCanAddMultipleCards_ToNeutralZone()
         {
             List<ICard> cards = new() { new PlayingCard(10, "J"), new PlayingCard(5, "Q") };
-            Table neutralTable = new(gm, 0, 2);
+            TableZone zone = new(TablePlacementZoneType.NeutralZone, 2);
+            Table neutralTable = new(gm, new List<TableZone>() { zone });
 
-            neutralTable.AddCardsTo_NeutralZone(cards, 0);
+            neutralTable.PlayCardsToZone(cards, TablePlacementZoneType.NeutralZone, 0);
             Console.SetOut(output);
             neutralTable.GetCardsForSpecificNeutralZone(0).Should().BeEquivalentTo(cards);
         }
@@ -397,11 +399,9 @@ namespace UnitTests.GameElements
             TableZone playerZone = new(TablePlacementZoneType.PlayerZone, 4);
             TableZone neutralZone = new(TablePlacementZoneType.NeutralZone, 3);
             Table table = new(gm, new List<TableZone>() { playerZone, neutralZone });
-            //Table table = new(gm, 4, 3); Likely will need to implement AddCardTo_NeutralZone
 
-            table.AddCardsTo_NeutralZone(
-                new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, 0);
-            table.AddCardTo_NeutralZone(new PlayingCard(10, "Q"), 1);
+            table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "J"), new PlayingCard(2, "J") }, TablePlacementZoneType.NeutralZone, 0);
+            table.PlayCardToZone(new PlayingCard(10, "Q"), TablePlacementZoneType.NeutralZone, 1);
 
             table.PlayCardToZone(new PlayingCard(3, "J"), TablePlacementZoneType.PlayerZone, 0);
             table.PlayCardToZone(new PlayingCard(4, "J"), TablePlacementZoneType.PlayerZone, 1);
@@ -425,7 +425,9 @@ namespace UnitTests.GameElements
         public void TablePlaysCardFromDeck_ToNeutralZone()
         {
             IGameMediator gm = new BaseGameMediator(0);
-            Table table = new(gm, 0, new DeckOfPlayingCards(), 1);
+            TableZone zone = new(TablePlacementZoneType.NeutralZone, 1, new DeckOfPlayingCards());
+            Table table = new(gm, new List<TableZone>() { zone });
+            //Table table = new(gm, 0, new DeckOfPlayingCards(), 1);
 
             table.PlayCards_FromTableDeck_ToNeutralZone(2, 0, 0);
 

@@ -201,11 +201,12 @@ namespace UnitTests.PokerTests
             playerOne.SetInvestedCash(25);
             playerTwo.SetInvestedCash(25);
 
-            table.AddCardsTo_NeutralZone(
+            table.PlayCardsToZone(
                 new List<ICard>()
                 {
                     new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
                 },
+                TablePlacementZoneType.NeutralZone,
                 0);
 
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, TablePlacementZoneType.PlayerZone, 0);
@@ -232,12 +233,20 @@ namespace UnitTests.PokerTests
             playerTwo.SetInvestedCash(20);
             playerThree.SetInvestedCash(20);
 
-            table.AddCardsTo_NeutralZone(
+            table.PlayCardsToZone(
                 new List<ICard>()
                 {
                     new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
                 },
+                TablePlacementZoneType.NeutralZone,
                 0);
+
+            //table.AddCardsTo_NeutralZone(
+            //    new List<ICard>()
+            //    {
+            //        new PlayingCard(2, "C"), new PlayingCard(3, "C"), new PlayingCard(4, "C")
+            //    },
+            //    0);
 
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "S"), new PlayingCard(5, "S") }, TablePlacementZoneType.PlayerZone, 0);
             table.PlayCardsToZone(new List<ICard>() { new PlayingCard(10, "D"), new PlayingCard(5, "D") }, TablePlacementZoneType.PlayerZone, 1);
