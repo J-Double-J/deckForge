@@ -27,7 +27,7 @@ namespace DeckForge.GameElements.Resources
         public event EventHandler<CardIsRemovedFromTableEventArgs>? CardIsRemovedFromTable;
 
         /// <inheritdoc/>
-        public bool Facedown { get; set; }
+        public bool Facedown { get; protected set; }
 
         /// <inheritdoc/>
         public virtual IPlayer? OwnedBy { get; set; }
@@ -60,6 +60,12 @@ namespace DeckForge.GameElements.Resources
             {
                 Facedown = true;
             }
+        }
+
+        /// <inheritdoc/>
+        public void Flip(bool facedown)
+        {
+            Facedown = facedown;
         }
 
         /// <inheritdoc/>

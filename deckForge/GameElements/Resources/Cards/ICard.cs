@@ -15,10 +15,10 @@ namespace DeckForge.GameElements.Resources
         event EventHandler<CardIsRemovedFromTableEventArgs>? CardIsRemovedFromTable;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="ICard"/> is facedown or not. If true,
+        /// Gets a value indicating whether the <see cref="ICard"/> is facedown or not. If true,
         /// <see cref="ICard"/> is facedown.
         /// </summary>
-        public bool Facedown { get; set; }
+        public bool Facedown { get; }
 
         /// <summary>
         /// Gets or sets the <see cref="IPlayer"/> who owns this <see cref="ICard"/>.
@@ -51,9 +51,15 @@ namespace DeckForge.GameElements.Resources
         public string PrintCard();
 
         /// <summary>
-        /// Swaps the boolean of <see cref="Facedown"/>.
+        /// Flips the <see cref="ICard"/> from faceup to facedown, or vice-versa.
         /// </summary>
         public void Flip();
+
+        /// <summary>
+        /// Flips the <see cref="ICard"/> to a certain orientation, regardless of current orientation.
+        /// </summary>
+        /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/> facedown.</param>
+        public void Flip(bool facedown);
 
         /// <summary>
         /// Executes whenever this card is played. Card is activated when played.

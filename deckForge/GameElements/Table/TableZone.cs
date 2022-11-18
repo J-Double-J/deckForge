@@ -431,7 +431,7 @@ namespace DeckForge.GameElements.Table
             try
             {
                 ValidatePlaceInAreaArgument(area, placementInArea);
-                zone[area][placementInArea].Facedown = facedown;
+                zone[area][placementInArea].Flip(facedown);
             }
             catch
             {
@@ -471,7 +471,7 @@ namespace DeckForge.GameElements.Table
                 ValidateAreaArgument(area);
                 foreach (ICard card in zone[area])
                 {
-                    card.Facedown = facedown;
+                    card.Flip(facedown);
                 }
             }
             catch
@@ -504,7 +504,7 @@ namespace DeckForge.GameElements.Table
             {
                 foreach (ICard card in area)
                 {
-                    card.Facedown = facedown;
+                    card.Flip(facedown);
                 }
             }
         }

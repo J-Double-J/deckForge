@@ -85,7 +85,7 @@ namespace DeckForge.PhaseActions
             {
                 if (card != null)
                 {
-                    card.Facedown = !PlayFaceUp;
+                    card.Flip(!PlayFaceUp);
                 }
                 else
                 {

@@ -278,7 +278,6 @@ namespace DeckForge.GameConstruction
             try
             {
                 return GameTable!.GetCardsInZone(TablePlacementZoneType.PlayerZone)[playerID];
-                //return GameTable!.GetCardsForSpecificPlayer(playerID);  TODO: REMOVE REFACTOR COMMENT Made this return a readonly
             }
             catch
             {

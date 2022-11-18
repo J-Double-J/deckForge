@@ -316,7 +316,6 @@ namespace DeckForge.GameElements.Table
             }
         }
 
-
         /// <summary>
         /// Finds a zone on the <see cref="Table"/> based on the <see cref="TablePlacementZoneType"/>.
         /// </summary>

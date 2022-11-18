@@ -46,6 +46,11 @@ namespace DeckForge.GameElements.Resources.Cards
         }
 
         /// <inheritdoc/>
+        public void Flip(bool facedown)
+        {
+        }
+
+        /// <inheritdoc/>
         public void OnPlay(CardPlacedOnTableDetails placementDetails)
         {
         }
