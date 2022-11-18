@@ -224,7 +224,7 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public void FlipSingleCard(int cardNum, bool? facedown = null)
         {
-            GM.FlipSingleCard(PlayerID, cardNum, facedown);
+            GM.FlipSingleCard(TablePlacementZoneType.PlayerZone, PlayerID, cardNum, facedown);
         }
 
         /// <inheritdoc/>

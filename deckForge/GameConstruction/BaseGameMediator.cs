@@ -286,17 +286,17 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
-        public virtual void FlipSingleCard(int playerID, int cardPos, bool? facedown)
+        public virtual void FlipSingleCard(TablePlacementZoneType zoneType, int area, int cardPos, bool? facedown)
         {
             try
             {
                 if (facedown is null)
                 {
-                    GameTable!.FlipCardInZone(TablePlacementZoneType.PlayerZone, playerID, cardPos);
+                    GameTable!.FlipCardInZone(zoneType, area, cardPos);
                 }
                 else
                 {
-                    GameTable!.FlipCardInZoneCertainWay(TablePlacementZoneType.PlayerZone, playerID, cardPos, (bool)facedown);
+                    GameTable!.FlipCardInZoneCertainWay(zoneType, area, cardPos, (bool)facedown);
                 }
             }
             catch

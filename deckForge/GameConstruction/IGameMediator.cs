@@ -122,12 +122,13 @@ namespace DeckForge.GameConstruction
         public IReadOnlyList<ICard> GetPlayedCardsOfPlayer(int playerID);
 
         /// <summary>
-        /// Flips a specified card on the <see cref="Table"/>, for a specific <see cref="IPlayer"/>, a specific way.
+        /// Flips a specified card on the <see cref="Table"/>, a specific way if specified.
         /// </summary>
-        /// <param name="playerID">ID of <see cref="IPlayer"/> whose card is getting flipped.</param>
+        /// <param name="zoneType">Type of <see cref="TableZone"/> to target on the <see cref="Table"/>.</param>
+        /// <param name="area">ID of <see cref="IPlayer"/> whose card is getting flipped.</param>
         /// <param name="cardPos">Specific card's position on the table for that player.</param>
         /// <param name="facedown">Flip it facedown if true, faceup if false, or flip it regardless if null.</param>
-        public void FlipSingleCard(int playerID, int cardPos, bool? facedown);
+        public void FlipSingleCard(TablePlacementZoneType zoneType, int area, int cardPos, bool? facedown);
 
         /// <summary>
         /// Pick up all <see cref="ICard"/>s belonging to an <see cref="IPlayer"/> on the <see cref="Table"/>.
