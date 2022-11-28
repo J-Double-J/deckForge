@@ -5,10 +5,9 @@ using DeckForge.GameElements.Resources.Cards.Example_Cards;
 using DeckForge.GameElements.Table;
 using DeckForge.PlayerConstruction;
 using FluentAssertions;
-using System.Xml.Linq;
 using UnitTests.Mocks;
 
-namespace UnitTests.GameElements.CardTests
+namespace UnitTests.GameElements.Card_Tests
 {
     [TestClass]
     public class CharacterCardTests

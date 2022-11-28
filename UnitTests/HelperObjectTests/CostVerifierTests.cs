@@ -1,4 +1,4 @@
-﻿using DeckForge.GameElements.Resources.Cards;
+﻿using DeckForge.HelperObjects;
 using FluentAssertions;
 
 namespace UnitTests.HelperObjectTests
