@@ -60,6 +60,16 @@ namespace DeckForge.PlayerConstruction
         public bool IsOut { get; set; }
 
         /// <summary>
+        /// Starts the <see cref="IPlayer"/>'s turn.
+        /// </summary>
+        public void StartTurn();
+
+        /// <summary>
+        /// Ends the <see cref="IPlayer"/>'s turn.
+        /// </summary>
+        public void EndTurn();
+
+        /// <summary>
         /// <see cref="IPlayer"/> loses the game.
         /// </summary>
         public void LoseGame();

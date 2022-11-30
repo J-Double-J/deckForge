@@ -24,7 +24,6 @@
             string? response;
             do
             {
-
                 foreach (var entry in prompt)
                 {
                     if (entry.Key != 0)

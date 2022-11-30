@@ -137,6 +137,14 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
+        public virtual void StartTurn()
+        {
+        }
+
+        public virtual void EndTurn()
+        {
+        }
+
         /// <inheritdoc/>
         public virtual void LoseGame()
         {
