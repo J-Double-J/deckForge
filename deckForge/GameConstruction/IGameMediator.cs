@@ -85,6 +85,12 @@ namespace DeckForge.GameConstruction
         public void EndGameWithWinner(IPlayer winner);
 
         /// <summary>
+        /// Informs the <see cref="IPlayer"/> with the given <paramref name="playerID"/> to start their turn.
+        /// </summary>
+        /// <param name="playerID">ID of the <see cref="IPlayer"/> to inform.</param>
+        void InformPlayerToStartTurn(int playerID);
+
+        /// <summary>
         /// Called at the end of every <see cref="IPlayer"/>'s turn.
         /// </summary>
         public void EndPlayerTurn();

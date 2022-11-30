@@ -211,6 +211,27 @@ namespace DeckForge.GameConstruction
         }
 
         /// <inheritdoc/>
+        public void InformPlayerToStartTurn(int playerID)
+        {
+            try
+            {
+                var player = GetPlayerByID(playerID);
+                if (player is not null)
+                {
+                    player.StartTurn();
+                }
+                else
+                {
+                    throw new ArgumentException("No player with the given ID found", nameof(playerID));
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public virtual void EndPlayerTurn()
         {
         }

@@ -8,7 +8,7 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
     /// <summary>
     /// An <see cref="IPhase"/> that concerns itself with managing <see cref="IPlayer"/>s playing through its ruleset.
     /// </summary>
-    public abstract class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase, IPhase
+    public abstract class PlayerPhase : BasePhase<IPlayer>, IPlayerPhase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerPhase"/> class. Concerns itself with one or more <see cref="IPlayer"/>s.
@@ -197,6 +197,8 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
 
             EndPhase();
         }
+
+        // TODO: Does it make sense for this to be a bool and not void?
 
         /// <summary>
         /// Any logic or extra function calls should be overriden here and will be called before each <see cref="IPlayer"/>
