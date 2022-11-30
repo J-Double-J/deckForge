@@ -4,6 +4,7 @@ using System.Reflection;
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
+using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PlayerConstruction.PlayerEvents;
 
@@ -38,6 +39,22 @@ namespace DeckForge.PlayerConstruction
             gm.RegisterPlayer(this);
 
             this.initHandSize = initHandSize;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasePlayer"/> class. Specifies where input and output should be done.
+        /// </summary>
+        /// <param name="reader">Tells <see cref="IPlayer"/> where to read input.</param>
+        /// <param name="output">Tells <see cref="IPlayer"/> where to display output.</param>
+        /// <param name="gm"><see cref="IGameMediator"/> that the <see cref="BasePlayer"/> will use to communicate
+        /// with other game elements.</param>
+        /// <param name="playerID">ID of the <see cref="BasePlayer"/>.</param>
+        /// <param name="initHandSize">The size of the initial hand that the <see cref="BasePlayer"/> will start with.</param>
+        public BasePlayer(IInputReader reader, IOutputDisplay output, IGameMediator gm, int playerID = 0, int initHandSize = 5)
+            : this(gm, playerID, initHandSize)
+        {
+            InputReader = reader;
+            OutputDisplay = output;
         }
 
         /// <inheritdoc/>
@@ -128,6 +145,16 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         protected IGameMediator GM { get; }
 
+        /// <summary>
+        /// Gets the Input Reader that reads user input.
+        /// </summary>
+        protected IInputReader InputReader { get; } = new ConsoleReader();
+
+        /// <summary>
+        /// Gets the Output Display that displays strings.
+        /// </summary>
+        protected IOutputDisplay OutputDisplay { get; } = new ConsoleOutput();
+
         /// <inheritdoc/>
         public virtual void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0)
         {
@@ -137,10 +164,12 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual void StartTurn()
         {
         }
 
+        /// <inheritdoc/>
         public virtual void EndTurn()
         {
         }
@@ -162,7 +191,7 @@ namespace DeckForge.PlayerConstruction
             }
             else
             {
-                Console.WriteLine("Deck is Empty.");
+                OutputDisplay.Display("Deck is Empty.");
             }
 
             return card;
@@ -202,15 +231,15 @@ namespace DeckForge.PlayerConstruction
             string? input;
             int selectedVal;
 
-            Console.WriteLine("Which card would you like to play?");
+            OutputDisplay.Display("Which card would you like to play?");
             for (var i = 0; i < HandSize; i++)
             {
-                Console.WriteLine($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
+                OutputDisplay.Display($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
             }
 
             do
             {
-                input = Console.ReadLine();
+                input = InputReader.GetInput();
             }
             while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
 
