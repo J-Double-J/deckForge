@@ -185,7 +185,7 @@ namespace DeckForge.PlayerConstruction
         public virtual ICard? DrawCard()
         {
             ICard? card = GM.Table!.DrawCardFromDeckInArea(TablePlacementZoneType.PlayerZone, PlayerID);
-            if (card != null && card is not NullCard)
+            if (card != null)
             {
                 card.OwnedBy = this;
                 PlayerHand.AddResource(card);
@@ -213,6 +213,19 @@ namespace DeckForge.PlayerConstruction
             }
 
             return card;
+        }
+
+        /// <inheritdoc/>
+        public virtual List<ICard?> DrawMultipleCards(int numCards)
+        {
+            List<ICard?> cards = new();
+
+            for (int i = 0; i < numCards; i++)
+            {
+                cards.Add(DrawCard());
+            }
+
+            return cards;
         }
 
         /// <inheritdoc/>

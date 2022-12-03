@@ -16,7 +16,7 @@ namespace UnitTests.DominionTests
         public void PlayerGetsCoinsAfterPlayingTreasureCard()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            Table table = new Table(
+            Table table = new(
                 gm,
                 new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { new DominionPlayerTableArea(0) }) });
             DominionPlayer player = new(new ConsoleInputMock(new List<string>() { "0" }), new ConsoleOutputMock(), gm, 0);
@@ -30,7 +30,7 @@ namespace UnitTests.DominionTests
         public void PlayerGetsManyCoins_AfterPlayingMultipleTreasureCards()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            Table table = new Table(
+            Table table = new(
                 gm,
                 new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { new DominionPlayerTableArea(0) }) });
             DominionPlayer player = new(new ConsoleInputMock(new List<string>() { "0", "0", "0" }), new ConsoleOutputMock(), gm, 0);
@@ -47,7 +47,7 @@ namespace UnitTests.DominionTests
         public void PlayerScoresTheirDeckCorrectly()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            Table table = new Table(
+            Table table = new(
                 gm,
                 new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { new DominionPlayerTableArea(0) }) });
             DominionPlayer player = new(gm, 0);
@@ -63,7 +63,7 @@ namespace UnitTests.DominionTests
         public void PlayerScoresAllLocationsCorrectly()
         {
             IGameMediator gm = new BaseGameMediator(1);
-            Table table = new Table(
+            Table table = new(
                 gm,
                 new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { new DominionPlayerTableArea(0) }) });
             DominionPlayer player = new(gm, 0);
@@ -73,6 +73,40 @@ namespace UnitTests.DominionTests
 
             // Add 3 starting estate cards in deck.
             player.Score().Should().Be(12, "that is the sum of all the victory cards");
+        }
+
+        [TestMethod]
+        public void WhenPlayerTurnEndsAllCardsNotInDeckGoToDiscard()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            DominionPlayerTableArea presetArea = new DominionPlayerTableArea(0);
+            presetArea.PlaceCard(new SilverCard());
+            Table table = new(
+                gm,
+                new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }) });
+            DominionPlayer player = new(gm, 0);
+
+            player.AddCardsToHand(new List<ICard>() { new ProvinceCard(), new CurseCard(), new CopperCard(), new SilverCard() });
+            player.EndTurn();
+
+            player.DiscardPile.Count.Should().Be(5, "4 cards were removed from the hand and one from play");
+        }
+
+        [TestMethod]
+        public void PlayerEndsTheirTurnWithANewHand()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            DominionPlayerTableArea presetArea = new DominionPlayerTableArea(0);
+            presetArea.PlaceCard(new SilverCard());
+            Table table = new(
+                gm,
+                new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }) });
+            DominionPlayer player = new(gm, 0);
+
+            player.AddCardsToHand(new List<ICard>() { new ProvinceCard(), new CurseCard(), new CopperCard(), new SilverCard() });
+            player.EndTurn();
+
+            player.HandSize.Should().Be(5, "5 cards were drawn from their deck");
         }
     }
 }

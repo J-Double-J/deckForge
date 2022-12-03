@@ -84,7 +84,7 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Draws a <see cref="ICard"/> from the default player <see cref="IDeck"/>.
         /// </summary>
-        /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
+        /// <returns>A nullable <see cref="ICard"/> that was drawn into the <see cref="IPlayer"/>'s hand.</returns>
         public ICard? DrawCard();
 
         /// <summary>
@@ -92,8 +92,15 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
         /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
-        /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
+        /// <returns>A nullable <see cref="ICard"/> that was drawn into the <see cref="IPlayer"/>'s hand.</returns>
         public ICard? DrawCard(TablePlacementZoneType zoneType, int area = 0);
+
+        /// <summary>
+        /// Draws multiple <see cref="ICard"/>s from the default player area.
+        /// </summary>
+        /// <param name="numCards">Number of <see cref="ICard"/>s to draw.</param>
+        /// <returns>A list of <see cref="ICard"/>s drawn that were added to the <see cref="IPlayer"/>'s hand.</returns>
+        public List<ICard?> DrawMultipleCards(int numCards);
 
         /// <summary>
         /// Draws numerous <see cref="ICard"/>s from a <see cref="IDeck"/>.
@@ -101,7 +108,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="numCards">Number of <see cref="ICard"/>s to draw from an <see cref="IDeck"/>.</param>
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
         /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
-        /// <returns>A list of nullable <see cref="ICard"/>s.</returns>
+        /// <returns>A list of nullable <see cref="ICard"/>s added to the <see cref="IPlayer"/>'s hand.</returns>
         public List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>

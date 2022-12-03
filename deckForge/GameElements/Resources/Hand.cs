@@ -74,7 +74,6 @@ namespace DeckForge.GameElements.Resources
             }
         }
 
-
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "Near other ResourceCollection methods")]
         public Type ResourceType
@@ -140,9 +139,9 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public List<ICard>? ClearCollection()
+        public List<ICard> ClearCollection()
         {
-            List<ICard> cardsRemoved = hand;
+            List<ICard> cardsRemoved = new(hand);
             hand.Clear();
 
             return cardsRemoved;

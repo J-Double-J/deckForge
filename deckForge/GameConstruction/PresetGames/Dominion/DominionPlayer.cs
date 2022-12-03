@@ -100,6 +100,14 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         {
         }
 
+        /// <inheritdoc/>
+        public override void EndTurn()
+        {
+            base.EndTurn();
+            DiscardHandAndPlayArea();
+            DrawMultipleCards(5);
+        }
+
         /// <summary>
         /// Scores all the <see cref="DominionPlayer"/>'s <see cref="ICard"/>'s.
         /// </summary>
@@ -142,6 +150,13 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         public void ReduceCoins(int amount)
         {
             Coins -= amount;
+        }
+
+        private void DiscardHandAndPlayArea()
+        {
+            var cards = PlayerHand.ClearCollection();
+            cards.AddRange(GM.Table!.RemoveAllCards_FromArea(GameElements.Table.TablePlacementZoneType.PlayerZone, PlayerID));
+            DiscardPile.AddMultipleCardsToDeck(cards);
         }
 
         private void CreateDefaultActions()
