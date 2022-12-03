@@ -14,15 +14,15 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits
         /// </summary>
         /// <param name="gm"><see cref="IGameMediator"/> used to communicate with other game elements.</param>
         /// <param name="attachedToCard">Card this <see cref="ActionTrait"/> is attached to.</param>
-        public ActionTrait(IGameMediator gm, ICard attachedToCard)
-            : base(gm, attachedToCard)
+        public ActionTrait(ICard attachedToCard)
+            : base(attachedToCard)
         {
         }
 
         /// <inheritdoc/>
         public override void OnPlay()
         {
-            ((DominionPlayer)AttachedToCard.OwnedBy!).LoseAction(new PlayCardAction(), 1);
+            ((DominionPlayer?)AttachedToCard.OwnedBy)?.LoseAction(new PlayCardAction(), 1);
         }
     }
 }

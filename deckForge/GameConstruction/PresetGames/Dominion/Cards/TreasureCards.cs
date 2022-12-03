@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
 using DeckForge.GameElements.Resources.Cards;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards

@@ -1,4 +1,4 @@
-﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
 using DeckForge.HelperObjects;
