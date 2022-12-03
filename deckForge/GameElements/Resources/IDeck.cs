@@ -6,6 +6,11 @@
     public interface IDeck : IResourceCollection<ICard>
     {
         /// <summary>
+        /// Gets the list of <see cref="ICard"/>s in the <see cref="IDeck"/>.
+        /// </summary>
+        public List<ICard> Deck { get; }
+
+        /// <summary>
         /// Draw a <see cref="ICard"/> from the <see cref="IDeck"/>.
         /// </summary>
         /// <param name="drawFacedown">Draws the <see cref="ICard"/> facedown if <c>true</c>.</param>

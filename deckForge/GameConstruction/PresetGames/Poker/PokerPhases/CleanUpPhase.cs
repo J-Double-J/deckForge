@@ -16,7 +16,7 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
         public CleanUpPhase(PokerGameMediator pGM, string name = "Clean Up Phase")
             : base(pGM, name)
         {
-            Actions.Add(new MoveAllCardsFromTableToTableDeckAction(pGM, 0));
+            Actions.Add(new MoveAllCardsFromTableToTableDeckAction(pGM, 0, false));
         }
     }
 }

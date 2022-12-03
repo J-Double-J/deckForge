@@ -566,6 +566,17 @@ namespace DeckForge.GameElements.Table
             }
         }
 
+        /// <summary>
+        /// Gets a <see cref="IDeck"/> that is the discard pile in an area.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/> to get the discard pile from.</param>
+        /// <returns>A <see cref="IDeck"/> of cards that were discarded. If no discard exists returns <c>null</c>.</returns>
+        public IDeck? GetDiscardFromArea(int areaID)
+        {
+            ValidateAreaArgument(areaID);
+            return Areas[areaID].DiscardPile;
+        }
+
         // Shared among all creation of TableZones
         private void StandardConstruction(TablePlacementZoneType placementZoneType, int areaCount, int areaCardLimit = -1)
         {

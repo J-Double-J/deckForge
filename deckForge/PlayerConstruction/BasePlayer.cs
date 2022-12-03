@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using DeckForge.GameConstruction;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Resources.Cards;
 using DeckForge.GameElements.Table;
 using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
@@ -181,6 +182,23 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <inheritdoc/>
+        public virtual ICard? DrawCard()
+        {
+            ICard? card = GM.Table!.DrawCardFromDeckInArea(TablePlacementZoneType.PlayerZone, PlayerID);
+            if (card != null && card is not NullCard)
+            {
+                card.OwnedBy = this;
+                PlayerHand.AddResource(card);
+            }
+            else
+            {
+                OutputDisplay.Display("Deck is Empty.");
+            }
+
+            return card;
+        }
+
+        /// <inheritdoc/>
         public virtual ICard? DrawCard(TablePlacementZoneType zoneType, int area = 0)
         {
             ICard? card = GM.DrawCardFromDeck(zoneType, area);
@@ -197,6 +215,7 @@ namespace DeckForge.PlayerConstruction
             return card;
         }
 
+        /// <inheritdoc/>
         public virtual List<ICard?> DrawMultipleCards(int numCards, TablePlacementZoneType zoneType, int area = 0)
         {
             List<ICard?> cards = new();

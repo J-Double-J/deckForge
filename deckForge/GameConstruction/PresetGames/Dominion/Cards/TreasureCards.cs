@@ -3,12 +3,16 @@ using DeckForge.GameElements.Resources.Cards;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
 {
+#pragma warning disable SA1402 // File may only contain a single type
     /// <summary>
     /// A treasure card that costs nothing to buy. Worth 1 coin.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name should match first type name", Justification = "Numerous small treasure cards.")]
     public class CopperCard : DominionCard, ITreasureCard
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CopperCard"/> class.
+        /// </summary>
         public CopperCard()
             : base(new Dictionary<Type, int>() { { typeof(Coin), 0 } }, "Copper", "1")
         {
@@ -23,7 +27,6 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
     /// <summary>
     /// A treasure card that costs 3 coins to buy. Worth 2 coins.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Numerous small treasure cards.")]
     public class SilverCard : DominionCard, ITreasureCard
     {
         /// <summary>
@@ -57,6 +60,6 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
 
         /// <inheritdoc/>
         public int TreasureValue { get; }
-
     }
+#pragma warning restore SA1402 // File may only contain a single type
 }

@@ -119,6 +119,16 @@ namespace DeckForge.GameElements.Table
         public ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
+        /// Draws a <see cref="ICard"/> from a <see cref="TableZone"/>'s <see cref="TableArea"/>.
+        /// </summary>
+        /// <param name="zoneType">Type of <see cref="TableZone"/> to target on the <see cref="ITable"/>.</param>
+        /// <param name="areaID">ID of the <see cref="TableArea"/> belonging to the <see cref="TableZone"/>.</param>
+        /// <param name="deckInArea">Specified <see cref="IDeck"/> in the <see cref="TableArea"/>. Defaults to first or only <see cref="IDeck"/>.</param>
+        /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
+        public ICard? DrawCardFromDeckInArea(TablePlacementZoneType zoneType, int areaID = 0, int deckInArea = 0);
+
+
+        /// <summary>
         /// Draws multiple <see cref="ICard"/>s from a <see cref="TableZone"/>, and optionally, a specific area in the zone.
         /// </summary>
         /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
@@ -183,5 +193,13 @@ namespace DeckForge.GameElements.Table
         /// <param name="deckNum">Which <see cref="IDeck"/> to get. If unspecified, grabs the first or only <see cref="IDeck"/>.</param>
         /// <returns>A <see cref="IDeck"/> if found. Otherwise returns null.</returns>
         public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area, int deckNum = 0);
+
+        /// <summary>
+        /// Gets a <see cref="IDeck"/> that is the discard pile from a <see cref="TableArea"/> in a <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="zoneType">Type of <see cref="TablePlacementZoneType"/> to search for the <see cref="TableArea"/>.</param>
+        /// <param name="areaID">ID of <see cref="TableArea"/> in <see cref="TableZone"/>.</param>
+        /// <returns><see cref="IDeck"/> if discard exists, else <c>null</c>.</returns>
+        public IDeck? GetDiscardFromAreaInZone(TablePlacementZoneType zoneType, int areaID);
     }
 }

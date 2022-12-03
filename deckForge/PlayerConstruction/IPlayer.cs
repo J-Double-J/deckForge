@@ -82,6 +82,12 @@ namespace DeckForge.PlayerConstruction
         public void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0);
 
         /// <summary>
+        /// Draws a <see cref="ICard"/> from the default player <see cref="IDeck"/>.
+        /// </summary>
+        /// <returns>A nullable <see cref="ICard"/> that was drawn.</returns>
+        public ICard? DrawCard();
+
+        /// <summary>
         /// Draws a <see cref="ICard"/> from a <see cref="IDeck"/>.
         /// </summary>
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>

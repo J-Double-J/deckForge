@@ -7,6 +7,7 @@ namespace DeckForge.GameElements.Resources
     /// </summary>
     public abstract class BaseDeck : IDeck
     {
+        // TODO: Not all decks should be shuffled on creation. Add option for this.
         private static readonly Random RNG = new();
         private readonly string defaultAddCardPos;
         private readonly bool defaultShuffleOnAddCard;
@@ -59,7 +60,7 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Gets or sets the <see cref="IDeck"/> (or list) of <see cref="ICard"/>s.
         /// </summary>
-        protected List<ICard> Deck { get; set; }
+        public List<ICard> Deck { get; protected set; }
 
         /// <inheritdoc/>
         public ICard? DrawCard(bool drawFacedown = false)

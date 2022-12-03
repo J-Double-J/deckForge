@@ -1,4 +1,5 @@
-﻿using DeckForge.GameElements.Table;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
+using DeckForge.GameElements.Table;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
 {
@@ -12,7 +13,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
         /// </summary>
         /// <param name="id">ID of the <see cref="TableArea"/>.</param>
         public DominionPlayerTableArea(int id)
-            : base(id, TablePlacementZoneType.PlayerZone, discardPile: true)
+            : base(id, TablePlacementZoneType.PlayerZone, new StartingPlayerDeck(), discardPile: true)
         {
         }
     }

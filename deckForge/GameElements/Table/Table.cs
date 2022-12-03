@@ -179,6 +179,19 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <inheritdoc/>
+        public ICard? DrawCardFromDeckInArea(TablePlacementZoneType zoneType, int areaID = 0, int deckInArea = 0)
+        {
+            try
+            {
+                return FindZoneBasedOnType(zoneType)!.DrawCardsFromArea(areaID, 1, deckInArea)[0];
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
         public List<ICard> DrawMultipleCardsFromDeck(int cardCount, TablePlacementZoneType zoneType, int area = 0)
         {
             try
@@ -314,6 +327,12 @@ namespace DeckForge.GameElements.Table
             {
                 return null;
             }
+        }
+
+        /// <inheritdoc/>
+        public IDeck? GetDiscardFromAreaInZone(TablePlacementZoneType zoneType, int areaID)
+        {
+            return FindZoneBasedOnType(zoneType)?.GetDiscardFromArea(areaID);
         }
 
         /// <summary>
