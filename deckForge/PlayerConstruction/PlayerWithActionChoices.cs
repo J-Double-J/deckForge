@@ -66,7 +66,7 @@ namespace DeckForge.PlayerConstruction
                 }
 
                 pickedAction.Execute(this);
-                UpdateActionDictionaryForTurn(pickedAction);
+                ReduceActionCountForTurn(pickedAction);
             }
 
             EndTurn();
@@ -79,10 +79,85 @@ namespace DeckForge.PlayerConstruction
         }
 
         /// <summary>
+        /// Gain a certain number of uses of a <see cref="PlayerGameAction"/>.
+        /// </summary>
+        /// <param name="action"><see cref="PlayerGameAction"/> that is gained and can be done.</param>
+        /// <param name="count">Number of uses of the <see cref="PlayerGameAction"/> gained.</param>
+        public void GainAction(IGameAction<IPlayer> action, int count = 1)
+        {
+            if (count < 1)
+            {
+                throw new ArgumentException("Cannot gain less than 1 count of an action", nameof(count));
+            }
+
+            if (Actions.ContainsKey(action.Name))
+            {
+                Actions[action.Name] = (action, Actions[action.Name].ActionCount + count);
+            }
+            else
+            {
+                Actions[action.Name] = (action, count);
+            }
+        }
+
+        /// <summary>
+        /// Loses a certain number of uses of a <see cref="PlayerGameAction"/>. Does nothing if Player never had that <see cref="PlayerGameAction"/>
+        /// this turn.
+        /// </summary>
+        /// <param name="action">Uses of <see cref="PlayerGameAction"/> that is reduced.</param>
+        /// <param name="count">Number of uses of the <see cref="PlayerGameAction"/> lost.</param>
+        public void LoseAction(IGameAction<IPlayer> action, int count = 1)
+        {
+            if (Actions.ContainsKey(action.Name))
+            {
+                if (Actions[action.Name].ActionCount > 0)
+                {
+                    Actions[action.Name] = (action, Actions[action.Name].ActionCount - count);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gain a certain number of uses of a <see cref="PlayerGameAction"/> for future turns.
+        /// </summary>
+        /// <param name="action"><see cref="PlayerGameAction"/> that is gained and can be done.</param>
+        /// <param name="count">Number of uses of the <see cref="PlayerGameAction"/> gained.</param>
+        public void GainDefaultAction(IGameAction<IPlayer> action, int count = 1)
+        {
+            if (count < 1)
+            {
+                throw new ArgumentException("Cannot gain less than 1 count of an action", nameof(count));
+            }
+
+            if (DefaultActions.ContainsKey(action.Name))
+            {
+                DefaultActions[action.Name] = (action, DefaultActions[action.Name].ActionCount + count);
+            }
+            else
+            {
+                DefaultActions[action.Name] = (action, count);
+            }
+        }
+
+        /// <summary>
+        /// Loses a certain number of uses of a <see cref="PlayerGameAction"/> for future turns.
+        /// Does nothing if Player never had that <see cref="PlayerGameAction"/> this turn.
+        /// </summary>
+        /// <param name="action">Uses of <see cref="PlayerGameAction"/> that is reduced.</param>
+        /// <param name="count">Number of uses of the <see cref="PlayerGameAction"/> lost.</param>
+        public void LoseDefaultAction(IGameAction<IPlayer> action, int count = 1)
+        {
+            if (DefaultActions.ContainsKey(action.Name))
+            {
+                DefaultActions[action.Name] = (action, DefaultActions[action.Name].ActionCount - count);
+            }
+        }
+
+        /// <summary>
         /// Updates the Actions Dictionary to track the remaining number of times that action can be done.
         /// </summary>
         /// <param name="action"><see cref="IGameAction{T}"/> chosen to be executed.</param>
-        protected void UpdateActionDictionaryForTurn(IGameAction<IPlayer> action)
+        protected void ReduceActionCountForTurn(IGameAction<IPlayer> action)
         {
             Actions[action.Name] = (action, Actions[action.Name].ActionCount - 1);
         }

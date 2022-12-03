@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction;
+using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 using DeckForge.PlayerConstruction;
 using UnitTests.PlayerConstruction;
@@ -29,6 +30,15 @@ namespace UnitTests.Mocks
         /// </summary>
         public List<string> ActionChoices { get; set; } = new();
 
+        /// <summary>
+        /// Sets the mock's default actions.
+        /// </summary>
+        /// <param name="actions">Actions that </param>
+        public void SetDefaultActions(Dictionary<string, (IGameAction<IPlayer> action, int actionCount)> actions)
+        {
+            DefaultActions = actions;
+        }
+
         /// <inheritdoc/>
         public override void StartTurn()
         {
@@ -43,7 +53,7 @@ namespace UnitTests.Mocks
                 }
 
                 pickedAction.Execute(this);
-                UpdateActionDictionaryForTurn(pickedAction);
+                ReduceActionCountForTurn(pickedAction);
                 actionNum++;
             }
 
@@ -75,7 +85,7 @@ namespace UnitTests.Mocks
                     }
 
                     pickedAction.Execute(this);
-                    UpdateActionDictionaryForTurn(pickedAction);
+                    ReduceActionCountForTurn(pickedAction);
                     actionNum++;
                 }
             }
