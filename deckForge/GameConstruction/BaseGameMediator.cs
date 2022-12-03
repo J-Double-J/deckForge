@@ -331,7 +331,7 @@ namespace DeckForge.GameConstruction
         {
             try
             {
-                return GameTable!.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, playerID);
+                return GameTable!.RemoveAllCards_FromArea(TablePlacementZoneType.PlayerZone, playerID);
             }
             catch
             {
@@ -416,7 +416,7 @@ namespace DeckForge.GameConstruction
             }
 
             TurnHandler!.UpdatePlayerList(remaingPlayerIDs);
-            GameTable!.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, playerID);
+            GameTable!.RemoveAllCards_FromArea(TablePlacementZoneType.PlayerZone, playerID);
 
             if (RoundRules is not null)
             {

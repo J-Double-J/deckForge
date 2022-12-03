@@ -144,7 +144,7 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <inheritdoc/>
-        public List<ICard> PickUpAllCards_FromArea(TablePlacementZoneType zoneType, int area)
+        public List<ICard> RemoveAllCards_FromArea(TablePlacementZoneType zoneType, int area)
         {
             try
             {

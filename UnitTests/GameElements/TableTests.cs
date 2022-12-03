@@ -267,7 +267,7 @@ namespace UnitTests.GameElements
 
             SetUpTableForTests();
 
-            cards = table.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
+            cards = table.RemoveAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
             cards.Count.Should().Be(2, "all of Player 0's cards were picked up");
         }
 
@@ -276,7 +276,7 @@ namespace UnitTests.GameElements
         {
             SetUpTableForTests();
 
-            table.PickUpAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
+            table.RemoveAllCards_FromArea(TablePlacementZoneType.PlayerZone, 0);
             table.PrintTableState();
 
             if (OperatingSystem.IsIOS())

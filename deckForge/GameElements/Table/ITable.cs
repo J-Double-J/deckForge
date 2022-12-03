@@ -107,7 +107,7 @@ namespace DeckForge.GameElements.Table
         /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of <see cref="TableZone"/> </param>
         /// <param name="area">Area identifier in the <see cref="TableZone"/>.</param>
         /// <returns>List of <see cref="ICard"/>s picked up from the <see cref="ITable"/>.</returns>
-        public List<ICard> PickUpAllCards_FromArea(TablePlacementZoneType zoneType, int area);
+        public List<ICard> RemoveAllCards_FromArea(TablePlacementZoneType zoneType, int area);
 
         /// <summary>
         /// Draws a <see cref="ICard"/> from a <see cref="TableZone"/>, and optionally, a specific area in the zone.
