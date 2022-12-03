@@ -21,6 +21,17 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="BaseCardTrait"/> class. Does not require <see cref="IGameMediator"/>.
+        /// </summary>
+        /// <param name="attachedToCard"><see cref="ICard"/> this trait is attached to.</param>
+        public BaseCardTrait(ICard attachedToCard)
+        {
+            TraitName = string.Empty;
+            Description = string.Empty;
+            AttachedToCard = attachedToCard;
+        }
+
+        /// <summary>
         /// Gets the name of the Trait.
         /// </summary>
         public string TraitName { get; }
@@ -38,7 +49,7 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// <summary>
         /// Gets the <see cref="IGameMediator"/> used to interact with other game elements.
         /// </summary>
-        protected IGameMediator GM { get;  }
+        protected IGameMediator? GM { get;  }
 
         /// <summary>
         /// Executes when the <see cref="ICard"/> this trait is attached to is played.
