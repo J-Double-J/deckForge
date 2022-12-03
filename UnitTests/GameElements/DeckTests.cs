@@ -1,5 +1,8 @@
 using FluentAssertions;
 using DeckForge.GameElements.Resources;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
+using DeckForge.GameElements.Resources.Cards.Example_Cards;
+using DeckForge.GameConstruction;
 
 namespace UnitTests.GameElements
 
@@ -219,6 +222,43 @@ namespace UnitTests.GameElements
             d.DrawCard();
 
             d.Count.Should().Be(49, "3 cards were drawn from the deck (52 - 3 = 49)");
+        }
+
+        [TestMethod]
+        public void MonotoneDeckCreatesManyInstances_OfSpecificCard()
+        {
+            MonotoneDeck deck = new(typeof(SilverCard), 5, null);
+
+            deck.Count.Should().Be(5);
+            deck.Deck[0].Should().NotBeEquivalentTo(deck.Deck[1], "these are different instance of cards");
+        }
+
+        [TestMethod]
+        public void MonotoneDeckCreatesManyInstances_OfSpecificCard_WithConstructorArguments()
+        {
+            object[] constructorParameters = { new BaseGameMediator(0), 1, 2 };
+            MonotoneDeck deck = new(typeof(MobPileCharacterCard), 3, constructorParameters);
+
+            deck.Count.Should().Be(3);
+            ((MobPileCharacterCard)deck.Deck[0]).AttackVal.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void MonotoneDeckCanAddAnotherCardOfType()
+        {
+            IDeck deck = new MonotoneDeck(typeof(SilverCard), 5, null);
+
+            deck.AddCardToDeck(new SilverCard());
+            deck.Deck.Count.Should().Be(6);
+        }
+
+        [TestMethod]
+        public void MonotoneDeckCannotAddCardOfWrongType()
+        {
+            IDeck deck = new MonotoneDeck(typeof(SilverCard), 5, null);
+
+            Action action = () => deck.AddCardToDeck(new CopperCard());
+            action.Should().Throw<ArgumentException>("copper cards do not belong with silver cards");
         }
     }
 }

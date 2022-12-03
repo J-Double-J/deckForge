@@ -116,7 +116,7 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
-        public void AddCardToDeck(ICard card, string pos = "bottom", bool shuffleAfter = false)
+        public virtual void AddCardToDeck(ICard card, string pos = "bottom", bool shuffleAfter = false)
         {
             if (pos == "bottom")
             {
