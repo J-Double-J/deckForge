@@ -249,5 +249,15 @@ namespace UnitTests.GameElements
 
             tableZone.RemoveCard(1, 3).Should().Be(false, "no card was removed because only NullCards are there");
         }
+
+        [TestMethod]
+        public void CardCanBeDrawnFromTableArea()
+        {
+            TableArea area = new(0, TablePlacementZoneType.PlayerZone, new DeckOfPlayingCards());
+            TableZone zone = new(TablePlacementZoneType.PlayerZone, new List<TableArea>() { area });
+
+            ICard card = zone.DrawCardsFromArea(0, 1)[0]!;
+            card.Should().NotBeNull().And.NotBeAssignableTo(typeof(NullCard));
+        }
     }
 }

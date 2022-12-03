@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction;
+using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 
@@ -14,8 +15,25 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <param name="gm"><see cref="IGameMediator"/> used to communicate with other game elements.</param>
         /// <param name="playerID">ID of the <see cref="IPlayer"/>.</param>
-        public PlayerWithActionChoices(IGameMediator gm, int playerID)
-            : base(gm, playerID)
+        /// <param name="initHandSize">Initial size of hand.</param>
+        public PlayerWithActionChoices(IGameMediator gm, int playerID, int initHandSize = 5)
+            : base(gm, playerID, initHandSize)
+        {
+            Actions = DefaultActions;
+            Prompter = new(Actions);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerWithActionChoices"/> class. Specifies where input and output should be done.
+        /// </summary>
+        /// <param name="reader">Tells <see cref="IPlayer"/> where to read input.</param>
+        /// <param name="output">Tells <see cref="IPlayer"/> where to display output.</param>
+        /// <param name="gm"><see cref="IGameMediator"/> that the <see cref="PlayerWithActionChoices"/> will use to communicate
+        /// with other game elements.</param>
+        /// <param name="playerID">ID of the <see cref="PlayerWithActionChoices"/>.</param>
+        /// <param name="initHandSize">The size of the initial hand that the <see cref="PlayerWithActionChoices"/> will start with.</param>
+        public PlayerWithActionChoices(IInputReader reader, IOutputDisplay output, IGameMediator gm, int playerID, int initHandSize = 5)
+            : base(reader, output, gm, playerID, initHandSize)
         {
             Actions = DefaultActions;
             Prompter = new(Actions);

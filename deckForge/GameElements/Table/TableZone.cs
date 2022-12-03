@@ -11,6 +11,7 @@ namespace DeckForge.GameElements.Table
     {
         protected List<List<ICard>> zone = new();
         protected List<IDeck> decks = new();
+        protected List<TableArea> areas = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TableZone"/> class.
@@ -26,6 +27,8 @@ namespace DeckForge.GameElements.Table
             AreaCardLimit = areaCardLimit;
 
             StandardConstruction(placementZoneType, areaCount, areaCardLimit);
+
+            TempCreateAreas(placementZoneType, areaCount, areaCardLimit);
         }
 
         /// <summary>
@@ -46,6 +49,8 @@ namespace DeckForge.GameElements.Table
             StandardConstruction(placementZoneType, areaCount, areaCardLimit);
 
             decks = new() { deck };
+
+            TempCreateAreas(placementZoneType, areaCount, areaCardLimit);
         }
 
         /// <summary>
@@ -76,12 +81,45 @@ namespace DeckForge.GameElements.Table
             {
                 throw new ArgumentException("Argument Exception: decks must have the same number of decks as areas", nameof(decks));
             }
+
+            TempCreateAreas(placementZoneType, areaCount, areaCardLimit, decks);
+        }
+
+        public TableZone(TablePlacementZoneType placementZoneType, List<TableArea> areas)
+        {
+            PlacementZoneType = placementZoneType;
+            this.areas = areas;
+        }
+
+        // TODO: Delete.
+        private void TempCreateAreas(TablePlacementZoneType type, int areaCount, int areaCardLimit)
+        {
+            for (int i = 0; i < areaCount; i++)
+            {
+                areas.Add(new(i, type, areaCardLimit));
+            }
+        }
+
+        private void TempCreateAreas(TablePlacementZoneType type, int areaCount, int areaCardLimit, List<IDeck> decks)
+        {
+            for (int i = 0; i < areaCount; i++)
+            {
+                areas.Add(new(i, type, decks[i], areaCardLimit));
+            }
         }
 
         /// <summary>
         /// Gets the type of zone.
         /// </summary>
         public TablePlacementZoneType PlacementZoneType { get; }
+
+        /// <summary>
+        /// Gets the list of <see cref="TableArea"/>s managed by this <see cref="TableZone"/>.
+        /// </summary>
+        public IReadOnlyList<TableArea> Areas
+        {
+            get { return areas; }
+        }
 
         /// <summary>
         /// Gets how many different card areas are managed by this zone.
@@ -108,21 +146,30 @@ namespace DeckForge.GameElements.Table
         /// </summary>
         public IReadOnlyList<IReadOnlyList<ICard>> CardsInTableZone
         {
-            get { return zone; }
+            get
+            {
+                List<IReadOnlyList<ICard>> zone = new();
+                foreach (var area in Areas)
+                {
+                    zone.Add(area.PlayArea);
+                }
+
+                return zone;
+            }
         }
 
         /// <summary>
         /// Gets a readonly list of all the <see cref="ICard"/>s managed by the area in the zone.
         /// If there is an area limit some cards returned may be <see cref="NullCard"/>s.
         /// </summary>
-        /// <param name="area">Area identifier for area in zone.</param>
+        /// <param name="areaID">Area identifier for area in zone.</param>
         /// <returns>A readonly list of <see cref="ICard"/>s in area.</returns>
-        public IReadOnlyList<ICard> GetCardsInArea(int area)
+        public IReadOnlyList<ICard> GetCardsInArea(int areaID)
         {
             try
             {
-                ValidateAreaArgument(area);
-                return zone[area];
+                ValidateAreaArgument(areaID);
+                return Areas[areaID].PlayArea;
             }
             catch
             {
@@ -142,7 +189,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                CardPlacementRulesExecutioner(card, true, area, placementInArea);
+                Areas[area].PlayCard(card, placementInArea);
             }
             catch
             {
@@ -160,7 +207,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                CardPlacementRulesExecutioner(card, true, area);
+                Areas[area].PlayCard(card);
             }
             catch
             {
@@ -200,7 +247,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                CardPlacementRulesExecutioner(card, false, area, placementInArea);
+                Areas[area].PlaceCard(card, placementInArea);
             }
             catch
             {
@@ -218,7 +265,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                CardPlacementRulesExecutioner(card, false, area);
+                Areas[area].PlaceCard(card);
             }
             catch
             {
@@ -259,26 +306,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-                if (AreaCardLimit == -1)
-                {
-                    ICard card = zone[area][placementInArea];
-                    zone[area].RemoveAt(placementInArea);
-                    card.OnRemoval();
-                    return true;
-                }
-                else
-                {
-                    ICard card = zone[area][placementInArea];
-                    if (card is not NullCard)
-                    {
-                        zone[area][placementInArea] = new NullCard();
-                        card.OnRemoval();
-                        return true;
-                    }
-                }
-
-                return false;
+                return Areas[area].RemoveCard(placementInArea);
             }
             catch
             {
@@ -297,30 +325,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidateAreaArgument(area);
-
-                if (AreaCardLimit == -1)
-                {
-                    if (zone[area].Remove(card))
-                    {
-                        card.OnRemoval();
-                        return true;
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < zone[area].Count; i++)
-                    {
-                        if (zone[area][i] == card)
-                        {
-                            zone[area][i] = new NullCard();
-                            card.OnRemoval();
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
+                return Areas[area].RemoveCard(card);
             }
             catch
             {
@@ -340,24 +345,7 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-
-                if (zone[area][placementInArea] == card)
-                {
-                    if (AreaCardLimit == -1)
-                    {
-                        zone[area].RemoveAt(placementInArea);
-                    }
-                    else
-                    {
-                        zone[area][placementInArea] = new NullCard();
-                    }
-
-                    card.OnRemoval();
-                    return true;
-                }
-
-                return false;
+                return Areas[area].RemoveCard(card, placementInArea);
             }
             catch
             {
@@ -403,6 +391,54 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <summary>
+        /// Draws <see cref="ICard"/>s from a <see cref="IDeck"/> in a <see cref="TableArea"/>.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/> to target.</param>
+        /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
+        /// <returns>A list of <see cref="ICard"/>s drawn from the <see cref="IDeck"/>. If the <see cref="IDeck"/> is empty
+        /// <see cref="NullCard"/>s are replaced for any missing draw.</returns>
+        public List<ICard?> DrawCardsFromArea(int areaID, int cardCount)
+        {
+            ValidateAreaArgument(areaID);
+            return Areas[areaID].DrawCardsFromDeck(cardCount);
+        }
+
+        /// <summary>
+        /// Draws <see cref="ICard"/>s from a <see cref="IDeck"/> in a <see cref="TableArea"/>.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/> to target.</param>
+        /// <param name="cardCount">Number of <see cref="ICard"/>s to draw.</param>
+        /// <param name="deckNum">Specific <see cref="IDeck"/> to target and draw from in <see cref="TableArea"/>.</param>
+        /// <returns>A list of <see cref="ICard"/>s drawn from the <see cref="IDeck"/>. If the <see cref="IDeck"/> is empty
+        /// <see cref="NullCard"/>s are replaced for any missing draw.</returns>
+        public List<ICard?> DrawCardsFromArea(int areaID, int cardCount, int deckNum)
+        {
+            ValidateAreaArgument(areaID);
+            return Areas[areaID].DrawCardsFromDeck(deckNum, cardCount);
+        }
+
+        /// <summary>
+        /// Shuffles <see cref="IDeck"/> in <see cref="TableArea"/>.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/>.</param>
+        public void ShuffleDeckInArea(int areaID)
+        {
+            ValidateAreaArgument(areaID);
+            Areas[areaID].ShuffleDeck();
+        }
+
+        /// <summary>
+        /// Shuffles specified <see cref="IDeck"/> in <see cref="TableArea"/>.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/>.</param>
+        /// <param name="deckNum">Specific <see cref="IDeck"/> in <see cref="TableArea"/> to target.</param>
+        public void ShuffleDeckInArea(int areaID, int deckNum)
+        {
+            ValidateAreaArgument(areaID);
+            Areas[areaID].ShuffleDeck(deckNum);
+        }
+
+        /// <summary>
         /// Flips a <see cref="ICard"/>.
         /// </summary>
         /// <param name="area">Area in the <see cref="TableZone"/> the <see cref="ICard"/> resides in.</param>
@@ -411,8 +447,8 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-                zone[area][placementInArea].Flip();
+                ValidateAreaArgument(area);
+                Areas[area].FlipCard(placementInArea);
             }
             catch
             {
@@ -430,8 +466,8 @@ namespace DeckForge.GameElements.Table
         {
             try
             {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-                zone[area][placementInArea].Flip(facedown);
+                ValidateAreaArgument(area);
+                Areas[area].FlipCardCertainWay(placementInArea, facedown);
             }
             catch
             {
@@ -448,10 +484,7 @@ namespace DeckForge.GameElements.Table
             try
             {
                 ValidateAreaArgument(area);
-                foreach (ICard card in zone[area])
-                {
-                    card.Flip();
-                }
+                Areas[area].FlipAllCards();
             }
             catch
             {
@@ -485,12 +518,9 @@ namespace DeckForge.GameElements.Table
         /// </summary>
         public void FlipAllCardsInZone()
         {
-            foreach (var area in zone)
+            foreach (var area in Areas)
             {
-                foreach (ICard card in area)
-                {
-                    card.Flip();
-                }
+                area.FlipAllCards();
             }
         }
 
@@ -500,12 +530,9 @@ namespace DeckForge.GameElements.Table
         /// <param name="facedown">If <c>true</c> flips the <see cref="ICard"/>s facedown, otherwise faceup.</param>
         public void FlipAllCardsInZoneCertainWay(bool facedown)
         {
-            foreach (var area in zone)
+            foreach (var area in Areas)
             {
-                foreach (ICard card in area)
-                {
-                    card.Flip(facedown);
-                }
+                area.FlipAllCardsCertainWay(facedown);
             }
         }
 
@@ -531,127 +558,127 @@ namespace DeckForge.GameElements.Table
             }
         }
 
-        /// <summary>
-        /// Helper function that follows rules for placing card to a spot in the zone.
-        /// </summary>
-        /// <param name="played">If <c>true</c>, triggers <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> if placed, else triggers
-        /// <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/> if placed.</param>
-        private void CardPlacementRulesExecutioner(ICard card, bool played, int area)
-        {
-            try
-            {
-                ValidateAreaArgument(area);
+        ///// <summary>
+        ///// Helper function that follows rules for placing card to a spot in the zone.
+        ///// </summary>
+        ///// <param name="played">If <c>true</c>, triggers <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> if placed, else triggers
+        ///// <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/> if placed.</param>
+        //private void CardPlacementRulesExecutioner(ICard card, bool played, int area)
+        //{
+        //    try
+        //    {
+        //        ValidateAreaArgument(area);
 
-                if (AreaCardLimit == -1)
-                {
-                    zone[area].Add(card);
-                    ExecuteCardOnPlayOrOnPlace(card, played, area, zone[area].Count - 1);
-                }
-                else
-                {
-                    bool placementFound = false;
+        //        if (AreaCardLimit == -1)
+        //        {
+        //            zone[area].Add(card);
+        //            ExecuteCardOnPlayOrOnPlace(card, played, area, zone[area].Count - 1);
+        //        }
+        //        else
+        //        {
+        //            bool placementFound = false;
 
-                    for (int i = 0; i < zone[area].Count; i++)
-                    {
-                        if (zone[area][i] is NullCard)
-                        {
-                            zone[area][i] = card;
-                            ExecuteCardOnPlayOrOnPlace(card, played, area, i);
-                            placementFound = true;
-                            break;
-                        }
-                    }
+        //            for (int i = 0; i < zone[area].Count; i++)
+        //            {
+        //                if (zone[area][i] is NullCard)
+        //                {
+        //                    zone[area][i] = card;
+        //                    ExecuteCardOnPlayOrOnPlace(card, played, area, i);
+        //                    placementFound = true;
+        //                    break;
+        //                }
+        //            }
 
-                    if (!placementFound)
-                    {
-                        throw new InvalidOperationException("No open space for card to be played.");
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        //            if (!placementFound)
+        //            {
+        //                throw new InvalidOperationException("No open space for card to be played.");
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        private void CardPlacementRulesExecutioner(ICard card, bool played, int area, int placementInArea)
-        {
-            try
-            {
-                ValidatePlaceInAreaArgument(area, placementInArea);
-                if (zone[area][placementInArea] is NullCard)
-                {
-                    zone[area][placementInArea] = card;
-                    ExecuteCardOnPlayOrOnPlace(card, played, area, placementInArea);
-                }
-                else
-                {
-                    throw new InvalidOperationException($"A card already exists in Area {area} at Placement {placementInArea}");
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        //private void CardPlacementRulesExecutioner(ICard card, bool played, int area, int placementInArea)
+        //{
+        //    try
+        //    {
+        //        ValidatePlaceInAreaArgument(area, placementInArea);
+        //        if (zone[area][placementInArea] is NullCard)
+        //        {
+        //            zone[area][placementInArea] = card;
+        //            ExecuteCardOnPlayOrOnPlace(card, played, area, placementInArea);
+        //        }
+        //        else
+        //        {
+        //            throw new InvalidOperationException($"A card already exists in Area {area} at Placement {placementInArea}");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        /// <summary>
-        /// If <paramref name="played"/> is <c>true</c>, executes <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> else executes <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/>.
-        /// </summary>
-        /// <param name="played">Determines which function to call.</param>
-        private void ExecuteCardOnPlayOrOnPlace(ICard card, bool played, int area, int placementInArea)
-        {
-            if (played)
-            {
-                card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
-            }
-            else
-            {
-                card.OnPlace(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
-            }
-        }
+        ///// <summary>
+        ///// If <paramref name="played"/> is <c>true</c>, executes <see cref="ICard.OnPlay(CardPlacedOnTableDetails)"/> else executes <see cref="ICard.OnPlace(CardPlacedOnTableDetails)"/>.
+        ///// </summary>
+        ///// <param name="played">Determines which function to call.</param>
+        //private void ExecuteCardOnPlayOrOnPlace(ICard card, bool played, int area, int placementInArea)
+        //{
+        //    if (played)
+        //    {
+        //        card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
+        //    }
+        //    else
+        //    {
+        //        card.OnPlace(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
+        //    }
+        //}
 
         private void ValidateAreaArgument(int area)
         {
-            if (!(area < zone.Count && area >= 0))
+            if (!(area < Areas.Count && area >= 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(area));
             }
         }
 
-        /// <summary>
-        /// Validates <paramref name="placementInArea"/> argument. This also means
-        /// that <paramref name="area"/> must also be validated.
-        /// </summary>
-        /// <param name="area">Area in the zone.</param>
-        /// <param name="placementInArea">Placement in an area in the zone.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Throws if any argument is out range
-        /// of bounds of the zone or area.</exception>
-        private void ValidatePlaceInAreaArgument(int area, int placementInArea)
-        {
-            try
-            {
-                ValidateAreaArgument(area);
-                if (!(placementInArea < zone[area].Count && placementInArea >= 0))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(placementInArea));
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        ///// <summary>
+        ///// Validates <paramref name="placementInArea"/> argument. This also means
+        ///// that <paramref name="area"/> must also be validated.
+        ///// </summary>
+        ///// <param name="area">Area in the zone.</param>
+        ///// <param name="placementInArea">Placement in an area in the zone.</param>
+        ///// <exception cref="ArgumentOutOfRangeException">Throws if any argument is out range
+        ///// of bounds of the zone or area.</exception>
+        //private void ValidatePlaceInAreaArgument(int area, int placementInArea)
+        //{
+        //    try
+        //    {
+        //        ValidateAreaArgument(area);
+        //        if (!(placementInArea < zone[area].Count && placementInArea >= 0))
+        //        {
+        //            throw new ArgumentOutOfRangeException(nameof(placementInArea));
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        private void CardPlacementCallCorrectTrigger(ICard card, int area, int placementInArea, bool played)
-        {
-            if (played)
-            {
-                card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
-            }
-            else
-            {
-            }
-        }
+        //private void CardPlacementCallCorrectTrigger(ICard card, int area, int placementInArea, bool played)
+        //{
+        //    if (played)
+        //    {
+        //        card.OnPlay(new CardPlacedOnTableDetails(PlacementZoneType, area, placementInArea));
+        //    }
+        //    else
+        //    {
+        //    }
+        //}
     }
 }
