@@ -1,4 +1,6 @@
-﻿namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
+
+namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
 {
 #pragma warning disable SA1402 // File may only contain a single type
     /// <summary>

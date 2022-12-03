@@ -1,4 +1,4 @@
-﻿namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
+﻿namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes
 {
     /// <summary>
     /// <see cref="DominionCard"/>s that are worth points.
