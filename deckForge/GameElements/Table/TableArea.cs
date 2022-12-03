@@ -15,7 +15,7 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Initializes a new instance of the <see cref="TableArea"/> class.
         /// </summary>
-        /// <param name="id">ID of the <see cref="TableArea"/></param>
+        /// <param name="id">ID of the <see cref="TableArea"/>.</param>
         /// <param name="owningZoneType">Type of <see cref="TableZone"/> that manages this <see cref="TableArea"/>.</param>
         /// <param name="areaCardLimit">Limit on the number of <see cref="ICard"/>s that can be played in an area. If -1
         /// there is no limit.</param>
@@ -49,7 +49,7 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Initializes a new instance of the <see cref="TableArea"/> class. Has a <see cref="IDeck"/> managed in this <see cref="TableArea"/>.
         /// </summary>
-        /// <param name="id">ID of the <see cref="TableArea"/></param>
+        /// <param name="id">ID of the <see cref="TableArea"/>.</param>
         /// <param name="owningZoneType">Type of <see cref="TableZone"/> that manages this <see cref="TableArea"/>.</param>
         /// <param name="deck"><see cref="IDeck"/> managed by this <see cref="TableArea"/>.</param>
         /// <param name="areaCardLimit">Limit on the number of <see cref="ICard"/>s that can be played in an area. If -1
@@ -66,7 +66,7 @@ namespace DeckForge.GameElements.Table
         /// Initializes a new instance of the <see cref="TableArea"/> class. Has a list of <see cref="IDeck"/>s managed in this
         /// <see cref="TableArea"/>.
         /// </summary>
-        /// <param name="id">ID of the <see cref="TableArea"/></param>
+        /// <param name="id">ID of the <see cref="TableArea"/>.</param>
         /// <param name="owningZoneType">Type of <see cref="TableZone"/> that manages this <see cref="TableArea"/>.</param>
         /// <param name="decks"><see cref="IDeck"/>s managed by this <see cref="TableArea"/>.</param>
         /// <param name="areaCardLimit">Limit on the number of <see cref="ICard"/>s that can be played in an area. If -1
@@ -109,7 +109,7 @@ namespace DeckForge.GameElements.Table
         public IDeck? DiscardPile { get; protected set; } = null;
 
         /// <summary>
-        /// Gets or sets <see cref="TableArea"/>-specific trash pile for when cards are intended to never be accessed again, or rarely. 
+        /// Gets or sets <see cref="TableArea"/>-specific trash pile for when cards are intended to never be accessed again, or rarely.
         /// If no trash pile is managed by this <see cref="TableArea"/> returns <c>null</c>.
         /// </summary>
         public IDeck? TrashPile { get; protected set; } = null;

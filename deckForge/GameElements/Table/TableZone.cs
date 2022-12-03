@@ -1,6 +1,5 @@
 ﻿using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
-using System.Formats.Asn1;
 
 namespace DeckForge.GameElements.Table
 {
@@ -12,6 +11,8 @@ namespace DeckForge.GameElements.Table
         protected List<List<ICard>> zone = new();
         protected List<IDeck> decks = new();
         protected List<TableArea> areas = new();
+
+        // TODO: Validation that all area ID's are sequential as well as removing potentially deprecated constructors.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TableZone"/> class.
@@ -85,6 +86,11 @@ namespace DeckForge.GameElements.Table
             TempCreateAreas(placementZoneType, areaCount, areaCardLimit, decks);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TableZone"/> class. Takes prebuilt <see cref="TableArea"/>s.
+        /// </summary>
+        /// <param name="placementZoneType">Type of zone this <see cref="TableZone"/> is.</param>
+        /// <param name="areas">List of <see cref="TableArea"/>s to be managed by this <see cref="TableZone"/>.</param>
         public TableZone(TablePlacementZoneType placementZoneType, List<TableArea> areas)
         {
             PlacementZoneType = placementZoneType;
