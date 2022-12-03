@@ -180,7 +180,8 @@ namespace DeckForge.GameElements.Table
         /// </summary>
         /// <param name="zoneType"><see cref="TablePlacementZoneType"/> of interested <see cref="TableZone"/>.</param>
         /// <param name="area">The area that owns the <see cref="IDeck"/> in the <see cref="TableZone"/>.</param>
+        /// <param name="deckNum">Which <see cref="IDeck"/> to get. If unspecified, grabs the first or only <see cref="IDeck"/>.</param>
         /// <returns>A <see cref="IDeck"/> if found. Otherwise returns null.</returns>
-        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area);
+        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area, int deckNum = 0);
     }
 }

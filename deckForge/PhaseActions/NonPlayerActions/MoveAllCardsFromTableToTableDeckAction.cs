@@ -11,6 +11,7 @@ namespace DeckForge.PhaseActions.NonPlayerActions
         private int areaThatOwnsDeck;
         private bool shuffleAfter;
         private TablePlacementZoneType zoneThatOwnsDeck;
+        private bool grabDirectlyFromZone; // TODO: refactor this later.
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MoveAllCardsFromTableToTableDeck"/> class.
@@ -34,6 +35,24 @@ namespace DeckForge.PhaseActions.NonPlayerActions
             this.areaThatOwnsDeck = areaThatOwnsDeck;
             this.shuffleAfter = shuffleAfter;
             this.zoneThatOwnsDeck = zoneThatOwnsDeck;
+            this.grabDirectlyFromZone = false;
+        }
+
+        public MoveAllCardsFromTableToTableDeckAction(
+            IGameMediator gm,
+            TablePlacementZoneType zoneThatOwnsDeck,
+            bool grabDirectlyFromZone = true,
+            int areaThatOwnsDeck = 0,
+            bool shuffleAfter = true,
+            string name = "Move All Cards From Table to Table Deck",
+            string description = "Moves cards from table and readds them to deck.")
+            : base(name, description)
+        {
+            this.gm = gm;
+            this.areaThatOwnsDeck = areaThatOwnsDeck;
+            this.shuffleAfter = shuffleAfter;
+            this.zoneThatOwnsDeck = zoneThatOwnsDeck;
+            this.grabDirectlyFromZone = true;
         }
 
         /// <inheritdoc/>
@@ -41,9 +60,18 @@ namespace DeckForge.PhaseActions.NonPlayerActions
         {
             if (gm.Table is not null)
             {
-                gm.Table.GetDeckFromAreaInZone(zoneThatOwnsDeck, areaThatOwnsDeck)!.AddMultipleCardsToDeck(
+                if (!grabDirectlyFromZone)
+                {
+                    gm.Table.GetDeckFromAreaInZone(zoneThatOwnsDeck, areaThatOwnsDeck)!.AddMultipleCardsToDeck(
                     gm.Table.Remove_AllCardsFromTable().ToList(),
                     shuffleAfter: shuffleAfter);
+                }
+                else
+                {
+                    gm.Table.GetDecksFromZone(zoneThatOwnsDeck)[0]!.AddMultipleCardsToDeck(
+                    gm.Table.Remove_AllCardsFromTable().ToList(),
+                    shuffleAfter: shuffleAfter);
+                }
             }
             else
             {

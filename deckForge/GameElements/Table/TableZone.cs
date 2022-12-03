@@ -397,6 +397,30 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <summary>
+        /// Gets <see cref="IDeck"/> from area.
+        /// </summary>
+        /// <param name="areaID">ID of <see cref="TableArea"/> to get the <see cref="IDeck"/> from.</param>
+        /// <param name="deckNum">Which <see cref="IDeck"/> to get. If unspecified, grabs the first or only <see cref="IDeck"/>.</param>
+        /// <returns>A <see cref="IDeck"/> in the <see cref="TableArea"/>. Returns <c>null</c> if there is no <see cref="IDeck"/>.</returns>
+        public IDeck? GetDeckFromArea(int areaID, int deckNum = 0)
+        {
+            ValidateAreaArgument(areaID);
+            return Areas[areaID].Deck;
+        }
+
+        // TODO: This is a temporary function, a symptom of the tablezone refactor.
+
+        /// <summary>
+        /// Gets a <see cref="IDeck"/> that is owned by the <see cref="TableZone"/>.
+        /// </summary>
+        /// <param name="deckNum">Specifies which <see cref="IDeck"/> to return. Defaults to first or only <see cref="IDeck"/>.</param>
+        /// <returns><see cref="IDeck"/> managed by the <see cref="TableZone"/>.</returns>
+        public IDeck? GetDeckFromZone(int deckNum = 0)
+        {
+            return decks[deckNum];
+        }
+
+        /// <summary>
         /// Draws <see cref="ICard"/>s from a <see cref="IDeck"/> in a <see cref="TableArea"/>.
         /// </summary>
         /// <param name="areaID">ID of the <see cref="TableArea"/> to target.</param>

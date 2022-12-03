@@ -304,11 +304,11 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <inheritdoc/>
-        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area)
+        public IDeck? GetDeckFromAreaInZone(TablePlacementZoneType zoneType, int area, int deckNum = 0)
         {
             try
             {
-                return FindZoneBasedOnType(zoneType)?.Decks[area];
+                return FindZoneBasedOnType(zoneType)?.GetDeckFromArea(area, deckNum);
             }
             catch
             {
