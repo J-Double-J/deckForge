@@ -104,6 +104,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         public override void EndTurn()
         {
             base.EndTurn();
+            Coins = 0;
             DiscardHandAndPlayArea();
             DrawMultipleCards(5);
         }

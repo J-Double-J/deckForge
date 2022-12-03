@@ -108,5 +108,23 @@ namespace UnitTests.DominionTests
 
             player.HandSize.Should().Be(5, "5 cards were drawn from their deck");
         }
+
+        [TestMethod]
+        public void PlayerLosesAllRemainingCoinsOnEndTurn()
+        {
+            IGameMediator gm = new BaseGameMediator(1);
+            DominionPlayerTableArea presetArea = new DominionPlayerTableArea(0);
+            presetArea.PlaceCard(new SilverCard());
+            Table table = new(
+                gm,
+                new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }) });
+            DominionPlayer player = new(gm, 0);
+
+            player.AddCardsToHand(new List<ICard>() { new ProvinceCard(), new CurseCard(), new CopperCard(), new SilverCard() });
+            player.IncreaseCoins(1);
+            player.EndTurn();
+
+            player.Coins.Should().Be(0, "player should no longer have coins after their turn ends");
+        }
     }
 }
