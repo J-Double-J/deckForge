@@ -30,6 +30,11 @@ namespace DeckForge.GameRules.RoundConstruction.Phases
         {
             foreach (var playerID in PlayerIDs)
             {
+                if (CurrentPlayerTurn == -1)
+                {
+                    break;
+                }
+
                 CurrentPlayerTurn = playerID;
                 GM.InformPlayerToStartTurn(playerID);
                 InterPlayerTurnExtraLogic();

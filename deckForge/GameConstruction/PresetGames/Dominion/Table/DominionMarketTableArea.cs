@@ -9,6 +9,8 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
     /// </summary>
     public class DominionMarketTableArea : TableArea
     {
+        private int numberOfEmptyDecks = 0;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DominionMarketTableArea"/> class.
         /// </summary>
@@ -17,6 +19,11 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
             : base(id: 0, TablePlacementZoneType.NeutralZone, decks, areaCardLimit: 0)
         {
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the game is over according to the Market.
+        /// </summary>
+        public bool IsGameOver { get; private set; } = false;
 
         public List<string> GetMarketAreaAsStringList()
         {
@@ -47,6 +54,37 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
             else
             {
                 return ((DominionCard)Decks[deckNum].Deck[0]).Cost;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override List<ICard?> DrawCardsFromDeck(int deckNum, int cardCount)
+        {
+            List<ICard?> cards = base.DrawCardsFromDeck(deckNum, cardCount);
+            if (cards[0] is not null)
+            {
+                UpdateProgressTowardsGameEndState(cards[0]!, deckNum);
+            }
+
+            return cards;
+        }
+
+        private void UpdateProgressTowardsGameEndState(ICard card, int deckNum)
+        {
+            if (Decks[deckNum].Count == 0)
+            {
+                if (card.GetType() == typeof(ProvinceCard))
+                {
+                    IsGameOver = true;
+                }
+                else
+                {
+                    numberOfEmptyDecks++;
+                    if (numberOfEmptyDecks == 3)
+                    {
+                        IsGameOver = true;
+                    }
+                }
             }
         }
 

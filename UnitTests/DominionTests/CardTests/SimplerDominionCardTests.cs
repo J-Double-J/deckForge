@@ -22,11 +22,15 @@ namespace UnitTests.DominionTests.CardTests
         [TestInitialize]
         public void TestInitialize()
         {
-            gm = new BaseGameMediator(1);
-            DominionPlayerTableArea presetArea = new DominionPlayerTableArea(0);
+            gm = new DominionGameMediator(1);
+            DominionPlayerTableArea presetArea = new(0);
             table = new(
                 gm,
-                new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }) });
+                new List<TableZone>()
+                {
+                    new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }),
+                    new TableZone(TablePlacementZoneType.NeutralZone, new List<TableArea>() { new DominionMarketTableArea(new()) })
+                });
         }
 
         [TestMethod]
@@ -34,7 +38,7 @@ namespace UnitTests.DominionTests.CardTests
         {
             PlayerGameAction interestedAction = new PlayCardAction();
 
-            DominionPlayer player = new(new ConsoleInputMock(new() { "0" }), new ConsoleOutputMock(), gm, 0);
+            DominionPlayer player = new(new ConsoleInputMock(new() { "1" }), new ConsoleOutputMock(), gm, 0);
 
             player.AddCardToHand(new VillageCard());
             player.PlayCard();
@@ -46,7 +50,7 @@ namespace UnitTests.DominionTests.CardTests
         [TestMethod]
         public void SmithyCardExecutesAsExpected()
         {
-            DominionPlayer player = new(new ConsoleInputMock(new() { "0" }), new ConsoleOutputMock(), gm, 0);
+            DominionPlayer player = new(new ConsoleInputMock(new() { "1" }), new ConsoleOutputMock(), gm, 0);
 
             player.AddCardToHand(new SmithyCard());
             player.PlayCard();
@@ -58,7 +62,7 @@ namespace UnitTests.DominionTests.CardTests
         public void WoodcutterCardExecutesAsExpected()
         {
             PlayerGameAction interestedAction = new BuyAction();
-            DominionPlayer player = new(new ConsoleInputMock(new() { "0" }), new ConsoleOutputMock(), gm, 0);
+            DominionPlayer player = new(new ConsoleInputMock(new() { "1" }), new ConsoleOutputMock(), gm, 0);
 
             player.AddCardToHand(new WoodcutterCard());
             player.PlayCard();
@@ -71,7 +75,7 @@ namespace UnitTests.DominionTests.CardTests
         public void LaboratoryCardExecutresAsExpected()
         {
             PlayerGameAction interestedAction = new PlayCardAction();
-            DominionPlayer player = new(new ConsoleInputMock(new() { "0" }), new ConsoleOutputMock(), gm, 0);
+            DominionPlayer player = new(new ConsoleInputMock(new() { "1" }), new ConsoleOutputMock(), gm, 0);
 
             player.AddCardToHand(new LaboratoryCard());
             player.PlayCard();

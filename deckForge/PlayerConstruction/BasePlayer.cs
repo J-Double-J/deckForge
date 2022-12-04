@@ -257,7 +257,7 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
-        // TODO: Refactor to be more useable as virtual
+        // TODO: Refactor to be more useable as virtual. Change to use prompter.
 
         /// <inheritdoc/>
         public virtual ICard? PlayCard(bool facedown = false)
@@ -268,16 +268,16 @@ namespace DeckForge.PlayerConstruction
             OutputDisplay.Display("Which card would you like to play?");
             for (var i = 0; i < HandSize; i++)
             {
-                OutputDisplay.Display($"{i}) {PlayerHand.GetCardAt(i).PrintCard()}");
+                OutputDisplay.Display($"{i + 1}) {PlayerHand.GetCardAt(i).PrintCard()}");
             }
 
             do
             {
                 input = InputReader.GetInput();
             }
-            while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize || selectedVal < 0));
+            while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize + 1 || selectedVal < 1));
 
-            ICard card = PlayerHand.GetCardAt(selectedVal);
+            ICard card = PlayerHand.GetCardAt(selectedVal - 1); // Compensate for offset.
             PlayerHand.RemoveResource(card);
 
             if (facedown)

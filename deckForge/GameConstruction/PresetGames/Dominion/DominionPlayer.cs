@@ -218,6 +218,11 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             Coins -= amount;
         }
 
+        /// <inheritdoc/>
+        protected override void PostActionHook(IGameAction<IPlayer> pickedAction)
+        {
+        }
+
         private void DiscardHandAndPlayArea()
         {
             var cards = PlayerHand.ClearCollection();

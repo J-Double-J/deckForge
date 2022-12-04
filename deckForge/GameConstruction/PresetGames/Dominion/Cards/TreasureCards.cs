@@ -53,7 +53,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         /// Initializes a new instance of the <see cref="GoldCard"/> class.
         /// </summary>
         public GoldCard()
-            : base(new Dictionary<Type, int>() { { typeof(Coin), 6 } }, "Gold", "6")
+            : base(new Dictionary<Type, int>() { { typeof(Coin), 6 } }, "Gold", "3")
         {
             TreasureValue = 3;
             Traits.Add(new TreasureTrait(this));

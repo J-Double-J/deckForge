@@ -1,4 +1,5 @@
-﻿using DeckForge.PhaseActions;
+﻿using DeckForge.HelperObjects;
+using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 
 namespace DeckForge.PlayerConstruction
@@ -17,9 +18,35 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <param name="actions">Dictionary of actions with action names as the key, and stores the action type and its count.</param>
         public PlayerActionChoicePrompter(Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions)
+            : this(new ConsoleReader(), new ConsoleOutput(), actions)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerActionChoicePrompter"/> class.
+        /// </summary>
+        /// <param name="reader">Specifies where to get user input.</param>
+        /// <param name="output">Specifies where to display any output.</param>
+        /// <param name="actions">Dictionary of actions with action names as the key, and stores the action type and its count.</param>
+        public PlayerActionChoicePrompter(
+            IInputReader reader,
+            IOutputDisplay output,
+            Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions)
         {
             this.actions = actions;
+            InputReader = reader;
+            OutputDisplay = output;
         }
+
+        /// <summary>
+        /// Gets where to read any input.
+        /// </summary>
+        protected IInputReader InputReader { get; }
+
+        /// <summary>
+        /// Gets where to display any output.
+        /// </summary>
+        protected IOutputDisplay OutputDisplay { get; }
 
         /// <summary>
         /// Prompts the <see cref="IPlayer"/> to select an action to do.
@@ -31,7 +58,7 @@ namespace DeckForge.PlayerConstruction
 
             if (!PromptDisplayDictIsEmpty(promptDisplayDict))
             {
-                var pp = new PlayerPrompter(promptDisplayDict);
+                var pp = new PlayerPrompter(InputReader, OutputDisplay, promptDisplayDict);
                 int response = pp.Prompt();
                 return actions[actions.Keys.ToList()[response - 1]].Action; // Responses are offset by 1 for prompt header.
             }

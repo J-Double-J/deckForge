@@ -9,6 +9,8 @@ using DeckForge.PlayerConstruction.PlayerEvents;
 
 namespace DeckForge.GameConstruction
 {
+    // TODO: Refactor. Numerous outdated functions.
+
     /// <summary>
     /// Mediates gameplay and iteractions between various objects such as <see cref="Table"/>,
     /// <see cref="IPlayer"/>, <see cref="IRoundRules"/>, etc.
@@ -22,6 +24,17 @@ namespace DeckForge.GameConstruction
         /// </summary>
         /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
         public BaseGameMediator(int playerCount)
+            : this(new ConsoleReader(), new ConsoleOutput(), playerCount)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseGameMediator"/> class.
+        /// </summary>
+        /// <param name="reader">Specifies where to get user input.</param>
+        /// <param name="output">Specifies where to display any output.</param>
+        /// <param name="playerCount">Number of <see cref="IPlayer"/>s in the game.</param>
+        public BaseGameMediator(IInputReader reader, IOutputDisplay output, int playerCount)
         {
             try
             {
@@ -44,6 +57,8 @@ namespace DeckForge.GameConstruction
             GameOver = false;
             CurRound = 0;
             DefaultCardModifierValue = 0;
+            InputReader = reader;
+            OutputDisplay = output;
         }
 
         /// <inheritdoc/>
@@ -72,6 +87,16 @@ namespace DeckForge.GameConstruction
                 return GameTable;
             }
         }
+
+        /// <summary>
+        /// Gets the destination for reading input from the user.
+        /// </summary>
+        protected IInputReader InputReader { get; }
+
+        /// <summary>
+        /// Gets the output destination for anything to be displayed.
+        /// </summary>
+        protected IOutputDisplay OutputDisplay { get; }
 
         /// <summary>
         /// Gets or sets the ITurnHandler.
@@ -241,10 +266,12 @@ namespace DeckForge.GameConstruction
         {
         }
 
+        // TODO: Refactor. This is assuming that a round could still be happening.
+
         /// <inheritdoc/>
         public virtual void EndGameWithWinner(IPlayer winner)
         {
-            Console.WriteLine($"Player {winner.PlayerID} wins!");
+            OutputDisplay.Display($"Player {winner.PlayerID} wins!");
             if (RoundRules is not null)
             {
                 RoundRules[CurRound].EndRound();
@@ -252,6 +279,7 @@ namespace DeckForge.GameConstruction
             }
         }
 
+        /// <inheritdoc/>
         public virtual ICard? DrawCardFromDeck(TablePlacementZoneType zoneType, int area = 0)
         {
             try

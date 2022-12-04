@@ -36,8 +36,10 @@ namespace DeckForge.PlayerConstruction
             : base(reader, output, gm, playerID, initHandSize)
         {
             Actions = DefaultActions;
-            Prompter = new(Actions);
+            Prompter = new(reader, output, Actions);
         }
+
+        // TODO: Consider refactoring to some Interface for Action tracking so that action rule tracking can be more easily delegated.
 
         /// <inheritdoc/>
         public Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> Actions { get; set; }
@@ -66,7 +68,7 @@ namespace DeckForge.PlayerConstruction
                 }
 
                 pickedAction.Execute(this);
-                ReduceActionCountForTurn(pickedAction);
+                PostActionHook(pickedAction);
             }
 
             EndTurn();
@@ -151,6 +153,16 @@ namespace DeckForge.PlayerConstruction
             {
                 DefaultActions[action.Name] = (action, DefaultActions[action.Name].ActionCount - count);
             }
+        }
+
+        /// <summary>
+        /// Executes after an action has been completed. Override to change behvaior. By default
+        /// calls <see cref="ReduceActionCountForTurn(IGameAction{IPlayer})"/>.
+        /// </summary>
+        /// <param name="pickedAction">Action that was just completed.</param>
+        protected virtual void PostActionHook(IGameAction<IPlayer> pickedAction)
+        {
+            ReduceActionCountForTurn(pickedAction);
         }
 
         /// <summary>

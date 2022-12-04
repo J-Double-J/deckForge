@@ -22,7 +22,7 @@ namespace UnitTests.ActionTests
             p.DrawStartingHand(TablePlacementZoneType.PlayerZone);
 
             // StringWriter and Reader are for the console.
-            var sr = new StringReader("0");
+            var sr = new StringReader("1");
 
             Console.SetIn(sr);
 
