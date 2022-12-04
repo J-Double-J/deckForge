@@ -1,10 +1,12 @@
-﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Actions;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
 using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 using DeckForge.PlayerConstruction;
+using DeckForge.PlayerConstruction.PlayerEvents;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion
@@ -86,6 +88,34 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         }
 
         /// <summary>
+        /// Plays a given <see cref="ICard"/> for free, costing no actions.
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to play.</param>
+        /// <returns><see cref="ICard"/> played.</returns>
+        public ICard? PlayCardForFree(ICard card)
+        {
+            var tempAction = new PlayCardAction();
+            int playCardCount = Actions[tempAction.Name].ActionCount;
+
+            // TODO: Possible conflict of ordering. Does another player/card do their events before or after a card is played?
+            GM.PlayerPlayedCard(PlayerID, card);
+            OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(card));
+
+            Actions[tempAction.Name] = (Actions[tempAction.Name].Action, playCardCount);
+
+            return card;
+        }
+
+        /// <summary>
+        /// Discards the card into the <see cref="DominionPlayer"/>'s dicard pile.
+        /// </summary>
+        /// <param name="card"><see cref="ICard"/> to discard.</param>
+        public void AddCardToDiscardPile(ICard card)
+        {
+            DiscardPile.AddCardToDeck(card);
+        }
+
+        /// <summary>
         /// Shuffles the <see cref="DominionPlayer"/>'s <see cref="DiscardPile"/> into their <see cref="PlayerDeck"/>.
         /// </summary>
         public void ShuffleDiscardPileIntoPlayerDeck()
@@ -96,8 +126,9 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             PlayerDeck.Shuffle();
         }
 
-        public void Buy()
+        public ICard? Buy()
         {
+            return null;
         }
 
         /// <inheritdoc/>
@@ -162,7 +193,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
 
         private void CreateDefaultActions()
         {
-            List<PlayerGameAction> playerActions = new() { new PlayCardAction(), new EndTurnAction() };
+            List<PlayerGameAction> playerActions = new() { new PlayCardAction(), new BuyAction(), new EndTurnAction() };
 
             foreach (var action in playerActions)
             {

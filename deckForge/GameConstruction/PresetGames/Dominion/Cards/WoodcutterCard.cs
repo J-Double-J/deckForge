@@ -1,22 +1,20 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Actions;
-using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
 using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
 {
     /// <summary>
-    /// An action card that costs 3 coins. Gives +1 card and +2 actions.
+    /// A Dominion card that costs 3 coins. Gives +1 buy and +2 coins.
     /// </summary>
-    public class VillageCard : DominionCard
+    public class WoodcutterCard : DominionCard
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="VillageCard"/> class.
+        /// Initializes a new instance of the <see cref="WoodcutterCard"/> class.
         /// </summary>
-        public VillageCard()
-            : base(new() { { typeof(Coin), 3 } }, "Village", "+1 Card, +2 Actions")
+        public WoodcutterCard()
+            : base(new() { { typeof(Coin), 3 } }, "Woodcutter", "+1 Buy, +2 Coins")
         {
-            Traits.Add(new ActionTrait(this));
         }
 
         /// <inheritdoc/>
@@ -24,8 +22,8 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         {
             base.OnPlay(placementDetails);
             DominionPlayer? player = OwnedBy as DominionPlayer;
-            OwnedBy?.DrawCard();
-            ((DominionPlayer?)OwnedBy)?.GainAction(new PlayCardAction(), 2);
+            player?.GainAction(new BuyAction(), 1);
+            player?.IncreaseCoins(2);
         }
     }
 }

@@ -257,6 +257,8 @@ namespace DeckForge.PlayerConstruction
             }
         }
 
+        // TODO: Refactor to be more useable as virtual
+
         /// <inheritdoc/>
         public virtual ICard? PlayCard(bool facedown = false)
         {
