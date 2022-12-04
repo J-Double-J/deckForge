@@ -6,6 +6,8 @@ using DeckForge.PlayerConstruction;
 
 namespace DeckForge.GameRules.RoundConstruction.Rounds
 {
+    // TODO: Refactor. Has things not needed and is outdated.
+
     /// <summary>
     /// Base class for all Rounds involving <see cref= "IPlayer"/>s.
     /// Outlines <see cref="IPhase"/>s and the algorithm for <see cref="IPhase"/> looping.
