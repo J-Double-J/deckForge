@@ -20,6 +20,15 @@ namespace DeckForge.GameElements.Resources.Cards
         }
 
         /// <inheritdoc/>
+        public List<ICard> Deck
+        {
+            get
+            {
+                return new List<ICard>();
+            }
+        }
+
+        /// <inheritdoc/>
         public void AddCardToDeck(ICard card, string pos = "bottom", bool shuffleAfter = false)
         {
         }
