@@ -1,4 +1,5 @@
-﻿using DeckForge.GameElements.Resources;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
+using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
@@ -14,6 +15,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         public LaboratoryCard()
             : base(new() { { typeof(Coin), 5 } }, "Laboratory", "+2 Cards, +1 Action")
         {
+            Traits.Add(new ActionTrait(this));
         }
 
         /// <inheritdoc/>

@@ -1,4 +1,5 @@
-﻿using DeckForge.GameElements.Resources;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
+using DeckForge.GameElements.Resources;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
 {
@@ -13,6 +14,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         public SmithyCard()
             : base(new() { { typeof(Coin), 4 } }, "Smithy", "+3 Cards")
         {
+            Traits.Add(new ActionTrait(this));
         }
 
         /// <inheritdoc/>

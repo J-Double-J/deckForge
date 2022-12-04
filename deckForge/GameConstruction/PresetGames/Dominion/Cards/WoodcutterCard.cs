@@ -1,4 +1,5 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Actions;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
 using DeckForge.GameElements.Resources;
 using DeckForge.PhaseActions;
 
@@ -15,6 +16,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         public WoodcutterCard()
             : base(new() { { typeof(Coin), 3 } }, "Woodcutter", "+1 Buy, +2 Coins")
         {
+            Traits.Add(new ActionTrait(this));
         }
 
         /// <inheritdoc/>

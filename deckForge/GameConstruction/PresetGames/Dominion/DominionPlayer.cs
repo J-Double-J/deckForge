@@ -38,6 +38,8 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         public DominionPlayer(IInputReader reader, IOutputDisplay output, IGameMediator gm, int playerID)
             : base(reader, output, gm, playerID, 5)
         {
+            CreateDefaultActions();
+            Actions = DefaultActions;
         }
 
         /// <summary>

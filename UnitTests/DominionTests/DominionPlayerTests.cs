@@ -127,23 +127,5 @@ namespace UnitTests.DominionTests
 
             player.Coins.Should().Be(0, "player should no longer have coins after their turn ends");
         }
-
-        [TestMethod]
-        public void PlayerGainsBenefitsFromPlayingVillageCard()
-        {
-            IGameMediator gm = new BaseGameMediator(1);
-            PlayerGameAction action = new PlayCardAction();
-            DominionPlayerTableArea presetArea = new DominionPlayerTableArea(0);
-            Table table = new(
-                gm,
-                new List<TableZone>() { new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }) });
-            DominionPlayer player = new(new ConsoleInputMock(new() { "0" }), new ConsoleOutputMock(), gm, 0);
-
-            player.AddCardToHand(new VillageCard());
-            player.PlayCard();
-
-            player.Actions[action.Name].ActionCount.Should().Be(2, "2 actions were gained from playing the Village");
-            player.HandSize.Should().Be(1, "player drew a card from playing the Village");
-        }
     }
 }

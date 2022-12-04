@@ -16,6 +16,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Cards
         public ThroneRoomCard()
             : base(new Dictionary<Type, int>() { { typeof(Coin), 4 } }, "Throne", "You may play an Action card from your hand twice")
         {
+            Traits.Add(new ActionTrait(this));
         }
 
         public override void OnPlay(CardPlacedOnTableDetails placementDetails)
