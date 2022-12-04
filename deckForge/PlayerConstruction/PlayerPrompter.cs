@@ -1,15 +1,12 @@
 ﻿using DeckForge.HelperObjects;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DeckForge.PlayerConstruction
 {
     /// <summary>
     /// Prompts the <see cref="IPlayer"/> for some input and returns a validated input response.
     /// </summary>
-    public class PlayerPrompter
+    public class PlayerPrompter : IPrompter
     {
-        private Dictionary<int, string> prompt;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerPrompter"/> class.
         /// </summary>
@@ -45,7 +42,7 @@ namespace DeckForge.PlayerConstruction
         /// /// <param name="cancelAllowed">Sets whether or not this prompt will allow a user to cancel. Default is <c>false</c>.</param>
         public PlayerPrompter(IInputReader reader, IOutputDisplay output, Dictionary<int, string> prompt, bool cancelAllowed = false)
         {
-            this.prompt = prompt;
+            PromptDict = prompt;
             CancelAllowed = cancelAllowed;
             InputReader = reader;
             OutputDisplay = output;
@@ -55,6 +52,11 @@ namespace DeckForge.PlayerConstruction
         /// Gets a value indicating whether this prompt allows a user to cancel.
         /// </summary>
         public bool CancelAllowed { get; }
+
+        /// <summary>
+        /// Gets the prompt to display.
+        /// </summary>
+        protected Dictionary<int, string> PromptDict { get; }
 
         private IInputReader InputReader { get; }
 
@@ -79,7 +81,7 @@ namespace DeckForge.PlayerConstruction
 
         private void DisplayPrompt()
         {
-            foreach (var entry in prompt)
+            foreach (var entry in PromptDict)
             {
                 OutputPromptEntry(entry);
             }
@@ -111,11 +113,11 @@ namespace DeckForge.PlayerConstruction
 
         private bool ValidateWhetherIntegerIsInBounds(int response)
         {
-            if (response > 0 && prompt.ContainsKey(response))
+            if (response > 0 && PromptDict.ContainsKey(response))
             {
                 return true;
             }
-            else if (response == -1 && CancelAllowed && prompt.ContainsKey(-1))
+            else if (response == -1 && CancelAllowed && PromptDict.ContainsKey(-1))
             {
                 return true;
             }

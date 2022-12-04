@@ -36,9 +36,9 @@ namespace UnitTests.DominionTests
             List<string> expectedOutput = new()
             {
                 "Market:",
-                "\t1) Copper - [6 Remaining]",
-                "\t2) Silver - [4 Remaining]",
-                "\t3) Gold - [3 Remaining]"
+                "\t1) Copper (0 Coins) - [6 Remaining]",
+                "\t2) Silver (3 Coins) - [4 Remaining]",
+                "\t3) Gold (6 Coins) - [3 Remaining]"
             };
             output.CompleteOutput.Should().BeEquivalentTo(expectedOutput);
         }

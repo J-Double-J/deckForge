@@ -32,13 +32,31 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
             return market;
         }
 
+        /// <summary>
+        /// Gets the cost of the <see cref="DominionCard"/>s in the <see cref="IDeck"/>.
+        /// </summary>
+        /// <param name="deckNum">Specifies which <see cref="IDeck"/> to get the cost from.</param>
+        /// <returns>The cost of the <see cref="ICard"/>.</returns>
+        /// <exception cref="ArgumentException">Throws if there are no <see cref="ICard"/>s in the <see cref="IDeck"/>.</exception>
+        public Dictionary<Type, int> GetCostOfCardsInDeck(int deckNum)
+        {
+            if (Decks[deckNum].Count == 0)
+            {
+                throw new ArgumentException("That deck is empty, cost is unknown", nameof(deckNum));
+            }
+            else
+            {
+                return ((DominionCard)Decks[deckNum].Deck[0]).Cost;
+            }
+        }
+
         private string GetStringOfTopCardIfNotEmptyDeck(IDeck deck)
         {
             string cardRepresentation = string.Empty;
 
             if (deck.Deck.Count is not 0)
             {
-                cardRepresentation = ((DominionCard)deck.Deck[0]).Name;
+                cardRepresentation = ((DominionCard)deck.Deck[0]).Name + $" ({((DominionCard)deck.Deck[0]).Cost[typeof(Coin)]} Coins)";
             }
 
             return cardRepresentation;

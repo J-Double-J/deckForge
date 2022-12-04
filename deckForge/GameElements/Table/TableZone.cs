@@ -147,6 +147,17 @@ namespace DeckForge.GameElements.Table
         }
 
         /// <summary>
+        /// Gets the <see cref="TableArea"/> with the matching ID.
+        /// </summary>
+        /// <param name="areaID">ID of the <see cref="TableArea"/>.</param>
+        /// <returns>The <see cref="TableArea"/> with the <paramref name="areaID"/>.</returns>
+        public TableArea GetTableArea(int areaID)
+        {
+            ValidateAreaArgument(areaID);
+            return Areas[areaID];
+        }
+
+        /// <summary>
         /// Gets a readonly list of all the <see cref="ICard"/>s managed by this zone. If there is an area limit
         /// some cards returned may be <see cref="NullCard"/>s.
         /// </summary>

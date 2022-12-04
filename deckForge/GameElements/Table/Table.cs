@@ -335,16 +335,8 @@ namespace DeckForge.GameElements.Table
             return FindZoneBasedOnType(zoneType)?.GetDiscardFromArea(areaID);
         }
 
-        /// <summary>
-        /// Finds a zone on the <see cref="Table"/> based on the <see cref="TablePlacementZoneType"/>.
-        /// </summary>
-        /// <param name="zoneType"><see cref="TablePlacementZoneType"/> to search for.</param>
-        /// <param name="throwIfNotFound">If <c>true</c>, throws an <see cref="ArgumentException"/> if the
-        /// <see cref="TablePlacementZoneType"/> is not found. Default <c>true</c>.</param>
-        /// <returns><see cref="TableZone"/> on <see cref="Table"/> that is the correct type.</returns>
-        /// <exception cref="ArgumentException">Throws if <see cref="TablePlacementZoneType"/> is not found
-        /// and <paramref name="throwIfNotFound"/> is true.</exception>
-        protected TableZone? FindZoneBasedOnType(TablePlacementZoneType zoneType, bool throwIfNotFound = true)
+        /// <inheritdoc/>
+        public TableZone? FindZoneBasedOnType(TablePlacementZoneType zoneType, bool throwIfNotFound = true)
         {
             var result = zones.Find(zone => zone.PlacementZoneType == zoneType);
             if (result is not null || !throwIfNotFound)

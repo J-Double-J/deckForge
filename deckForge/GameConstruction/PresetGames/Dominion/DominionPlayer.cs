@@ -16,6 +16,8 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
     /// </summary>
     public class DominionPlayer : PlayerWithActionChoices
     {
+        private readonly BuyActionPrompter buyActionPrompter;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DominionPlayer"/> class.
         /// </summary>
@@ -26,6 +28,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         {
             CreateDefaultActions();
             Actions = DefaultActions;
+            buyActionPrompter = new(gm);
         }
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         {
             CreateDefaultActions();
             Actions = DefaultActions;
+            buyActionPrompter = new(gm, reader, output);
         }
 
         /// <summary>
@@ -128,9 +132,37 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             PlayerDeck.Shuffle();
         }
 
-        public ICard? Buy()
+        /// <summary>
+        /// <see cref="IPlayer"/> can buy a <see cref="ICard"/> from the Market.
+        /// </summary>
+        /// <param name="putCardInDiscard">Puts <see cref="ICard"/> in discard if purchased if <c>true</c>. Otherwise
+        /// only returns purchased <see cref="ICard"/>.</param>
+        /// <returns><see cref="ICard"/> if successful purchase. <c>null</c> if no <see cref="ICard"/>
+        /// was bought.</returns>
+        public ICard? Buy(bool putCardInDiscard = true)
         {
-            return null;
+            ICard? purchasedCard = null;
+
+            while (purchasedCard == null)
+            {
+                OutputDisplay.Display($"You have {Coins} Coins");
+                int response = buyActionPrompter.Prompt();
+                if (response != -1)
+                {
+                    purchasedCard = BuyCardFromMarketDeck(response);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (putCardInDiscard && purchasedCard is not null)
+            {
+                DiscardPile.AddCardToDeck(purchasedCard);
+            }
+
+            return purchasedCard;
         }
 
         /// <inheritdoc/>
@@ -212,6 +244,25 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             }
 
             return score;
+        }
+
+        private ICard? BuyCardFromMarketDeck(int response)
+        {
+            // Offset of -1 because prompter has everything offset by 1
+            var cost = ((DominionGameMediator)GM).Market.GetCostOfCardsInDeck(response - 1);
+            bool canAfford = CostVerifier.VerifyMinimumPayment(cost, new Dictionary<Type, int>() { { typeof(Coin), Coins } }, out var overPayedResources);
+
+            if (canAfford)
+            {
+                LoseAction(new BuyAction(), 1);
+                Coins = overPayedResources![typeof(Coin)];
+                ICard purchasedCard = ((DominionGameMediator)GM).GrabCardFromMarketPlace(response - 1, true);
+                return purchasedCard;
+            }
+
+            OutputDisplay.Display("\nNot enough Coins.\n");
+
+            return null;
         }
     }
 }

@@ -127,5 +127,65 @@ namespace UnitTests.DominionTests
 
             player.Coins.Should().Be(0, "player should no longer have coins after their turn ends");
         }
+
+        [TestMethod]
+        public void PlayerCanBuyFromMarketPlace()
+        {
+            IGameMediator gm = new DominionGameMediator(1);
+            DominionPlayerTableArea presetArea = new(0);
+            List<IDeck> decksInMarket = new()
+            {
+                new MonotoneDeck(typeof(CopperCard), 4),
+                new MonotoneDeck(typeof(SilverCard), 4),
+                new MonotoneDeck(typeof(GoldCard), 4)
+            };
+            DominionMarketTableArea marketArea = new(decksInMarket);
+            Table table = new(
+                gm,
+                new List<TableZone>()
+                {
+                    new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }),
+                    new TableZone(TablePlacementZoneType.NeutralZone, new List<TableArea>() { marketArea })
+                });
+            List<string> playerInputs = new() { "2" };
+            DominionPlayer player = new(new ConsoleInputMock(playerInputs), new ConsoleOutputMock(), gm, 0);
+
+            player.IncreaseCoins(4);
+            ICard purchasedCard = player.Buy()!;
+
+            purchasedCard.Should().BeAssignableTo(typeof(SilverCard), "they purchased the silver");
+            player.Coins.Should().Be(1, "they have one coin left");
+            player.DiscardPile.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void PlayerCannotBuy_ExpensiveCard_FromMarketPlace()
+        {
+            IGameMediator gm = new DominionGameMediator(1);
+            DominionPlayerTableArea presetArea = new(0);
+            List<IDeck> decksInMarket = new()
+            {
+                new MonotoneDeck(typeof(CopperCard), 4),
+                new MonotoneDeck(typeof(SilverCard), 4),
+                new MonotoneDeck(typeof(GoldCard), 4)
+            };
+            DominionMarketTableArea marketArea = new(decksInMarket);
+            Table table = new(
+                gm,
+                new List<TableZone>()
+                {
+                    new TableZone(TablePlacementZoneType.PlayerZone, new List<TableArea>() { presetArea }),
+                    new TableZone(TablePlacementZoneType.NeutralZone, new List<TableArea>() { marketArea })
+                });
+            List<string> playerInputs = new() { "3", "-1" };
+            DominionPlayer player = new(new ConsoleInputMock(playerInputs), new ConsoleOutputMock(), gm, 0);
+
+            player.IncreaseCoins(4);
+            ICard? purchasedCard = player.Buy();
+
+            purchasedCard.Should().BeNull("player didn't end up purchasing a card");
+            player.Coins.Should().Be(4, "player didn't end up purchasing a card");
+            player.DiscardPile.Count.Should().Be(0, "player didn't end up purchasing a card");
+        }
     }
 }
