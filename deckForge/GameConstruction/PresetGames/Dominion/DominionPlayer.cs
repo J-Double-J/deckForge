@@ -8,7 +8,6 @@ using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
-using System.Reflection.PortableExecutable;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion
 {
@@ -102,13 +101,6 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             }
 
             return card;
-        }
-
-        // TODO: Refactor Starting Hand
-
-        public override void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0)
-        {
-            DrawMultipleCards(5);
         }
 
         /// <summary>

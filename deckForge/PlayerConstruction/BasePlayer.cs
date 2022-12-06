@@ -157,6 +157,12 @@ namespace DeckForge.PlayerConstruction
         protected IOutputDisplay OutputDisplay { get; } = new ConsoleOutput();
 
         /// <inheritdoc/>
+        public virtual void DrawStartingHand()
+        {
+            DrawMultipleCards(initHandSize);
+        }
+
+        /// <inheritdoc/>
         public virtual void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0)
         {
             for (var i = 0; i < initHandSize; i++)

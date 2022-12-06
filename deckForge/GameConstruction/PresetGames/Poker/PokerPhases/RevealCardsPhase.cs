@@ -17,7 +17,6 @@ namespace DeckForge.GameConstruction.PresetGames.Poker.PokerPhases
             : base(pGM, playerIDs, "Reveal and Evaluate Phase")
         {
             Actions.Add(new PlayHandToTable());
-            
         }
     }
 }

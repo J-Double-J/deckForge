@@ -77,6 +77,11 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Draws <see cref="IPlayer"/>'s starting hand for the game.
         /// </summary>
+        public void DrawStartingHand();
+
+        /// <summary>
+        /// Draws <see cref="IPlayer"/>'s starting hand for the game. Specifies where to draw these cards from if different from parameterless <see cref="DrawCard"/>.
+        /// </summary>
         /// <param name="zoneType">Type of <see cref="TableZone"/> that owns the <see cref="IDeck"/> to draw from.</param>
         /// <param name="area">An optional parameter specifying which area in the <see cref="TableZone"/> the <see cref="IDeck"/> resides.</param>
         public void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0);
@@ -133,10 +138,9 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Flips a single <see cref="ICard"/> belonging to the <see cref="IPlayer"/> on the <see cref="Table"/>.
         /// </summary>
-        /// <param name="cardPos">Position of the card on the <see cref="Table"/></param>
+        /// <param name="cardPos">Position of the card on the <see cref="Table"/>.</param>
         /// <param name="facedown">Flips card facedown if <c>true</c>, faceup if <c>false</c>,
         /// otherwise flipped regardless of current orientation.</param>
-        /// <returns>Reference to <see cref="ICard"/> that was flipped.</returns>
         public void FlipSingleCard(int cardPos, bool? facedown = null);
 
         /// <summary>
@@ -163,14 +167,14 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Gets the number of resources in an <see cref="IResourceCollection"/>.
         /// </summary>
-        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/></param>
+        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/>.</param>
         /// <returns>The number of resources in the collection.</returns>
         public int CountOfResourceCollection(int resourceCollectionID);
 
         /// <summary>
         /// Takes a resource from the <see cref="IResourceCollection"/>.
         /// </summary>
-        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/></param>
+        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/>.</param>
         /// <returns>
         /// A nullable <see cref="object"/> that is of the type of resource managed by the <see cref="IResourceCollection"/>.
         /// </returns>
@@ -179,7 +183,7 @@ namespace DeckForge.PlayerConstruction
         /// <summary>
         /// Adds a resource to the <see cref="IResourceCollection"/>.
         /// </summary>
-        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/></param>
+        /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/>.</param>
         /// <param name="resource">Resource of the same type that the <see cref="IResourceCollection"/> manages.</param>
         public void AddResourceToCollection(int resourceCollectionID, object resource);
 
@@ -188,7 +192,7 @@ namespace DeckForge.PlayerConstruction
         /// are not unique, then any resource will be removed.
         /// </summary>
         /// <param name="resourceCollectionID">ID of the <see cref="IResourceCollection"/>.</param>
-        /// <param name="resource">Resource to remove. Resource must match type managed by <see cref="IResourceCollection"/></param>
+        /// <param name="resource">Resource to remove. Resource must match type managed by <see cref="IResourceCollection"/>.</param>
         public void RemoveResourceFromCollection(int resourceCollectionID, object resource);
 
         /// <summary>
@@ -227,7 +231,7 @@ namespace DeckForge.PlayerConstruction
         /// <see cref="IPlayer"/> executes an action against another <see cref="IPlayer"/>.
         /// </summary>
         /// <param name="action">Action that interacts with <see cref="IPlayer"/>s.</param>
-        /// <param name="target"><see cref="IPlayer"/> to be targetted by <paramref name= "action"/></param>
+        /// <param name="target"><see cref="IPlayer"/> to be targetted by <paramref name= "action"/>.</param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameActionAgainstPlayer(IGameAction<IPlayer> action, IPlayer target);
 
@@ -236,7 +240,7 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         /// <param name="action">Action that interacts with <see cref="IPlayer"/>s.</param>
         /// <param name="targets">List of <see cref="IPlayer"/>s to be targetted by <paramref name="action"/>.</param>
-        /// <param name="includeSelf">Specifies whether to include <see cref="IPlayer"/> executing action in target list if <c>true</c></param>
+        /// <param name="includeSelf">Specifies whether to include <see cref="IPlayer"/> executing action in target list if <c>true</c>.</param>
         /// <returns>A nullable <see cref="object"/> that <paramref name="action"/> interacted with.</returns>
         public object? ExecuteGameActionAgainstMultiplePlayers(IGameAction<IPlayer> action, List<IPlayer> targets, bool includeSelf = false);
     }

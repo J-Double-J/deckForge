@@ -118,7 +118,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             for (int i = 0; i < playerCount; i++)
             {
                 players.Add(new DominionPlayer(Reader, Output, GM, i));
-                players[i].DrawStartingHand(TablePlacementZoneType.PlayerZone, i);
+                players[i].DrawStartingHand();
             }
 
             return players;
