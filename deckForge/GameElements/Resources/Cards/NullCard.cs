@@ -35,7 +35,7 @@ namespace DeckForge.GameElements.Resources.Cards
         public CardPlacedOnTableDetails? TablePlacementDetails { get; }
 
         /// <inheritdoc/>
-        public IReadOnlyList<BaseCardTrait> CardTraits
+        public IReadOnlyList<ICardTrait> CardTraits
         {
             get { return new List<BaseCardTrait>(); }
         }

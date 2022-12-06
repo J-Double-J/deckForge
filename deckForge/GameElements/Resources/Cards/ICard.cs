@@ -42,7 +42,7 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Gets a readonly list of the <see cref="BaseCardTrait"/>s this card has.
         /// </summary>
-        public IReadOnlyList<BaseCardTrait> CardTraits { get;  }
+        public IReadOnlyList<ICardTrait> CardTraits { get;  }
 
         /// <summary>
         /// Gets the string representing the card.

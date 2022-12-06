@@ -3,34 +3,10 @@
 namespace DeckForge.GameElements.Resources.Cards.CardTraits
 {
     /// <summary>
-    /// The base outline for any trait that a <see cref="ICard"/> may possess.
+    /// Trait that defines behavior across various <see cref="ICard"/>s.
     /// </summary>
-    public abstract class BaseCardTrait : ICardTrait
+    public interface ICardTrait
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCardTrait"/> class.
-        /// </summary>
-        /// <param name="gm"><see cref="IGameMediator"/> used to interact with other game elements.</param>
-        /// <param name="attachedToCard"><see cref="ICard"/> this trait is attached to.</param>
-        public BaseCardTrait(IGameMediator gm, ICard attachedToCard)
-        {
-            TraitName = string.Empty;
-            Description = string.Empty;
-            GM = gm;
-            AttachedToCard = attachedToCard;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseCardTrait"/> class. Does not require <see cref="IGameMediator"/>.
-        /// </summary>
-        /// <param name="attachedToCard"><see cref="ICard"/> this trait is attached to.</param>
-        public BaseCardTrait(ICard attachedToCard)
-        {
-            TraitName = string.Empty;
-            Description = string.Empty;
-            AttachedToCard = attachedToCard;
-        }
-
         /// <summary>
         /// Gets the name of the Trait.
         /// </summary>
@@ -45,11 +21,6 @@ namespace DeckForge.GameElements.Resources.Cards.CardTraits
         /// Gets the <see cref="ICard"/> that this trait is attached to.
         /// </summary>
         public ICard AttachedToCard { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IGameMediator"/> used to interact with other game elements.
-        /// </summary>
-        protected IGameMediator? GM { get;  }
 
         /// <summary>
         /// Executes when the <see cref="ICard"/> this trait is attached to is played.

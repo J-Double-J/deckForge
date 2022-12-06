@@ -39,7 +39,7 @@ namespace DeckForge.GameElements.Resources
         public CardPlacedOnTableDetails? TablePlacementDetails { get; protected set; }
 
         /// <inheritdoc/>
-        public IReadOnlyList<BaseCardTrait> CardTraits
+        public IReadOnlyList<ICardTrait> CardTraits
         {
             get { return Traits; }
         }
@@ -47,7 +47,7 @@ namespace DeckForge.GameElements.Resources
         /// <summary>
         /// Gets a mutable list of <see cref="BaseCardTrait"/>s on this card.
         /// </summary>
-        protected List<BaseCardTrait> Traits { get; }
+        protected List<ICardTrait> Traits { get; }
 
         /// <inheritdoc/>
         public void Flip()
