@@ -1,6 +1,6 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion;
 using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
-using DeckForge.GameConstruction.PresetGames.Dominion.Table;
+using DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas;
 using DeckForge.GameElements.Table;
 using DeckForge.HelperObjects;
 using FluentAssertions;

@@ -1,4 +1,4 @@
-﻿using DeckForge.GameConstruction.PresetGames.Dominion.Table;
+﻿using DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;
 

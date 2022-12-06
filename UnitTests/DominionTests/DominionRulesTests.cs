@@ -2,7 +2,7 @@
 using DeckForge.GameConstruction.PresetGames.Dominion;
 using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
 using DeckForge.GameConstruction.PresetGames.Dominion.Rules;
-using DeckForge.GameConstruction.PresetGames.Dominion.Table;
+using DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
 using DeckForge.GameRules.RoundConstruction.Interfaces;

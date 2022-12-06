@@ -48,6 +48,17 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         protected IOutputDisplay OutputDisplay { get; }
 
+        // TODO: Is this the best way to do it?
+
+        /// <summary>
+        /// Updates the prompter to use the newest available actions.
+        /// </summary>
+        /// <param name="actions">The new dictionary of actions to partse responses for.</param>
+        public void UpdateAvailableActions(Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions)
+        {
+            this.actions = actions;
+        }
+
         /// <summary>
         /// Prompts the <see cref="IPlayer"/> to select an action to do.
         /// </summary>

@@ -1,5 +1,5 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
-using DeckForge.GameConstruction.PresetGames.Dominion.Table;
+using DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas;
 using DeckForge.GameElements.Resources;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;

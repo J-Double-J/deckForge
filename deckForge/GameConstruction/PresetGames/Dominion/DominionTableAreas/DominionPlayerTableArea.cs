@@ -1,7 +1,7 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
 using DeckForge.GameElements.Table;
 
-namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
+namespace DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas
 {
     /// <summary>
     /// Settings for any <see cref="TableArea"/> for players in <see cref="Dominion"/>.

@@ -178,6 +178,20 @@ namespace DeckForge.GameElements.Resources
         }
 
         /// <inheritdoc/>
+        public List<ICard> RemoveAllCardsFromDeck()
+        {
+            List<ICard> removedCards = new();
+
+            for (int i = 0; i < Deck.Count; i++)
+            {
+                removedCards.Add(Deck[i]);
+            }
+
+            Deck.Clear();
+            return removedCards;
+        }
+
+        /// <inheritdoc/>
         public void AddResource(ICard resource)
         {
             AddCardToDeck(resource, pos: defaultAddCardPos, shuffleAfter: defaultShuffleOnAddCard);

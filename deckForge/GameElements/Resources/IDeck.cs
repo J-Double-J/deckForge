@@ -50,5 +50,11 @@
         /// <param name="shuffleAfter">If <c>true</c>, shuffles the <see cref="IDeck"/> after adding
         /// the <see cref="ICard"/>.</param>
         public void AddMultipleCardsToDeck(List<ICard> cards, string pos = "bottom", bool shuffleAfter = false);
+
+        /// <summary>
+        /// Removes all <see cref="ICard"/>s from the <see cref="IDeck"/>.
+        /// </summary>
+        /// <returns>The list of returned <see cref="ICard"/>s removed from the <see cref="IDeck"/>.</returns>
+        public List<ICard> RemoveAllCardsFromDeck();
     }
 }

@@ -24,7 +24,7 @@ namespace DeckForge.GameElements.Table
         public TableZone(TablePlacementZoneType placementZoneType, int areaCount, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
-            AreaCount = areaCount;
+            // AreaCount = areaCount;
             AreaCardLimit = areaCardLimit;
 
             StandardConstruction(placementZoneType, areaCount, areaCardLimit);
@@ -44,7 +44,7 @@ namespace DeckForge.GameElements.Table
         public TableZone(TablePlacementZoneType placementZoneType, int areaCount, IDeck deck, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
-            AreaCount = areaCount;
+            // AreaCount = areaCount;
             AreaCardLimit = areaCardLimit;
 
             StandardConstruction(placementZoneType, areaCount, areaCardLimit);
@@ -69,7 +69,7 @@ namespace DeckForge.GameElements.Table
         public TableZone(TablePlacementZoneType placementZoneType, int areaCount, List<IDeck> decks, int areaCardLimit = -1)
         {
             PlacementZoneType = placementZoneType;
-            AreaCount = areaCount;
+            // AreaCount = areaCount;
             AreaCardLimit = areaCardLimit;
 
             StandardConstruction(placementZoneType, areaCount, areaCardLimit);
@@ -130,7 +130,7 @@ namespace DeckForge.GameElements.Table
         /// <summary>
         /// Gets how many different card areas are managed by this zone.
         /// </summary>
-        public int AreaCount { get; }
+        public int AreaCount { get { return Areas.Count; } }
 
         /// <summary>
         /// Gets the limit of cards that can be in each area.

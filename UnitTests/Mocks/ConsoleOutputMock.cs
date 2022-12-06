@@ -31,5 +31,10 @@ namespace UnitTests.Mocks
             CurrentOutput = output;
             CompleteOutput.Add(output);
         }
+
+        /// <inheritdoc/>
+        public void Clear()
+        {
+        }
     }
 }

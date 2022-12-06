@@ -19,7 +19,8 @@ namespace DeckForge.PlayerConstruction
         public PlayerWithActionChoices(IGameMediator gm, int playerID, int initHandSize = 5)
             : base(gm, playerID, initHandSize)
         {
-            Actions = DefaultActions;
+            Actions = new();
+            SetActionsToDefault();
             Prompter = new(Actions);
         }
 
@@ -35,7 +36,8 @@ namespace DeckForge.PlayerConstruction
         public PlayerWithActionChoices(IInputReader reader, IOutputDisplay output, IGameMediator gm, int playerID, int initHandSize = 5)
             : base(reader, output, gm, playerID, initHandSize)
         {
-            Actions = DefaultActions;
+            Actions = new();
+            SetActionsToDefault();
             Prompter = new(reader, output, Actions);
         }
 
@@ -53,7 +55,7 @@ namespace DeckForge.PlayerConstruction
         /// Gets the prompter that handles displaying and getting the action the <see cref="IPlayer"/> wants to execute
         /// on thier turn.
         /// </summary>
-        protected PlayerActionChoicePrompter Prompter { get; }
+        protected PlayerActionChoicePrompter Prompter { get; set; }
 
         /// <inheritdoc/>
         public override void StartTurn()
@@ -77,7 +79,8 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public override void EndTurn()
         {
-            Actions = DefaultActions;
+            SetActionsToDefault();
+            Prompter.UpdateAvailableActions(Actions);
         }
 
         /// <summary>
@@ -153,6 +156,14 @@ namespace DeckForge.PlayerConstruction
             {
                 DefaultActions[action.Name] = (action, DefaultActions[action.Name].ActionCount - count);
             }
+        }
+
+        /// <summary>
+        /// Handles setting Actions to Default Actions correctly.
+        /// </summary>
+        protected void SetActionsToDefault()
+        {
+            Actions = new(DefaultActions);
         }
 
         /// <summary>

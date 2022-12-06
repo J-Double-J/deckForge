@@ -2,7 +2,7 @@
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Table;
 
-namespace DeckForge.GameConstruction.PresetGames.Dominion.Table
+namespace DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas
 {
     /// <summary>
     /// Standard settings for the Market in Dominion.

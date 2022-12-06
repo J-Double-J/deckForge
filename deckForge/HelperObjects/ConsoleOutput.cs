@@ -10,5 +10,11 @@
         {
             Console.WriteLine(output);
         }
+
+        /// <inheritdoc/>
+        public void Clear()
+        {
+            Console.Clear();
+        }
     }
 }

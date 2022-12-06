@@ -2,12 +2,13 @@
 using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
+using DeckForge.GameElements.Table;
 using DeckForge.HelperObjects;
 using DeckForge.PhaseActions;
 using DeckForge.PhaseActions.PlayerActions;
 using DeckForge.PlayerConstruction;
 using DeckForge.PlayerConstruction.PlayerEvents;
-using static System.Formats.Asn1.AsnWriter;
+using System.Reflection.PortableExecutable;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion
 {
@@ -27,8 +28,9 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             : base(gm, playerID, 5)
         {
             CreateDefaultActions();
-            Actions = DefaultActions;
+            SetActionsToDefault();
             buyActionPrompter = new(gm);
+            Prompter = new(Actions);
         }
 
         /// <summary>
@@ -42,8 +44,9 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             : base(reader, output, gm, playerID, 5)
         {
             CreateDefaultActions();
-            Actions = DefaultActions;
+            SetActionsToDefault();
             buyActionPrompter = new(gm, reader, output);
+            Prompter = new(reader, output, Actions);
         }
 
         /// <summary>
@@ -74,6 +77,14 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         }
 
         /// <inheritdoc/>
+        public override void StartTurn()
+        {
+            OutputDisplay.Display($"Player {PlayerID}'s Turn");
+            base.StartTurn();
+            OutputDisplay.Clear();
+        }
+
+        /// <inheritdoc/>
         public override ICard? DrawCard()
         {
             ICard? card = PlayerDeck.DrawCard();
@@ -91,6 +102,13 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             }
 
             return card;
+        }
+
+        // TODO: Refactor Starting Hand
+
+        public override void DrawStartingHand(TablePlacementZoneType zoneType, int area = 0)
+        {
+            DrawMultipleCards(5);
         }
 
         /// <summary>
@@ -126,8 +144,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         /// </summary>
         public void ShuffleDiscardPileIntoPlayerDeck()
         {
-            var discardCards = DiscardPile.Deck;
-            DiscardPile.ClearCollection();
+            var discardCards = DiscardPile.RemoveAllCardsFromDeck();
             PlayerDeck.AddMultipleCardsToDeck(discardCards);
             PlayerDeck.Shuffle();
         }

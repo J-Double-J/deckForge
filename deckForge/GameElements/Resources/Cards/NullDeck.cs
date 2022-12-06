@@ -44,6 +44,12 @@ namespace DeckForge.GameElements.Resources.Cards
         }
 
         /// <inheritdoc/>
+        public List<ICard> RemoveAllCardsFromDeck()
+        {
+            return new();
+        }
+
+        /// <inheritdoc/>
         public void AddResource(ICard resource)
         {
         }
@@ -65,6 +71,7 @@ namespace DeckForge.GameElements.Resources.Cards
             return new NullCard();
         }
 
+        /// <inheritdoc/>
         public List<ICard?> DrawMultipleCards(int count)
         {
             return new List<ICard?>() { new NullCard() };
