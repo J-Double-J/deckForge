@@ -21,7 +21,7 @@ namespace DeckForge.PlayerConstruction
         {
             Actions = new();
             SetActionsToDefault();
-            Prompter = new(Actions);
+            ActionPrompter = new(Actions);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace DeckForge.PlayerConstruction
         {
             Actions = new();
             SetActionsToDefault();
-            Prompter = new(reader, output, Actions);
+            ActionPrompter = new(reader, output, Actions);
         }
 
         // TODO: Consider refactoring to some Interface for Action tracking so that action rule tracking can be more easily delegated.
@@ -52,17 +52,17 @@ namespace DeckForge.PlayerConstruction
         public Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> DefaultActions { get; protected set; } = new();
 
         /// <summary>
-        /// Gets the prompter that handles displaying and getting the action the <see cref="IPlayer"/> wants to execute
+        /// Gets or sets the prompter that handles displaying and getting the action the <see cref="IPlayer"/> wants to execute
         /// on thier turn.
         /// </summary>
-        protected PlayerActionChoicePrompter Prompter { get; set; }
+        protected PlayerActionChoicePrompter ActionPrompter { get; set; }
 
         /// <inheritdoc/>
         public override void StartTurn()
         {
             while (true)
             {
-                var pickedAction = Prompter.Prompt();
+                var pickedAction = ActionPrompter.Prompt();
 
                 if (pickedAction is EndTurnAction)
                 {
@@ -80,7 +80,7 @@ namespace DeckForge.PlayerConstruction
         public override void EndTurn()
         {
             SetActionsToDefault();
-            Prompter.UpdateAvailableActions(Actions);
+            ActionPrompter.UpdateAvailableActions(Actions);
         }
 
         /// <summary>

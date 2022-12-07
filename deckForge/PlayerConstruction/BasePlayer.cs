@@ -190,18 +190,7 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public virtual ICard? DrawCard()
         {
-            ICard? card = GM.Table!.DrawCardFromDeckInArea(TablePlacementZoneType.PlayerZone, PlayerID);
-            if (card != null)
-            {
-                card.OwnedBy = this;
-                PlayerHand.AddResource(card);
-            }
-            else
-            {
-                OutputDisplay.Display("Deck is Empty.");
-            }
-
-            return card;
+            return DrawCard(TablePlacementZoneType.PlayerZone, PlayerID);
         }
 
         /// <inheritdoc/>
@@ -268,22 +257,13 @@ namespace DeckForge.PlayerConstruction
         /// <inheritdoc/>
         public virtual ICard? PlayCard(bool facedown = false)
         {
-            string? input;
-            int selectedVal;
+            ICard? card = PromptPlayerToPickCardToPlay();
 
-            OutputDisplay.Display("Which card would you like to play?");
-            for (var i = 0; i < HandSize; i++)
+            if (card is null)
             {
-                OutputDisplay.Display($"{i + 1}) {PlayerHand.GetCardAt(i).PrintCard()}");
+                return null;
             }
 
-            do
-            {
-                input = InputReader.GetInput();
-            }
-            while (int.TryParse(input, out selectedVal) && (selectedVal > HandSize + 1 || selectedVal < 1));
-
-            ICard card = PlayerHand.GetCardAt(selectedVal - 1); // Compensate for offset.
             PlayerHand.RemoveResource(card);
 
             if (facedown)
@@ -296,6 +276,16 @@ namespace DeckForge.PlayerConstruction
             OnPlayerPlayedCard(new PlayerPlayedCardEventArgs(card));
 
             return card;
+        }
+
+        /// <summary>
+        /// Prompts <see cref="IPlayer"/> to pick a <see cref="ICard"/> to play.
+        /// </summary>
+        /// <remarks>When overriding, consider using one of the GetCardInHand() methods.</remarks>
+        /// <returns>A selected <see cref="ICard"/> or null if no valid cards, or empty hand.</returns>
+        protected virtual ICard? PromptPlayerToPickCardToPlay()
+        {
+            return GetCardInHand("Which card would you like to play?", true);
         }
 
         /// <inheritdoc/>
@@ -593,6 +583,150 @@ namespace DeckForge.PlayerConstruction
             }
 
             return action.Execute(this, targetList);
+        }
+
+        /// <summary>
+        /// Prompt that is created whenever <see cref="IPlayer"/> has to pick a <see cref="ICard"/> from their <see cref="Hand"/>.
+        /// </summary>
+        /// <param name="header">String that will be in the header of the <see cref="IPrompter"/>. If <c>null</c> no header will be printed.</param>
+        /// <returns>A dictionary for use in a <see cref="IPrompter"/>.</returns>
+        protected virtual Dictionary<int, string> CreatePromptFromCardsInHand(string? header = "Cards in Hand:")
+        {
+            Dictionary<int, string> prompt = new();
+            if (header is not null)
+            {
+                prompt.Add(0, header);
+            }
+
+            for (var i = 0; i < HandSize; i++)
+            {
+                prompt.Add(i + 1, $"{PlayerHand.GetCardAt(i).PrintCard()}");
+            }
+
+            return prompt;
+        }
+
+        /// <summary>
+        /// Prompt that is created whenever <see cref="IPlayer"/> has to pick a <see cref="ICard"/> from their <see cref="Hand"/>. Can allow
+        /// an option to cancel.
+        /// </summary>
+        /// <param name="allowCancel">If <c>true</c> allows the <see cref="IPlayer"/> to cancel or exit the prompt.</param>
+        /// <param name="cancelText">String to present for cancel option.</param>
+        /// <param name="header">String that will be in the header of the <see cref="IPrompter"/>. If <c>null</c> no header will be printed.</param>
+        /// <returns>A dictionary for use in a <see cref="IPrompter"/>.</returns>
+        protected virtual Dictionary<int, string> CreatePromptFromCardsInHand(bool allowCancel, string cancelText = "Cancel", string? header = "Cards in Hand:")
+        {
+            var prompt = CreatePromptFromCardsInHand(header);
+
+            if (allowCancel)
+            {
+                prompt.Add(-1, cancelText);
+            }
+
+            return prompt;
+        }
+
+        // TODO: Refactor? Should GetCardInHand be a Hand or a BasePlayer method? Should these methods be public?
+
+        /// <summary>
+        /// Prompts the <see cref="IPlayer"/> to choose a <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="promptHeader">Prompt header displayed to help instruct user choice.</param>
+        /// <returns><see cref="ICard"/> they picked from their hand. If no <see cref="ICard"/>s are in
+        /// the <see cref="IPlayer"/>'s hand, returns null.</returns>
+        protected ICard? GetCardInHand(string promptHeader)
+        {
+            return GetCardInHand(promptHeader, false);
+        }
+
+        /// <summary>
+        /// Prompts the <see cref="IPlayer"/> to choose a <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="promptHeader">Prompt header displayed to help instruct user choice.</param>
+        /// <param name="promptHasCancel">If <c>true</c> allows the <see cref="IPlayer"/> to not pick a <see cref="ICard"/>.</param>
+        /// <param name="cancelPromptString">If prompt allows the choice to not pick a <see cref="ICard"/> this is the text for that choice.</param>
+        /// <returns><see cref="ICard"/> they picked from their hand. If no <see cref="ICard"/>s are in
+        /// the <see cref="IPlayer"/>'s hand or the <see cref="IPlayer"/> does not make a choice, returns null.</returns>
+        protected ICard? GetCardInHand(string promptHeader, bool promptHasCancel, string cancelPromptString = "Cancel")
+        {
+            var handPrompt = CreatePromptFromCardsInHand(true, cancelPromptString, promptHeader);
+            var handPrompter = new PlayerPrompter(InputReader, OutputDisplay, handPrompt, promptHasCancel);
+            int choice = handPrompter.Prompt();
+
+            if (choice != -1)
+            {
+                return PlayerHand.GetCardAt(choice - 1);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Prompts the <see cref="IPlayer"/> to choose a <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="conditionForValidCards">Only allows <see cref="ICard"/>s that meet this condition to be chosen from.</param>
+        /// <param name="promptHeader">Prompt header displayed to help instruct user choice.</param>
+        /// <returns><see cref="ICard"/> they picked from their hand. If no <see cref="ICard"/>s are in
+        /// the <see cref="IPlayer"/>'s hand or no <see cref="ICard"/>s meet
+        /// the condition specified, returns null.</returns>
+        protected ICard? GetCardInHand(Predicate<ICard> conditionForValidCards, string promptHeader)
+        {
+            return GetCardInHand(conditionForValidCards, promptHeader, false);
+        }
+
+        /// <summary>
+        /// Prompts the <see cref="IPlayer"/> to choose a <see cref="ICard"/>.
+        /// </summary>
+        /// <param name="conditionForValidCards">Only allows <see cref="ICard"/>s that meet this condition to be chosen from.</param>
+        /// <param name="promptHeader">Prompt header displayed to help instruct user choice.</param>
+        /// <param name="promptHasCancel">If <c>true</c> allows the <see cref="IPlayer"/> to not pick a <see cref="ICard"/>.</param>
+        /// <param name="cancelPromptString">If prompt allows the choice to not pick a <see cref="ICard"/> this is the text for that choice.</param>
+        /// <returns><see cref="ICard"/> they picked from their hand. If no <see cref="ICard"/>s are in
+        /// the <see cref="IPlayer"/>'s hand, no <see cref="ICard"/>s meet the conditions, or the <see cref="IPlayer"/> does not make a choice, returns null.</returns>
+        protected ICard? GetCardInHand(Predicate<ICard> conditionForValidCards, string promptHeader, bool promptHasCancel, string cancelPromptString = "Cancel")
+        {
+            if (!CardFoundThatMeetsCondition(conditionForValidCards))
+            {
+                return null;
+            }
+
+            var handPrompt = CreatePromptFromCardsInHand(promptHasCancel, cancelPromptString, promptHeader);
+            var prompter = new PlayerPrompter(InputReader, OutputDisplay, handPrompt, promptHasCancel);
+
+            int choice = 0;
+            while (choice != -1)
+            {
+                choice = prompter.Prompt();
+                if (choice != -1)
+                {
+                    ICard card = PlayerHand.GetCardAt(choice - 1);
+                    if (conditionForValidCards(card))
+                    {
+                        return card;
+                    }
+                    else
+                    {
+                        OutputDisplay.Display("Invalid Choice");
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private bool CardFoundThatMeetsCondition(Predicate<ICard> condition)
+        {
+            bool aCardMeetsCondition = false;
+            foreach (ICard card in PlayerHand.Cards)
+            {
+                if (condition(card))
+                {
+                    aCardMeetsCondition = true;
+                    break;
+                }
+            }
+
+            return aCardMeetsCondition;
         }
 
         /// <summary>

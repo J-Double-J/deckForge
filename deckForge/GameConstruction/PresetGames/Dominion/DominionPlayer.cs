@@ -1,4 +1,6 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.Actions;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTraits;
 using DeckForge.GameConstruction.PresetGames.Dominion.Cards.CardTypes;
 using DeckForge.GameElements.Resources;
 using DeckForge.GameElements.Resources.Cards;
@@ -29,7 +31,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             CreateDefaultActions();
             SetActionsToDefault();
             buyActionPrompter = new(gm);
-            Prompter = new(Actions);
+            ActionPrompter = new DominionPlayerActionChoicePrompter(Actions);
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
             CreateDefaultActions();
             SetActionsToDefault();
             buyActionPrompter = new(gm, reader, output);
-            Prompter = new(reader, output, Actions);
+            ActionPrompter = new DominionPlayerActionChoicePrompter(reader, output, Actions);
         }
 
         /// <summary>
@@ -230,6 +232,29 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         /// <inheritdoc/>
         protected override void PostActionHook(IGameAction<IPlayer> pickedAction)
         {
+        }
+
+        /// <inheritdoc/>
+        protected override ICard? PromptPlayerToPickCardToPlay()
+        {
+
+            if (Actions[new PlayCardAction().Name].ActionCount > 0)
+            {
+                return GetCardInHand("Which card would you like to play?", true);
+            }
+
+            Predicate<ICard> cannotPlayActionCards = card =>
+            {
+                DominionCard domCard = (card as DominionCard)!;
+                if (!domCard.CardTraits.OfType<ActionTrait>().Any())
+                {
+                    return true;
+                }
+
+                return false;
+            };
+
+            return GetCardInHand(cannotPlayActionCards, "Which card would you like to play?", true);
         }
 
         private void DiscardHandAndPlayArea()

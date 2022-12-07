@@ -9,8 +9,6 @@ namespace DeckForge.PlayerConstruction
     /// </summary>
     public class PlayerActionChoicePrompter
     {
-        private Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions;
-
         // TODO: Could this be static?
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace DeckForge.PlayerConstruction
             IOutputDisplay output,
             Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions)
         {
-            this.actions = actions;
+            this.Actions = actions;
             InputReader = reader;
             OutputDisplay = output;
         }
@@ -48,6 +46,11 @@ namespace DeckForge.PlayerConstruction
         /// </summary>
         protected IOutputDisplay OutputDisplay { get; }
 
+        /// <summary>
+        /// Gets or sets the Action Dictionary that is the basis for the prompt.
+        /// </summary>
+        protected Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> Actions { get; set; }
+
         // TODO: Is this the best way to do it?
 
         /// <summary>
@@ -56,7 +59,7 @@ namespace DeckForge.PlayerConstruction
         /// <param name="actions">The new dictionary of actions to partse responses for.</param>
         public void UpdateAvailableActions(Dictionary<string, (IGameAction<IPlayer> Action, int ActionCount)> actions)
         {
-            this.actions = actions;
+            Actions = actions;
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace DeckForge.PlayerConstruction
             {
                 var pp = new PlayerPrompter(InputReader, OutputDisplay, promptDisplayDict);
                 int response = pp.Prompt();
-                return actions[actions.Keys.ToList()[response - 1]].Action; // Responses are offset by 1 for prompt header.
+                return Actions[Actions.Keys.ToList()[response - 1]].Action; // Responses are offset by 1 for prompt header.
             }
 
             return new EndTurnAction();
@@ -85,12 +88,12 @@ namespace DeckForge.PlayerConstruction
         {
             Dictionary<int, string> prompt = new() { { 0, "Which action would you like to do?" } };
 
-            var keysList = actions.Keys.ToList();
-            for (int i = 0; i < actions.Count; i++)
+            var keysList = Actions.Keys.ToList();
+            for (int i = 0; i < Actions.Count; i++)
             {
-                if (actions[keysList[i]].ActionCount != 0)
+                if (Actions[keysList[i]].ActionCount != 0)
                 {
-                    prompt[i + 1] = $"{keysList[i]} [{actions[keysList[i]].ActionCount} left]";
+                    prompt[i + 1] = $"{keysList[i]} [{Actions[keysList[i]].ActionCount} left]";
                 }
             }
 
