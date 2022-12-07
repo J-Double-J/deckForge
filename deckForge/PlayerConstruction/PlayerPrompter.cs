@@ -54,9 +54,9 @@ namespace DeckForge.PlayerConstruction
         public bool CancelAllowed { get; }
 
         /// <summary>
-        /// Gets the prompt to display.
+        /// Gets or sets the prompt to display.
         /// </summary>
-        protected Dictionary<int, string> PromptDict { get; }
+        protected Dictionary<int, string> PromptDict { get; set; }
 
         private IInputReader InputReader { get; }
 
@@ -77,6 +77,11 @@ namespace DeckForge.PlayerConstruction
             while (!IsValidResponse(response));
 
             return int.Parse(response!);
+        }
+
+        public void UpdatePrompt(Dictionary<int, string> newPrompt)
+        {
+            PromptDict = newPrompt;
         }
 
         private void DisplayPrompt()

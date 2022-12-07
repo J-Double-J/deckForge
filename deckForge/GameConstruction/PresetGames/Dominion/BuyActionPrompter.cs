@@ -1,6 +1,7 @@
 ﻿using DeckForge.GameConstruction.PresetGames.Dominion.DominionTableAreas;
 using DeckForge.HelperObjects;
 using DeckForge.PlayerConstruction;
+using System.Reflection.PortableExecutable;
 
 namespace DeckForge.GameConstruction.PresetGames.Dominion
 {
@@ -20,6 +21,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         public BuyActionPrompter(IGameMediator gm, IInputReader reader, IOutputDisplay output)
         {
             DominionGameMediator? domGm = gm as DominionGameMediator;
+            GM = domGm!;
             List<string> marketList = domGm!.Market.GetMarketAreaAsStringList();
 
             var prompt = CreatePromptFromMarketList(marketList);
@@ -35,9 +37,14 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         {
         }
 
+        private DominionGameMediator GM { get; }
+
         /// <inheritdoc/>
         public int Prompt()
         {
+            List<string> marketList = GM.Market.GetMarketAreaAsStringList();
+            var prompt = CreatePromptFromMarketList(marketList);
+            prompter.UpdatePrompt(prompt);
             return prompter.Prompt();
         }
 

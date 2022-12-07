@@ -237,7 +237,6 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         /// <inheritdoc/>
         protected override ICard? PromptPlayerToPickCardToPlay()
         {
-
             if (Actions[new PlayCardAction().Name].ActionCount > 0)
             {
                 return GetCardInHand("Which card would you like to play?", true);
