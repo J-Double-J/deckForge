@@ -1,12 +1,10 @@
-using FluentAssertions;
-using DeckForge.GameElements.Resources;
-using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
-using DeckForge.GameElements.Resources.Cards.Example_Cards;
 using DeckForge.GameConstruction;
+using DeckForge.GameConstruction.PresetGames.Dominion.Cards;
+using DeckForge.GameElements.Resources;
+using DeckForge.GameElements.Resources.Cards.Example_Cards;
+using FluentAssertions;
 
 namespace UnitTests.GameElements
-
-
 {
     [TestClass]
     public class DeckTests
@@ -100,6 +98,7 @@ namespace UnitTests.GameElements
             {
                 deck.DrawCard();
             }
+
             PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
 
             drawn.Val.Should().Be(99, "the special card was added to the middle of the deck");
@@ -116,6 +115,7 @@ namespace UnitTests.GameElements
             {
                 deck.DrawCard();
             }
+
             PlayingCard drawn = (PlayingCard)deck.DrawCard()!;
             drawn.Val.Should().Be(99, "the special card was put 2 cards from the top");
         }

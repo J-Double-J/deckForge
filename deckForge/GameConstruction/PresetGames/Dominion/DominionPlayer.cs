@@ -232,6 +232,7 @@ namespace DeckForge.GameConstruction.PresetGames.Dominion
         /// <inheritdoc/>
         protected override void PostActionHook(IGameAction<IPlayer> pickedAction)
         {
+            // Does nothing instead of base.
         }
 
         /// <inheritdoc/>
